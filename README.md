@@ -1,1 +1,3 @@
-# sdk-go
+# cdevents Go SDK
+
+Coming soon!
