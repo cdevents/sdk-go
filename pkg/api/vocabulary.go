@@ -19,48 +19,22 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 const (
+	// Core Subject Types
+	PipelineRunSubjectType SubjectType = "pipelineRun"
+	TaskRunSubjectType     SubjectType = "taskRun"
 
-	// Repository events
-	RepositoryCreatedEventV1  CDEventType = "dev.cdevents.repository.created.v1"
-	RepositoryModifiedEventV1 CDEventType = "dev.cdevents.repository.modified.v1"
-	RepositoryDeletedEventV1  CDEventType = "dev.cdevents.repository.deleted.v1"
+	// SCM Subject Types
+	RepositorySubjectType SubjectType = "repository"
+	BranchSubjectType     SubjectType = "branch"
+	ChangeSubjectType     SubjectType = "change"
 
-	BranchCreatedEventV1 CDEventType = "dev.cdevents.repository.branch.created.v1"
-	BranchDeletedEventV1 CDEventType = "dev.cdevents.repository.branch.deleted.v1"
+	// CI Subject Types
+	BuildSubjectType     SubjectType = "build"
+	TestCaseSubjectType  SubjectType = "testCase"
+	TestSuiteSubjectType SubjectType = "testSuite"
+	ArtifactSubjectType  SubjectType = "artifact"
 
-	// Change Events
-	ChangeCreatedEventV1   CDEventType = "dev.cdevents.repository.change.created.v1"
-	ChangeUpdatedEventV1   CDEventType = "dev.cdevents.repository.change.updated.v1"
-	ChangeReviewedEventV1  CDEventType = "dev.cdevents.repository.change.reviewed.v1"
-	ChangeMergedEventV1    CDEventType = "dev.cdevents.repository.change.merged.v1"
-	ChangeAbandonedEventV1 CDEventType = "dev.cdevents.repository.change.abandoned.v1"
-
-	// Build Events
-	BuildStartedEventV1  CDEventType = "dev.cdevents.build.started.v1"
-	BuildQueuedEventV1   CDEventType = "dev.cdevents.build.queued.v1"
-	BuildFinishedEventV1 CDEventType = "dev.cdevents.build.finished.v1"
-
-	// Test Events
-	TestCaseStartedEventV1  CDEventType = "dev.cdevents.test.case.started.v1"
-	TestCaseQueuedEventV1   CDEventType = "dev.cdevents.test.case.queued.v1"
-	TestCaseFinishedEventV1 CDEventType = "dev.cdevents.test.case.finished.v1"
-
-	TestSuiteStartedEventV1  CDEventType = "dev.cdevents.test.suite.started.v1"
-	TestSuiteQueuedEventV1   CDEventType = "dev.cdevents.test.suite.queued.v1"
-	TestSuiteFinishedEventV1 CDEventType = "dev.cdevents.test.suite.finished.v1"
-
-	// Artifact Events
-	ArtifactPackagedEventV1  CDEventType = "dev.cdevents.artifact.packaged.v1"
-	ArtifactPublishedEventV1 CDEventType = "dev.cdevents.artifact.published.v1"
-
-	// Environment Events
-	EnvironmentCreatedEventV1  CDEventType = "dev.cdevents.environment.created.v1"
-	EnvironmentModifiedEventV1 CDEventType = "dev.cdevents.environment.modified.v1"
-	EnvironmentDeletedEventV1  CDEventType = "dev.cdevents.environment.deleted.v1"
-
-	// Service Events
-	ServiceDeployedEventV1   CDEventType = "dev.cdevents.service.deployed.v1"
-	ServiceUpgradedEventV1   CDEventType = "dev.cdevents.service.upgraded.v1"
-	ServiceRolledbackEventV1 CDEventType = "dev.cdevents.service.rolledback.v1"
-	ServiceRemovedEventV1    CDEventType = "dev.cdevents.service.removed.v1"
+	// CD Subject Types
+	EnvironmentSubjectType SubjectType = "environment"
+	ServiceSubjectType     SubjectType = "service"
 )

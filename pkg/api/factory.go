@@ -55,6 +55,93 @@ func NewCDEvent(eventType CDEventType) (CDEvent, error) {
 	case TaskRunFinishedEventV1:
 		e := newTaskRunFinishedEvent()
 		return initCDEvent(e)
+	// case RepositoryCreatedEventV1:
+	// 	e := newRepositoryCreatedEvent()
+	// 	return initCDEvent(e)
+	// case RepositoryModifiedEventV1:
+	// 	e := newRepositoryModifiedEvent()
+	// 	return initCDEvent(e)
+	// case RepositoryDeletedEventV1:
+	// 	e := newRepositoryDeletedEvent()
+	// 	return initCDEvent(e)
+	// case BranchCreatedEventV1:
+	// 	e := newBranchCreatedEvent()
+	// 	return initCDEvent(e)
+	// case BranchDeletedEventV1:
+	// 	e := newBranchDeletedEvent()
+	// 	return initCDEvent(e)
+	// case ChangeCreatedEventV1:
+	// 	e := newChangeCreatedEvent()
+	// 	return initCDEvent(e)
+	// case ChangeUpdatedEventV1:
+	// 	e := newChangeUpdatedEvent()
+	// 	return initCDEvent(e)
+	// case ChangeReviewedEventV1:
+	// 	e := newChangeReviewedEvent()
+	// 	return initCDEvent(e)
+	// case ChangeMergedEventV1:
+	// 	e := newChangeMergedEvent()
+	// 	return initCDEvent(e)
+	// case ChangeAbandonedEventV1:
+	// 	e := newChangeAbandonedEvent()
+	// 	return initCDEvent(e)
+	// case BuildQueuedEventV1:
+	// 	e := newBuildQueuedEvent()
+	// 	return initCDEvent(e)
+	// case BuildStartedEventV1:
+	// 	e := newBuildStartedEvent()
+	// 	return initCDEvent(e)
+	// case BuildFinishedEventV1:
+	// 	e := newBuildFinishedEvent()
+	// 	return initCDEvent(e)
+	// case TestCaseQueuedEventV1:
+	// 	e := newTestCaseQueuedEvent()
+	// 	return initCDEvent(e)
+	// case TestCaseStartedEventV1:
+	// 	e := newTestCaseStartedEvent()
+	// 	return initCDEvent(e)
+	// case TestCaseFinishedEventV1:
+	// 	e := newTestCaseFinishedEvent()
+	// 	return initCDEvent(e)
+	// case TestSuiteQueuedEventV1:
+	// 	e := newTestSuiteQueuedEvent()
+	// 	return initCDEvent(e)
+	// case TestSuiteStartedEventV1:
+	// 	e := newTestSuiteStartedEvent()
+	// 	return initCDEvent(e)
+	// case TestSuiteFinishedEventV1:
+	// 	e := newTestSuiteFinishedEvent()
+	// 	return initCDEvent(e)
+	// case ArtifactPackagedEventV1:
+	// 	e := newArtifactPackagedEvent()
+	// 	return initCDEvent(e)
+	// case ArtifactPublishedEventV1:
+	// 	e := newArtifactPublishedEvent()
+	// 	return initCDEvent(e)
+	// case EnvironmentCreatedEventV1:
+	// 	e := newEnvironmentCreatedEvent()
+	// 	return initCDEvent(e)
+	// case EnvironmentModifiedEventV1:
+	// 	e := newEnvironmentModifiedEvent()
+	// 	return initCDEvent(e)
+	// case EnvironmentDeletedEventV1:
+	// 	e := newEnvironmentDeletedEvent()
+	// 	return initCDEvent(e)
+	// case ServiceDeployedEventV1:
+	// 	e := newServiceDeployedEvent()
+	// 	return initCDEvent(e)
+	// case ServiceUpgradedEventV1:
+	// 	e := newServiceUpgradedEvent()
+	// 	return initCDEvent(e)
+	// case ServiceRolledbackEventV1:
+	// 	e := newServiceRolledbackEvent()
+	// 	return initCDEvent(e)
+	// case ServiceRemovedEventV1:
+	// 	e := newServiceRemovedEvent()
+	// 	return initCDEvent(e)
+	// case ServicePublishedEventV1:
+	// 	e := newServicePublishedEvent()
+	// 	return initCDEvent(e)
 	default:
 		return nil, fmt.Errorf("event %v not supported", eventType)
 	}
