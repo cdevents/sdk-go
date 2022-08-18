@@ -113,6 +113,10 @@ func newChangeCreatedEvent() CDEvent {
 			Type:    ChangeCreatedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: ChangeCreatedSubject{},
+		Subject: ChangeCreatedSubject{
+			SubjectBase: SubjectBase{
+				Type: ChangeSubjectType,
+			},
+		},
 	}
 }

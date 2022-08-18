@@ -113,6 +113,10 @@ func newChangeAbandonedEvent() CDEvent {
 			Type:    ChangeAbandonedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: ChangeAbandonedSubject{},
+		Subject: ChangeAbandonedSubject{
+			SubjectBase: SubjectBase{
+				Type: ChangeSubjectType,
+			},
+		},
 	}
 }

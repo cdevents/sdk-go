@@ -70,21 +70,21 @@ func NewCDEvent(eventType CDEventType) (CDEvent, error) {
 	// case BranchDeletedEventV1:
 	// 	e := newBranchDeletedEvent()
 	// 	return initCDEvent(e)
-	// case ChangeCreatedEventV1:
-	// 	e := newChangeCreatedEvent()
-	// 	return initCDEvent(e)
-	// case ChangeUpdatedEventV1:
-	// 	e := newChangeUpdatedEvent()
-	// 	return initCDEvent(e)
-	// case ChangeReviewedEventV1:
-	// 	e := newChangeReviewedEvent()
-	// 	return initCDEvent(e)
-	// case ChangeMergedEventV1:
-	// 	e := newChangeMergedEvent()
-	// 	return initCDEvent(e)
-	// case ChangeAbandonedEventV1:
-	// 	e := newChangeAbandonedEvent()
-	// 	return initCDEvent(e)
+	case ChangeCreatedEventV1:
+		e := newChangeCreatedEvent()
+		return initCDEvent(e)
+	case ChangeUpdatedEventV1:
+		e := newChangeUpdatedEvent()
+		return initCDEvent(e)
+	case ChangeReviewedEventV1:
+		e := newChangeReviewedEvent()
+		return initCDEvent(e)
+	case ChangeMergedEventV1:
+		e := newChangeMergedEvent()
+		return initCDEvent(e)
+	case ChangeAbandonedEventV1:
+		e := newChangeAbandonedEvent()
+		return initCDEvent(e)
 	// case BuildQueuedEventV1:
 	// 	e := newBuildQueuedEvent()
 	// 	return initCDEvent(e)

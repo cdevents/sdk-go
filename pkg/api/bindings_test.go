@@ -45,6 +45,11 @@ var (
 	pipelineRunFinishedEvent *PipelineRunFinishedEvent
 	taskRunStartedEvent      *TaskRunStartedEvent
 	taskRunFinishedEvent     *TaskRunFinishedEvent
+	changeCreatedEvent       *ChangeCreatedEvent
+	changeUpdatedEvent       *ChangeUpdatedEvent
+	changeReviewedEvent      *ChangeReviewedEvent
+	changeMergedEvent        *ChangeMergedEvent
+	changeAbandonedEvent     *ChangeAbandonedEvent
 
 	pipelineRunQueuedEventJsonTemplate = `
 {
@@ -152,11 +157,96 @@ var (
 	}
 }`
 
+	changeCreatedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.change.created.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "change",
+		"content": {}
+	}
+}`
+
+	changeUpdatedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.change.updated.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "change",
+		"content": {}
+	}
+}`
+
+	changeReviewedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.change.reviewed.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "change",
+		"content": {}
+	}
+}`
+
+	changeMergedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.change.merged.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "change",
+		"content": {}
+	}
+}`
+
+	changeAbandonedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.change.merged.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "change",
+		"content": {}
+	}
+}`
+
 	pipelineRunQueuedEventJson   string
 	pipelineRunStartedEventJson  string
 	pipelineRunFinishedEventJson string
 	taskRunStartedEventJson      string
 	taskRunFinishedEventJson     string
+	changeCreateEventJson        string
+	changeUpdatedEventJson       string
+	changeReviewedEventJson      string
+	changeMergedEventJson        string
+	changeAbandonedEventJson     string
 )
 
 func init() {
@@ -213,13 +303,33 @@ func init() {
 	taskRunFinishedEvent.SetSubjectOutcome(testTaskOutcome)
 	taskRunFinishedEvent.SetSubjectErrors(testTaskRunErrors)
 
+	e = makeCDEvent(ChangeCreatedEventV1)
+	changeCreatedEvent, _ = e.(*ChangeCreatedEvent)
+
+	e = makeCDEvent(ChangeUpdatedEventV1)
+	changeUpdatedEvent, _ = e.(*ChangeUpdatedEvent)
+
+	e = makeCDEvent(ChangeReviewedEventV1)
+	changeReviewedEvent, _ = e.(*ChangeReviewedEvent)
+
+	e = makeCDEvent(ChangeMergedEventV1)
+	changeMergedEvent, _ = e.(*ChangeMergedEvent)
+
+	e = makeCDEvent(ChangeAbandonedEventV1)
+	changeAbandonedEvent, _ = e.(*ChangeAbandonedEvent)
+
 	newUUID, _ := uuidNewRandom()
-	newTime := timeNow()
-	pipelineRunQueuedEventJson = fmt.Sprintf(pipelineRunQueuedEventJsonTemplate, newUUID, newTime.Format(time.RFC3339Nano))
-	pipelineRunStartedEventJson = fmt.Sprintf(pipelineRunStartedEventJsonTemplate, newUUID, newTime.Format(time.RFC3339Nano))
-	pipelineRunFinishedEventJson = fmt.Sprintf(pipelineRunFinishedEventJsonTemplate, newUUID, newTime.Format(time.RFC3339Nano))
-	taskRunStartedEventJson = fmt.Sprintf(taskRunStartedEventJsonTemplate, newUUID, newTime.Format(time.RFC3339Nano))
-	taskRunFinishedEventJson = fmt.Sprintf(taskRunFinishedEventJsonTemplate, newUUID, newTime.Format(time.RFC3339Nano))
+	newTime := timeNow().Format(time.RFC3339Nano)
+	pipelineRunQueuedEventJson = fmt.Sprintf(pipelineRunQueuedEventJsonTemplate, newUUID, newTime)
+	pipelineRunStartedEventJson = fmt.Sprintf(pipelineRunStartedEventJsonTemplate, newUUID, newTime)
+	pipelineRunFinishedEventJson = fmt.Sprintf(pipelineRunFinishedEventJsonTemplate, newUUID, newTime)
+	taskRunStartedEventJson = fmt.Sprintf(taskRunStartedEventJsonTemplate, newUUID, newTime)
+	taskRunFinishedEventJson = fmt.Sprintf(taskRunFinishedEventJsonTemplate, newUUID, newTime)
+	changeCreateEventJson = fmt.Sprintf(changeCreatedEventJsonTemplate, newUUID, newTime)
+	changeUpdatedEventJson = fmt.Sprintf(changeUpdatedEventJsonTemplate, newUUID, newTime)
+	changeReviewedEventJson = fmt.Sprintf(changeReviewedEventJsonTemplate, newUUID, newTime)
+	changeMergedEventJson = fmt.Sprintf(changeMergedEventJsonTemplate, newUUID, newTime)
+	changeAbandonedEventJson = fmt.Sprintf(changeAbandonedEventJsonTemplate, newUUID, newTime)
 }
 
 func TestAsCloudEvent(t *testing.T) {
@@ -228,65 +338,77 @@ func TestAsCloudEvent(t *testing.T) {
 		name            string
 		event           CDEvent
 		payloadReceiver interface{}
-		shouldFail      bool
 	}{{
 		name:            "pipelinerun queued",
 		event:           pipelineRunQueuedEvent,
 		payloadReceiver: &PipelineRunQueuedEvent{},
-		shouldFail:      false,
 	}, {
 		name:            "pipelinerun started",
 		event:           pipelineRunStartedEvent,
 		payloadReceiver: &PipelineRunStartedEvent{},
-		shouldFail:      false,
 	}, {
 		name:            "pipelinerun finished",
 		event:           pipelineRunFinishedEvent,
 		payloadReceiver: &PipelineRunFinishedEvent{},
-		shouldFail:      false,
 	}, {
 		name:            "taskrun started",
 		event:           taskRunStartedEvent,
 		payloadReceiver: &TaskRunStartedEvent{},
-		shouldFail:      false,
 	}, {
 		name:            "taskrun finished",
 		event:           taskRunFinishedEvent,
 		payloadReceiver: &TaskRunFinishedEvent{},
-		shouldFail:      false,
 	}, {
-		name:       "invalid event",
-		event:      nil,
-		shouldFail: true,
+		name:            "change created",
+		event:           changeCreatedEvent,
+		payloadReceiver: &ChangeCreatedEvent{},
+	}, {
+		name:            "change updated",
+		event:           changeUpdatedEvent,
+		payloadReceiver: &ChangeUpdatedEvent{},
+	}, {
+		name:            "change reviewed",
+		event:           changeReviewedEvent,
+		payloadReceiver: &ChangeReviewedEvent{},
+	}, {
+		name:            "change merged",
+		event:           changeMergedEvent,
+		payloadReceiver: &ChangeMergedEvent{},
+	}, {
+		name:            "change abandoned",
+		event:           changeAbandonedEvent,
+		payloadReceiver: &ChangeAbandonedEvent{},
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			ce, err := AsCloudEvent(tc.event)
-			if err != nil && !tc.shouldFail {
+			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did")
 			}
-			if err == nil && tc.shouldFail {
-				t.Fatalf("expected it to fail, but it didn't")
+			if d := cmp.Diff(testSubjectId, ce.Context.GetSubject()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
-			if tc.event != nil {
-				if d := cmp.Diff(testSubjectId, ce.Context.GetSubject()); d != "" {
-					t.Errorf("args: diff(-want,+got):\n%s", d)
-				}
-				if d := cmp.Diff(testSource, ce.Context.GetSource()); d != "" {
-					t.Errorf("args: diff(-want,+got):\n%s", d)
-				}
-				if d := cmp.Diff(tc.event.GetType().String(), ce.Context.GetType()); d != "" {
-					t.Errorf("args: diff(-want,+got):\n%s", d)
-				}
-				err = ce.DataAs(tc.payloadReceiver)
-				if err != nil {
-					t.Fatalf("somehow cannot unmarshal test event %v", ce)
-				}
-				if d := cmp.Diff(tc.event, tc.payloadReceiver); d != "" {
-					t.Errorf("args: diff(-want,+got):\n%s", d)
-				}
+			if d := cmp.Diff(testSource, ce.Context.GetSource()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			if d := cmp.Diff(tc.event.GetType().String(), ce.Context.GetType()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			err = ce.DataAs(tc.payloadReceiver)
+			if err != nil {
+				t.Fatalf("somehow cannot unmarshal test event %v", ce)
+			}
+			if d := cmp.Diff(tc.event, tc.payloadReceiver); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
 		})
+	}
+}
+
+func TestAsCloudEventInvalid(t *testing.T) {
+	_, err := AsCloudEvent(nil)
+	if err == nil {
+		t.Fatalf("expected it to fail, but it didn't")
 	}
 }
 
@@ -317,9 +439,9 @@ func TestAsJsonString(t *testing.T) {
 		event:      taskRunFinishedEvent,
 		jsonString: taskRunFinishedEventJson,
 	}, {
-		name:       "nil event",
-		event:      nil,
-		jsonString: "",
+		name:       "change created",
+		event:      changeCreatedEvent,
+		jsonString: changeCreateEventJson,
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -327,19 +449,23 @@ func TestAsJsonString(t *testing.T) {
 			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did")
 			}
-			if tc.jsonString != "" {
-				expectedJsonString := &bytes.Buffer{}
-				if err := json.Compact(expectedJsonString, []byte(tc.jsonString)); err != nil {
-					t.Fatalf("somehow cannot compact test json %s", tc.jsonString)
-				}
-				if d := cmp.Diff(expectedJsonString.String(), obtainedJsonString); d != "" {
-					t.Errorf("args: diff(-want,+got):\n%s", d)
-				}
-			} else {
-				if d := cmp.Diff(tc.jsonString, obtainedJsonString); d != "" {
-					t.Errorf("args: diff(-want,+got):\n%s", d)
-				}
+			expectedJsonString := &bytes.Buffer{}
+			if err := json.Compact(expectedJsonString, []byte(tc.jsonString)); err != nil {
+				t.Fatalf("somehow cannot compact test json %s", tc.jsonString)
+			}
+			if d := cmp.Diff(expectedJsonString.String(), obtainedJsonString); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
 		})
+	}
+}
+
+func TestAsJsonStringEmpty(t *testing.T) {
+	obtainedJsonString, err := AsJsonString(nil)
+	if err != nil {
+		t.Fatalf("didn't expected it to fail, but it did")
+	}
+	if d := cmp.Diff("", obtainedJsonString); d != "" {
+		t.Errorf("args: diff(-want,+got):\n%s", d)
 	}
 }
