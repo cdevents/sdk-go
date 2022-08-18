@@ -103,9 +103,6 @@ func NewCDEvent(eventType CDEventType) (CDEvent, error) {
 	// case TestCaseFinishedEventV1:
 	// 	e := newTestCaseFinishedEvent()
 	// 	return initCDEvent(e)
-	// case TestSuiteQueuedEventV1:
-	// 	e := newTestSuiteQueuedEvent()
-	// 	return initCDEvent(e)
 	// case TestSuiteStartedEventV1:
 	// 	e := newTestSuiteStartedEvent()
 	// 	return initCDEvent(e)

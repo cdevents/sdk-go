@@ -20,7 +20,6 @@ cd $BASE_DIR
 ./add-event.sh testCase queued
 ./add-event.sh testCase finished
 ./add-event.sh testSuite started
-./add-event.sh testSuite queued
 ./add-event.sh testSuite finished
 ./add-event.sh artifact packaged
 ./add-event.sh artifact published
