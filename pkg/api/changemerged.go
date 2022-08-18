@@ -113,6 +113,10 @@ func newChangeMergedEvent() CDEvent {
 			Type:    ChangeMergedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: ChangeMergedSubject{},
+		Subject: ChangeMergedSubject{
+			SubjectBase: SubjectBase{
+				Type: ChangeSubjectType,
+			},
+		},
 	}
 }

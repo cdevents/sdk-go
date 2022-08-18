@@ -53,7 +53,6 @@ func TestNewCDEvent(t *testing.T) {
 		name          string
 		eventType     CDEventType
 		expectedEvent CDEvent
-		shouldFail    bool
 	}{{
 		name:      "pipelinerun queued",
 		eventType: PipelineRunQueuedEventV1,
@@ -70,7 +69,6 @@ func TestNewCDEvent(t *testing.T) {
 				},
 			},
 		},
-		shouldFail: false,
 	}, {
 		name:      "pipelinerun started",
 		eventType: PipelineRunStartedEventV1,
@@ -87,7 +85,6 @@ func TestNewCDEvent(t *testing.T) {
 				},
 			},
 		},
-		shouldFail: false,
 	}, {
 		name:      "pipelinerun finished",
 		eventType: PipelineRunFinishedEventV1,
@@ -104,7 +101,6 @@ func TestNewCDEvent(t *testing.T) {
 				},
 			},
 		},
-		shouldFail: false,
 	}, {
 		name:      "taskrun started",
 		eventType: TaskRunStartedEventV1,
@@ -121,7 +117,6 @@ func TestNewCDEvent(t *testing.T) {
 				},
 			},
 		},
-		shouldFail: false,
 	}, {
 		name:      "taskrun finished",
 		eventType: TaskRunFinishedEventV1,
@@ -138,25 +133,104 @@ func TestNewCDEvent(t *testing.T) {
 				},
 			},
 		},
-		shouldFail: false,
 	}, {
-		name:          "not supported",
-		eventType:     "not supported",
-		expectedEvent: nil,
-		shouldFail:    true,
+		name:      "change created",
+		eventType: ChangeCreatedEventV1,
+		expectedEvent: &ChangeCreatedEvent{
+			Context: Context{
+				Type:      ChangeCreatedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: ChangeCreatedSubject{
+				SubjectBase: SubjectBase{
+					Type: ChangeSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "change updated",
+		eventType: ChangeUpdatedEventV1,
+		expectedEvent: &ChangeUpdatedEvent{
+			Context: Context{
+				Type:      ChangeUpdatedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: ChangeUpdatedSubject{
+				SubjectBase: SubjectBase{
+					Type: ChangeSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "change reviewed",
+		eventType: ChangeReviewedEventV1,
+		expectedEvent: &ChangeReviewedEvent{
+			Context: Context{
+				Type:      ChangeReviewedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: ChangeReviewedSubject{
+				SubjectBase: SubjectBase{
+					Type: ChangeSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "change merged",
+		eventType: ChangeMergedEventV1,
+		expectedEvent: &ChangeMergedEvent{
+			Context: Context{
+				Type:      ChangeMergedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: ChangeMergedSubject{
+				SubjectBase: SubjectBase{
+					Type: ChangeSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "change abandoned",
+		eventType: ChangeAbandonedEventV1,
+		expectedEvent: &ChangeAbandonedEvent{
+			Context: Context{
+				Type:      ChangeAbandonedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: ChangeAbandonedSubject{
+				SubjectBase: SubjectBase{
+					Type: ChangeSubjectType,
+				},
+			},
+		},
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			event, err := NewCDEvent(tc.eventType)
-			if err != nil && !tc.shouldFail {
+			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did: %v", err)
-			}
-			if err == nil && tc.shouldFail {
-				t.Fatalf("expected it to fail, but it didn't")
 			}
 			if d := cmp.Diff(tc.expectedEvent, event); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
 		})
+	}
+}
+
+func TestNewCDEventFailed(t *testing.T) {
+
+	_, err := NewCDEvent("not supported")
+	if err == nil {
+		t.Fatalf("expected it to fail, but it didn't")
 	}
 }

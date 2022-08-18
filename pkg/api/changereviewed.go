@@ -113,6 +113,10 @@ func newChangeReviewedEvent() CDEvent {
 			Type:    ChangeReviewedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: ChangeReviewedSubject{},
+		Subject: ChangeReviewedSubject{
+			SubjectBase: SubjectBase{
+				Type: ChangeSubjectType,
+			},
+		},
 	}
 }
