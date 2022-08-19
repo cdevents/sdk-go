@@ -24,7 +24,8 @@ import (
 
 const (
 	// EnvironmentCreated event
-	EnvironmentCreatedEventV1 CDEventType = "dev.cdevents.environment.created.v1"
+	EnvironmentCreatedEventV1    CDEventType = "dev.cdevents.environment.created.v1"
+	environmentCreatedSchemaFile string      = "environmentcreated"
 )
 
 type EnvironmentCreatedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *EnvironmentCreatedEvent) SetSubjectId(subjectId string) {
 
 func (e *EnvironmentCreatedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *EnvironmentCreatedEvent) GetSchema() string {
+	return environmentCreatedSchemaFile
 }
 
 func newEnvironmentCreatedEvent() CDEvent {

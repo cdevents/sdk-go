@@ -24,7 +24,8 @@ import (
 
 const (
 	// EnvironmentModified event
-	EnvironmentModifiedEventV1 CDEventType = "dev.cdevents.environment.modified.v1"
+	EnvironmentModifiedEventV1    CDEventType = "dev.cdevents.environment.modified.v1"
+	environmentModifiedSchemaFile string      = "environmentmodified"
 )
 
 type EnvironmentModifiedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *EnvironmentModifiedEvent) SetSubjectId(subjectId string) {
 
 func (e *EnvironmentModifiedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *EnvironmentModifiedEvent) GetSchema() string {
+	return environmentModifiedSchemaFile
 }
 
 func newEnvironmentModifiedEvent() CDEvent {

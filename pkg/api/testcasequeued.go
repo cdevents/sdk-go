@@ -24,7 +24,8 @@ import (
 
 const (
 	// TestCaseQueued event
-	TestCaseQueuedEventV1 CDEventType = "dev.cdevents.testcase.queued.v1"
+	TestCaseQueuedEventV1    CDEventType = "dev.cdevents.testcase.queued.v1"
+	testCaseQueuedSchemaFile string      = "testcasequeued"
 )
 
 type TestCaseQueuedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *TestCaseQueuedEvent) SetSubjectId(subjectId string) {
 
 func (e *TestCaseQueuedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *TestCaseQueuedEvent) GetSchema() string {
+	return testCaseQueuedSchemaFile
 }
 
 func newTestCaseQueuedEvent() CDEvent {

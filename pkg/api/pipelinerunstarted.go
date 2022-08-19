@@ -24,7 +24,8 @@ import (
 
 const (
 	// PipelineRunStarted event
-	PipelineRunStartedEventV1 CDEventType = "dev.cdevents.pipelinerun.started.v1"
+	PipelineRunStartedEventV1    CDEventType = "dev.cdevents.pipelinerun.started.v1"
+	pipelineRunStartedSchemaFile string      = "pipelinerunstarted"
 )
 
 type PipelineRunStartedSubjectContent struct {
@@ -122,6 +123,10 @@ func (e *PipelineRunStartedEvent) SetSubjectPipelineName(pipelineName string) {
 
 func (e *PipelineRunStartedEvent) SetSubjectURL(url string) {
 	e.Subject.Content.URL = url
+}
+
+func (e *PipelineRunStartedEvent) GetSchema() string {
+	return pipelineRunStartedSchemaFile
 }
 
 func newPipelineRunStartedEvent() CDEvent {

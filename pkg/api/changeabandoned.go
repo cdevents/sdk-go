@@ -24,7 +24,8 @@ import (
 
 const (
 	// ChangeAbandoned event
-	ChangeAbandonedEventV1 CDEventType = "dev.cdevents.change.abandoned.v1"
+	ChangeAbandonedEventV1    CDEventType = "dev.cdevents.change.abandoned.v1"
+	changeAbandonedSchemaFile string      = "changeabandoned"
 )
 
 type ChangeAbandonedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *ChangeAbandonedEvent) SetSubjectId(subjectId string) {
 
 func (e *ChangeAbandonedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *ChangeAbandonedEvent) GetSchema() string {
+	return changeAbandonedSchemaFile
 }
 
 func newChangeAbandonedEvent() CDEvent {

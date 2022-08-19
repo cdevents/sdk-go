@@ -24,7 +24,8 @@ import (
 
 const (
 	// RepositoryModified event
-	RepositoryModifiedEventV1 CDEventType = "dev.cdevents.repository.modified.v1"
+	RepositoryModifiedEventV1    CDEventType = "dev.cdevents.repository.modified.v1"
+	repositoryModifiedSchemaFile string      = "repositorymodified"
 )
 
 type RepositoryModifiedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *RepositoryModifiedEvent) SetSubjectId(subjectId string) {
 
 func (e *RepositoryModifiedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *RepositoryModifiedEvent) GetSchema() string {
+	return repositoryModifiedSchemaFile
 }
 
 func newRepositoryModifiedEvent() CDEvent {

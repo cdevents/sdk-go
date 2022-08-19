@@ -40,6 +40,8 @@ const (
 
 	// PipelineRun errored
 	PipelineRunOutcomeErrored PipelineRunOutcome = "error"
+
+	pipelineRunFinishedSchemaFile string = "pipelinerunfinished"
 )
 
 type PipelineRunFinishedSubjectContent struct {
@@ -151,6 +153,10 @@ func (e *PipelineRunFinishedEvent) SetSubjectOutcome(outcome PipelineRunOutcome)
 
 func (e *PipelineRunFinishedEvent) SetSubjectErrors(errors string) {
 	e.Subject.Content.Errors = errors
+}
+
+func (e *PipelineRunFinishedEvent) GetSchema() string {
+	return pipelineRunFinishedSchemaFile
 }
 
 func newPipelineRunFinishedEvent() CDEvent {

@@ -24,7 +24,8 @@ import (
 
 const (
 	// ArtifactPackaged event
-	ArtifactPackagedEventV1 CDEventType = "dev.cdevents.artifact.packaged.v1"
+	ArtifactPackagedEventV1    CDEventType = "dev.cdevents.artifact.packaged.v1"
+	artifactPackagedSchemaFile string      = "artifactpackaged"
 )
 
 type ArtifactPackagedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *ArtifactPackagedEvent) SetSubjectId(subjectId string) {
 
 func (e *ArtifactPackagedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *ArtifactPackagedEvent) GetSchema() string {
+	return artifactPackagedSchemaFile
 }
 
 func newArtifactPackagedEvent() CDEvent {

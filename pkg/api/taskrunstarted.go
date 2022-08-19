@@ -24,7 +24,8 @@ import (
 
 const (
 	// TaskRunStarted event
-	TaskRunStartedEventV1 CDEventType = "dev.cdevents.taskrun.started.v1"
+	TaskRunStartedEventV1    CDEventType = "dev.cdevents.taskrun.started.v1"
+	taskRunStartedSchemaFile string      = "taskrunstarted"
 )
 
 type TaskRunStartedSubjectContent struct {
@@ -129,6 +130,10 @@ func (e *TaskRunStartedEvent) SetSubjectURL(url string) {
 
 func (e *TaskRunStartedEvent) SetSubjectPipelineRun(pipelineRun Reference) {
 	e.Subject.Content.PipelineRun = pipelineRun
+}
+
+func (e *TaskRunStartedEvent) GetSchema() string {
+	return taskRunStartedSchemaFile
 }
 
 func newTaskRunStartedEvent() CDEvent {

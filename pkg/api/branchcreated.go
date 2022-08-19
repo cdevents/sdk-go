@@ -24,7 +24,8 @@ import (
 
 const (
 	// BranchCreated event
-	BranchCreatedEventV1 CDEventType = "dev.cdevents.branch.created.v1"
+	BranchCreatedEventV1    CDEventType = "dev.cdevents.branch.created.v1"
+	branchCreatedSchemaFile string      = "branchcreated"
 )
 
 type BranchCreatedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *BranchCreatedEvent) SetSubjectId(subjectId string) {
 
 func (e *BranchCreatedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *BranchCreatedEvent) GetSchema() string {
+	return branchCreatedSchemaFile
 }
 
 func newBranchCreatedEvent() CDEvent {

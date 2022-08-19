@@ -24,7 +24,8 @@ import (
 
 const (
 	// ServiceDeployed event
-	ServiceDeployedEventV1 CDEventType = "dev.cdevents.service.deployed.v1"
+	ServiceDeployedEventV1    CDEventType = "dev.cdevents.service.deployed.v1"
+	serviceDeployedSchemaFile string      = "servicedeployed"
 )
 
 type ServiceDeployedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *ServiceDeployedEvent) SetSubjectId(subjectId string) {
 
 func (e *ServiceDeployedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *ServiceDeployedEvent) GetSchema() string {
+	return serviceDeployedSchemaFile
 }
 
 func newServiceDeployedEvent() CDEvent {

@@ -24,7 +24,8 @@ import (
 
 const (
 	// RepositoryDeleted event
-	RepositoryDeletedEventV1 CDEventType = "dev.cdevents.repository.deleted.v1"
+	RepositoryDeletedEventV1    CDEventType = "dev.cdevents.repository.deleted.v1"
+	repositoryDeletedSchemaFile string      = "repositorydeleted"
 )
 
 type RepositoryDeletedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *RepositoryDeletedEvent) SetSubjectId(subjectId string) {
 
 func (e *RepositoryDeletedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *RepositoryDeletedEvent) GetSchema() string {
+	return repositoryDeletedSchemaFile
 }
 
 func newRepositoryDeletedEvent() CDEvent {
