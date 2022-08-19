@@ -39,6 +39,8 @@ const (
 
 	// PipelineRun errored
 	TaskRunOutcomeErrored TaskRunOutcome = "error"
+
+	taskRunFinishedSchemaFile string = "taskrunfinished"
 )
 
 type TaskRunFinishedSubjectContent struct {
@@ -157,6 +159,10 @@ func (e *TaskRunFinishedEvent) SetSubjectOutcome(outcome TaskRunOutcome) {
 
 func (e *TaskRunFinishedEvent) SetSubjectErrors(errors string) {
 	e.Subject.Content.Errors = errors
+}
+
+func (e *TaskRunFinishedEvent) GetSchema() string {
+	return taskRunFinishedSchemaFile
 }
 
 func newTaskRunFinishedEvent() CDEvent {

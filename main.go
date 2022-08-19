@@ -19,54 +19,51 @@ SPDX-License-Identifier: Apache-2.0
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/cdevents/sdk-go/pkg/api"
+	"github.com/invopop/jsonschema"
 )
 
 var (
-	prq *api.PipelineRunQueuedEvent
-	prs *api.PipelineRunStartedEvent
-	prf *api.PipelineRunFinishedEvent
-
-	source    = "TestAsCloudEvent"
-	subjectid = "mySubject123"
-	pipeline  = "myPipeline"
-	url       = "https://www.example.com/mySubject123"
-	outcome   = api.PipelineRunOutcomeFailed
-	errors    = "Something went wrong\nWith some more details"
+	allEvents = map[string]api.CDEvent{
+		"pipelinerunqueued":   &api.PipelineRunQueuedEvent{},
+		"pipelinerunstarted":  &api.PipelineRunStartedEvent{},
+		"pipelinerunfinished": &api.PipelineRunFinishedEvent{},
+		"taskrunstarted":      &api.TaskRunStartedEvent{},
+		"taskrunfinished":     &api.TaskRunFinishedEvent{},
+		"changecreated":       &api.ChangeCreatedEvent{},
+		"changeupdated":       &api.ChangeUpdatedEvent{},
+		"changereviewed":      &api.ChangeReviewedEvent{},
+		"changemerged":        &api.ChangeMergedEvent{},
+		"changeabandoned":     &api.ChangeAbandonedEvent{},
+	}
 )
 
-func makecde(eventType api.CDEventType) api.CDEvent {
-	event, _ := api.NewCDEvent(eventType)
-	event.SetSource(source)
-	event.SetSubjectId(subjectid)
-	return event
+func panicOnError(err error) {
+	if err != nil {
+		panic(err.Error())
+	}
 }
 
 func main() {
-
-	e := makecde(api.PipelineRunQueuedEventV1)
-	prq, _ = e.(*api.PipelineRunQueuedEvent)
-	prq.SetSubjectPipelineName(pipeline)
-	prq.SetSubjectURL(url)
-
-	e = makecde(api.PipelineRunStartedEventV1)
-	prs, _ = e.(*api.PipelineRunStartedEvent)
-	prs.SetSubjectPipelineName(pipeline)
-	prs.SetSubjectURL(url)
-
-	e = makecde(api.PipelineRunFinishedEventV1)
-	prf, _ = e.(*api.PipelineRunFinishedEvent)
-	prf.SetSubjectPipelineName(pipeline)
-	prf.SetSubjectURL(url)
-	prf.SetSubjectOutcome(outcome)
-	prf.SetSubjectErrors(errors)
-
-	ej, _ := api.AsJsonString(prq)
-	fmt.Printf("%v\n", ej)
-	ej, _ = api.AsJsonString(prs)
-	fmt.Printf("%v\n", ej)
-	ej, _ = api.AsJsonString(prf)
-	fmt.Printf("%v\n", ej)
+	// Setup a reflector
+	id := jsonschema.EmptyID
+	id.Add(fmt.Sprintf("https://cdevents.dev/%s/schema", api.CDEventsSpecVersion))
+	reflector := jsonschema.Reflector{
+		BaseSchemaID:   id,
+		DoNotReference: true,
+	}
+	for filename, eventType := range allEvents {
+		f, err := os.Create(fmt.Sprintf("jsonschema/%s.json", filename))
+		panicOnError(err)
+		defer f.Close()
+		s := reflector.Reflect(eventType)
+		data, err := json.MarshalIndent(s, "", "  ")
+		panicOnError(err)
+		_, err = f.WriteString(string(data))
+		panicOnError(err)
+	}
 }

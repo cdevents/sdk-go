@@ -24,7 +24,8 @@ import (
 
 const (
 	// ServiceRolledback event
-	ServiceRolledbackEventV1 CDEventType = "dev.cdevents.service.rolledback.v1"
+	ServiceRolledbackEventV1    CDEventType = "dev.cdevents.service.rolledback.v1"
+	serviceRolledbackSchemaFile string      = "servicerolledback"
 )
 
 type ServiceRolledbackSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *ServiceRolledbackEvent) SetSubjectId(subjectId string) {
 
 func (e *ServiceRolledbackEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *ServiceRolledbackEvent) GetSchema() string {
+	return serviceRolledbackSchemaFile
 }
 
 func newServiceRolledbackEvent() CDEvent {

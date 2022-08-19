@@ -24,7 +24,8 @@ import (
 
 const (
 	// BuildFinished event
-	BuildFinishedEventV1 CDEventType = "dev.cdevents.build.finished.v1"
+	BuildFinishedEventV1    CDEventType = "dev.cdevents.build.finished.v1"
+	buildFinishedSchemaFile string      = "buildfinished"
 )
 
 type BuildFinishedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *BuildFinishedEvent) SetSubjectId(subjectId string) {
 
 func (e *BuildFinishedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *BuildFinishedEvent) GetSchema() string {
+	return buildFinishedSchemaFile
 }
 
 func newBuildFinishedEvent() CDEvent {

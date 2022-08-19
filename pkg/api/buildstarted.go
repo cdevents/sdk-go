@@ -24,7 +24,8 @@ import (
 
 const (
 	// BuildStarted event
-	BuildStartedEventV1 CDEventType = "dev.cdevents.build.started.v1"
+	BuildStartedEventV1    CDEventType = "dev.cdevents.build.started.v1"
+	buildStartedSchemaFile string      = "buildstarted"
 )
 
 type BuildStartedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *BuildStartedEvent) SetSubjectId(subjectId string) {
 
 func (e *BuildStartedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *BuildStartedEvent) GetSchema() string {
+	return buildStartedSchemaFile
 }
 
 func newBuildStartedEvent() CDEvent {

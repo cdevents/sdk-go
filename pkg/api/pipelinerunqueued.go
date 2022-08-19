@@ -24,7 +24,8 @@ import (
 
 const (
 	// PipelineRun events
-	PipelineRunQueuedEventV1 CDEventType = "dev.cdevents.pipelinerun.queued.v1"
+	PipelineRunQueuedEventV1    CDEventType = "dev.cdevents.pipelinerun.queued.v1"
+	pipelineRunQueuedSchemaFile string      = "pipelinerunqueued"
 )
 
 type PipelineRunQueuedSubjectContent struct {
@@ -122,6 +123,10 @@ func (e *PipelineRunQueuedEvent) SetSubjectPipelineName(pipelineName string) {
 
 func (e *PipelineRunQueuedEvent) SetSubjectURL(url string) {
 	e.Subject.Content.URL = url
+}
+
+func (e *PipelineRunQueuedEvent) GetSchema() string {
+	return pipelineRunQueuedSchemaFile
 }
 
 func newPipelineRunQueuedEvent() CDEvent {

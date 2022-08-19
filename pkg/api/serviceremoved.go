@@ -24,7 +24,8 @@ import (
 
 const (
 	// ServiceRemoved event
-	ServiceRemovedEventV1 CDEventType = "dev.cdevents.service.removed.v1"
+	ServiceRemovedEventV1    CDEventType = "dev.cdevents.service.removed.v1"
+	serviceRemovedSchemaFile string      = "serviceremoved"
 )
 
 type ServiceRemovedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *ServiceRemovedEvent) SetSubjectId(subjectId string) {
 
 func (e *ServiceRemovedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *ServiceRemovedEvent) GetSchema() string {
+	return serviceRemovedSchemaFile
 }
 
 func newServiceRemovedEvent() CDEvent {

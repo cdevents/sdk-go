@@ -24,7 +24,8 @@ import (
 
 const (
 	// BuildQueued event
-	BuildQueuedEventV1 CDEventType = "dev.cdevents.build.queued.v1"
+	BuildQueuedEventV1    CDEventType = "dev.cdevents.build.queued.v1"
+	buildQueuedSchemaFile string      = "buildqueued"
 )
 
 type BuildQueuedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *BuildQueuedEvent) SetSubjectId(subjectId string) {
 
 func (e *BuildQueuedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *BuildQueuedEvent) GetSchema() string {
+	return buildQueuedSchemaFile
 }
 
 func newBuildQueuedEvent() CDEvent {

@@ -24,7 +24,8 @@ import (
 
 const (
 	// TestCaseStarted event
-	TestCaseStartedEventV1 CDEventType = "dev.cdevents.testcase.started.v1"
+	TestCaseStartedEventV1    CDEventType = "dev.cdevents.testcase.started.v1"
+	testCaseStartedSchemaFile string      = "testcasestarted"
 )
 
 type TestCaseStartedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *TestCaseStartedEvent) SetSubjectId(subjectId string) {
 
 func (e *TestCaseStartedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *TestCaseStartedEvent) GetSchema() string {
+	return testCaseStartedSchemaFile
 }
 
 func newTestCaseStartedEvent() CDEvent {

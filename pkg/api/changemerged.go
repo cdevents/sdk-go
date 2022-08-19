@@ -24,7 +24,8 @@ import (
 
 const (
 	// ChangeMerged event
-	ChangeMergedEventV1 CDEventType = "dev.cdevents.change.merged.v1"
+	ChangeMergedEventV1    CDEventType = "dev.cdevents.change.merged.v1"
+	changeMergedSchemaFile string      = "changemerged"
 )
 
 type ChangeMergedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *ChangeMergedEvent) SetSubjectId(subjectId string) {
 
 func (e *ChangeMergedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *ChangeMergedEvent) GetSchema() string {
+	return changeMergedSchemaFile
 }
 
 func newChangeMergedEvent() CDEvent {

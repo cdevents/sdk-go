@@ -24,7 +24,8 @@ import (
 
 const (
 	// ChangeCreated event
-	ChangeCreatedEventV1 CDEventType = "dev.cdevents.change.created.v1"
+	ChangeCreatedEventV1    CDEventType = "dev.cdevents.change.created.v1"
+	changeCreatedSchemaFile string      = "changecreated"
 )
 
 type ChangeCreatedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *ChangeCreatedEvent) SetSubjectId(subjectId string) {
 
 func (e *ChangeCreatedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *ChangeCreatedEvent) GetSchema() string {
+	return changeCreatedSchemaFile
 }
 
 func newChangeCreatedEvent() CDEvent {

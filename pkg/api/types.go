@@ -158,4 +158,7 @@ type CDEventWriter interface {
 type CDEvent interface {
 	CDEventReader
 	CDEventWriter
+
+	// The name of the schema file associated to the event type
+	GetSchema() string
 }

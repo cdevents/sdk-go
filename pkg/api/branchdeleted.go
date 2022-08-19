@@ -24,7 +24,8 @@ import (
 
 const (
 	// BranchDeleted event
-	BranchDeletedEventV1 CDEventType = "dev.cdevents.branch.deleted.v1"
+	BranchDeletedEventV1    CDEventType = "dev.cdevents.branch.deleted.v1"
+	branchDeletedSchemaFile string      = "branchdeleted"
 )
 
 type BranchDeletedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *BranchDeletedEvent) SetSubjectId(subjectId string) {
 
 func (e *BranchDeletedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *BranchDeletedEvent) GetSchema() string {
+	return branchDeletedSchemaFile
 }
 
 func newBranchDeletedEvent() CDEvent {

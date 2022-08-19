@@ -24,7 +24,8 @@ import (
 
 const (
 	// EnvironmentDeleted event
-	EnvironmentDeletedEventV1 CDEventType = "dev.cdevents.environment.deleted.v1"
+	EnvironmentDeletedEventV1    CDEventType = "dev.cdevents.environment.deleted.v1"
+	environmentDeletedSchemaFile string      = "environmentdeleted"
 )
 
 type EnvironmentDeletedSubjectContent struct{}
@@ -105,6 +106,10 @@ func (e *EnvironmentDeletedEvent) SetSubjectId(subjectId string) {
 
 func (e *EnvironmentDeletedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *EnvironmentDeletedEvent) GetSchema() string {
+	return environmentDeletedSchemaFile
 }
 
 func newEnvironmentDeletedEvent() CDEvent {

@@ -27,6 +27,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/uuid"
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v5"
 )
 
 var (
@@ -226,7 +227,7 @@ var (
 		"version": "draft",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.change.merged.v1",
+		"type": "dev.cdevents.change.abandoned.v1",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -383,7 +384,7 @@ func TestAsCloudEvent(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ce, err := AsCloudEvent(tc.event)
 			if err != nil {
-				t.Fatalf("didn't expected it to fail, but it did")
+				t.Fatalf("didn't expected it to fail, but it did: %v", err)
 			}
 			if d := cmp.Diff(testSubjectId, ce.Context.GetSubject()); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
@@ -414,40 +415,83 @@ func TestAsCloudEventInvalid(t *testing.T) {
 
 func TestAsJsonString(t *testing.T) {
 
+	compiler := jsonschema.NewCompiler()
+
 	tests := []struct {
 		name       string
 		event      CDEvent
 		jsonString string
+		schemaName string
 	}{{
 		name:       "pipelinerun queued",
 		event:      pipelineRunQueuedEvent,
 		jsonString: pipelineRunQueuedEventJson,
+		schemaName: "pipelinerunqueued",
 	}, {
 		name:       "pipelinerun started",
 		event:      pipelineRunStartedEvent,
 		jsonString: pipelineRunStartedEventJson,
+		schemaName: "pipelinerunstarted",
 	}, {
 		name:       "pipelinerun finished",
 		event:      pipelineRunFinishedEvent,
 		jsonString: pipelineRunFinishedEventJson,
+		schemaName: "pipelinerunfinished",
 	}, {
 		name:       "taskrun started",
 		event:      taskRunStartedEvent,
 		jsonString: taskRunStartedEventJson,
+		schemaName: "taskrunstarted",
 	}, {
 		name:       "taskrun finished",
 		event:      taskRunFinishedEvent,
 		jsonString: taskRunFinishedEventJson,
+		schemaName: "taskrunfinished",
 	}, {
 		name:       "change created",
 		event:      changeCreatedEvent,
 		jsonString: changeCreateEventJson,
+		schemaName: "changecreated",
+	}, {
+		name:       "change updated",
+		event:      changeUpdatedEvent,
+		jsonString: changeUpdatedEventJson,
+		schemaName: "changeupdated",
+	}, {
+		name:       "change reviewed",
+		event:      changeReviewedEvent,
+		jsonString: changeReviewedEventJson,
+		schemaName: "changereviewed",
+	}, {
+		name:       "change merged",
+		event:      changeMergedEvent,
+		jsonString: changeMergedEventJson,
+		schemaName: "changemerged",
+	}, {
+		name:       "change abandoned",
+		event:      changeAbandonedEvent,
+		jsonString: changeAbandonedEventJson,
+		schemaName: "changeabandoned",
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			// First validate that the test JSON compiles against the schema
+			sch, err := compiler.Compile(fmt.Sprintf("../../jsonschema/%s.json", tc.schemaName))
+			if err != nil {
+				t.Fatalf("Cannot compile jsonschema %s", tc.schemaName)
+			}
+			var v interface{}
+			if err := json.Unmarshal([]byte(tc.jsonString), &v); err != nil {
+				t.Fatalf("Cannot unmarshal test json: %v", err)
+			}
+			err = sch.Validate(v)
+			if err != nil {
+				t.Fatalf("Failed to validate events %s", err)
+			}
+			// Then test that AsJsonString produces a matching JSON from the event
 			obtainedJsonString, err := AsJsonString(tc.event)
 			if err != nil {
-				t.Fatalf("didn't expected it to fail, but it did")
+				t.Fatalf("didn't expected it to fail, but it did: %v", err)
 			}
 			expectedJsonString := &bytes.Buffer{}
 			if err := json.Compact(expectedJsonString, []byte(tc.jsonString)); err != nil {
@@ -460,10 +504,45 @@ func TestAsJsonString(t *testing.T) {
 	}
 }
 
+func TestInvalidEvent(t *testing.T) {
+
+	eventNoSource, _ := NewCDEvent(ChangeAbandonedEventV1)
+	eventNoSource.SetSubjectId(testSubjectId)
+
+	eventNoSubjectId, _ := NewCDEvent(ChangeAbandonedEventV1)
+	eventNoSubjectId.SetSource(testSource)
+
+	eventSubjectIncomplete := makeCDEvent(PipelineRunQueuedEventV1)
+	eventSubjectIncomplete, _ = eventSubjectIncomplete.(*PipelineRunQueuedEvent)
+
+	tests := []struct {
+		name  string
+		event CDEvent
+	}{{
+		name:  "missing source",
+		event: eventNoSource,
+	}, {
+		name:  "missing subject id",
+		event: eventNoSubjectId,
+	}, {
+		name:  "missing mandatory subject details",
+		event: eventSubjectIncomplete,
+	}}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// First validate that the test JSON compiles against the schema
+			err := Validate(tc.event)
+			if err == nil {
+				t.Fatalf("Expected validation to fail, but it succeeded instead")
+			}
+		})
+	}
+}
+
 func TestAsJsonStringEmpty(t *testing.T) {
 	obtainedJsonString, err := AsJsonString(nil)
 	if err != nil {
-		t.Fatalf("didn't expected it to fail, but it did")
+		t.Fatalf("didn't expected it to fail, but it did: %v", err)
 	}
 	if d := cmp.Diff("", obtainedJsonString); d != "" {
 		t.Errorf("args: diff(-want,+got):\n%s", d)

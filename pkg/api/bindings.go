@@ -21,8 +21,10 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v5"
 )
 
 // TODO(afrittoli) we may want to define something like:
@@ -34,12 +36,16 @@ func AsCloudEvent(event CDEvent) (*cloudevents.Event, error) {
 	if event == nil {
 		return nil, fmt.Errorf("nil CDEvent cannot be rendered as CloudEvent")
 	}
+	err := Validate(event)
+	if err != nil {
+		return nil, fmt.Errorf("cannot validate CDEvent %v", err)
+	}
 	ce := cloudevents.NewEvent()
 	// TODO(afrittoli) We should have some validation in place
 	ce.SetSource(event.GetSource())
 	ce.SetSubject(event.GetSubjectId())
 	ce.SetType(event.GetType().String())
-	err := ce.SetData(cloudevents.ApplicationJSON, event)
+	err = ce.SetData(cloudevents.ApplicationJSON, event)
 	return &ce, err
 }
 
@@ -53,4 +59,25 @@ func AsJsonString(event CDEvent) (string, error) {
 		return "", err
 	}
 	return string(jsonBytes), nil
+}
+
+// Validate checks the CDEvent against the JSON schema
+func Validate(event CDEvent) error {
+	schemaName := event.GetSchema()
+	compiler := jsonschema.NewCompiler()
+	sch, err := compiler.Compile(fmt.Sprintf("../../jsonschema/%s.json", schemaName))
+	if err != nil {
+		return fmt.Errorf("cannot compile jsonschema %s, %s", schemaName, err)
+	}
+	eventType := reflect.TypeOf(event)
+	sch.Types = append(sch.Types, eventType.String())
+	// var v interface{}
+	// jsonString, err := AsJsonString(event)
+	// if err != nil {
+	// 	return fmt.Errorf("cannot render the event %s as json %s", event, err)
+	// }
+	// if err := json.Unmarshal([]byte(jsonString), &v); err != nil {
+	// 	return fmt.Errorf("cannot unmarshal event json: %v", err)
+	// }
+	return sch.Validate(event)
 }
