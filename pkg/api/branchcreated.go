@@ -108,7 +108,7 @@ func (e *BranchCreatedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *BranchCreatedEvent) GetSchema() string {
+func (e BranchCreatedEvent) GetSchema() string {
 	return branchCreatedSchemaFile
 }
 

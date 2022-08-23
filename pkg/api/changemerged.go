@@ -108,7 +108,7 @@ func (e *ChangeMergedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *ChangeMergedEvent) GetSchema() string {
+func (e ChangeMergedEvent) GetSchema() string {
 	return changeMergedSchemaFile
 }
 

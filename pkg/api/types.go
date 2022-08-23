@@ -132,6 +132,9 @@ type CDEventReader interface {
 	// the generic Subject to obtain an event specific implementation of Subject
 	// for direct access to the content fields
 	GetSubject() Subject
+
+	// The name of the schema file associated to the event type
+	GetSchema() string
 }
 
 type CDEventWriter interface {
@@ -158,7 +161,4 @@ type CDEventWriter interface {
 type CDEvent interface {
 	CDEventReader
 	CDEventWriter
-
-	// The name of the schema file associated to the event type
-	GetSchema() string
 }

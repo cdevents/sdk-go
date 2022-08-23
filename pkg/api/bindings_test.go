@@ -337,48 +337,48 @@ func TestAsCloudEvent(t *testing.T) {
 
 	tests := []struct {
 		name            string
-		event           CDEvent
+		event           CDEventReader
 		payloadReceiver interface{}
 	}{{
 		name:            "pipelinerun queued",
-		event:           pipelineRunQueuedEvent,
-		payloadReceiver: &PipelineRunQueuedEvent{},
+		event:           *pipelineRunQueuedEvent,
+		payloadReceiver: PipelineRunQueuedEvent{},
 	}, {
 		name:            "pipelinerun started",
-		event:           pipelineRunStartedEvent,
-		payloadReceiver: &PipelineRunStartedEvent{},
+		event:           *pipelineRunStartedEvent,
+		payloadReceiver: PipelineRunStartedEvent{},
 	}, {
 		name:            "pipelinerun finished",
-		event:           pipelineRunFinishedEvent,
-		payloadReceiver: &PipelineRunFinishedEvent{},
+		event:           *pipelineRunFinishedEvent,
+		payloadReceiver: PipelineRunFinishedEvent{},
 	}, {
 		name:            "taskrun started",
-		event:           taskRunStartedEvent,
-		payloadReceiver: &TaskRunStartedEvent{},
+		event:           *taskRunStartedEvent,
+		payloadReceiver: TaskRunStartedEvent{},
 	}, {
 		name:            "taskrun finished",
-		event:           taskRunFinishedEvent,
-		payloadReceiver: &TaskRunFinishedEvent{},
+		event:           *taskRunFinishedEvent,
+		payloadReceiver: TaskRunFinishedEvent{},
 	}, {
 		name:            "change created",
-		event:           changeCreatedEvent,
-		payloadReceiver: &ChangeCreatedEvent{},
+		event:           *changeCreatedEvent,
+		payloadReceiver: ChangeCreatedEvent{},
 	}, {
 		name:            "change updated",
-		event:           changeUpdatedEvent,
-		payloadReceiver: &ChangeUpdatedEvent{},
+		event:           *changeUpdatedEvent,
+		payloadReceiver: ChangeUpdatedEvent{},
 	}, {
 		name:            "change reviewed",
-		event:           changeReviewedEvent,
-		payloadReceiver: &ChangeReviewedEvent{},
+		event:           *changeReviewedEvent,
+		payloadReceiver: ChangeReviewedEvent{},
 	}, {
 		name:            "change merged",
-		event:           changeMergedEvent,
-		payloadReceiver: &ChangeMergedEvent{},
+		event:           *changeMergedEvent,
+		payloadReceiver: ChangeMergedEvent{},
 	}, {
 		name:            "change abandoned",
-		event:           changeAbandonedEvent,
-		payloadReceiver: &ChangeAbandonedEvent{},
+		event:           *changeAbandonedEvent,
+		payloadReceiver: ChangeAbandonedEvent{},
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

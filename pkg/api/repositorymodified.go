@@ -108,7 +108,7 @@ func (e *RepositoryModifiedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *RepositoryModifiedEvent) GetSchema() string {
+func (e RepositoryModifiedEvent) GetSchema() string {
 	return repositoryModifiedSchemaFile
 }
 

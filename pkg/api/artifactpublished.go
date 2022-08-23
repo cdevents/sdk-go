@@ -108,7 +108,7 @@ func (e *ArtifactPublishedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *ArtifactPublishedEvent) GetSchema() string {
+func (e ArtifactPublishedEvent) GetSchema() string {
 	return artifactPublishedSchemaFile
 }
 

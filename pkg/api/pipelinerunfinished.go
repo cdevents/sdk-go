@@ -155,7 +155,7 @@ func (e *PipelineRunFinishedEvent) SetSubjectErrors(errors string) {
 	e.Subject.Content.Errors = errors
 }
 
-func (e *PipelineRunFinishedEvent) GetSchema() string {
+func (e PipelineRunFinishedEvent) GetSchema() string {
 	return pipelineRunFinishedSchemaFile
 }
 
