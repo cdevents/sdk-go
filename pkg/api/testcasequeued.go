@@ -108,7 +108,7 @@ func (e *TestCaseQueuedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *TestCaseQueuedEvent) GetSchema() string {
+func (e TestCaseQueuedEvent) GetSchema() string {
 	return testCaseQueuedSchemaFile
 }
 

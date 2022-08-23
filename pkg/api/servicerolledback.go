@@ -108,7 +108,7 @@ func (e *ServiceRolledbackEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *ServiceRolledbackEvent) GetSchema() string {
+func (e ServiceRolledbackEvent) GetSchema() string {
 	return serviceRolledbackSchemaFile
 }
 

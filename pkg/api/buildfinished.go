@@ -108,7 +108,7 @@ func (e *BuildFinishedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *BuildFinishedEvent) GetSchema() string {
+func (e BuildFinishedEvent) GetSchema() string {
 	return buildFinishedSchemaFile
 }
 

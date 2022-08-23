@@ -108,7 +108,7 @@ func (e *BranchDeletedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *BranchDeletedEvent) GetSchema() string {
+func (e BranchDeletedEvent) GetSchema() string {
 	return branchDeletedSchemaFile
 }
 

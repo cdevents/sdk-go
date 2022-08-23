@@ -108,7 +108,7 @@ func (e *BuildQueuedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *BuildQueuedEvent) GetSchema() string {
+func (e BuildQueuedEvent) GetSchema() string {
 	return buildQueuedSchemaFile
 }
 

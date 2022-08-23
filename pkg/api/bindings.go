@@ -32,7 +32,7 @@ import (
 // but it's not yet in the spec
 
 // AsCloudEvent renders a CDEvent as a CloudEvent
-func AsCloudEvent(event CDEvent) (*cloudevents.Event, error) {
+func AsCloudEvent(event CDEventReader) (*cloudevents.Event, error) {
 	if event == nil {
 		return nil, fmt.Errorf("nil CDEvent cannot be rendered as CloudEvent")
 	}
@@ -50,7 +50,7 @@ func AsCloudEvent(event CDEvent) (*cloudevents.Event, error) {
 }
 
 // AsJsonString renders a CDEvent as a JSON string
-func AsJsonString(event CDEvent) (string, error) {
+func AsJsonString(event CDEventReader) (string, error) {
 	if event == nil {
 		return "", nil
 	}
@@ -62,7 +62,7 @@ func AsJsonString(event CDEvent) (string, error) {
 }
 
 // Validate checks the CDEvent against the JSON schema
-func Validate(event CDEvent) error {
+func Validate(event CDEventReader) error {
 	schemaName := event.GetSchema()
 	compiler := jsonschema.NewCompiler()
 	sch, err := compiler.Compile(fmt.Sprintf("../../jsonschema/%s.json", schemaName))

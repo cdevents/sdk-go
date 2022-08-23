@@ -108,7 +108,7 @@ func (e *EnvironmentDeletedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *EnvironmentDeletedEvent) GetSchema() string {
+func (e EnvironmentDeletedEvent) GetSchema() string {
 	return environmentDeletedSchemaFile
 }
 

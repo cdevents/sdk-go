@@ -132,7 +132,7 @@ func (e *TaskRunStartedEvent) SetSubjectPipelineRun(pipelineRun Reference) {
 	e.Subject.Content.PipelineRun = pipelineRun
 }
 
-func (e *TaskRunStartedEvent) GetSchema() string {
+func (e TaskRunStartedEvent) GetSchema() string {
 	return taskRunStartedSchemaFile
 }
 

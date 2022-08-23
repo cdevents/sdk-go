@@ -108,7 +108,7 @@ func (e *EnvironmentModifiedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *EnvironmentModifiedEvent) GetSchema() string {
+func (e EnvironmentModifiedEvent) GetSchema() string {
 	return environmentModifiedSchemaFile
 }
 

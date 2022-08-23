@@ -108,7 +108,7 @@ func (e *ServicePublishedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *ServicePublishedEvent) GetSchema() string {
+func (e ServicePublishedEvent) GetSchema() string {
 	return servicePublishedSchemaFile
 }
 

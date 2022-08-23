@@ -108,7 +108,7 @@ func (e *ServiceUpgradedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *ServiceUpgradedEvent) GetSchema() string {
+func (e ServiceUpgradedEvent) GetSchema() string {
 	return serviceUpgradedSchemaFile
 }
 

@@ -108,7 +108,7 @@ func (e *RepositoryDeletedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *RepositoryDeletedEvent) GetSchema() string {
+func (e RepositoryDeletedEvent) GetSchema() string {
 	return repositoryDeletedSchemaFile
 }
 

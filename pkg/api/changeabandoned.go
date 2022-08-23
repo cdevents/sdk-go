@@ -108,7 +108,7 @@ func (e *ChangeAbandonedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *ChangeAbandonedEvent) GetSchema() string {
+func (e ChangeAbandonedEvent) GetSchema() string {
 	return changeAbandonedSchemaFile
 }
 

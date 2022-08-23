@@ -125,7 +125,7 @@ func (e *PipelineRunQueuedEvent) SetSubjectURL(url string) {
 	e.Subject.Content.URL = url
 }
 
-func (e *PipelineRunQueuedEvent) GetSchema() string {
+func (e PipelineRunQueuedEvent) GetSchema() string {
 	return pipelineRunQueuedSchemaFile
 }
 

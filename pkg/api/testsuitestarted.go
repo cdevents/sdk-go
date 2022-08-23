@@ -108,7 +108,7 @@ func (e *TestSuiteStartedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *TestSuiteStartedEvent) GetSchema() string {
+func (e TestSuiteStartedEvent) GetSchema() string {
 	return testSuiteStartedSchemaFile
 }
 
