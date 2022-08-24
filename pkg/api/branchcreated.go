@@ -112,12 +112,17 @@ func (e BranchCreatedEvent) GetSchema() string {
 	return branchCreatedSchemaFile
 }
 
-func newBranchCreatedEvent() CDEvent {
-	return &BranchCreatedEvent{
+func NewBranchCreatedEvent() (*BranchCreatedEvent, error) {
+	e := &BranchCreatedEvent{
 		Context: Context{
 			Type:    BranchCreatedEventV1,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: BranchCreatedSubject{},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

@@ -112,8 +112,8 @@ func (e ChangeAbandonedEvent) GetSchema() string {
 	return changeAbandonedSchemaFile
 }
 
-func newChangeAbandonedEvent() CDEvent {
-	return &ChangeAbandonedEvent{
+func NewChangeAbandonedEvent() (*ChangeAbandonedEvent, error) {
+	e := &ChangeAbandonedEvent{
 		Context: Context{
 			Type:    ChangeAbandonedEventV1,
 			Version: CDEventsSpecVersion,
@@ -124,4 +124,9 @@ func newChangeAbandonedEvent() CDEvent {
 			},
 		},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

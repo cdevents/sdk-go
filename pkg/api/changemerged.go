@@ -112,8 +112,8 @@ func (e ChangeMergedEvent) GetSchema() string {
 	return changeMergedSchemaFile
 }
 
-func newChangeMergedEvent() CDEvent {
-	return &ChangeMergedEvent{
+func NewChangeMergedEvent() (*ChangeMergedEvent, error) {
+	e := &ChangeMergedEvent{
 		Context: Context{
 			Type:    ChangeMergedEventV1,
 			Version: CDEventsSpecVersion,
@@ -124,4 +124,9 @@ func newChangeMergedEvent() CDEvent {
 			},
 		},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

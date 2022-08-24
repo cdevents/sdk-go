@@ -112,12 +112,17 @@ func (e ServiceUpgradedEvent) GetSchema() string {
 	return serviceUpgradedSchemaFile
 }
 
-func newServiceUpgradedEvent() CDEvent {
-	return &ServiceUpgradedEvent{
+func NewServiceUpgradedEvent() (*ServiceUpgradedEvent, error) {
+	e := &ServiceUpgradedEvent{
 		Context: Context{
 			Type:    ServiceUpgradedEventV1,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: ServiceUpgradedSubject{},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

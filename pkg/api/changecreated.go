@@ -112,8 +112,8 @@ func (e ChangeCreatedEvent) GetSchema() string {
 	return changeCreatedSchemaFile
 }
 
-func newChangeCreatedEvent() CDEvent {
-	return &ChangeCreatedEvent{
+func NewChangeCreatedEvent() (*ChangeCreatedEvent, error) {
+	e := &ChangeCreatedEvent{
 		Context: Context{
 			Type:    ChangeCreatedEventV1,
 			Version: CDEventsSpecVersion,
@@ -124,4 +124,9 @@ func newChangeCreatedEvent() CDEvent {
 			},
 		},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

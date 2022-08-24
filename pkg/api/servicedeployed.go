@@ -112,12 +112,17 @@ func (e ServiceDeployedEvent) GetSchema() string {
 	return serviceDeployedSchemaFile
 }
 
-func newServiceDeployedEvent() CDEvent {
-	return &ServiceDeployedEvent{
+func NewServiceDeployedEvent() (*ServiceDeployedEvent, error) {
+	e := &ServiceDeployedEvent{
 		Context: Context{
 			Type:    ServiceDeployedEventV1,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: ServiceDeployedSubject{},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

@@ -112,12 +112,17 @@ func (e EnvironmentModifiedEvent) GetSchema() string {
 	return environmentModifiedSchemaFile
 }
 
-func newEnvironmentModifiedEvent() CDEvent {
-	return &EnvironmentModifiedEvent{
+func NewEnvironmentModifiedEvent() (*EnvironmentModifiedEvent, error) {
+	e := &EnvironmentModifiedEvent{
 		Context: Context{
 			Type:    EnvironmentModifiedEventV1,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: EnvironmentModifiedSubject{},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

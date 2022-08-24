@@ -33,7 +33,7 @@ To create a CDEvent, for instance a [*pipelineRun queued*](https://cdevents.dev/
 func main() {
 
     // Create the base event
-    event, err := cdevent.NewCDEvent(cdevent.PipelineRunStartedEventV1)
+    event, err := cdevents.NewPipelineRunQueuedEvent()
     if err != nil {
       log.Fatalf("could not create a cdevent, %v", err)
     }
