@@ -5,16 +5,20 @@
     "context": {
       "properties": {
         "version": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "id": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "source": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "type": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "timestamp": {
           "type": "string",
@@ -34,13 +38,15 @@
     "subject": {
       "properties": {
         "id": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "source": {
           "type": "string"
         },
         "type": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "content": {
           "properties": {

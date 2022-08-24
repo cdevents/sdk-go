@@ -30,21 +30,21 @@ type Context struct {
 	// uses. This enables the interpretation of the context. Compliant event
 	// producers MUST use a value of draft when referring to this version of the
 	// specification.
-	Version string `json:"version"`
+	Version string `json:"version" jsonschema:"required,minLength=1"`
 
 	// Spec: https://cdevents.dev/docs/spec/#id
 	// Description: Identifier for an event. Subsequent delivery attempts of the
 	// same event MAY share the same id. This attribute matches the syntax and
 	// semantics of the id attribute of CloudEvents:
 	// https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#id
-	Id string `json:"id"`
+	Id string `json:"id" jsonschema:"required,minLength=1"`
 
 	// Spec: https://cdevents.dev/docs/spec/#source
 	// Description: defines the context in which an event happened. The main
 	// purpose of the source is to provide global uniqueness for source + id.
 	// The source MAY identify a single producer or a group of producer that
 	// belong to the same application.
-	Source string `json:"source"`
+	Source string `json:"source" jsonschema:"required,minLength=1"`
 
 	// Spec: https://cdevents.dev/docs/spec/#type
 	// Description: defines the type of event, as combination of a subject and
@@ -52,7 +52,7 @@ type Context struct {
 	// types should be prefixed with dev.cdevents.
 	// One occurrence may have multiple events associated, as long as they have
 	// different event types
-	Type CDEventType `json:"type"`
+	Type CDEventType `json:"type" jsonschema:"required,minLength=1"`
 
 	// Spec: https://cdevents.dev/docs/spec/#timestamp
 	// Description: Description: defines the time of the occurrence. When the
@@ -60,14 +60,14 @@ type Context struct {
 	// produced MAY be used. In case the transport layer should require a
 	// re-transmission of the event, the timestamp SHOULD NOT be updated, i.e.
 	// it should be the same for the same source + id combination.
-	Timestamp time.Time `json:"timestamp"`
+	Timestamp time.Time `json:"timestamp" jsonschema:"required"`
 }
 
 type Reference struct {
 
 	// Spec: https://cdevents.dev/docs/spec/#format-of-subjects
 	// Description: Uniquely identifies the subject within the source
-	Id string `json:"id"`
+	Id string `json:"id" jsonschema:"required,minLength=1"`
 
 	// Spec: https://cdevents.dev/docs/spec/#format-of-subjects
 	// Description: defines the context in which an event happened. The main
@@ -81,7 +81,7 @@ type SubjectBase struct {
 	Reference
 
 	// The type of subject. Constraints what is a valid valid SubjectContent
-	Type SubjectType `json:"type"`
+	Type SubjectType `json:"type" jsonschema:"required,minLength=1"`
 }
 
 type SubjectType string

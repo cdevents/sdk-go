@@ -55,7 +55,7 @@ func (e TestSuiteStartedEvent) GetType() CDEventType {
 }
 
 func (e TestSuiteStartedEvent) GetVersion() string {
-	return CDEventsSpecVersion
+	return string(CDEventsSpecVersion)
 }
 
 func (e TestSuiteStartedEvent) GetId() string {

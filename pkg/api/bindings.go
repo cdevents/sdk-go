@@ -21,7 +21,6 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"reflect"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	jsonschema "github.com/santhosh-tekuri/jsonschema/v5"
@@ -69,15 +68,13 @@ func Validate(event CDEventReader) error {
 	if err != nil {
 		return fmt.Errorf("cannot compile jsonschema %s, %s", schemaName, err)
 	}
-	eventType := reflect.TypeOf(event)
-	sch.Types = append(sch.Types, eventType.String())
-	// var v interface{}
-	// jsonString, err := AsJsonString(event)
-	// if err != nil {
-	// 	return fmt.Errorf("cannot render the event %s as json %s", event, err)
-	// }
-	// if err := json.Unmarshal([]byte(jsonString), &v); err != nil {
-	// 	return fmt.Errorf("cannot unmarshal event json: %v", err)
-	// }
-	return sch.Validate(event)
+	var v interface{}
+	jsonString, err := AsJsonString(event)
+	if err != nil {
+		return fmt.Errorf("cannot render the event %s as json %s", event, err)
+	}
+	if err := json.Unmarshal([]byte(jsonString), &v); err != nil {
+		return fmt.Errorf("cannot unmarshal event json: %v", err)
+	}
+	return sch.Validate(v)
 }
