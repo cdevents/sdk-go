@@ -165,8 +165,8 @@ func (e TaskRunFinishedEvent) GetSchema() string {
 	return taskRunFinishedSchemaFile
 }
 
-func newTaskRunFinishedEvent() CDEvent {
-	return &TaskRunFinishedEvent{
+func NewTaskRunFinishedEvent() (*TaskRunFinishedEvent, error) {
+	e := &TaskRunFinishedEvent{
 		Context: Context{
 			Type:    TaskRunFinishedEventV1,
 			Version: CDEventsSpecVersion,
@@ -177,4 +177,9 @@ func newTaskRunFinishedEvent() CDEvent {
 			},
 		},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

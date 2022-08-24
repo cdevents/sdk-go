@@ -136,8 +136,8 @@ func (e TaskRunStartedEvent) GetSchema() string {
 	return taskRunStartedSchemaFile
 }
 
-func newTaskRunStartedEvent() CDEvent {
-	return &TaskRunStartedEvent{
+func NewTaskRunStartedEvent() (*TaskRunStartedEvent, error) {
+	e := &TaskRunStartedEvent{
 		Context: Context{
 			Type:    TaskRunStartedEventV1,
 			Version: CDEventsSpecVersion,
@@ -148,4 +148,9 @@ func newTaskRunStartedEvent() CDEvent {
 			},
 		},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

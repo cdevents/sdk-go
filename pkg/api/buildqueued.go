@@ -112,12 +112,17 @@ func (e BuildQueuedEvent) GetSchema() string {
 	return buildQueuedSchemaFile
 }
 
-func newBuildQueuedEvent() CDEvent {
-	return &BuildQueuedEvent{
+func NewBuildQueuedEvent() (*BuildQueuedEvent, error) {
+	e := &BuildQueuedEvent{
 		Context: Context{
 			Type:    BuildQueuedEventV1,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: BuildQueuedSubject{},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

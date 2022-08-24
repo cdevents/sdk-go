@@ -112,12 +112,17 @@ func (e EnvironmentDeletedEvent) GetSchema() string {
 	return environmentDeletedSchemaFile
 }
 
-func newEnvironmentDeletedEvent() CDEvent {
-	return &EnvironmentDeletedEvent{
+func NewEnvironmentDeletedEvent() (*EnvironmentDeletedEvent, error) {
+	e := &EnvironmentDeletedEvent{
 		Context: Context{
 			Type:    EnvironmentDeletedEventV1,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: EnvironmentDeletedSubject{},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

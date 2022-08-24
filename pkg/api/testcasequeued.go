@@ -112,12 +112,17 @@ func (e TestCaseQueuedEvent) GetSchema() string {
 	return testCaseQueuedSchemaFile
 }
 
-func newTestCaseQueuedEvent() CDEvent {
-	return &TestCaseQueuedEvent{
+func NewTestCaseQueuedEvent() (*TestCaseQueuedEvent, error) {
+	e := &TestCaseQueuedEvent{
 		Context: Context{
 			Type:    TestCaseQueuedEventV1,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: TestCaseQueuedSubject{},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

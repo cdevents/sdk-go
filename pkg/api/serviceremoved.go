@@ -112,12 +112,17 @@ func (e ServiceRemovedEvent) GetSchema() string {
 	return serviceRemovedSchemaFile
 }
 
-func newServiceRemovedEvent() CDEvent {
-	return &ServiceRemovedEvent{
+func NewServiceRemovedEvent() (*ServiceRemovedEvent, error) {
+	e := &ServiceRemovedEvent{
 		Context: Context{
 			Type:    ServiceRemovedEventV1,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: ServiceRemovedSubject{},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

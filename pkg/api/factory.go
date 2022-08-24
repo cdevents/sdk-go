@@ -38,107 +38,76 @@ func initCDEvent(e CDEvent) (CDEvent, error) {
 	return e, nil
 }
 
+// NewCDEvent produces a CDEvent by type
+// This function can be used by users but it's meant mainly for testing purposes
 func NewCDEvent(eventType CDEventType) (CDEvent, error) {
 	switch eventType {
 	case PipelineRunQueuedEventV1:
-		e := newPipelineRunQueuedEvent()
-		return initCDEvent(e)
+		return NewPipelineRunQueuedEvent()
 	case PipelineRunStartedEventV1:
-		e := newPipelineRunStartedEvent()
-		return initCDEvent(e)
+		return NewPipelineRunStartedEvent()
 	case PipelineRunFinishedEventV1:
-		e := newPipelineRunFinishedEvent()
-		return initCDEvent(e)
+		return NewPipelineRunFinishedEvent()
 	case TaskRunStartedEventV1:
-		e := newTaskRunStartedEvent()
-		return initCDEvent(e)
+		return NewTaskRunStartedEvent()
 	case TaskRunFinishedEventV1:
-		e := newTaskRunFinishedEvent()
-		return initCDEvent(e)
+		return NewTaskRunFinishedEvent()
 	// case RepositoryCreatedEventV1:
-	// 	e := newRepositoryCreatedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewRepositoryCreatedEvent()
 	// case RepositoryModifiedEventV1:
-	// 	e := newRepositoryModifiedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewRepositoryModifiedEvent()
 	// case RepositoryDeletedEventV1:
-	// 	e := newRepositoryDeletedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewRepositoryDeletedEvent()
 	// case BranchCreatedEventV1:
-	// 	e := newBranchCreatedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewBranchCreatedEvent()
 	// case BranchDeletedEventV1:
-	// 	e := newBranchDeletedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewBranchDeletedEvent()
 	case ChangeCreatedEventV1:
-		e := newChangeCreatedEvent()
-		return initCDEvent(e)
+		return NewChangeCreatedEvent()
 	case ChangeUpdatedEventV1:
-		e := newChangeUpdatedEvent()
-		return initCDEvent(e)
+		return NewChangeUpdatedEvent()
 	case ChangeReviewedEventV1:
-		e := newChangeReviewedEvent()
-		return initCDEvent(e)
+		return NewChangeReviewedEvent()
 	case ChangeMergedEventV1:
-		e := newChangeMergedEvent()
-		return initCDEvent(e)
+		return NewChangeMergedEvent()
 	case ChangeAbandonedEventV1:
-		e := newChangeAbandonedEvent()
-		return initCDEvent(e)
+		return NewChangeAbandonedEvent()
 	// case BuildQueuedEventV1:
-	// 	e := newBuildQueuedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewBuildQueuedEvent()
 	// case BuildStartedEventV1:
-	// 	e := newBuildStartedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewBuildStartedEvent()
 	// case BuildFinishedEventV1:
-	// 	e := newBuildFinishedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewBuildFinishedEvent()
 	// case TestCaseQueuedEventV1:
-	// 	e := newTestCaseQueuedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewTestCaseQueuedEvent()
 	// case TestCaseStartedEventV1:
-	// 	e := newTestCaseStartedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewTestCaseStartedEvent()
 	// case TestCaseFinishedEventV1:
-	// 	e := newTestCaseFinishedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewTestCaseFinishedEvent()
 	// case TestSuiteStartedEventV1:
-	// 	e := newTestSuiteStartedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewTestSuiteStartedEvent()
 	// case TestSuiteFinishedEventV1:
-	// 	e := newTestSuiteFinishedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewTestSuiteFinishedEvent()
 	// case ArtifactPackagedEventV1:
-	// 	e := newArtifactPackagedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewArtifactPackagedEvent()
 	// case ArtifactPublishedEventV1:
-	// 	e := newArtifactPublishedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewArtifactPublishedEvent()
 	// case EnvironmentCreatedEventV1:
-	// 	e := newEnvironmentCreatedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewEnvironmentCreatedEvent()
 	// case EnvironmentModifiedEventV1:
-	// 	e := newEnvironmentModifiedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewEnvironmentModifiedEvent()
 	// case EnvironmentDeletedEventV1:
-	// 	e := newEnvironmentDeletedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewEnvironmentDeletedEvent()
 	// case ServiceDeployedEventV1:
-	// 	e := newServiceDeployedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewServiceDeployedEvent()
 	// case ServiceUpgradedEventV1:
-	// 	e := newServiceUpgradedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewServiceUpgradedEvent()
 	// case ServiceRolledbackEventV1:
-	// 	e := newServiceRolledbackEvent()
-	// 	return initCDEvent(e)
+	// 	return NewServiceRolledbackEvent()
 	// case ServiceRemovedEventV1:
-	// 	e := newServiceRemovedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewServiceRemovedEvent()
 	// case ServicePublishedEventV1:
-	// 	e := newServicePublishedEvent()
-	// 	return initCDEvent(e)
+	// 	return NewServicePublishedEvent()
 	default:
 		return nil, fmt.Errorf("event %v not supported", eventType)
 	}

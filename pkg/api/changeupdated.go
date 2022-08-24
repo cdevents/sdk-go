@@ -112,8 +112,8 @@ func (e ChangeUpdatedEvent) GetSchema() string {
 	return changeUpdatedSchemaFile
 }
 
-func newChangeUpdatedEvent() CDEvent {
-	return &ChangeUpdatedEvent{
+func NewChangeUpdatedEvent() (*ChangeUpdatedEvent, error) {
+	e := &ChangeUpdatedEvent{
 		Context: Context{
 			Type:    ChangeUpdatedEventV1,
 			Version: CDEventsSpecVersion,
@@ -124,4 +124,9 @@ func newChangeUpdatedEvent() CDEvent {
 			},
 		},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

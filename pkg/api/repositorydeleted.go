@@ -112,12 +112,17 @@ func (e RepositoryDeletedEvent) GetSchema() string {
 	return repositoryDeletedSchemaFile
 }
 
-func newRepositoryDeletedEvent() CDEvent {
-	return &RepositoryDeletedEvent{
+func NewRepositoryDeletedEvent() (*RepositoryDeletedEvent, error) {
+	e := &RepositoryDeletedEvent{
 		Context: Context{
 			Type:    RepositoryDeletedEventV1,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: RepositoryDeletedSubject{},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

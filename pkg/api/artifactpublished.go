@@ -112,12 +112,17 @@ func (e ArtifactPublishedEvent) GetSchema() string {
 	return artifactPublishedSchemaFile
 }
 
-func newArtifactPublishedEvent() CDEvent {
-	return &ArtifactPublishedEvent{
+func NewArtifactPublishedEvent() (*ArtifactPublishedEvent, error) {
+	e := &ArtifactPublishedEvent{
 		Context: Context{
 			Type:    ArtifactPublishedEventV1,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: ArtifactPublishedSubject{},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

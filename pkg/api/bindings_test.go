@@ -265,59 +265,57 @@ func init() {
 	}
 }
 
-func makeCDEvent(eventType CDEventType) CDEvent {
-	event, _ := NewCDEvent(eventType)
+func setContext(event CDEventWriter) {
 	event.SetSource(testSource)
 	event.SetSubjectId(testSubjectId)
-	return event
 }
 
 func init() {
-	e := makeCDEvent(PipelineRunQueuedEventV1)
-	pipelineRunQueuedEvent, _ = e.(*PipelineRunQueuedEvent)
+	pipelineRunQueuedEvent, _ = NewPipelineRunQueuedEvent()
+	setContext(pipelineRunQueuedEvent)
 	pipelineRunQueuedEvent.SetSubjectPipelineName(testPipeline)
 	pipelineRunQueuedEvent.SetSubjectURL(testSubjectURL)
 
-	e = makeCDEvent(PipelineRunStartedEventV1)
-	pipelineRunStartedEvent, _ = e.(*PipelineRunStartedEvent)
+	pipelineRunStartedEvent, _ = NewPipelineRunStartedEvent()
+	setContext(pipelineRunStartedEvent)
 	pipelineRunStartedEvent.SetSubjectPipelineName(testPipeline)
 	pipelineRunStartedEvent.SetSubjectURL(testSubjectURL)
 
-	e = makeCDEvent(PipelineRunFinishedEventV1)
-	pipelineRunFinishedEvent, _ = e.(*PipelineRunFinishedEvent)
+	pipelineRunFinishedEvent, _ = NewPipelineRunFinishedEvent()
+	setContext(pipelineRunFinishedEvent)
 	pipelineRunFinishedEvent.SetSubjectPipelineName(testPipeline)
 	pipelineRunFinishedEvent.SetSubjectURL(testSubjectURL)
 	pipelineRunFinishedEvent.SetSubjectOutcome(testPipelineOutcome)
 	pipelineRunFinishedEvent.SetSubjectErrors(testPipelineErrors)
 
-	e = makeCDEvent(TaskRunStartedEventV1)
-	taskRunStartedEvent, _ = e.(*TaskRunStartedEvent)
+	taskRunStartedEvent, _ = NewTaskRunStartedEvent()
+	setContext(taskRunStartedEvent)
 	taskRunStartedEvent.SetSubjectTaskName(testTaskName)
 	taskRunStartedEvent.SetSubjectURL(testSubjectURL)
 	taskRunStartedEvent.SetSubjectPipelineRun(Reference{Id: testSubjectId})
 
-	e = makeCDEvent(TaskRunFinishedEventV1)
-	taskRunFinishedEvent, _ = e.(*TaskRunFinishedEvent)
+	taskRunFinishedEvent, _ = NewTaskRunFinishedEvent()
+	setContext(taskRunFinishedEvent)
 	taskRunFinishedEvent.SetSubjectTaskName(testTaskName)
 	taskRunFinishedEvent.SetSubjectURL(testSubjectURL)
 	taskRunFinishedEvent.SetSubjectPipelineRun(Reference{Id: testSubjectId})
 	taskRunFinishedEvent.SetSubjectOutcome(testTaskOutcome)
 	taskRunFinishedEvent.SetSubjectErrors(testTaskRunErrors)
 
-	e = makeCDEvent(ChangeCreatedEventV1)
-	changeCreatedEvent, _ = e.(*ChangeCreatedEvent)
+	changeCreatedEvent, _ = NewChangeCreatedEvent()
+	setContext(changeCreatedEvent)
 
-	e = makeCDEvent(ChangeUpdatedEventV1)
-	changeUpdatedEvent, _ = e.(*ChangeUpdatedEvent)
+	changeUpdatedEvent, _ = NewChangeUpdatedEvent()
+	setContext(changeUpdatedEvent)
 
-	e = makeCDEvent(ChangeReviewedEventV1)
-	changeReviewedEvent, _ = e.(*ChangeReviewedEvent)
+	changeReviewedEvent, _ = NewChangeReviewedEvent()
+	setContext(changeReviewedEvent)
 
-	e = makeCDEvent(ChangeMergedEventV1)
-	changeMergedEvent, _ = e.(*ChangeMergedEvent)
+	changeMergedEvent, _ = NewChangeMergedEvent()
+	setContext(changeMergedEvent)
 
-	e = makeCDEvent(ChangeAbandonedEventV1)
-	changeAbandonedEvent, _ = e.(*ChangeAbandonedEvent)
+	changeAbandonedEvent, _ = NewChangeAbandonedEvent()
+	setContext(changeAbandonedEvent)
 
 	newUUID, _ := uuidNewRandom()
 	newTime := timeNow().Format(time.RFC3339Nano)

@@ -129,8 +129,8 @@ func (e PipelineRunStartedEvent) GetSchema() string {
 	return pipelineRunStartedSchemaFile
 }
 
-func newPipelineRunStartedEvent() CDEvent {
-	return &PipelineRunStartedEvent{
+func NewPipelineRunStartedEvent() (*PipelineRunStartedEvent, error) {
+	e := &PipelineRunStartedEvent{
 		Context: Context{
 			Type:    PipelineRunStartedEventV1,
 			Version: CDEventsSpecVersion,
@@ -141,4 +141,9 @@ func newPipelineRunStartedEvent() CDEvent {
 			},
 		},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

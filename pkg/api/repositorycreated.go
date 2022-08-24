@@ -112,12 +112,17 @@ func (e RepositoryCreatedEvent) GetSchema() string {
 	return repositoryCreatedSchemaFile
 }
 
-func newRepositoryCreatedEvent() CDEvent {
-	return &RepositoryCreatedEvent{
+func NewRepositoryCreatedEvent() (*RepositoryCreatedEvent, error) {
+	e := &RepositoryCreatedEvent{
 		Context: Context{
 			Type:    RepositoryCreatedEventV1,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: RepositoryCreatedSubject{},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

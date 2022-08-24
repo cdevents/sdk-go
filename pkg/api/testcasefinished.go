@@ -112,12 +112,17 @@ func (e TestCaseFinishedEvent) GetSchema() string {
 	return testCaseFinishedSchemaFile
 }
 
-func newTestCaseFinishedEvent() CDEvent {
-	return &TestCaseFinishedEvent{
+func NewTestCaseFinishedEvent() (*TestCaseFinishedEvent, error) {
+	e := &TestCaseFinishedEvent{
 		Context: Context{
 			Type:    TestCaseFinishedEventV1,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: TestCaseFinishedSubject{},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

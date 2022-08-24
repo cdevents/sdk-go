@@ -112,12 +112,17 @@ func (e BuildFinishedEvent) GetSchema() string {
 	return buildFinishedSchemaFile
 }
 
-func newBuildFinishedEvent() CDEvent {
-	return &BuildFinishedEvent{
+func NewBuildFinishedEvent() (*BuildFinishedEvent, error) {
+	e := &BuildFinishedEvent{
 		Context: Context{
 			Type:    BuildFinishedEventV1,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: BuildFinishedSubject{},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

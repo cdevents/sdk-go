@@ -112,12 +112,17 @@ func (e EnvironmentCreatedEvent) GetSchema() string {
 	return environmentCreatedSchemaFile
 }
 
-func newEnvironmentCreatedEvent() CDEvent {
-	return &EnvironmentCreatedEvent{
+func NewEnvironmentCreatedEvent() (*EnvironmentCreatedEvent, error) {
+	e := &EnvironmentCreatedEvent{
 		Context: Context{
 			Type:    EnvironmentCreatedEventV1,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: EnvironmentCreatedSubject{},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

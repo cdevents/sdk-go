@@ -112,12 +112,17 @@ func (e ServiceRolledbackEvent) GetSchema() string {
 	return serviceRolledbackSchemaFile
 }
 
-func newServiceRolledbackEvent() CDEvent {
-	return &ServiceRolledbackEvent{
+func NewServiceRolledbackEvent() (*ServiceRolledbackEvent, error) {
+	e := &ServiceRolledbackEvent{
 		Context: Context{
 			Type:    ServiceRolledbackEventV1,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: ServiceRolledbackSubject{},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }
