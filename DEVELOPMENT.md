@@ -24,9 +24,9 @@ You must install these tools:
 
 ### Setup a fork
 
-The Tekton project requires that you develop (commit) code changes to branches that belong to a fork of the `tektoncd/pipeline` repository in your GitHub account before submitting them as Pull Requests (PRs) to the actual project repository.
+The sdk-go project requires that you develop (commit) code changes to branches that belong to a fork of the `cdevents/sdk-go` repository in your GitHub account before submitting them as Pull Requests (PRs) to the actual project repository.
 
-1. [Create a fork](https://help.github.com/articles/fork-a-repo/) of the `tektoncd/pipeline` repository in your GitHub account.
+1. [Create a fork](https://help.github.com/articles/fork-a-repo/) of the `cdevents/sdk-go` repository in your GitHub account.
 
 1. Create a clone of your fork on your local machine:
 
