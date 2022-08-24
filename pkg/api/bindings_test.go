@@ -504,11 +504,14 @@ func TestAsJsonString(t *testing.T) {
 
 func TestInvalidEvent(t *testing.T) {
 
-	eventNoSource, _ := NewCDEvent(ChangeAbandonedEventV1)
+	eventNoSource, _ := NewChangeAbandonedEvent()
 	eventNoSource.SetSubjectId(testSubjectId)
 
-	eventNoSubjectId, _ := NewCDEvent(ChangeAbandonedEventV1)
+	eventNoSubjectId, _ := NewChangeAbandonedEvent()
 	eventNoSubjectId.SetSource(testSource)
+
+	eventBadVersion, _ := NewChangeAbandonedEvent()
+	eventBadVersion.Context.Version = "invalid"
 
 	tests := []struct {
 		name  string
@@ -519,6 +522,9 @@ func TestInvalidEvent(t *testing.T) {
 	}, {
 		name:  "missing subject id",
 		event: eventNoSubjectId,
+	}, {
+		name:  "invalid version",
+		event: eventBadVersion,
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

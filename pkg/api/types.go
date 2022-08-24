@@ -30,7 +30,7 @@ type Context struct {
 	// uses. This enables the interpretation of the context. Compliant event
 	// producers MUST use a value of draft when referring to this version of the
 	// specification.
-	Version string `json:"version" jsonschema:"required,minLength=1"`
+	Version string `json:"version" jsonschema:"required,enum=draft,default=draft"`
 
 	// Spec: https://cdevents.dev/docs/spec/#id
 	// Description: Identifier for an event. Subsequent delivery attempts of the

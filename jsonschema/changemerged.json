@@ -6,7 +6,10 @@
       "properties": {
         "version": {
           "type": "string",
-          "minLength": 1
+          "enum": [
+            "draft"
+          ],
+          "default": "draft"
         },
         "id": {
           "type": "string",
