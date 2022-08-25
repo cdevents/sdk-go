@@ -44,6 +44,11 @@ var (
 		"repositorydeleted":   &api.RepositoryDeletedEvent{},
 		"branchcreated":       &api.BranchCreatedEvent{},
 		"branchdeleted":       &api.BranchDeletedEvent{},
+		"testsuitestarted":    &api.TestSuiteStartedEvent{},
+		"testsuitefinished":   &api.TestSuiteFinishedEvent{},
+		"testcasequeued":      &api.TestCaseQueuedEvent{},
+		"testcasestarted":     &api.TestCaseStartedEvent{},
+		"testcasefinished":    &api.TestCaseFinishedEvent{},
 	}
 )
 

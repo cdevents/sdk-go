@@ -293,6 +293,86 @@ func TestNewCDEvent(t *testing.T) {
 				},
 			},
 		},
+	}, {
+		name:      "testcase queued",
+		eventType: TestCaseQueuedEventV1,
+		expectedEvent: &TestCaseQueuedEvent{
+			Context: Context{
+				Type:      TestCaseQueuedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: TestCaseQueuedSubject{
+				SubjectBase: SubjectBase{
+					Type: TestCaseSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "testcase started",
+		eventType: TestCaseStartedEventV1,
+		expectedEvent: &TestCaseStartedEvent{
+			Context: Context{
+				Type:      TestCaseStartedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: TestCaseStartedSubject{
+				SubjectBase: SubjectBase{
+					Type: TestCaseSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "testcase finished",
+		eventType: TestCaseFinishedEventV1,
+		expectedEvent: &TestCaseFinishedEvent{
+			Context: Context{
+				Type:      TestCaseFinishedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: TestCaseFinishedSubject{
+				SubjectBase: SubjectBase{
+					Type: TestCaseSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "testsuite started",
+		eventType: TestSuiteStartedEventV1,
+		expectedEvent: &TestSuiteStartedEvent{
+			Context: Context{
+				Type:      TestSuiteStartedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: TestSuiteStartedSubject{
+				SubjectBase: SubjectBase{
+					Type: TestSuiteSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "testsuite finished",
+		eventType: TestSuiteFinishedEventV1,
+		expectedEvent: &TestSuiteFinishedEvent{
+			Context: Context{
+				Type:      TestSuiteFinishedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: TestSuiteFinishedSubject{
+				SubjectBase: SubjectBase{
+					Type: TestSuiteSubjectType,
+				},
+			},
+		},
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

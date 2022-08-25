@@ -118,7 +118,11 @@ func NewTestSuiteStartedEvent() (*TestSuiteStartedEvent, error) {
 			Type:    TestSuiteStartedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: TestSuiteStartedSubject{},
+		Subject: TestSuiteStartedSubject{
+			SubjectBase: SubjectBase{
+				Type: TestSuiteSubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {

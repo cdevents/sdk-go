@@ -78,16 +78,16 @@ func NewCDEvent(eventType CDEventType) (CDEvent, error) {
 	// 	return NewBuildStartedEvent()
 	// case BuildFinishedEventV1:
 	// 	return NewBuildFinishedEvent()
-	// case TestCaseQueuedEventV1:
-	// 	return NewTestCaseQueuedEvent()
-	// case TestCaseStartedEventV1:
-	// 	return NewTestCaseStartedEvent()
-	// case TestCaseFinishedEventV1:
-	// 	return NewTestCaseFinishedEvent()
-	// case TestSuiteStartedEventV1:
-	// 	return NewTestSuiteStartedEvent()
-	// case TestSuiteFinishedEventV1:
-	// 	return NewTestSuiteFinishedEvent()
+	case TestCaseQueuedEventV1:
+		return NewTestCaseQueuedEvent()
+	case TestCaseStartedEventV1:
+		return NewTestCaseStartedEvent()
+	case TestCaseFinishedEventV1:
+		return NewTestCaseFinishedEvent()
+	case TestSuiteStartedEventV1:
+		return NewTestSuiteStartedEvent()
+	case TestSuiteFinishedEventV1:
+		return NewTestSuiteFinishedEvent()
 	// case ArtifactPackagedEventV1:
 	// 	return NewArtifactPackagedEvent()
 	// case ArtifactPublishedEventV1:

@@ -118,7 +118,11 @@ func NewTestCaseFinishedEvent() (*TestCaseFinishedEvent, error) {
 			Type:    TestCaseFinishedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: TestCaseFinishedSubject{},
+		Subject: TestCaseFinishedSubject{
+			SubjectBase: SubjectBase{
+				Type: TestCaseSubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {

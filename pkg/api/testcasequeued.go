@@ -118,7 +118,11 @@ func NewTestCaseQueuedEvent() (*TestCaseQueuedEvent, error) {
 			Type:    TestCaseQueuedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: TestCaseQueuedSubject{},
+		Subject: TestCaseQueuedSubject{
+			SubjectBase: SubjectBase{
+				Type: TestCaseSubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {
