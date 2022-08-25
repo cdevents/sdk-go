@@ -34,12 +34,16 @@ var (
 	testSource          = "TestAsCloudEvent"
 	testSubjectId       = "mySubject123"
 	testPipeline        = "myPipeline"
-	testSubjectURL      = "https://www.example.com/mySubject123"
+	testSubjecturl      = "https://www.example.com/mySubject123"
 	testPipelineOutcome = PipelineRunOutcomeFailed
 	testPipelineErrors  = "Something went wrong\nWith some more details"
 	testTaskName        = "myTask"
 	testTaskOutcome     = TaskRunOutcomeFailed
 	testTaskRunErrors   = "Something went wrong\nWith some more details"
+	testRepo            = "TestRepo"
+	testOwner           = "TestOrg"
+	testUrl             = "https://example.org/TestOrg/TestRepo"
+	testViewUrl         = "https://example.org/view/TestOrg/TestRepo"
 
 	pipelineRunQueuedEvent   *PipelineRunQueuedEvent
 	pipelineRunStartedEvent  *PipelineRunStartedEvent
@@ -51,6 +55,9 @@ var (
 	changeReviewedEvent      *ChangeReviewedEvent
 	changeMergedEvent        *ChangeMergedEvent
 	changeAbandonedEvent     *ChangeAbandonedEvent
+	repositoryCreatedEvent   *RepositoryCreatedEvent
+	repositoryModifiedEvent  *RepositoryModifiedEvent
+	repositoryDeletedEvent   *RepositoryDeletedEvent
 
 	pipelineRunQueuedEventJsonTemplate = `
 {
@@ -238,6 +245,69 @@ var (
 	}
 }`
 
+	repositoryCreatedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.repository.created.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "repository",
+		"content": {
+			"name": "TestRepo",
+			"owner": "TestOrg",
+			"url": "https://example.org/TestOrg/TestRepo",
+			"viewUrl": "https://example.org/view/TestOrg/TestRepo"
+		}
+	}
+}`
+
+	repositoryModifiedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.repository.modified.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "repository",
+		"content": {
+			"name": "TestRepo",
+			"owner": "TestOrg",
+			"url": "https://example.org/TestOrg/TestRepo",
+			"viewUrl": "https://example.org/view/TestOrg/TestRepo"
+		}
+	}
+}`
+
+	repositoryDeletedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.repository.deleted.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "repository",
+		"content": {
+			"name": "TestRepo",
+			"owner": "TestOrg",
+			"url": "https://example.org/TestOrg/TestRepo",
+			"viewUrl": "https://example.org/view/TestOrg/TestRepo"
+		}
+	}
+}`
+
 	pipelineRunQueuedEventJson   string
 	pipelineRunStartedEventJson  string
 	pipelineRunFinishedEventJson string
@@ -248,6 +318,9 @@ var (
 	changeReviewedEventJson      string
 	changeMergedEventJson        string
 	changeAbandonedEventJson     string
+	repositoryCreatedEventJson   string
+	repositoryModifiedEventJson  string
+	repositoryDeletedEventJson   string
 )
 
 func init() {
@@ -274,30 +347,30 @@ func init() {
 	pipelineRunQueuedEvent, _ = NewPipelineRunQueuedEvent()
 	setContext(pipelineRunQueuedEvent)
 	pipelineRunQueuedEvent.SetSubjectPipelineName(testPipeline)
-	pipelineRunQueuedEvent.SetSubjectURL(testSubjectURL)
+	pipelineRunQueuedEvent.SetSubjectUrl(testSubjecturl)
 
 	pipelineRunStartedEvent, _ = NewPipelineRunStartedEvent()
 	setContext(pipelineRunStartedEvent)
 	pipelineRunStartedEvent.SetSubjectPipelineName(testPipeline)
-	pipelineRunStartedEvent.SetSubjectURL(testSubjectURL)
+	pipelineRunStartedEvent.SetSubjectUrl(testSubjecturl)
 
 	pipelineRunFinishedEvent, _ = NewPipelineRunFinishedEvent()
 	setContext(pipelineRunFinishedEvent)
 	pipelineRunFinishedEvent.SetSubjectPipelineName(testPipeline)
-	pipelineRunFinishedEvent.SetSubjectURL(testSubjectURL)
+	pipelineRunFinishedEvent.SetSubjectUrl(testSubjecturl)
 	pipelineRunFinishedEvent.SetSubjectOutcome(testPipelineOutcome)
 	pipelineRunFinishedEvent.SetSubjectErrors(testPipelineErrors)
 
 	taskRunStartedEvent, _ = NewTaskRunStartedEvent()
 	setContext(taskRunStartedEvent)
 	taskRunStartedEvent.SetSubjectTaskName(testTaskName)
-	taskRunStartedEvent.SetSubjectURL(testSubjectURL)
+	taskRunStartedEvent.SetSubjectUrl(testSubjecturl)
 	taskRunStartedEvent.SetSubjectPipelineRun(Reference{Id: testSubjectId})
 
 	taskRunFinishedEvent, _ = NewTaskRunFinishedEvent()
 	setContext(taskRunFinishedEvent)
 	taskRunFinishedEvent.SetSubjectTaskName(testTaskName)
-	taskRunFinishedEvent.SetSubjectURL(testSubjectURL)
+	taskRunFinishedEvent.SetSubjectUrl(testSubjecturl)
 	taskRunFinishedEvent.SetSubjectPipelineRun(Reference{Id: testSubjectId})
 	taskRunFinishedEvent.SetSubjectOutcome(testTaskOutcome)
 	taskRunFinishedEvent.SetSubjectErrors(testTaskRunErrors)
@@ -317,6 +390,27 @@ func init() {
 	changeAbandonedEvent, _ = NewChangeAbandonedEvent()
 	setContext(changeAbandonedEvent)
 
+	repositoryCreatedEvent, _ = NewRepositoryCreatedEvent()
+	setContext(repositoryCreatedEvent)
+	repositoryCreatedEvent.SetSubjectName(testRepo)
+	repositoryCreatedEvent.SetSubjectOwner(testOwner)
+	repositoryCreatedEvent.SetSubjectUrl(testUrl)
+	repositoryCreatedEvent.SetSubjectViewUrl(testViewUrl)
+
+	repositoryModifiedEvent, _ = NewRepositoryModifiedEvent()
+	setContext(repositoryModifiedEvent)
+	repositoryModifiedEvent.SetSubjectName(testRepo)
+	repositoryModifiedEvent.SetSubjectOwner(testOwner)
+	repositoryModifiedEvent.SetSubjectUrl(testUrl)
+	repositoryModifiedEvent.SetSubjectViewUrl(testViewUrl)
+
+	repositoryDeletedEvent, _ = NewRepositoryDeletedEvent()
+	setContext(repositoryDeletedEvent)
+	repositoryDeletedEvent.SetSubjectName(testRepo)
+	repositoryDeletedEvent.SetSubjectOwner(testOwner)
+	repositoryDeletedEvent.SetSubjectUrl(testUrl)
+	repositoryDeletedEvent.SetSubjectViewUrl(testViewUrl)
+
 	newUUID, _ := uuidNewRandom()
 	newTime := timeNow().Format(time.RFC3339Nano)
 	pipelineRunQueuedEventJson = fmt.Sprintf(pipelineRunQueuedEventJsonTemplate, newUUID, newTime)
@@ -329,6 +423,9 @@ func init() {
 	changeReviewedEventJson = fmt.Sprintf(changeReviewedEventJsonTemplate, newUUID, newTime)
 	changeMergedEventJson = fmt.Sprintf(changeMergedEventJsonTemplate, newUUID, newTime)
 	changeAbandonedEventJson = fmt.Sprintf(changeAbandonedEventJsonTemplate, newUUID, newTime)
+	repositoryCreatedEventJson = fmt.Sprintf(repositoryCreatedEventJsonTemplate, newUUID, newTime)
+	repositoryModifiedEventJson = fmt.Sprintf(repositoryModifiedEventJsonTemplate, newUUID, newTime)
+	repositoryDeletedEventJson = fmt.Sprintf(repositoryDeletedEventJsonTemplate, newUUID, newTime)
 }
 
 func TestAsCloudEvent(t *testing.T) {
@@ -377,6 +474,18 @@ func TestAsCloudEvent(t *testing.T) {
 		name:            "change abandoned",
 		event:           changeAbandonedEvent,
 		payloadReceiver: &ChangeAbandonedEvent{},
+	}, {
+		name:            "repository created",
+		event:           repositoryCreatedEvent,
+		payloadReceiver: &RepositoryCreatedEvent{},
+	}, {
+		name:            "repository modified",
+		event:           repositoryModifiedEvent,
+		payloadReceiver: &RepositoryModifiedEvent{},
+	}, {
+		name:            "repository deleted",
+		event:           repositoryDeletedEvent,
+		payloadReceiver: &RepositoryDeletedEvent{},
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -470,6 +579,21 @@ func TestAsJsonString(t *testing.T) {
 		event:      changeAbandonedEvent,
 		jsonString: changeAbandonedEventJson,
 		schemaName: "changeabandoned",
+	}, {
+		name:       "repository created",
+		event:      repositoryCreatedEvent,
+		jsonString: repositoryCreatedEventJson,
+		schemaName: "repositorycreated",
+	}, {
+		name:       "repository modified",
+		event:      repositoryModifiedEvent,
+		jsonString: repositoryModifiedEventJson,
+		schemaName: "repositorymodified",
+	}, {
+		name:       "repository deleted",
+		event:      repositoryDeletedEvent,
+		jsonString: repositoryDeletedEventJson,
+		schemaName: "repositorydeleted",
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -504,14 +628,23 @@ func TestAsJsonString(t *testing.T) {
 
 func TestInvalidEvent(t *testing.T) {
 
-	eventNoSource, _ := NewChangeAbandonedEvent()
+	// mandatory source missing
+	eventNoSource, _ := NewCDEvent(ChangeAbandonedEventV1)
 	eventNoSource.SetSubjectId(testSubjectId)
 
-	eventNoSubjectId, _ := NewChangeAbandonedEvent()
+	// mandatory subject id missing
+	eventNoSubjectId, _ := NewCDEvent(ChangeAbandonedEventV1)
 	eventNoSubjectId.SetSource(testSource)
 
+	// forced invalid version
 	eventBadVersion, _ := NewChangeAbandonedEvent()
 	eventBadVersion.Context.Version = "invalid"
+
+	// mandatory subject url missing
+	eventIncompleteSubject, _ := NewRepositoryCreatedEvent()
+	eventIncompleteSubject.SetSource(testSource)
+	eventIncompleteSubject.SetSubjectId(testSubjectId)
+	eventIncompleteSubject.SetSubjectName(testRepo)
 
 	tests := []struct {
 		name  string
@@ -525,6 +658,9 @@ func TestInvalidEvent(t *testing.T) {
 	}, {
 		name:  "invalid version",
 		event: eventBadVersion,
+	}, {
+		name:  "missing subject url",
+		event: eventIncompleteSubject,
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

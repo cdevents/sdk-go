@@ -28,7 +28,20 @@ const (
 	repositoryCreatedSchemaFile string      = "repositorycreated"
 )
 
-type RepositoryCreatedSubjectContent struct{}
+type RepositoryCreatedSubjectContent struct {
+
+	// The name of the repository, like "sdk-go", "spec" or "a-repo"
+	Name string `json:"name" jsonschema:"required,minLength=1"`
+
+	// The owner of the repository, like "cdevents", "an-org" or "an-user"
+	Owner string `json:"owner,omitempty"`
+
+	// The URL to programmatically access repository, for instance via "git clone"
+	Url string `json:"url" jsonschema:"required,minLength=1"`
+
+	// The URL for a human to browse the repository, for instance a Web UI to the repo
+	ViewUrl string `json:"viewUrl,omitempty"`
+}
 
 type RepositoryCreatedSubject struct {
 	SubjectBase
@@ -112,13 +125,34 @@ func (e RepositoryCreatedEvent) GetSchema() string {
 	return repositoryCreatedSchemaFile
 }
 
+// Subject field setters
+func (e *RepositoryCreatedEvent) SetSubjectName(name string) {
+	e.Subject.Content.Name = name
+}
+
+func (e *RepositoryCreatedEvent) SetSubjectUrl(url string) {
+	e.Subject.Content.Url = url
+}
+
+func (e *RepositoryCreatedEvent) SetSubjectOwner(owner string) {
+	e.Subject.Content.Owner = owner
+}
+
+func (e *RepositoryCreatedEvent) SetSubjectViewUrl(viewUrl string) {
+	e.Subject.Content.ViewUrl = viewUrl
+}
+
 func NewRepositoryCreatedEvent() (*RepositoryCreatedEvent, error) {
 	e := &RepositoryCreatedEvent{
 		Context: Context{
 			Type:    RepositoryCreatedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: RepositoryCreatedSubject{},
+		Subject: RepositoryCreatedSubject{
+			SubjectBase: SubjectBase{
+				Type: RepositorySubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {

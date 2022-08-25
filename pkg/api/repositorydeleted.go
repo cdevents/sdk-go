@@ -28,7 +28,20 @@ const (
 	repositoryDeletedSchemaFile string      = "repositorydeleted"
 )
 
-type RepositoryDeletedSubjectContent struct{}
+type RepositoryDeletedSubjectContent struct {
+
+	// The name of the repository, like "sdk-go", "spec" or "a-repo"
+	Name string `json:"name,omitempty"`
+
+	// The owner of the repository, like "cdevents", "an-org" or "an-user"
+	Owner string `json:"owner,omitempty"`
+
+	// The URL to programmatically access repository, for instance via "git clone"
+	Url string `json:"url,omitempty"`
+
+	// The URL for a human to browse the repository, for instance a Web UI to the repo
+	ViewUrl string `json:"viewUrl,omitempty"`
+}
 
 type RepositoryDeletedSubject struct {
 	SubjectBase
@@ -112,13 +125,34 @@ func (e RepositoryDeletedEvent) GetSchema() string {
 	return repositoryDeletedSchemaFile
 }
 
+// Subject field setters
+func (e *RepositoryDeletedEvent) SetSubjectName(name string) {
+	e.Subject.Content.Name = name
+}
+
+func (e *RepositoryDeletedEvent) SetSubjectUrl(url string) {
+	e.Subject.Content.Url = url
+}
+
+func (e *RepositoryDeletedEvent) SetSubjectOwner(owner string) {
+	e.Subject.Content.Owner = owner
+}
+
+func (e *RepositoryDeletedEvent) SetSubjectViewUrl(viewUrl string) {
+	e.Subject.Content.ViewUrl = viewUrl
+}
+
 func NewRepositoryDeletedEvent() (*RepositoryDeletedEvent, error) {
 	e := &RepositoryDeletedEvent{
 		Context: Context{
 			Type:    RepositoryDeletedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: RepositoryDeletedSubject{},
+		Subject: RepositoryDeletedSubject{
+			SubjectBase: SubjectBase{
+				Type: RepositorySubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {
