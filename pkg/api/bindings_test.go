@@ -44,6 +44,7 @@ var (
 	testOwner           = "TestOrg"
 	testUrl             = "https://example.org/TestOrg/TestRepo"
 	testViewUrl         = "https://example.org/view/TestOrg/TestRepo"
+	testArtifactId      = "0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
 
 	pipelineRunQueuedEvent   *PipelineRunQueuedEvent
 	pipelineRunStartedEvent  *PipelineRunStartedEvent
@@ -65,6 +66,9 @@ var (
 	testCaseFinishedEvent    *TestCaseFinishedEvent
 	testSuiteStartedEvent    *TestSuiteStartedEvent
 	testSuiteFinishedEvent   *TestSuiteFinishedEvent
+	buildQueuedEvent         *BuildQueuedEvent
+	buildStartedEvent        *BuildStartedEvent
+	buildFinishedEvent       *BuildFinishedEvent
 
 	pipelineRunQueuedEventJsonTemplate = `
 {
@@ -426,6 +430,57 @@ var (
 		"content": {}
 	}
 }`
+
+	buildQueuedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.build.queued.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "build",
+		"content": {}
+	}
+}`
+
+	buildStartedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.build.started.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "build",
+		"content": {}
+	}
+}`
+
+	buildFinishedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.build.finished.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "build",
+		"content": {
+			"artifactId": "0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
+		}
+	}
+}`
+
 	pipelineRunQueuedEventJson   string
 	pipelineRunStartedEventJson  string
 	pipelineRunFinishedEventJson string
@@ -446,6 +501,9 @@ var (
 	testCaseFinishedEventJson    string
 	testSuiteStartedEventJson    string
 	testSuiteFinishedEventJson   string
+	buildQueuedEventJson         string
+	buildStartedEventJson        string
+	buildFinishedEventJson       string
 )
 
 func init() {
@@ -557,6 +615,16 @@ func init() {
 	testSuiteFinishedEvent, _ = NewTestSuiteFinishedEvent()
 	setContext(testSuiteFinishedEvent)
 
+	buildQueuedEvent, _ = NewBuildQueuedEvent()
+	setContext(buildQueuedEvent)
+
+	buildStartedEvent, _ = NewBuildStartedEvent()
+	setContext(buildStartedEvent)
+
+	buildFinishedEvent, _ = NewBuildFinishedEvent()
+	setContext(buildFinishedEvent)
+	buildFinishedEvent.SetSubjectArtifactId(testArtifactId)
+
 	newUUID, _ := uuidNewRandom()
 	newTime := timeNow().Format(time.RFC3339Nano)
 	pipelineRunQueuedEventJson = fmt.Sprintf(pipelineRunQueuedEventJsonTemplate, newUUID, newTime)
@@ -579,6 +647,9 @@ func init() {
 	testCaseFinishedEventJson = fmt.Sprintf(testCaseFinishedEventJsonTemplate, newUUID, newTime)
 	testSuiteStartedEventJson = fmt.Sprintf(testSuiteStartedEventJsonTemplate, newUUID, newTime)
 	testSuiteFinishedEventJson = fmt.Sprintf(testSuiteFinishedEventJsonTemplate, newUUID, newTime)
+	buildQueuedEventJson = fmt.Sprintf(buildQueuedEventJsonTemplate, newUUID, newTime)
+	buildStartedEventJson = fmt.Sprintf(buildStartedEventJsonTemplate, newUUID, newTime)
+	buildFinishedEventJson = fmt.Sprintf(buildFinishedEventJsonTemplate, newUUID, newTime)
 }
 
 func TestAsCloudEvent(t *testing.T) {
@@ -667,6 +738,18 @@ func TestAsCloudEvent(t *testing.T) {
 		name:            "testsuite finished",
 		event:           testSuiteFinishedEvent,
 		payloadReceiver: &TestSuiteFinishedEvent{},
+	}, {
+		name:            "build queued",
+		event:           buildQueuedEvent,
+		payloadReceiver: &BuildQueuedEvent{},
+	}, {
+		name:            "build started",
+		event:           buildStartedEvent,
+		payloadReceiver: &BuildStartedEvent{},
+	}, {
+		name:            "build finished",
+		event:           buildFinishedEvent,
+		payloadReceiver: &BuildFinishedEvent{},
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -810,6 +893,21 @@ func TestAsJsonString(t *testing.T) {
 		event:      testSuiteFinishedEvent,
 		jsonString: testSuiteFinishedEventJson,
 		schemaName: "testsuitefinished",
+	}, {
+		name:       "build queued",
+		event:      buildQueuedEvent,
+		jsonString: buildQueuedEventJson,
+		schemaName: "buildqueued",
+	}, {
+		name:       "build started",
+		event:      buildStartedEvent,
+		jsonString: buildStartedEventJson,
+		schemaName: "buildstarted",
+	}, {
+		name:       "build finished",
+		event:      buildFinishedEvent,
+		jsonString: buildFinishedEventJson,
+		schemaName: "buildfinished",
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

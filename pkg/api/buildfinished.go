@@ -28,7 +28,11 @@ const (
 	buildFinishedSchemaFile string      = "buildfinished"
 )
 
-type BuildFinishedSubjectContent struct{}
+type BuildFinishedSubjectContent struct {
+
+	// The Id of the artifact produced by the build
+	ArtifactId string `json:"artifactId,omitempty"`
+}
 
 type BuildFinishedSubject struct {
 	SubjectBase
@@ -112,13 +116,21 @@ func (e BuildFinishedEvent) GetSchema() string {
 	return buildFinishedSchemaFile
 }
 
+func (e *BuildFinishedEvent) SetSubjectArtifactId(artifactId string) {
+	e.Subject.Content.ArtifactId = artifactId
+}
+
 func NewBuildFinishedEvent() (*BuildFinishedEvent, error) {
 	e := &BuildFinishedEvent{
 		Context: Context{
 			Type:    BuildFinishedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: BuildFinishedSubject{},
+		Subject: BuildFinishedSubject{
+			SubjectBase: SubjectBase{
+				Type: BuildSubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {

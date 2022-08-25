@@ -118,7 +118,11 @@ func NewBuildStartedEvent() (*BuildStartedEvent, error) {
 			Type:    BuildStartedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: BuildStartedSubject{},
+		Subject: BuildStartedSubject{
+			SubjectBase: SubjectBase{
+				Type: BuildSubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {

@@ -72,12 +72,12 @@ func NewCDEvent(eventType CDEventType) (CDEvent, error) {
 		return NewChangeMergedEvent()
 	case ChangeAbandonedEventV1:
 		return NewChangeAbandonedEvent()
-	// case BuildQueuedEventV1:
-	// 	return NewBuildQueuedEvent()
-	// case BuildStartedEventV1:
-	// 	return NewBuildStartedEvent()
-	// case BuildFinishedEventV1:
-	// 	return NewBuildFinishedEvent()
+	case BuildQueuedEventV1:
+		return NewBuildQueuedEvent()
+	case BuildStartedEventV1:
+		return NewBuildStartedEvent()
+	case BuildFinishedEventV1:
+		return NewBuildFinishedEvent()
 	case TestCaseQueuedEventV1:
 		return NewTestCaseQueuedEvent()
 	case TestCaseStartedEventV1:
