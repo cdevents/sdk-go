@@ -28,7 +28,11 @@ const (
 	servicePublishedSchemaFile string      = "servicepublished"
 )
 
-type ServicePublishedSubjectContent struct{}
+type ServicePublishedSubjectContent struct {
+
+	// The Environment where the service is deployed
+	Environment Reference `json:"environment,omitempty"`
+}
 
 type ServicePublishedSubject struct {
 	SubjectBase
@@ -112,13 +116,22 @@ func (e ServicePublishedEvent) GetSchema() string {
 	return servicePublishedSchemaFile
 }
 
+// Subject field setters
+func (e *ServicePublishedEvent) SetSubjectEnvironment(environment Reference) {
+	e.Subject.Content.Environment = environment
+}
+
 func NewServicePublishedEvent() (*ServicePublishedEvent, error) {
 	e := &ServicePublishedEvent{
 		Context: Context{
 			Type:    ServicePublishedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: ServicePublishedSubject{},
+		Subject: ServicePublishedSubject{
+			SubjectBase: SubjectBase{
+				Type: ServiceSubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {

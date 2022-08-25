@@ -92,22 +92,22 @@ func NewCDEvent(eventType CDEventType) (CDEvent, error) {
 		return NewArtifactPackagedEvent()
 	case ArtifactPublishedEventV1:
 		return NewArtifactPublishedEvent()
-	// case EnvironmentCreatedEventV1:
-	// 	return NewEnvironmentCreatedEvent()
-	// case EnvironmentModifiedEventV1:
-	// 	return NewEnvironmentModifiedEvent()
-	// case EnvironmentDeletedEventV1:
-	// 	return NewEnvironmentDeletedEvent()
-	// case ServiceDeployedEventV1:
-	// 	return NewServiceDeployedEvent()
-	// case ServiceUpgradedEventV1:
-	// 	return NewServiceUpgradedEvent()
-	// case ServiceRolledbackEventV1:
-	// 	return NewServiceRolledbackEvent()
-	// case ServiceRemovedEventV1:
-	// 	return NewServiceRemovedEvent()
-	// case ServicePublishedEventV1:
-	// 	return NewServicePublishedEvent()
+	case EnvironmentCreatedEventV1:
+		return NewEnvironmentCreatedEvent()
+	case EnvironmentModifiedEventV1:
+		return NewEnvironmentModifiedEvent()
+	case EnvironmentDeletedEventV1:
+		return NewEnvironmentDeletedEvent()
+	case ServiceDeployedEventV1:
+		return NewServiceDeployedEvent()
+	case ServiceUpgradedEventV1:
+		return NewServiceUpgradedEvent()
+	case ServiceRolledbackEventV1:
+		return NewServiceRolledbackEvent()
+	case ServiceRemovedEventV1:
+		return NewServiceRemovedEvent()
+	case ServicePublishedEventV1:
+		return NewServicePublishedEvent()
 	default:
 		return nil, fmt.Errorf("event %v not supported", eventType)
 	}

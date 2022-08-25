@@ -28,7 +28,11 @@ const (
 	environmentDeletedSchemaFile string      = "environmentdeleted"
 )
 
-type EnvironmentDeletedSubjectContent struct{}
+type EnvironmentDeletedSubjectContent struct {
+
+	// The name of the environment, for instance dev, prod, ci-123
+	Name string `json:"name,omitempty"`
+}
 
 type EnvironmentDeletedSubject struct {
 	SubjectBase
@@ -112,13 +116,22 @@ func (e EnvironmentDeletedEvent) GetSchema() string {
 	return environmentDeletedSchemaFile
 }
 
+// Subject field setters
+func (e *EnvironmentDeletedEvent) SetSubjectName(name string) {
+	e.Subject.Content.Name = name
+}
+
 func NewEnvironmentDeletedEvent() (*EnvironmentDeletedEvent, error) {
 	e := &EnvironmentDeletedEvent{
 		Context: Context{
 			Type:    EnvironmentDeletedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: EnvironmentDeletedSubject{},
+		Subject: EnvironmentDeletedSubject{
+			SubjectBase: SubjectBase{
+				Type: EnvironmentSubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {

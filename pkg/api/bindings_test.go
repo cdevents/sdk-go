@@ -45,6 +45,9 @@ var (
 	testUrl             = "https://example.org/TestOrg/TestRepo"
 	testViewUrl         = "https://example.org/view/TestOrg/TestRepo"
 	testArtifactId      = "0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
+	testEnvironmentId   = "test123"
+	testEnvironmentName = "testEnv"
+	testEnvironmentUrl  = "https://example.org/testEnv"
 
 	pipelineRunQueuedEvent   *PipelineRunQueuedEvent
 	pipelineRunStartedEvent  *PipelineRunStartedEvent
@@ -71,6 +74,14 @@ var (
 	buildFinishedEvent       *BuildFinishedEvent
 	artifactPackagedEvent    *ArtifactPackagedEvent
 	artifactPublishedEvent   *ArtifactPublishedEvent
+	environmentCreatedEvent  *EnvironmentCreatedEvent
+	environmentModifiedEvent *EnvironmentModifiedEvent
+	environmentDeletedEvent  *EnvironmentDeletedEvent
+	serviceDeployedEvent     *ServiceDeployedEvent
+	serviceUpgradedEvent     *ServiceUpgradedEvent
+	serviceRolledBackEvent   *ServiceRolledbackEvent
+	serviceRemovedEvent      *ServiceRemovedEvent
+	servicePublishedEvent    *ServicePublishedEvent
 
 	pipelineRunQueuedEventJsonTemplate = `
 {
@@ -515,6 +526,162 @@ var (
 	}
 }`
 
+	environmentCreatedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.environment.created.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "environment",
+		"content": {
+			"name": "testEnv",
+			"url": "https://example.org/testEnv"
+		}
+	}
+}`
+
+	environmentModifiedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.environment.modified.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "environment",
+		"content": {
+			"name": "testEnv",
+			"url": "https://example.org/testEnv"
+		}
+	}
+}`
+
+	environmentDeletedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.environment.deleted.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "environment",
+		"content": {
+			"name": "testEnv"
+		}
+	}
+}`
+
+	serviceDeployedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.service.deployed.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "service",
+		"content": {
+			"environment": {
+				"id": "test123"
+			}
+		}
+	}
+}`
+
+	serviceUpgradedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.service.upgraded.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "service",
+		"content": {
+			"environment": {
+				"id": "test123"
+			}
+		}
+	}
+}`
+
+	serviceRolledBackEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.service.rolledback.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "service",
+		"content": {
+			"environment": {
+				"id": "test123"
+			}
+		}
+	}
+}`
+
+	serviceRemovedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.service.removed.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "service",
+		"content": {
+			"environment": {
+				"id": "test123"
+			}
+		}
+	}
+}`
+
+	servicePublishedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.service.published.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "service",
+		"content": {
+			"environment": {
+				"id": "test123"
+			}
+		}
+	}
+}`
+
 	pipelineRunQueuedEventJson   string
 	pipelineRunStartedEventJson  string
 	pipelineRunFinishedEventJson string
@@ -540,6 +707,14 @@ var (
 	buildFinishedEventJson       string
 	artifactPackagedEventJson    string
 	artifactPublishedEventJson   string
+	environmentCreatedEventJson  string
+	environmentModifiedEventJson string
+	environmentDeletedEventJson  string
+	serviceDeployedEventJson     string
+	serviceUpgradedEventJson     string
+	serviceRolledBackEventJson   string
+	serviceRemovedEventJson      string
+	servicePublishedEventJson    string
 )
 
 func init() {
@@ -667,6 +842,40 @@ func init() {
 	artifactPublishedEvent, _ = NewArtifactPublishedEvent()
 	setContext(artifactPublishedEvent)
 
+	environmentCreatedEvent, _ = NewEnvironmentCreatedEvent()
+	setContext(environmentCreatedEvent)
+	environmentCreatedEvent.SetSubjectName(testEnvironmentName)
+	environmentCreatedEvent.SetSubjectUrl(testEnvironmentUrl)
+
+	environmentModifiedEvent, _ = NewEnvironmentModifiedEvent()
+	setContext(environmentModifiedEvent)
+	environmentModifiedEvent.SetSubjectName(testEnvironmentName)
+	environmentModifiedEvent.SetSubjectUrl(testEnvironmentUrl)
+
+	environmentDeletedEvent, _ = NewEnvironmentDeletedEvent()
+	setContext(environmentDeletedEvent)
+	environmentDeletedEvent.SetSubjectName(testEnvironmentName)
+
+	serviceDeployedEvent, _ = NewServiceDeployedEvent()
+	setContext(serviceDeployedEvent)
+	serviceDeployedEvent.SetSubjectEnvironment(Reference{Id: testEnvironmentId})
+
+	serviceUpgradedEvent, _ = NewServiceUpgradedEvent()
+	setContext(serviceUpgradedEvent)
+	serviceUpgradedEvent.SetSubjectEnvironment(Reference{Id: testEnvironmentId})
+
+	serviceRolledBackEvent, _ = NewServiceRolledbackEvent()
+	setContext(serviceRolledBackEvent)
+	serviceRolledBackEvent.SetSubjectEnvironment(Reference{Id: testEnvironmentId})
+
+	serviceRemovedEvent, _ = NewServiceRemovedEvent()
+	setContext(serviceRemovedEvent)
+	serviceRemovedEvent.SetSubjectEnvironment(Reference{Id: testEnvironmentId})
+
+	servicePublishedEvent, _ = NewServicePublishedEvent()
+	setContext(servicePublishedEvent)
+	servicePublishedEvent.SetSubjectEnvironment(Reference{Id: testEnvironmentId})
+
 	newUUID, _ := uuidNewRandom()
 	newTime := timeNow().Format(time.RFC3339Nano)
 	pipelineRunQueuedEventJson = fmt.Sprintf(pipelineRunQueuedEventJsonTemplate, newUUID, newTime)
@@ -694,6 +903,14 @@ func init() {
 	buildFinishedEventJson = fmt.Sprintf(buildFinishedEventJsonTemplate, newUUID, newTime)
 	artifactPackagedEventJson = fmt.Sprintf(artifactPackagedEventJsonTemplate, newUUID, newTime)
 	artifactPublishedEventJson = fmt.Sprintf(artifactPublishedEventJsonTemplate, newUUID, newTime)
+	environmentCreatedEventJson = fmt.Sprintf(environmentCreatedEventJsonTemplate, newUUID, newTime)
+	environmentModifiedEventJson = fmt.Sprintf(environmentModifiedEventJsonTemplate, newUUID, newTime)
+	environmentDeletedEventJson = fmt.Sprintf(environmentDeletedEventJsonTemplate, newUUID, newTime)
+	serviceDeployedEventJson = fmt.Sprintf(serviceDeployedEventJsonTemplate, newUUID, newTime)
+	serviceUpgradedEventJson = fmt.Sprintf(serviceUpgradedEventJsonTemplate, newUUID, newTime)
+	serviceRolledBackEventJson = fmt.Sprintf(serviceRolledBackEventJsonTemplate, newUUID, newTime)
+	serviceRemovedEventJson = fmt.Sprintf(serviceRemovedEventJsonTemplate, newUUID, newTime)
+	servicePublishedEventJson = fmt.Sprintf(servicePublishedEventJsonTemplate, newUUID, newTime)
 }
 
 func TestAsCloudEvent(t *testing.T) {
@@ -802,6 +1019,38 @@ func TestAsCloudEvent(t *testing.T) {
 		name:            "artifact published",
 		event:           artifactPublishedEvent,
 		payloadReceiver: &ArtifactPublishedEvent{},
+	}, {
+		name:            "environment created",
+		event:           environmentCreatedEvent,
+		payloadReceiver: &EnvironmentCreatedEvent{},
+	}, {
+		name:            "environment modified",
+		event:           environmentModifiedEvent,
+		payloadReceiver: &EnvironmentModifiedEvent{},
+	}, {
+		name:            "environment deleted",
+		event:           environmentDeletedEvent,
+		payloadReceiver: &EnvironmentDeletedEvent{},
+	}, {
+		name:            "service deployed",
+		event:           serviceDeployedEvent,
+		payloadReceiver: &ServiceDeployedEvent{},
+	}, {
+		name:            "service upgraded",
+		event:           serviceUpgradedEvent,
+		payloadReceiver: &ServiceUpgradedEvent{},
+	}, {
+		name:            "service rolledback",
+		event:           serviceRolledBackEvent,
+		payloadReceiver: &ServiceRolledbackEvent{},
+	}, {
+		name:            "service removed",
+		event:           serviceRemovedEvent,
+		payloadReceiver: &ServiceRemovedEvent{},
+	}, {
+		name:            "service published",
+		event:           servicePublishedEvent,
+		payloadReceiver: &ServicePublishedEvent{},
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -970,6 +1219,46 @@ func TestAsJsonString(t *testing.T) {
 		event:      artifactPublishedEvent,
 		jsonString: artifactPublishedEventJson,
 		schemaName: "artifactpublished",
+	}, {
+		name:       "environment created",
+		event:      environmentCreatedEvent,
+		jsonString: environmentCreatedEventJson,
+		schemaName: "environmentcreated",
+	}, {
+		name:       "environment modified",
+		event:      environmentModifiedEvent,
+		jsonString: environmentModifiedEventJson,
+		schemaName: "environmentmodified",
+	}, {
+		name:       "environment deleted",
+		event:      environmentDeletedEvent,
+		jsonString: environmentDeletedEventJson,
+		schemaName: "environmentdeleted",
+	}, {
+		name:       "service deployed",
+		event:      serviceDeployedEvent,
+		jsonString: serviceDeployedEventJson,
+		schemaName: "servicedeployed",
+	}, {
+		name:       "service upgraded",
+		event:      serviceUpgradedEvent,
+		jsonString: serviceUpgradedEventJson,
+		schemaName: "serviceupgraded",
+	}, {
+		name:       "service rolledback",
+		event:      serviceRolledBackEvent,
+		jsonString: serviceRolledBackEventJson,
+		schemaName: "servicerolledback",
+	}, {
+		name:       "service removed",
+		event:      serviceRemovedEvent,
+		jsonString: serviceRemovedEventJson,
+		schemaName: "serviceremoved",
+	}, {
+		name:       "service published",
+		event:      servicePublishedEvent,
+		jsonString: servicePublishedEventJson,
+		schemaName: "servicepublished",
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
