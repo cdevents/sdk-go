@@ -453,6 +453,134 @@ func TestNewCDEvent(t *testing.T) {
 				},
 			},
 		},
+	}, {
+		name:      "environment created",
+		eventType: EnvironmentCreatedEventV1,
+		expectedEvent: &EnvironmentCreatedEvent{
+			Context: Context{
+				Type:      EnvironmentCreatedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: EnvironmentCreatedSubject{
+				SubjectBase: SubjectBase{
+					Type: EnvironmentSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "environment modified",
+		eventType: EnvironmentModifiedEventV1,
+		expectedEvent: &EnvironmentModifiedEvent{
+			Context: Context{
+				Type:      EnvironmentModifiedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: EnvironmentModifiedSubject{
+				SubjectBase: SubjectBase{
+					Type: EnvironmentSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "environment deleted",
+		eventType: EnvironmentDeletedEventV1,
+		expectedEvent: &EnvironmentDeletedEvent{
+			Context: Context{
+				Type:      EnvironmentDeletedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: EnvironmentDeletedSubject{
+				SubjectBase: SubjectBase{
+					Type: EnvironmentSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "service deployed",
+		eventType: ServiceDeployedEventV1,
+		expectedEvent: &ServiceDeployedEvent{
+			Context: Context{
+				Type:      ServiceDeployedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: ServiceDeployedSubject{
+				SubjectBase: SubjectBase{
+					Type: ServiceSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "service upgraded",
+		eventType: ServiceUpgradedEventV1,
+		expectedEvent: &ServiceUpgradedEvent{
+			Context: Context{
+				Type:      ServiceUpgradedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: ServiceUpgradedSubject{
+				SubjectBase: SubjectBase{
+					Type: ServiceSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "service rolledback",
+		eventType: ServiceRolledbackEventV1,
+		expectedEvent: &ServiceRolledbackEvent{
+			Context: Context{
+				Type:      ServiceRolledbackEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: ServiceRolledbackSubject{
+				SubjectBase: SubjectBase{
+					Type: ServiceSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "service removed",
+		eventType: ServiceRemovedEventV1,
+		expectedEvent: &ServiceRemovedEvent{
+			Context: Context{
+				Type:      ServiceRemovedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: ServiceRemovedSubject{
+				SubjectBase: SubjectBase{
+					Type: ServiceSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "service published",
+		eventType: ServicePublishedEventV1,
+		expectedEvent: &ServicePublishedEvent{
+			Context: Context{
+				Type:      ServicePublishedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: ServicePublishedSubject{
+				SubjectBase: SubjectBase{
+					Type: ServiceSubjectType,
+				},
+			},
+		},
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

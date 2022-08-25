@@ -54,6 +54,14 @@ var (
 		"buildfinished":       &api.BuildFinishedEvent{},
 		"artifactpackaged":    &api.ArtifactPackagedEvent{},
 		"artifactpublished":   &api.ArtifactPublishedEvent{},
+		"environmentcreated":  &api.EnvironmentCreatedEvent{},
+		"environmentmodified": &api.EnvironmentModifiedEvent{},
+		"environmentdeleted":  &api.EnvironmentDeletedEvent{},
+		"servicedeployed":     &api.ServiceDeployedEvent{},
+		"serviceupgraded":     &api.ServiceUpgradedEvent{},
+		"servicerolledback":   &api.ServiceRolledbackEvent{},
+		"serviceremoved":      &api.ServiceRemovedEvent{},
+		"servicepublished":    &api.ServicePublishedEvent{},
 	}
 )
 

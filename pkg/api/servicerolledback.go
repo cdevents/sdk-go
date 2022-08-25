@@ -28,7 +28,11 @@ const (
 	serviceRolledbackSchemaFile string      = "servicerolledback"
 )
 
-type ServiceRolledbackSubjectContent struct{}
+type ServiceRolledbackSubjectContent struct {
+
+	// The Environment where the service is deployed
+	Environment Reference `json:"environment,omitempty"`
+}
 
 type ServiceRolledbackSubject struct {
 	SubjectBase
@@ -112,13 +116,22 @@ func (e ServiceRolledbackEvent) GetSchema() string {
 	return serviceRolledbackSchemaFile
 }
 
+// Subject field setters
+func (e *ServiceRolledbackEvent) SetSubjectEnvironment(environment Reference) {
+	e.Subject.Content.Environment = environment
+}
+
 func NewServiceRolledbackEvent() (*ServiceRolledbackEvent, error) {
 	e := &ServiceRolledbackEvent{
 		Context: Context{
 			Type:    ServiceRolledbackEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: ServiceRolledbackSubject{},
+		Subject: ServiceRolledbackSubject{
+			SubjectBase: SubjectBase{
+				Type: ServiceSubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {

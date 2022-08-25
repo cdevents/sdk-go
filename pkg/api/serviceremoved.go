@@ -28,7 +28,11 @@ const (
 	serviceRemovedSchemaFile string      = "serviceremoved"
 )
 
-type ServiceRemovedSubjectContent struct{}
+type ServiceRemovedSubjectContent struct {
+
+	// The Environment where the service is deployed
+	Environment Reference `json:"environment,omitempty"`
+}
 
 type ServiceRemovedSubject struct {
 	SubjectBase
@@ -112,13 +116,22 @@ func (e ServiceRemovedEvent) GetSchema() string {
 	return serviceRemovedSchemaFile
 }
 
+// Subject field setters
+func (e *ServiceRemovedEvent) SetSubjectEnvironment(environment Reference) {
+	e.Subject.Content.Environment = environment
+}
+
 func NewServiceRemovedEvent() (*ServiceRemovedEvent, error) {
 	e := &ServiceRemovedEvent{
 		Context: Context{
 			Type:    ServiceRemovedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: ServiceRemovedSubject{},
+		Subject: ServiceRemovedSubject{
+			SubjectBase: SubjectBase{
+				Type: ServiceSubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {

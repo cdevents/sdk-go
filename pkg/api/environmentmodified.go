@@ -28,7 +28,14 @@ const (
 	environmentModifiedSchemaFile string      = "environmentmodified"
 )
 
-type EnvironmentModifiedSubjectContent struct{}
+type EnvironmentModifiedSubjectContent struct {
+
+	// The name of the environment, for instance dev, prod, ci-123
+	Name string `json:"name,omitempty"`
+
+	// A URL to the environment, for instance https://my-cluster.zone.my-cloud-provider
+	Url string `json:"url,omitempty"`
+}
 
 type EnvironmentModifiedSubject struct {
 	SubjectBase
@@ -112,13 +119,26 @@ func (e EnvironmentModifiedEvent) GetSchema() string {
 	return environmentModifiedSchemaFile
 }
 
+// Subject field setters
+func (e *EnvironmentModifiedEvent) SetSubjectName(name string) {
+	e.Subject.Content.Name = name
+}
+
+func (e *EnvironmentModifiedEvent) SetSubjectUrl(url string) {
+	e.Subject.Content.Url = url
+}
+
 func NewEnvironmentModifiedEvent() (*EnvironmentModifiedEvent, error) {
 	e := &EnvironmentModifiedEvent{
 		Context: Context{
 			Type:    EnvironmentModifiedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: EnvironmentModifiedSubject{},
+		Subject: EnvironmentModifiedSubject{
+			SubjectBase: SubjectBase{
+				Type: EnvironmentSubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {
