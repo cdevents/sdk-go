@@ -118,7 +118,11 @@ func NewBuildQueuedEvent() (*BuildQueuedEvent, error) {
 			Type:    BuildQueuedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: BuildQueuedSubject{},
+		Subject: BuildQueuedSubject{
+			SubjectBase: SubjectBase{
+				Type: BuildSubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {

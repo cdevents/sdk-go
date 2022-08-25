@@ -373,6 +373,54 @@ func TestNewCDEvent(t *testing.T) {
 				},
 			},
 		},
+	}, {
+		name:      "build queued",
+		eventType: BuildQueuedEventV1,
+		expectedEvent: &BuildQueuedEvent{
+			Context: Context{
+				Type:      BuildQueuedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: BuildQueuedSubject{
+				SubjectBase: SubjectBase{
+					Type: BuildSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "build started",
+		eventType: BuildStartedEventV1,
+		expectedEvent: &BuildStartedEvent{
+			Context: Context{
+				Type:      BuildStartedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: BuildStartedSubject{
+				SubjectBase: SubjectBase{
+					Type: BuildSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "build finished",
+		eventType: BuildFinishedEventV1,
+		expectedEvent: &BuildFinishedEvent{
+			Context: Context{
+				Type:      BuildFinishedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: BuildFinishedSubject{
+				SubjectBase: SubjectBase{
+					Type: BuildSubjectType,
+				},
+			},
+		},
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

@@ -49,6 +49,9 @@ var (
 		"testcasequeued":      &api.TestCaseQueuedEvent{},
 		"testcasestarted":     &api.TestCaseStartedEvent{},
 		"testcasefinished":    &api.TestCaseFinishedEvent{},
+		"buildqueued":         &api.BuildQueuedEvent{},
+		"buildstarted":        &api.BuildStartedEvent{},
+		"buildfinished":       &api.BuildFinishedEvent{},
 	}
 )
 
