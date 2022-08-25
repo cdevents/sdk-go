@@ -118,7 +118,11 @@ func NewArtifactPublishedEvent() (*ArtifactPublishedEvent, error) {
 			Type:    ArtifactPublishedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: ArtifactPublishedSubject{},
+		Subject: ArtifactPublishedSubject{
+			SubjectBase: SubjectBase{
+				Type: ArtifactSubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {

@@ -52,6 +52,8 @@ var (
 		"buildqueued":         &api.BuildQueuedEvent{},
 		"buildstarted":        &api.BuildStartedEvent{},
 		"buildfinished":       &api.BuildFinishedEvent{},
+		"artifactpackaged":    &api.ArtifactPackagedEvent{},
+		"artifactpublished":   &api.ArtifactPublishedEvent{},
 	}
 )
 
