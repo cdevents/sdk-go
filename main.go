@@ -39,6 +39,9 @@ var (
 		"changereviewed":      &api.ChangeReviewedEvent{},
 		"changemerged":        &api.ChangeMergedEvent{},
 		"changeabandoned":     &api.ChangeAbandonedEvent{},
+		"repositorycreated":   &api.RepositoryCreatedEvent{},
+		"repositorymodified":  &api.RepositoryModifiedEvent{},
+		"repositorydeleted":   &api.RepositoryDeletedEvent{},
 	}
 )
 

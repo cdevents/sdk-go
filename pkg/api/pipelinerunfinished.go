@@ -50,7 +50,7 @@ type PipelineRunFinishedSubjectContent struct {
 	PipelineName string `json:"pipelineName,omitempty"`
 
 	// A URL to the pipeline run
-	URL string `json:"url,omitempty"`
+	Url string `json:"url,omitempty"`
 
 	// The PipelineRun outcome
 	Outcome PipelineRunOutcome `json:"outcome,omitempty"`
@@ -143,8 +143,8 @@ func (e *PipelineRunFinishedEvent) SetSubjectPipelineName(pipelineName string) {
 	e.Subject.Content.PipelineName = pipelineName
 }
 
-func (e *PipelineRunFinishedEvent) SetSubjectURL(url string) {
-	e.Subject.Content.URL = url
+func (e *PipelineRunFinishedEvent) SetSubjectUrl(url string) {
+	e.Subject.Content.Url = url
 }
 
 func (e *PipelineRunFinishedEvent) SetSubjectOutcome(outcome PipelineRunOutcome) {

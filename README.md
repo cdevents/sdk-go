@@ -44,7 +44,7 @@ func main() {
 
     // Set the required subject fields
     event.SetSubjectPipelineName("myPipeline")
-    event.SetSubjectURL("https://example.com/myPipeline")
+    event.SetSubjectUrl("https://example.com/myPipeline")
 }
 ```
 

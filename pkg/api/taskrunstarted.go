@@ -34,7 +34,7 @@ type TaskRunStartedSubjectContent struct {
 	TaskName string `json:"taskName,omitempty"`
 
 	// A URL to the pipeline run
-	URL string `json:"url,omitempty"`
+	Url string `json:"url,omitempty"`
 
 	// The PipelineRun associated to the task run
 	PipelineRun Reference `json:"pipelineRun,omitempty"`
@@ -124,8 +124,8 @@ func (e *TaskRunStartedEvent) SetSubjectTaskName(pipelineName string) {
 	e.Subject.Content.TaskName = pipelineName
 }
 
-func (e *TaskRunStartedEvent) SetSubjectURL(url string) {
-	e.Subject.Content.URL = url
+func (e *TaskRunStartedEvent) SetSubjectUrl(url string) {
+	e.Subject.Content.Url = url
 }
 
 func (e *TaskRunStartedEvent) SetSubjectPipelineRun(pipelineRun Reference) {

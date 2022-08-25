@@ -28,7 +28,20 @@ const (
 	repositoryModifiedSchemaFile string      = "repositorymodified"
 )
 
-type RepositoryModifiedSubjectContent struct{}
+type RepositoryModifiedSubjectContent struct {
+
+	// The name of the repository, like "sdk-go", "spec" or "a-repo"
+	Name string `json:"name,omitempty"`
+
+	// The owner of the repository, like "cdevents", "an-org" or "an-user"
+	Owner string `json:"owner,omitempty"`
+
+	// The URL to programmatically access repository, for instance via "git clone"
+	Url string `json:"url,omitempty"`
+
+	// The URL for a human to browse the repository, for instance a Web UI to the repo
+	ViewUrl string `json:"viewUrl,omitempty"`
+}
 
 type RepositoryModifiedSubject struct {
 	SubjectBase
@@ -112,13 +125,34 @@ func (e RepositoryModifiedEvent) GetSchema() string {
 	return repositoryModifiedSchemaFile
 }
 
+// Subject field setters
+func (e *RepositoryModifiedEvent) SetSubjectName(name string) {
+	e.Subject.Content.Name = name
+}
+
+func (e *RepositoryModifiedEvent) SetSubjectUrl(url string) {
+	e.Subject.Content.Url = url
+}
+
+func (e *RepositoryModifiedEvent) SetSubjectOwner(owner string) {
+	e.Subject.Content.Owner = owner
+}
+
+func (e *RepositoryModifiedEvent) SetSubjectViewUrl(viewUrl string) {
+	e.Subject.Content.ViewUrl = viewUrl
+}
+
 func NewRepositoryModifiedEvent() (*RepositoryModifiedEvent, error) {
 	e := &RepositoryModifiedEvent{
 		Context: Context{
 			Type:    RepositoryModifiedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: RepositoryModifiedSubject{},
+		Subject: RepositoryModifiedSubject{
+			SubjectBase: SubjectBase{
+				Type: RepositorySubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {

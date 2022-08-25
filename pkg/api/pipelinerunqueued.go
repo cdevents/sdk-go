@@ -34,7 +34,7 @@ type PipelineRunQueuedSubjectContent struct {
 	PipelineName string `json:"pipelineName,omitempty"`
 
 	// A URL to the pipeline run
-	URL string `json:"url,omitempty"`
+	Url string `json:"url,omitempty"`
 }
 
 type PipelineRunQueuedSubject struct {
@@ -121,8 +121,8 @@ func (e *PipelineRunQueuedEvent) SetSubjectPipelineName(pipelineName string) {
 	e.Subject.Content.PipelineName = pipelineName
 }
 
-func (e *PipelineRunQueuedEvent) SetSubjectURL(url string) {
-	e.Subject.Content.URL = url
+func (e *PipelineRunQueuedEvent) SetSubjectUrl(url string) {
+	e.Subject.Content.Url = url
 }
 
 func (e PipelineRunQueuedEvent) GetSchema() string {
