@@ -60,6 +60,11 @@ var (
 	repositoryDeletedEvent   *RepositoryDeletedEvent
 	branchCreatedEvent       *BranchCreatedEvent
 	branchDeletedEvent       *BranchDeletedEvent
+	testCaseQueuedEvent      *TestCaseQueuedEvent
+	testCaseStartedEvent     *TestCaseStartedEvent
+	testCaseFinishedEvent    *TestCaseFinishedEvent
+	testSuiteStartedEvent    *TestSuiteStartedEvent
+	testSuiteFinishedEvent   *TestSuiteFinishedEvent
 
 	pipelineRunQueuedEventJsonTemplate = `
 {
@@ -341,6 +346,86 @@ var (
 		"content": {}
 	}
 }`
+
+	testCaseQueuedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.testcase.queued.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "testCase",
+		"content": {}
+	}
+}`
+
+	testCaseStartedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.testcase.started.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "testCase",
+		"content": {}
+	}
+}`
+
+	testCaseFinishedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.testcase.finished.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "testCase",
+		"content": {}
+	}
+}`
+
+	testSuiteStartedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.testsuite.started.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "testSuite",
+		"content": {}
+	}
+}`
+
+	testSuiteFinishedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.testsuite.finished.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "testSuite",
+		"content": {}
+	}
+}`
 	pipelineRunQueuedEventJson   string
 	pipelineRunStartedEventJson  string
 	pipelineRunFinishedEventJson string
@@ -356,6 +441,11 @@ var (
 	repositoryDeletedEventJson   string
 	branchCreatedEventJson       string
 	branchDeletedEventJson       string
+	testCaseQueuedEventJson      string
+	testCaseStartedEventJson     string
+	testCaseFinishedEventJson    string
+	testSuiteStartedEventJson    string
+	testSuiteFinishedEventJson   string
 )
 
 func init() {
@@ -452,6 +542,21 @@ func init() {
 	branchDeletedEvent, _ = NewBranchDeletedEvent()
 	setContext(branchDeletedEvent)
 
+	testCaseQueuedEvent, _ = NewTestCaseQueuedEvent()
+	setContext(testCaseQueuedEvent)
+
+	testCaseStartedEvent, _ = NewTestCaseStartedEvent()
+	setContext(testCaseStartedEvent)
+
+	testCaseFinishedEvent, _ = NewTestCaseFinishedEvent()
+	setContext(testCaseFinishedEvent)
+
+	testSuiteStartedEvent, _ = NewTestSuiteStartedEvent()
+	setContext(testSuiteStartedEvent)
+
+	testSuiteFinishedEvent, _ = NewTestSuiteFinishedEvent()
+	setContext(testSuiteFinishedEvent)
+
 	newUUID, _ := uuidNewRandom()
 	newTime := timeNow().Format(time.RFC3339Nano)
 	pipelineRunQueuedEventJson = fmt.Sprintf(pipelineRunQueuedEventJsonTemplate, newUUID, newTime)
@@ -469,6 +574,11 @@ func init() {
 	repositoryDeletedEventJson = fmt.Sprintf(repositoryDeletedEventJsonTemplate, newUUID, newTime)
 	branchCreatedEventJson = fmt.Sprintf(branchCreatedEventJsonTemplate, newUUID, newTime)
 	branchDeletedEventJson = fmt.Sprintf(branchDeletedEventJsonTemplate, newUUID, newTime)
+	testCaseQueuedEventJson = fmt.Sprintf(testCaseQueuedEventJsonTemplate, newUUID, newTime)
+	testCaseStartedEventJson = fmt.Sprintf(testCaseStartedEventJsonTemplate, newUUID, newTime)
+	testCaseFinishedEventJson = fmt.Sprintf(testCaseFinishedEventJsonTemplate, newUUID, newTime)
+	testSuiteStartedEventJson = fmt.Sprintf(testSuiteStartedEventJsonTemplate, newUUID, newTime)
+	testSuiteFinishedEventJson = fmt.Sprintf(testSuiteFinishedEventJsonTemplate, newUUID, newTime)
 }
 
 func TestAsCloudEvent(t *testing.T) {
@@ -537,6 +647,26 @@ func TestAsCloudEvent(t *testing.T) {
 		name:            "branch deleted",
 		event:           branchDeletedEvent,
 		payloadReceiver: &BranchDeletedEvent{},
+	}, {
+		name:            "testcase queued",
+		event:           testCaseQueuedEvent,
+		payloadReceiver: &TestCaseQueuedEvent{},
+	}, {
+		name:            "testcase started",
+		event:           testCaseStartedEvent,
+		payloadReceiver: &TestCaseStartedEvent{},
+	}, {
+		name:            "testcase finished",
+		event:           testCaseFinishedEvent,
+		payloadReceiver: &TestCaseFinishedEvent{},
+	}, {
+		name:            "testsuite started",
+		event:           testSuiteStartedEvent,
+		payloadReceiver: &TestSuiteStartedEvent{},
+	}, {
+		name:            "testsuite finished",
+		event:           testSuiteFinishedEvent,
+		payloadReceiver: &TestSuiteFinishedEvent{},
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -655,6 +785,31 @@ func TestAsJsonString(t *testing.T) {
 		event:      branchDeletedEvent,
 		jsonString: branchDeletedEventJson,
 		schemaName: "branchdeleted",
+	}, {
+		name:       "testcase queued",
+		event:      testCaseQueuedEvent,
+		jsonString: testCaseQueuedEventJson,
+		schemaName: "testcasequeued",
+	}, {
+		name:       "testcase started",
+		event:      testCaseStartedEvent,
+		jsonString: testCaseStartedEventJson,
+		schemaName: "testcasestarted",
+	}, {
+		name:       "testcase finished",
+		event:      testCaseFinishedEvent,
+		jsonString: testCaseFinishedEventJson,
+		schemaName: "testcasefinished",
+	}, {
+		name:       "testsuite started",
+		event:      testSuiteStartedEvent,
+		jsonString: testSuiteStartedEventJson,
+		schemaName: "testsuitestarted",
+	}, {
+		name:       "testsuite finished",
+		event:      testSuiteFinishedEvent,
+		jsonString: testSuiteFinishedEventJson,
+		schemaName: "testsuitefinished",
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
