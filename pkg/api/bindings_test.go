@@ -69,6 +69,8 @@ var (
 	buildQueuedEvent         *BuildQueuedEvent
 	buildStartedEvent        *BuildStartedEvent
 	buildFinishedEvent       *BuildFinishedEvent
+	artifactPackagedEvent    *ArtifactPackagedEvent
+	artifactPublishedEvent   *ArtifactPublishedEvent
 
 	pipelineRunQueuedEventJsonTemplate = `
 {
@@ -481,6 +483,38 @@ var (
 	}
 }`
 
+	artifactPackagedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.artifact.packaged.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "artifact",
+		"content": {}
+	}
+}`
+
+	artifactPublishedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.artifact.published.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "artifact",
+		"content": {}
+	}
+}`
+
 	pipelineRunQueuedEventJson   string
 	pipelineRunStartedEventJson  string
 	pipelineRunFinishedEventJson string
@@ -504,6 +538,8 @@ var (
 	buildQueuedEventJson         string
 	buildStartedEventJson        string
 	buildFinishedEventJson       string
+	artifactPackagedEventJson    string
+	artifactPublishedEventJson   string
 )
 
 func init() {
@@ -625,6 +661,12 @@ func init() {
 	setContext(buildFinishedEvent)
 	buildFinishedEvent.SetSubjectArtifactId(testArtifactId)
 
+	artifactPackagedEvent, _ = NewArtifactPackagedEvent()
+	setContext(artifactPackagedEvent)
+
+	artifactPublishedEvent, _ = NewArtifactPublishedEvent()
+	setContext(artifactPublishedEvent)
+
 	newUUID, _ := uuidNewRandom()
 	newTime := timeNow().Format(time.RFC3339Nano)
 	pipelineRunQueuedEventJson = fmt.Sprintf(pipelineRunQueuedEventJsonTemplate, newUUID, newTime)
@@ -650,6 +692,8 @@ func init() {
 	buildQueuedEventJson = fmt.Sprintf(buildQueuedEventJsonTemplate, newUUID, newTime)
 	buildStartedEventJson = fmt.Sprintf(buildStartedEventJsonTemplate, newUUID, newTime)
 	buildFinishedEventJson = fmt.Sprintf(buildFinishedEventJsonTemplate, newUUID, newTime)
+	artifactPackagedEventJson = fmt.Sprintf(artifactPackagedEventJsonTemplate, newUUID, newTime)
+	artifactPublishedEventJson = fmt.Sprintf(artifactPublishedEventJsonTemplate, newUUID, newTime)
 }
 
 func TestAsCloudEvent(t *testing.T) {
@@ -750,6 +794,14 @@ func TestAsCloudEvent(t *testing.T) {
 		name:            "build finished",
 		event:           buildFinishedEvent,
 		payloadReceiver: &BuildFinishedEvent{},
+	}, {
+		name:            "artifact packaged",
+		event:           artifactPackagedEvent,
+		payloadReceiver: &ArtifactPackagedEvent{},
+	}, {
+		name:            "artifact published",
+		event:           artifactPublishedEvent,
+		payloadReceiver: &ArtifactPublishedEvent{},
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -908,6 +960,16 @@ func TestAsJsonString(t *testing.T) {
 		event:      buildFinishedEvent,
 		jsonString: buildFinishedEventJson,
 		schemaName: "buildfinished",
+	}, {
+		name:       "artifact packaged",
+		event:      artifactPackagedEvent,
+		jsonString: artifactPackagedEventJson,
+		schemaName: "artifactpackaged",
+	}, {
+		name:       "artifact published",
+		event:      artifactPublishedEvent,
+		jsonString: artifactPublishedEventJson,
+		schemaName: "artifactpublished",
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

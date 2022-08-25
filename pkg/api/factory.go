@@ -88,10 +88,10 @@ func NewCDEvent(eventType CDEventType) (CDEvent, error) {
 		return NewTestSuiteStartedEvent()
 	case TestSuiteFinishedEventV1:
 		return NewTestSuiteFinishedEvent()
-	// case ArtifactPackagedEventV1:
-	// 	return NewArtifactPackagedEvent()
-	// case ArtifactPublishedEventV1:
-	// 	return NewArtifactPublishedEvent()
+	case ArtifactPackagedEventV1:
+		return NewArtifactPackagedEvent()
+	case ArtifactPublishedEventV1:
+		return NewArtifactPublishedEvent()
 	// case EnvironmentCreatedEventV1:
 	// 	return NewEnvironmentCreatedEvent()
 	// case EnvironmentModifiedEventV1:

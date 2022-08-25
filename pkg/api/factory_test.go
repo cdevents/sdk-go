@@ -421,6 +421,38 @@ func TestNewCDEvent(t *testing.T) {
 				},
 			},
 		},
+	}, {
+		name:      "artifact packaged",
+		eventType: ArtifactPackagedEventV1,
+		expectedEvent: &ArtifactPackagedEvent{
+			Context: Context{
+				Type:      ArtifactPackagedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: ArtifactPackagedSubject{
+				SubjectBase: SubjectBase{
+					Type: ArtifactSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "artifact published",
+		eventType: ArtifactPublishedEventV1,
+		expectedEvent: &ArtifactPublishedEvent{
+			Context: Context{
+				Type:      ArtifactPublishedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: ArtifactPublishedSubject{
+				SubjectBase: SubjectBase{
+					Type: ArtifactSubjectType,
+				},
+			},
+		},
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
