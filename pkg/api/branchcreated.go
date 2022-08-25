@@ -118,7 +118,11 @@ func NewBranchCreatedEvent() (*BranchCreatedEvent, error) {
 			Type:    BranchCreatedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: BranchCreatedSubject{},
+		Subject: BranchCreatedSubject{
+			SubjectBase: SubjectBase{
+				Type: BranchSubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {

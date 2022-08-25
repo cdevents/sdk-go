@@ -58,6 +58,8 @@ var (
 	repositoryCreatedEvent   *RepositoryCreatedEvent
 	repositoryModifiedEvent  *RepositoryModifiedEvent
 	repositoryDeletedEvent   *RepositoryDeletedEvent
+	branchCreatedEvent       *BranchCreatedEvent
+	branchDeletedEvent       *BranchDeletedEvent
 
 	pipelineRunQueuedEventJsonTemplate = `
 {
@@ -308,6 +310,37 @@ var (
 	}
 }`
 
+	branchCreatedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.branch.created.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "branch",
+		"content": {}
+	}
+}`
+
+	branchDeletedEventJsonTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.branch.deleted.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "branch",
+		"content": {}
+	}
+}`
 	pipelineRunQueuedEventJson   string
 	pipelineRunStartedEventJson  string
 	pipelineRunFinishedEventJson string
@@ -321,6 +354,8 @@ var (
 	repositoryCreatedEventJson   string
 	repositoryModifiedEventJson  string
 	repositoryDeletedEventJson   string
+	branchCreatedEventJson       string
+	branchDeletedEventJson       string
 )
 
 func init() {
@@ -411,6 +446,12 @@ func init() {
 	repositoryDeletedEvent.SetSubjectUrl(testUrl)
 	repositoryDeletedEvent.SetSubjectViewUrl(testViewUrl)
 
+	branchCreatedEvent, _ = NewBranchCreatedEvent()
+	setContext(branchCreatedEvent)
+
+	branchDeletedEvent, _ = NewBranchDeletedEvent()
+	setContext(branchDeletedEvent)
+
 	newUUID, _ := uuidNewRandom()
 	newTime := timeNow().Format(time.RFC3339Nano)
 	pipelineRunQueuedEventJson = fmt.Sprintf(pipelineRunQueuedEventJsonTemplate, newUUID, newTime)
@@ -426,6 +467,8 @@ func init() {
 	repositoryCreatedEventJson = fmt.Sprintf(repositoryCreatedEventJsonTemplate, newUUID, newTime)
 	repositoryModifiedEventJson = fmt.Sprintf(repositoryModifiedEventJsonTemplate, newUUID, newTime)
 	repositoryDeletedEventJson = fmt.Sprintf(repositoryDeletedEventJsonTemplate, newUUID, newTime)
+	branchCreatedEventJson = fmt.Sprintf(branchCreatedEventJsonTemplate, newUUID, newTime)
+	branchDeletedEventJson = fmt.Sprintf(branchDeletedEventJsonTemplate, newUUID, newTime)
 }
 
 func TestAsCloudEvent(t *testing.T) {
@@ -486,6 +529,14 @@ func TestAsCloudEvent(t *testing.T) {
 		name:            "repository deleted",
 		event:           repositoryDeletedEvent,
 		payloadReceiver: &RepositoryDeletedEvent{},
+	}, {
+		name:            "branch created",
+		event:           branchCreatedEvent,
+		payloadReceiver: &BranchCreatedEvent{},
+	}, {
+		name:            "branch deleted",
+		event:           branchDeletedEvent,
+		payloadReceiver: &BranchDeletedEvent{},
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -594,6 +645,16 @@ func TestAsJsonString(t *testing.T) {
 		event:      repositoryDeletedEvent,
 		jsonString: repositoryDeletedEventJson,
 		schemaName: "repositorydeleted",
+	}, {
+		name:       "branch created",
+		event:      branchCreatedEvent,
+		jsonString: branchCreatedEventJson,
+		schemaName: "branchcreated",
+	}, {
+		name:       "branch deleted",
+		event:      branchDeletedEvent,
+		jsonString: branchDeletedEventJson,
+		schemaName: "branchdeleted",
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

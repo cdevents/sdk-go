@@ -118,7 +118,11 @@ func NewBranchDeletedEvent() (*BranchDeletedEvent, error) {
 			Type:    BranchDeletedEventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: BranchDeletedSubject{},
+		Subject: BranchDeletedSubject{
+			SubjectBase: SubjectBase{
+				Type: BranchSubjectType,
+			},
+		},
 	}
 	_, err := initCDEvent(e)
 	if err != nil {
