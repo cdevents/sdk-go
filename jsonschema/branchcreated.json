@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/cdevents/sdk-go/pkg/api/repository-created-event",
+  "$id": "https://github.com/cdevents/sdk-go/pkg/api/branch-created-event",
   "properties": {
     "context": {
       "properties": {
@@ -52,28 +52,9 @@
           "minLength": 1
         },
         "content": {
-          "properties": {
-            "name": {
-              "type": "string",
-              "minLength": 1
-            },
-            "owner": {
-              "type": "string"
-            },
-            "url": {
-              "type": "string",
-              "minLength": 1
-            },
-            "viewUrl": {
-              "type": "string"
-            }
-          },
+          "properties": {},
           "additionalProperties": false,
-          "type": "object",
-          "required": [
-            "name",
-            "url"
-          ]
+          "type": "object"
         }
       },
       "additionalProperties": false,

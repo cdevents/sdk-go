@@ -42,6 +42,8 @@ var (
 		"repositorycreated":   &api.RepositoryCreatedEvent{},
 		"repositorymodified":  &api.RepositoryModifiedEvent{},
 		"repositorydeleted":   &api.RepositoryDeletedEvent{},
+		"branchcreated":       &api.BranchCreatedEvent{},
+		"branchdeleted":       &api.BranchDeletedEvent{},
 	}
 )
 

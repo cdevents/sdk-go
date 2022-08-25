@@ -213,6 +213,86 @@ func TestNewCDEvent(t *testing.T) {
 				},
 			},
 		},
+	}, {
+		name:      "repository created",
+		eventType: RepositoryCreatedEventV1,
+		expectedEvent: &RepositoryCreatedEvent{
+			Context: Context{
+				Type:      RepositoryCreatedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: RepositoryCreatedSubject{
+				SubjectBase: SubjectBase{
+					Type: RepositorySubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "repository modified",
+		eventType: RepositoryModifiedEventV1,
+		expectedEvent: &RepositoryModifiedEvent{
+			Context: Context{
+				Type:      RepositoryModifiedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: RepositoryModifiedSubject{
+				SubjectBase: SubjectBase{
+					Type: RepositorySubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "repository deleted",
+		eventType: RepositoryDeletedEventV1,
+		expectedEvent: &RepositoryDeletedEvent{
+			Context: Context{
+				Type:      RepositoryDeletedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: RepositoryDeletedSubject{
+				SubjectBase: SubjectBase{
+					Type: RepositorySubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "branch created",
+		eventType: BranchCreatedEventV1,
+		expectedEvent: &BranchCreatedEvent{
+			Context: Context{
+				Type:      BranchCreatedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: BranchCreatedSubject{
+				SubjectBase: SubjectBase{
+					Type: BranchSubjectType,
+				},
+			},
+		},
+	}, {
+		name:      "branch deleted",
+		eventType: BranchDeletedEventV1,
+		expectedEvent: &BranchDeletedEvent{
+			Context: Context{
+				Type:      BranchDeletedEventV1,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: BranchDeletedSubject{
+				SubjectBase: SubjectBase{
+					Type: BranchSubjectType,
+				},
+			},
+		},
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

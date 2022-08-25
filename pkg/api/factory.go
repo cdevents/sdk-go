@@ -52,16 +52,16 @@ func NewCDEvent(eventType CDEventType) (CDEvent, error) {
 		return NewTaskRunStartedEvent()
 	case TaskRunFinishedEventV1:
 		return NewTaskRunFinishedEvent()
-	// case RepositoryCreatedEventV1:
-	// 	return NewRepositoryCreatedEvent()
-	// case RepositoryModifiedEventV1:
-	// 	return NewRepositoryModifiedEvent()
-	// case RepositoryDeletedEventV1:
-	// 	return NewRepositoryDeletedEvent()
-	// case BranchCreatedEventV1:
-	// 	return NewBranchCreatedEvent()
-	// case BranchDeletedEventV1:
-	// 	return NewBranchDeletedEvent()
+	case RepositoryCreatedEventV1:
+		return NewRepositoryCreatedEvent()
+	case RepositoryModifiedEventV1:
+		return NewRepositoryModifiedEvent()
+	case RepositoryDeletedEventV1:
+		return NewRepositoryDeletedEvent()
+	case BranchCreatedEventV1:
+		return NewBranchCreatedEvent()
+	case BranchDeletedEventV1:
+		return NewBranchDeletedEvent()
 	case ChangeCreatedEventV1:
 		return NewChangeCreatedEvent()
 	case ChangeUpdatedEventV1:
