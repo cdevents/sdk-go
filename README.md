@@ -7,9 +7,9 @@ The SDK can be used to create CDEvents and send them as CloudEvents, as well as 
 ## Disclaimer 🚧
 
 This SDK is work in work in progress, it will be maintained in sync with the
-specification but it only covers a limited number of events.
-For a wider range of events, the [old SDK/CLI][old-sdk] may be used, with the
-caveat that the old SDK is not aligned with the new version of the specification.
+specification and it now covers all events from the specification.
+The [old SDK/CLI][old-sdk] is still available, with the caveat that it's
+not aligned with the new version of the specification.
 
 ## Get started
 
@@ -22,7 +22,7 @@ go get github.com/cdevents/sdk-go
 And import the module in your code
 
 ```golang
-import cdevents "github.com/cdevents/sdk-go"
+import cdevents "github.com/cdevents/sdk-go/pkg/api"
 ```
 
 ## Create your first CDEvent
@@ -62,6 +62,7 @@ func main() {
     ctx = cloudevents.WithEncodingBinary(ctx)
 
     // Sent the CloudEvent
+    // c is a CloudEvent client
     if result := c.Send(ctx, ce); cloudevents.IsUndelivered(result) {
         log.Fatalf("failed to send, %v", result)
     }
