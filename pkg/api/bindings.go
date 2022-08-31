@@ -23,8 +23,80 @@ import (
 	"fmt"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
+	schemaproducer "github.com/invopop/jsonschema"
 	jsonschema "github.com/santhosh-tekuri/jsonschema/v5"
 )
+
+var (
+
+	// All event types
+	allEvents = []CDEvent{
+		&PipelineRunQueuedEvent{},
+		&PipelineRunStartedEvent{},
+		&PipelineRunFinishedEvent{},
+		&TaskRunStartedEvent{},
+		&TaskRunFinishedEvent{},
+		&ChangeCreatedEvent{},
+		&ChangeUpdatedEvent{},
+		&ChangeReviewedEvent{},
+		&ChangeMergedEvent{},
+		&ChangeAbandonedEvent{},
+		&RepositoryCreatedEvent{},
+		&RepositoryModifiedEvent{},
+		&RepositoryDeletedEvent{},
+		&BranchCreatedEvent{},
+		&BranchDeletedEvent{},
+		&TestSuiteStartedEvent{},
+		&TestSuiteFinishedEvent{},
+		&TestCaseQueuedEvent{},
+		&TestCaseStartedEvent{},
+		&TestCaseFinishedEvent{},
+		&BuildQueuedEvent{},
+		&BuildStartedEvent{},
+		&BuildFinishedEvent{},
+		&ArtifactPackagedEvent{},
+		&ArtifactPublishedEvent{},
+		&EnvironmentCreatedEvent{},
+		&EnvironmentModifiedEvent{},
+		&EnvironmentDeletedEvent{},
+		&ServiceDeployedEvent{},
+		&ServiceUpgradedEvent{},
+		&ServiceRolledbackEvent{},
+		&ServiceRemovedEvent{},
+		&ServicePublishedEvent{},
+	}
+
+	// Map schema names to schema strings
+	allEventSchemas map[string]string
+)
+
+func init() {
+
+	// Init the schema map
+	allEventSchemas = make(map[string]string)
+
+	// Setup a reflector
+	id := schemaproducer.EmptyID
+	id.Add(fmt.Sprintf("https://cdevents.dev/%s/schema", CDEventsSpecVersion))
+	reflector := schemaproducer.Reflector{
+		BaseSchemaID:   id,
+		DoNotReference: true,
+	}
+
+	// Setup schema strings
+	for _, eventType := range allEvents {
+		s := reflector.Reflect(eventType)
+		data, err := json.MarshalIndent(s, "", "  ")
+		panicOnError(err)
+		allEventSchemas[eventType.GetSchema()] = string(data)
+	}
+}
+
+func panicOnError(err error) {
+	if err != nil {
+		panic(err.Error())
+	}
+}
 
 // TODO(afrittoli) we may want to define something like:
 // const CDEventsContentType = "application/cdevents+json"
@@ -40,7 +112,6 @@ func AsCloudEvent(event CDEventReader) (*cloudevents.Event, error) {
 		return nil, fmt.Errorf("cannot validate CDEvent %v", err)
 	}
 	ce := cloudevents.NewEvent()
-	// TODO(afrittoli) We should have some validation in place
 	ce.SetSource(event.GetSource())
 	ce.SetSubject(event.GetSubjectId())
 	ce.SetType(event.GetType().String())
@@ -63,8 +134,7 @@ func AsJsonString(event CDEventReader) (string, error) {
 // Validate checks the CDEvent against the JSON schema
 func Validate(event CDEventReader) error {
 	schemaName := event.GetSchema()
-	compiler := jsonschema.NewCompiler()
-	sch, err := compiler.Compile(fmt.Sprintf("../../jsonschema/%s.json", schemaName))
+	sch, err := jsonschema.CompileString(fmt.Sprintf("%s.json", schemaName), allEventSchemas[schemaName])
 	if err != nil {
 		return fmt.Errorf("cannot compile jsonschema %s, %s", schemaName, err)
 	}
