@@ -46,6 +46,7 @@ func (sc BranchDeletedSubject) GetSubjectType() SubjectType {
 type BranchDeletedEvent struct {
 	Context Context              `json:"context"`
 	Subject BranchDeletedSubject `json:"subject"`
+	CDEventCustomData
 }
 
 // CDEventsReader implementation
@@ -82,6 +83,18 @@ func (e BranchDeletedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
+func (e BranchDeletedEvent) GetCustomData() []byte {
+	return e.CustomData
+}
+
+func (e BranchDeletedEvent) GetCustomDataAs(receiver interface{}) error {
+	return getCustomDataAs(e, receiver)
+}
+
+func (e BranchDeletedEvent) GetCustomDataContentType() string {
+	return e.CustomDataContentType
+}
+
 // CDEventsWriter implementation
 
 func (e *BranchDeletedEvent) SetId(id string) {
@@ -106,6 +119,15 @@ func (e *BranchDeletedEvent) SetSubjectId(subjectId string) {
 
 func (e *BranchDeletedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *BranchDeletedEvent) SetCustomData(contentType string, data interface{}) error {
+	dataBytes, err := customDataBytes(contentType, data)
+	if err != nil {
+		return err
+	}
+	e.CustomData = dataBytes
+	return nil
 }
 
 func (e BranchDeletedEvent) GetSchema() string {

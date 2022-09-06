@@ -50,6 +50,7 @@ func (sc ServiceRolledbackSubject) GetSubjectType() SubjectType {
 type ServiceRolledbackEvent struct {
 	Context Context                  `json:"context"`
 	Subject ServiceRolledbackSubject `json:"subject"`
+	CDEventCustomData
 }
 
 // CDEventsReader implementation
@@ -86,6 +87,18 @@ func (e ServiceRolledbackEvent) GetSubject() Subject {
 	return e.Subject
 }
 
+func (e ServiceRolledbackEvent) GetCustomData() []byte {
+	return e.CustomData
+}
+
+func (e ServiceRolledbackEvent) GetCustomDataAs(receiver interface{}) error {
+	return getCustomDataAs(e, receiver)
+}
+
+func (e ServiceRolledbackEvent) GetCustomDataContentType() string {
+	return e.CustomDataContentType
+}
+
 // CDEventsWriter implementation
 
 func (e *ServiceRolledbackEvent) SetId(id string) {
@@ -110,6 +123,15 @@ func (e *ServiceRolledbackEvent) SetSubjectId(subjectId string) {
 
 func (e *ServiceRolledbackEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *ServiceRolledbackEvent) SetCustomData(contentType string, data interface{}) error {
+	dataBytes, err := customDataBytes(contentType, data)
+	if err != nil {
+		return err
+	}
+	e.CustomData = dataBytes
+	return nil
 }
 
 func (e ServiceRolledbackEvent) GetSchema() string {

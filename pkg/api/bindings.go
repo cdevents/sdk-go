@@ -77,7 +77,7 @@ func init() {
 
 	// Setup a reflector
 	id := schemaproducer.EmptyID
-	id.Add(fmt.Sprintf("https://cdevents.dev/%s/schema", CDEventsSpecVersion))
+	id = id.Add(fmt.Sprintf("https://cdevents.dev/%s/schema", CDEventsSpecVersion))
 	reflector := schemaproducer.Reflector{
 		BaseSchemaID:   id,
 		DoNotReference: true,

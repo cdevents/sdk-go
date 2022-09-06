@@ -50,6 +50,7 @@ func (sc ServiceUpgradedSubject) GetSubjectType() SubjectType {
 type ServiceUpgradedEvent struct {
 	Context Context                `json:"context"`
 	Subject ServiceUpgradedSubject `json:"subject"`
+	CDEventCustomData
 }
 
 // CDEventsReader implementation
@@ -86,6 +87,18 @@ func (e ServiceUpgradedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
+func (e ServiceUpgradedEvent) GetCustomData() []byte {
+	return e.CustomData
+}
+
+func (e ServiceUpgradedEvent) GetCustomDataAs(receiver interface{}) error {
+	return getCustomDataAs(e, receiver)
+}
+
+func (e ServiceUpgradedEvent) GetCustomDataContentType() string {
+	return e.CustomDataContentType
+}
+
 // CDEventsWriter implementation
 
 func (e *ServiceUpgradedEvent) SetId(id string) {
@@ -110,6 +123,15 @@ func (e *ServiceUpgradedEvent) SetSubjectId(subjectId string) {
 
 func (e *ServiceUpgradedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *ServiceUpgradedEvent) SetCustomData(contentType string, data interface{}) error {
+	dataBytes, err := customDataBytes(contentType, data)
+	if err != nil {
+		return err
+	}
+	e.CustomData = dataBytes
+	return nil
 }
 
 func (e ServiceUpgradedEvent) GetSchema() string {
