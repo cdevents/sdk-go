@@ -59,6 +59,7 @@ func (sc RepositoryCreatedSubject) GetSubjectType() SubjectType {
 type RepositoryCreatedEvent struct {
 	Context Context                  `json:"context"`
 	Subject RepositoryCreatedSubject `json:"subject"`
+	CDEventCustomData
 }
 
 // CDEventsReader implementation
@@ -95,6 +96,18 @@ func (e RepositoryCreatedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
+func (e RepositoryCreatedEvent) GetCustomData() []byte {
+	return e.CustomData
+}
+
+func (e RepositoryCreatedEvent) GetCustomDataAs(receiver interface{}) error {
+	return getCustomDataAs(e, receiver)
+}
+
+func (e RepositoryCreatedEvent) GetCustomDataContentType() string {
+	return e.CustomDataContentType
+}
+
 // CDEventsWriter implementation
 
 func (e *RepositoryCreatedEvent) SetId(id string) {
@@ -119,6 +132,15 @@ func (e *RepositoryCreatedEvent) SetSubjectId(subjectId string) {
 
 func (e *RepositoryCreatedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *RepositoryCreatedEvent) SetCustomData(contentType string, data interface{}) error {
+	dataBytes, err := customDataBytes(contentType, data)
+	if err != nil {
+		return err
+	}
+	e.CustomData = dataBytes
+	return nil
 }
 
 func (e RepositoryCreatedEvent) GetSchema() string {

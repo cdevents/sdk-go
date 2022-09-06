@@ -77,6 +77,7 @@ func (sc TaskRunFinishedSubject) GetSubjectType() SubjectType {
 type TaskRunFinishedEvent struct {
 	Context Context                `json:"context"`
 	Subject TaskRunFinishedSubject `json:"subject"`
+	CDEventCustomData
 }
 
 // CDEventsReader implementation
@@ -113,6 +114,18 @@ func (e TaskRunFinishedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
+func (e TaskRunFinishedEvent) GetCustomData() []byte {
+	return e.CustomData
+}
+
+func (e TaskRunFinishedEvent) GetCustomDataAs(receiver interface{}) error {
+	return getCustomDataAs(e, receiver)
+}
+
+func (e TaskRunFinishedEvent) GetCustomDataContentType() string {
+	return e.CustomDataContentType
+}
+
 // CDEventsWriter implementation
 // TODO(afrittoli) Add stricter validation where relevant
 
@@ -138,6 +151,15 @@ func (e *TaskRunFinishedEvent) SetSubjectId(subjectId string) {
 
 func (e *TaskRunFinishedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *TaskRunFinishedEvent) SetCustomData(contentType string, data interface{}) error {
+	dataBytes, err := customDataBytes(contentType, data)
+	if err != nil {
+		return err
+	}
+	e.CustomData = dataBytes
+	return nil
 }
 
 // Subject field setters

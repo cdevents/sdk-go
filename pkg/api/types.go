@@ -19,6 +19,9 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	"encoding/base64"
+	"encoding/json"
+	"fmt"
 	"time"
 )
 
@@ -135,6 +138,16 @@ type CDEventReader interface {
 
 	// The name of the schema file associated to the event type
 	GetSchema() string
+
+	// The custom data attached to the event
+	GetCustomData() []byte
+
+	// Custom data un-marshalled into receiver, only if content type is
+	// set to "application/json"
+	GetCustomDataAs(receiver interface{}) error
+
+	// Custom data content-type
+	GetCustomDataContentType() string
 }
 
 type CDEventWriter interface {
@@ -156,9 +169,53 @@ type CDEventWriter interface {
 	// The source of the subject. Usually this matches the source of the event
 	// but it may also be different.
 	SetSubjectSource(subjectSource string)
+
+	// Set custom data. If contentType is "application/json", data will
+	// eventually be marshalled as JSON. For any other content type, data
+	// must be passed as a []byte
+	SetCustomData(contentType string, data interface{}) error
+}
+
+type CDEventCustomDataEncoding string
+
+func (t CDEventCustomDataEncoding) String() string {
+	return string(t)
+}
+
+type CDEventCustomData struct {
+
+	// CustomData added to the CDEvent. Format not specified by the SPEC.
+	CustomData []byte `json:"customData,omitempty"`
+
+	// CustomDataContentType for CustomData in a CDEvent.
+	CustomDataContentType string `json:"customDataContentType,omitempty"`
 }
 
 type CDEvent interface {
 	CDEventReader
 	CDEventWriter
+}
+
+func getCustomDataAs(e CDEventReader, receiver interface{}) error {
+	if e.GetCustomDataContentType() != "application/json" {
+		return fmt.Errorf("cannot unmarshal content-type %s", e.GetCustomDataContentType())
+	}
+	return json.Unmarshal(e.GetCustomData(), receiver)
+}
+
+func customDataBytes(contentType string, data interface{}) ([]byte, error) {
+	switch data := data.(type) {
+	case []byte:
+		if contentType == "application/json" {
+			return data, nil
+		}
+		dataBytes := make([]byte, base64.StdEncoding.EncodedLen(len(data)))
+		base64.StdEncoding.Encode(dataBytes, data)
+		return dataBytes, nil
+	default:
+		if contentType != "application/json" {
+			return nil, fmt.Errorf("cannot marshal object to %s", contentType)
+		}
+		return json.Marshal(data)
+	}
 }

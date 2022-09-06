@@ -73,8 +73,7 @@ func panicOnError(err error) {
 
 func main() {
 	// Setup a reflector
-	id := jsonschema.EmptyID
-	id.Add(fmt.Sprintf("https://cdevents.dev/%s/schema", api.CDEventsSpecVersion))
+	id := jsonschema.ID(fmt.Sprintf("https://cdevents.dev/%s/schema", api.CDEventsSpecVersion))
 	reflector := jsonschema.Reflector{
 		BaseSchemaID:   id,
 		DoNotReference: true,

@@ -75,6 +75,7 @@ func (sc PipelineRunFinishedSubject) GetSubjectType() SubjectType {
 type PipelineRunFinishedEvent struct {
 	Context Context                    `json:"context"`
 	Subject PipelineRunFinishedSubject `json:"subject"`
+	CDEventCustomData
 }
 
 // CDEventsReader implementation
@@ -111,6 +112,18 @@ func (e PipelineRunFinishedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
+func (e PipelineRunFinishedEvent) GetCustomData() []byte {
+	return e.CustomData
+}
+
+func (e PipelineRunFinishedEvent) GetCustomDataAs(receiver interface{}) error {
+	return getCustomDataAs(e, receiver)
+}
+
+func (e PipelineRunFinishedEvent) GetCustomDataContentType() string {
+	return e.CustomDataContentType
+}
+
 // CDEventsWriter implementation
 // TODO(afrittoli) Add stricter validation where relevant
 
@@ -136,6 +149,15 @@ func (e *PipelineRunFinishedEvent) SetSubjectId(subjectId string) {
 
 func (e *PipelineRunFinishedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *PipelineRunFinishedEvent) SetCustomData(contentType string, data interface{}) error {
+	dataBytes, err := customDataBytes(contentType, data)
+	if err != nil {
+		return err
+	}
+	e.CustomData = dataBytes
+	return nil
 }
 
 // Subject field setters

@@ -46,6 +46,7 @@ func (sc ChangeUpdatedSubject) GetSubjectType() SubjectType {
 type ChangeUpdatedEvent struct {
 	Context Context              `json:"context"`
 	Subject ChangeUpdatedSubject `json:"subject"`
+	CDEventCustomData
 }
 
 // CDEventsReader implementation
@@ -82,6 +83,18 @@ func (e ChangeUpdatedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
+func (e ChangeUpdatedEvent) GetCustomData() []byte {
+	return e.CustomData
+}
+
+func (e ChangeUpdatedEvent) GetCustomDataAs(receiver interface{}) error {
+	return getCustomDataAs(e, receiver)
+}
+
+func (e ChangeUpdatedEvent) GetCustomDataContentType() string {
+	return e.CustomDataContentType
+}
+
 // CDEventsWriter implementation
 
 func (e *ChangeUpdatedEvent) SetId(id string) {
@@ -106,6 +119,15 @@ func (e *ChangeUpdatedEvent) SetSubjectId(subjectId string) {
 
 func (e *ChangeUpdatedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *ChangeUpdatedEvent) SetCustomData(contentType string, data interface{}) error {
+	dataBytes, err := customDataBytes(contentType, data)
+	if err != nil {
+		return err
+	}
+	e.CustomData = dataBytes
+	return nil
 }
 
 func (e ChangeUpdatedEvent) GetSchema() string {

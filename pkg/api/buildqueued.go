@@ -46,6 +46,7 @@ func (sc BuildQueuedSubject) GetSubjectType() SubjectType {
 type BuildQueuedEvent struct {
 	Context Context            `json:"context"`
 	Subject BuildQueuedSubject `json:"subject"`
+	CDEventCustomData
 }
 
 // CDEventsReader implementation
@@ -82,6 +83,18 @@ func (e BuildQueuedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
+func (e BuildQueuedEvent) GetCustomData() []byte {
+	return e.CustomData
+}
+
+func (e BuildQueuedEvent) GetCustomDataAs(receiver interface{}) error {
+	return getCustomDataAs(e, receiver)
+}
+
+func (e BuildQueuedEvent) GetCustomDataContentType() string {
+	return e.CustomDataContentType
+}
+
 // CDEventsWriter implementation
 
 func (e *BuildQueuedEvent) SetId(id string) {
@@ -106,6 +119,15 @@ func (e *BuildQueuedEvent) SetSubjectId(subjectId string) {
 
 func (e *BuildQueuedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *BuildQueuedEvent) SetCustomData(contentType string, data interface{}) error {
+	dataBytes, err := customDataBytes(contentType, data)
+	if err != nil {
+		return err
+	}
+	e.CustomData = dataBytes
+	return nil
 }
 
 func (e BuildQueuedEvent) GetSchema() string {

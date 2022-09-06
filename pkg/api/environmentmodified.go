@@ -53,6 +53,7 @@ func (sc EnvironmentModifiedSubject) GetSubjectType() SubjectType {
 type EnvironmentModifiedEvent struct {
 	Context Context                    `json:"context"`
 	Subject EnvironmentModifiedSubject `json:"subject"`
+	CDEventCustomData
 }
 
 // CDEventsReader implementation
@@ -89,6 +90,18 @@ func (e EnvironmentModifiedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
+func (e EnvironmentModifiedEvent) GetCustomData() []byte {
+	return e.CustomData
+}
+
+func (e EnvironmentModifiedEvent) GetCustomDataAs(receiver interface{}) error {
+	return getCustomDataAs(e, receiver)
+}
+
+func (e EnvironmentModifiedEvent) GetCustomDataContentType() string {
+	return e.CustomDataContentType
+}
+
 // CDEventsWriter implementation
 
 func (e *EnvironmentModifiedEvent) SetId(id string) {
@@ -113,6 +126,15 @@ func (e *EnvironmentModifiedEvent) SetSubjectId(subjectId string) {
 
 func (e *EnvironmentModifiedEvent) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
+}
+
+func (e *EnvironmentModifiedEvent) SetCustomData(contentType string, data interface{}) error {
+	dataBytes, err := customDataBytes(contentType, data)
+	if err != nil {
+		return err
+	}
+	e.CustomData = dataBytes
+	return nil
 }
 
 func (e EnvironmentModifiedEvent) GetSchema() string {
