@@ -83,12 +83,16 @@ func (e TestCaseQueuedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
-func (e TestCaseQueuedEvent) GetCustomData() []byte {
-	return e.CustomData
+func (e TestCaseQueuedEvent) GetCustomData() (interface{}, error) {
+	return getCustomData(e.CustomDataContentType, e.CustomData)
 }
 
 func (e TestCaseQueuedEvent) GetCustomDataAs(receiver interface{}) error {
 	return getCustomDataAs(e, receiver)
+}
+
+func (e TestCaseQueuedEvent) GetCustomDataRaw() ([]byte, error) {
+	return getCustomDataRaw(e.CustomDataContentType, e.CustomData)
 }
 
 func (e TestCaseQueuedEvent) GetCustomDataContentType() string {
@@ -122,11 +126,12 @@ func (e *TestCaseQueuedEvent) SetSubjectSource(subjectSource string) {
 }
 
 func (e *TestCaseQueuedEvent) SetCustomData(contentType string, data interface{}) error {
-	dataBytes, err := customDataBytes(contentType, data)
+	err := checkCustomData(contentType, data)
 	if err != nil {
 		return err
 	}
-	e.CustomData = dataBytes
+	e.CustomData = data
+	e.CustomDataContentType = contentType
 	return nil
 }
 

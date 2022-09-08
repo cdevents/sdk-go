@@ -87,12 +87,16 @@ func (e ServiceRolledbackEvent) GetSubject() Subject {
 	return e.Subject
 }
 
-func (e ServiceRolledbackEvent) GetCustomData() []byte {
-	return e.CustomData
+func (e ServiceRolledbackEvent) GetCustomData() (interface{}, error) {
+	return getCustomData(e.CustomDataContentType, e.CustomData)
 }
 
 func (e ServiceRolledbackEvent) GetCustomDataAs(receiver interface{}) error {
 	return getCustomDataAs(e, receiver)
+}
+
+func (e ServiceRolledbackEvent) GetCustomDataRaw() ([]byte, error) {
+	return getCustomDataRaw(e.CustomDataContentType, e.CustomData)
 }
 
 func (e ServiceRolledbackEvent) GetCustomDataContentType() string {
@@ -126,11 +130,12 @@ func (e *ServiceRolledbackEvent) SetSubjectSource(subjectSource string) {
 }
 
 func (e *ServiceRolledbackEvent) SetCustomData(contentType string, data interface{}) error {
-	dataBytes, err := customDataBytes(contentType, data)
+	err := checkCustomData(contentType, data)
 	if err != nil {
 		return err
 	}
-	e.CustomData = dataBytes
+	e.CustomData = data
+	e.CustomDataContentType = contentType
 	return nil
 }
 

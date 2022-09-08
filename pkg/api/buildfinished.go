@@ -87,12 +87,16 @@ func (e BuildFinishedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
-func (e BuildFinishedEvent) GetCustomData() []byte {
-	return e.CustomData
+func (e BuildFinishedEvent) GetCustomData() (interface{}, error) {
+	return getCustomData(e.CustomDataContentType, e.CustomData)
 }
 
 func (e BuildFinishedEvent) GetCustomDataAs(receiver interface{}) error {
 	return getCustomDataAs(e, receiver)
+}
+
+func (e BuildFinishedEvent) GetCustomDataRaw() ([]byte, error) {
+	return getCustomDataRaw(e.CustomDataContentType, e.CustomData)
 }
 
 func (e BuildFinishedEvent) GetCustomDataContentType() string {
@@ -126,11 +130,12 @@ func (e *BuildFinishedEvent) SetSubjectSource(subjectSource string) {
 }
 
 func (e *BuildFinishedEvent) SetCustomData(contentType string, data interface{}) error {
-	dataBytes, err := customDataBytes(contentType, data)
+	err := checkCustomData(contentType, data)
 	if err != nil {
 		return err
 	}
-	e.CustomData = dataBytes
+	e.CustomData = data
+	e.CustomDataContentType = contentType
 	return nil
 }
 

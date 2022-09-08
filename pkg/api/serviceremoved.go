@@ -87,12 +87,16 @@ func (e ServiceRemovedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
-func (e ServiceRemovedEvent) GetCustomData() []byte {
-	return e.CustomData
+func (e ServiceRemovedEvent) GetCustomData() (interface{}, error) {
+	return getCustomData(e.CustomDataContentType, e.CustomData)
 }
 
 func (e ServiceRemovedEvent) GetCustomDataAs(receiver interface{}) error {
 	return getCustomDataAs(e, receiver)
+}
+
+func (e ServiceRemovedEvent) GetCustomDataRaw() ([]byte, error) {
+	return getCustomDataRaw(e.CustomDataContentType, e.CustomData)
 }
 
 func (e ServiceRemovedEvent) GetCustomDataContentType() string {
@@ -126,11 +130,12 @@ func (e *ServiceRemovedEvent) SetSubjectSource(subjectSource string) {
 }
 
 func (e *ServiceRemovedEvent) SetCustomData(contentType string, data interface{}) error {
-	dataBytes, err := customDataBytes(contentType, data)
+	err := checkCustomData(contentType, data)
 	if err != nil {
 		return err
 	}
-	e.CustomData = dataBytes
+	e.CustomData = data
+	e.CustomDataContentType = contentType
 	return nil
 }
 

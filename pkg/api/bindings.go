@@ -68,12 +68,16 @@ var (
 
 	// Map schema names to schema strings
 	allEventSchemas map[string]string
+
+	// Map CDEventType to empty event objects
+	cdeventTypesToReceiver map[CDEventType]CDEvent
 )
 
 func init() {
 
 	// Init the schema map
 	allEventSchemas = make(map[string]string)
+	cdeventTypesToReceiver = make(map[CDEventType]CDEvent)
 
 	// Setup a reflector
 	id := schemaproducer.EmptyID
@@ -83,12 +87,15 @@ func init() {
 		DoNotReference: true,
 	}
 
-	// Setup schema strings
 	for _, eventType := range allEvents {
+		// Setup schema strings
 		s := reflector.Reflect(eventType)
 		data, err := json.MarshalIndent(s, "", "  ")
 		panicOnError(err)
 		allEventSchemas[eventType.GetSchema()] = string(data)
+
+		// Set type to receiver map
+		cdeventTypesToReceiver[eventType.GetType()] = eventType
 	}
 }
 

@@ -96,12 +96,16 @@ func (e RepositoryCreatedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
-func (e RepositoryCreatedEvent) GetCustomData() []byte {
-	return e.CustomData
+func (e RepositoryCreatedEvent) GetCustomData() (interface{}, error) {
+	return getCustomData(e.CustomDataContentType, e.CustomData)
 }
 
 func (e RepositoryCreatedEvent) GetCustomDataAs(receiver interface{}) error {
 	return getCustomDataAs(e, receiver)
+}
+
+func (e RepositoryCreatedEvent) GetCustomDataRaw() ([]byte, error) {
+	return getCustomDataRaw(e.CustomDataContentType, e.CustomData)
 }
 
 func (e RepositoryCreatedEvent) GetCustomDataContentType() string {
@@ -135,11 +139,12 @@ func (e *RepositoryCreatedEvent) SetSubjectSource(subjectSource string) {
 }
 
 func (e *RepositoryCreatedEvent) SetCustomData(contentType string, data interface{}) error {
-	dataBytes, err := customDataBytes(contentType, data)
+	err := checkCustomData(contentType, data)
 	if err != nil {
 		return err
 	}
-	e.CustomData = dataBytes
+	e.CustomData = data
+	e.CustomDataContentType = contentType
 	return nil
 }
 

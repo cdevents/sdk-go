@@ -114,12 +114,16 @@ func (e TaskRunFinishedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
-func (e TaskRunFinishedEvent) GetCustomData() []byte {
-	return e.CustomData
+func (e TaskRunFinishedEvent) GetCustomData() (interface{}, error) {
+	return getCustomData(e.CustomDataContentType, e.CustomData)
 }
 
 func (e TaskRunFinishedEvent) GetCustomDataAs(receiver interface{}) error {
 	return getCustomDataAs(e, receiver)
+}
+
+func (e TaskRunFinishedEvent) GetCustomDataRaw() ([]byte, error) {
+	return getCustomDataRaw(e.CustomDataContentType, e.CustomData)
 }
 
 func (e TaskRunFinishedEvent) GetCustomDataContentType() string {
@@ -154,11 +158,12 @@ func (e *TaskRunFinishedEvent) SetSubjectSource(subjectSource string) {
 }
 
 func (e *TaskRunFinishedEvent) SetCustomData(contentType string, data interface{}) error {
-	dataBytes, err := customDataBytes(contentType, data)
+	err := checkCustomData(contentType, data)
 	if err != nil {
 		return err
 	}
-	e.CustomData = dataBytes
+	e.CustomData = data
+	e.CustomDataContentType = contentType
 	return nil
 }
 
