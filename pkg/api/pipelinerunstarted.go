@@ -90,12 +90,16 @@ func (e PipelineRunStartedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
-func (e PipelineRunStartedEvent) GetCustomData() []byte {
-	return e.CustomData
+func (e PipelineRunStartedEvent) GetCustomData() (interface{}, error) {
+	return getCustomData(e.CustomDataContentType, e.CustomData)
 }
 
 func (e PipelineRunStartedEvent) GetCustomDataAs(receiver interface{}) error {
 	return getCustomDataAs(e, receiver)
+}
+
+func (e PipelineRunStartedEvent) GetCustomDataRaw() ([]byte, error) {
+	return getCustomDataRaw(e.CustomDataContentType, e.CustomData)
 }
 
 func (e PipelineRunStartedEvent) GetCustomDataContentType() string {
@@ -130,11 +134,12 @@ func (e *PipelineRunStartedEvent) SetSubjectSource(subjectSource string) {
 }
 
 func (e *PipelineRunStartedEvent) SetCustomData(contentType string, data interface{}) error {
-	dataBytes, err := customDataBytes(contentType, data)
+	err := checkCustomData(contentType, data)
 	if err != nil {
 		return err
 	}
-	e.CustomData = dataBytes
+	e.CustomData = data
+	e.CustomDataContentType = contentType
 	return nil
 }
 

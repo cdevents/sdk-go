@@ -96,12 +96,16 @@ func (e RepositoryDeletedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
-func (e RepositoryDeletedEvent) GetCustomData() []byte {
-	return e.CustomData
+func (e RepositoryDeletedEvent) GetCustomData() (interface{}, error) {
+	return getCustomData(e.CustomDataContentType, e.CustomData)
 }
 
 func (e RepositoryDeletedEvent) GetCustomDataAs(receiver interface{}) error {
 	return getCustomDataAs(e, receiver)
+}
+
+func (e RepositoryDeletedEvent) GetCustomDataRaw() ([]byte, error) {
+	return getCustomDataRaw(e.CustomDataContentType, e.CustomData)
 }
 
 func (e RepositoryDeletedEvent) GetCustomDataContentType() string {
@@ -135,11 +139,12 @@ func (e *RepositoryDeletedEvent) SetSubjectSource(subjectSource string) {
 }
 
 func (e *RepositoryDeletedEvent) SetCustomData(contentType string, data interface{}) error {
-	dataBytes, err := customDataBytes(contentType, data)
+	err := checkCustomData(contentType, data)
 	if err != nil {
 		return err
 	}
-	e.CustomData = dataBytes
+	e.CustomData = data
+	e.CustomDataContentType = contentType
 	return nil
 }
 

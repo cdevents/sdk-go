@@ -30,6 +30,10 @@ import (
 	jsonschema "github.com/santhosh-tekuri/jsonschema/v5"
 )
 
+type testData struct {
+	TestValues []map[string]string `json:"testValues"`
+}
+
 var (
 	testSource          = "TestAsCloudEvent"
 	testSubjectId       = "mySubject123"
@@ -48,6 +52,8 @@ var (
 	testEnvironmentId   = "test123"
 	testEnvironmentName = "testEnv"
 	testEnvironmentUrl  = "https://example.org/testEnv"
+	testDataJson        = testData{TestValues: []map[string]string{{"k1": "v1"}, {"k2": "v2"}}}
+	testDataXml         = []byte("<xml>testData</xml>")
 
 	pipelineRunQueuedEvent   *PipelineRunQueuedEvent
 	pipelineRunStartedEvent  *PipelineRunStartedEvent
@@ -82,6 +88,9 @@ var (
 	serviceRolledBackEvent   *ServiceRolledbackEvent
 	serviceRemovedEvent      *ServiceRemovedEvent
 	servicePublishedEvent    *ServicePublishedEvent
+
+	eventJsonCustomData    *ArtifactPackagedEvent
+	eventNonJsonCustomData *ArtifactPackagedEvent
 
 	pipelineRunQueuedEventJsonTemplate = `
 {
@@ -682,39 +691,106 @@ var (
 	}
 }`
 
-	pipelineRunQueuedEventJson   string
-	pipelineRunStartedEventJson  string
-	pipelineRunFinishedEventJson string
-	taskRunStartedEventJson      string
-	taskRunFinishedEventJson     string
-	changeCreateEventJson        string
-	changeUpdatedEventJson       string
-	changeReviewedEventJson      string
-	changeMergedEventJson        string
-	changeAbandonedEventJson     string
-	repositoryCreatedEventJson   string
-	repositoryModifiedEventJson  string
-	repositoryDeletedEventJson   string
-	branchCreatedEventJson       string
-	branchDeletedEventJson       string
-	testCaseQueuedEventJson      string
-	testCaseStartedEventJson     string
-	testCaseFinishedEventJson    string
-	testSuiteStartedEventJson    string
-	testSuiteFinishedEventJson   string
-	buildQueuedEventJson         string
-	buildStartedEventJson        string
-	buildFinishedEventJson       string
-	artifactPackagedEventJson    string
-	artifactPublishedEventJson   string
-	environmentCreatedEventJson  string
-	environmentModifiedEventJson string
-	environmentDeletedEventJson  string
-	serviceDeployedEventJson     string
-	serviceUpgradedEventJson     string
-	serviceRolledBackEventJson   string
-	serviceRemovedEventJson      string
-	servicePublishedEventJson    string
+	eventJsonCustomDataTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.artifact.packaged.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "artifact",
+		"content": {}
+	},
+	"customData": {
+		"testValues": [
+			{"k1": "v1"},
+			{"k2": "v2"}
+		]
+	},
+	"customDataContentType": "application/json"
+}`
+
+	eventImplicitJsonCustomDataTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.artifact.packaged.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "artifact",
+		"content": {}
+	},
+	"customData": {
+		"testValues": [
+			{"k1": "v1"},
+			{"k2": "v2"}
+		]
+	},
+	"customDataContentType": "application/json"
+}`
+
+	eventNonJsonCustomDataTemplate = `{
+	"context": {
+		"version": "draft",
+		"id": "%s",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.artifact.packaged.v1",
+		"timestamp": "%s"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"type": "artifact",
+		"content": {}
+	},
+	"customData": "PHhtbD50ZXN0RGF0YTwveG1sPg==",
+	"customDataContentType": "application/xml"
+}`
+
+	pipelineRunQueuedEventJson      string
+	pipelineRunStartedEventJson     string
+	pipelineRunFinishedEventJson    string
+	taskRunStartedEventJson         string
+	taskRunFinishedEventJson        string
+	changeCreateEventJson           string
+	changeUpdatedEventJson          string
+	changeReviewedEventJson         string
+	changeMergedEventJson           string
+	changeAbandonedEventJson        string
+	repositoryCreatedEventJson      string
+	repositoryModifiedEventJson     string
+	repositoryDeletedEventJson      string
+	branchCreatedEventJson          string
+	branchDeletedEventJson          string
+	testCaseQueuedEventJson         string
+	testCaseStartedEventJson        string
+	testCaseFinishedEventJson       string
+	testSuiteStartedEventJson       string
+	testSuiteFinishedEventJson      string
+	buildQueuedEventJson            string
+	buildStartedEventJson           string
+	buildFinishedEventJson          string
+	artifactPackagedEventJson       string
+	artifactPublishedEventJson      string
+	environmentCreatedEventJson     string
+	environmentModifiedEventJson    string
+	environmentDeletedEventJson     string
+	serviceDeployedEventJson        string
+	serviceUpgradedEventJson        string
+	serviceRolledBackEventJson      string
+	serviceRemovedEventJson         string
+	servicePublishedEventJson       string
+	eventJsonCustomDataJson         string
+	eventImplicitJsonCustomDataJson string
+	eventNonJsonCustomDataJson      string
 )
 
 func init() {
@@ -876,6 +952,16 @@ func init() {
 	setContext(servicePublishedEvent)
 	servicePublishedEvent.SetSubjectEnvironment(Reference{Id: testEnvironmentId})
 
+	eventJsonCustomData, _ = NewArtifactPackagedEvent()
+	setContext(eventJsonCustomData)
+	err := eventJsonCustomData.SetCustomData("application/json", testDataJson)
+	panicOnError(err)
+
+	eventNonJsonCustomData, _ = NewArtifactPackagedEvent()
+	setContext(eventNonJsonCustomData)
+	err = eventNonJsonCustomData.SetCustomData("application/xml", testDataXml)
+	panicOnError(err)
+
 	newUUID, _ := uuidNewRandom()
 	newTime := timeNow().Format(time.RFC3339Nano)
 	pipelineRunQueuedEventJson = fmt.Sprintf(pipelineRunQueuedEventJsonTemplate, newUUID, newTime)
@@ -911,6 +997,9 @@ func init() {
 	serviceRolledBackEventJson = fmt.Sprintf(serviceRolledBackEventJsonTemplate, newUUID, newTime)
 	serviceRemovedEventJson = fmt.Sprintf(serviceRemovedEventJsonTemplate, newUUID, newTime)
 	servicePublishedEventJson = fmt.Sprintf(servicePublishedEventJsonTemplate, newUUID, newTime)
+	eventJsonCustomDataJson = fmt.Sprintf(eventJsonCustomDataTemplate, newUUID, newTime)
+	eventImplicitJsonCustomDataJson = fmt.Sprintf(eventImplicitJsonCustomDataTemplate, newUUID, newTime)
+	eventNonJsonCustomDataJson = fmt.Sprintf(eventNonJsonCustomDataTemplate, newUUID, newTime)
 }
 
 func TestAsCloudEvent(t *testing.T) {
@@ -1259,6 +1348,21 @@ func TestAsJsonString(t *testing.T) {
 		event:      servicePublishedEvent,
 		jsonString: servicePublishedEventJson,
 		schemaName: "servicepublished",
+	}, {
+		name:       "json custom data",
+		event:      eventJsonCustomData,
+		jsonString: eventJsonCustomDataJson,
+		schemaName: "artifactpackaged",
+	}, {
+		name:       "json custom data implicit",
+		event:      eventJsonCustomData,
+		jsonString: eventImplicitJsonCustomDataJson,
+		schemaName: "artifactpackaged",
+	}, {
+		name:       "xml custom data",
+		event:      eventNonJsonCustomData,
+		jsonString: eventNonJsonCustomDataJson,
+		schemaName: "artifactpackaged",
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

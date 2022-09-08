@@ -83,12 +83,16 @@ func (e ChangeMergedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
-func (e ChangeMergedEvent) GetCustomData() []byte {
-	return e.CustomData
+func (e ChangeMergedEvent) GetCustomData() (interface{}, error) {
+	return getCustomData(e.CustomDataContentType, e.CustomData)
 }
 
 func (e ChangeMergedEvent) GetCustomDataAs(receiver interface{}) error {
 	return getCustomDataAs(e, receiver)
+}
+
+func (e ChangeMergedEvent) GetCustomDataRaw() ([]byte, error) {
+	return getCustomDataRaw(e.CustomDataContentType, e.CustomData)
 }
 
 func (e ChangeMergedEvent) GetCustomDataContentType() string {
@@ -122,11 +126,12 @@ func (e *ChangeMergedEvent) SetSubjectSource(subjectSource string) {
 }
 
 func (e *ChangeMergedEvent) SetCustomData(contentType string, data interface{}) error {
-	dataBytes, err := customDataBytes(contentType, data)
+	err := checkCustomData(contentType, data)
 	if err != nil {
 		return err
 	}
-	e.CustomData = dataBytes
+	e.CustomData = data
+	e.CustomDataContentType = contentType
 	return nil
 }
 

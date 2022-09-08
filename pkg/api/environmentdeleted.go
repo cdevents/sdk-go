@@ -87,12 +87,16 @@ func (e EnvironmentDeletedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
-func (e EnvironmentDeletedEvent) GetCustomData() []byte {
-	return e.CustomData
+func (e EnvironmentDeletedEvent) GetCustomData() (interface{}, error) {
+	return getCustomData(e.CustomDataContentType, e.CustomData)
 }
 
 func (e EnvironmentDeletedEvent) GetCustomDataAs(receiver interface{}) error {
 	return getCustomDataAs(e, receiver)
+}
+
+func (e EnvironmentDeletedEvent) GetCustomDataRaw() ([]byte, error) {
+	return getCustomDataRaw(e.CustomDataContentType, e.CustomData)
 }
 
 func (e EnvironmentDeletedEvent) GetCustomDataContentType() string {
@@ -126,11 +130,12 @@ func (e *EnvironmentDeletedEvent) SetSubjectSource(subjectSource string) {
 }
 
 func (e *EnvironmentDeletedEvent) SetCustomData(contentType string, data interface{}) error {
-	dataBytes, err := customDataBytes(contentType, data)
+	err := checkCustomData(contentType, data)
 	if err != nil {
 		return err
 	}
-	e.CustomData = dataBytes
+	e.CustomData = data
+	e.CustomDataContentType = contentType
 	return nil
 }
 

@@ -83,12 +83,16 @@ func (e ArtifactPackagedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
-func (e ArtifactPackagedEvent) GetCustomData() []byte {
-	return e.CustomData
+func (e ArtifactPackagedEvent) GetCustomData() (interface{}, error) {
+	return getCustomData(e.CustomDataContentType, e.CustomData)
 }
 
 func (e ArtifactPackagedEvent) GetCustomDataAs(receiver interface{}) error {
 	return getCustomDataAs(e, receiver)
+}
+
+func (e ArtifactPackagedEvent) GetCustomDataRaw() ([]byte, error) {
+	return getCustomDataRaw(e.CustomDataContentType, e.CustomData)
 }
 
 func (e ArtifactPackagedEvent) GetCustomDataContentType() string {
@@ -122,11 +126,12 @@ func (e *ArtifactPackagedEvent) SetSubjectSource(subjectSource string) {
 }
 
 func (e *ArtifactPackagedEvent) SetCustomData(contentType string, data interface{}) error {
-	dataBytes, err := customDataBytes(contentType, data)
+	err := checkCustomData(contentType, data)
 	if err != nil {
 		return err
 	}
-	e.CustomData = dataBytes
+	e.CustomData = data
+	e.CustomDataContentType = contentType
 	return nil
 }
 

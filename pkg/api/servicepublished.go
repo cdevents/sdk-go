@@ -87,12 +87,16 @@ func (e ServicePublishedEvent) GetSubject() Subject {
 	return e.Subject
 }
 
-func (e ServicePublishedEvent) GetCustomData() []byte {
-	return e.CustomData
+func (e ServicePublishedEvent) GetCustomData() (interface{}, error) {
+	return getCustomData(e.CustomDataContentType, e.CustomData)
 }
 
 func (e ServicePublishedEvent) GetCustomDataAs(receiver interface{}) error {
 	return getCustomDataAs(e, receiver)
+}
+
+func (e ServicePublishedEvent) GetCustomDataRaw() ([]byte, error) {
+	return getCustomDataRaw(e.CustomDataContentType, e.CustomData)
 }
 
 func (e ServicePublishedEvent) GetCustomDataContentType() string {
@@ -126,11 +130,12 @@ func (e *ServicePublishedEvent) SetSubjectSource(subjectSource string) {
 }
 
 func (e *ServicePublishedEvent) SetCustomData(contentType string, data interface{}) error {
-	dataBytes, err := customDataBytes(contentType, data)
+	err := checkCustomData(contentType, data)
 	if err != nil {
 		return err
 	}
-	e.CustomData = dataBytes
+	e.CustomData = data
+	e.CustomDataContentType = contentType
 	return nil
 }
 
