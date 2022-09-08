@@ -70,14 +70,14 @@ var (
 	allEventSchemas map[string]string
 
 	// Map CDEventType to empty event objects
-	cdeventTypesToReceiver map[CDEventType]CDEvent
+	cdeventsByTypes map[CDEventType]CDEvent
 )
 
 func init() {
 
 	// Init the schema map
 	allEventSchemas = make(map[string]string)
-	cdeventTypesToReceiver = make(map[CDEventType]CDEvent)
+	cdeventsByTypes = make(map[CDEventType]CDEvent)
 
 	// Setup a reflector
 	id := schemaproducer.EmptyID
@@ -95,7 +95,7 @@ func init() {
 		allEventSchemas[eventType.GetSchema()] = string(data)
 
 		// Set type to receiver map
-		cdeventTypesToReceiver[eventType.GetType()] = eventType
+		cdeventsByTypes[eventType.GetType()] = eventType
 	}
 }
 
@@ -108,6 +108,16 @@ func panicOnError(err error) {
 // TODO(afrittoli) we may want to define something like:
 // const CDEventsContentType = "application/cdevents+json"
 // but it's not yet in the spec
+
+// ParseType returns a CDEventType is eventType is a valid type
+func ParseType(eventType string) (CDEventType, error) {
+	t := CDEventType(eventType)
+	_, ok := cdeventsByTypes[t]
+	if !ok {
+		return "", fmt.Errorf("unknown event type %s", eventType)
+	}
+	return t, nil
+}
 
 // AsCloudEvent renders a CDEvent as a CloudEvent
 func AsCloudEvent(event CDEventReader) (*cloudevents.Event, error) {
@@ -154,4 +164,29 @@ func Validate(event CDEventReader) error {
 		return fmt.Errorf("cannot unmarshal event json: %v", err)
 	}
 	return sch.Validate(v)
+}
+
+// Build a new CDEventReader from a JSON string
+func NewFromJsonString(event string) (CDEvent, error) {
+	return NewFromJsonBytes([]byte(event))
+}
+
+// Build a new CDEventReader from a JSON string as []bytes
+func NewFromJsonBytes(event []byte) (CDEvent, error) {
+	eventAux := &struct {
+		Context Context `json:"context"`
+	}{}
+	err := json.Unmarshal(event, eventAux)
+	if err != nil {
+		return nil, err
+	}
+	receiver, ok := cdeventsByTypes[CDEventType(eventAux.Context.Type)]
+	if !ok {
+		return nil, fmt.Errorf("unknown event type %s", eventAux.Context.Type)
+	}
+	err = json.Unmarshal(event, receiver)
+	if err != nil {
+		return nil, err
+	}
+	return receiver, nil
 }

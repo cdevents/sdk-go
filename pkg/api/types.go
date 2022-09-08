@@ -19,6 +19,7 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -196,17 +197,21 @@ func (t CDEventCustomDataEncoding) String() string {
 // - When the content type is "application/json":
 //
 //   - if the CDEvent is produced via the golang API, the `CustomData`
-//     usually holds an un-marshalled golang interface{} of some type
+//     can hold an un-marshalled golang interface{} of a specific type
+//     or a marshalled byte slice
 //
 //   - if the CDEvent is consumed and thus un-marshalled from a []byte
-//     the `CustomData` holds the data as a []byte, so that it may be
-//     un-marshalled into a specific golang type via the `GetCustomDataAs`
+//     the `CustomData` holds the data un-marshalled from []byte, into
+//     a generic interface{}. It may be un-marshalled into a specific
+//     golang type via the `GetCustomDataAs`
 //
 // - When the content type is anything else:
 //
-//   - the content data is always stored as []byte, as the SDK does not
-//     have enough knowledge about the data to un-marshal it into a
-//     golang type
+//   - if the CDEvent is produced via the golang API, the `CustomData`
+//     hold an byte slice with the data passed via the API
+//
+//   - if the CDEvent is consumed and thus un-marshalled from a []byte
+//     the `CustomData` holds the data base64 encoded
 type CDEventCustomData struct {
 
 	// CustomData added to the CDEvent. Format not specified by the SPEC.
@@ -214,23 +219,6 @@ type CDEventCustomData struct {
 
 	// CustomDataContentType for CustomData in a CDEvent.
 	CustomDataContentType string `json:"customDataContentType,omitempty"`
-}
-
-// Customize the Unmarshal into *CDEventCustomData
-// Only unmarshal the content type, and let the data as []byte.
-// The unmarshal of the data is postponed to the GetCustomData* functions
-func (d *CDEventCustomData) UnMarshalJSON(data []byte) error {
-	// First read the content type
-	cc := &struct {
-		RawData     []byte `json:"customData,omitempty"`
-		ContentType string `json:"customDataContentType,omitempty"`
-	}{}
-	if err := json.Unmarshal(data, &cc); err != nil {
-		return err
-	}
-	d.CustomDataContentType = cc.ContentType
-	d.CustomData = cc.RawData
-	return nil
 }
 
 type CDEvent interface {
@@ -244,7 +232,7 @@ func getCustomDataRaw(contentType string, data interface{}) ([]byte, error) {
 	case []byte:
 		return data, nil
 	default:
-		if contentType != "application/json" {
+		if contentType != "application/json" && contentType != "" {
 			return nil, fmt.Errorf("cannot use %v with content type %s", data, contentType)
 		}
 		// The content type is JSON, but the data is un-marshalled
@@ -254,8 +242,9 @@ func getCustomDataRaw(contentType string, data interface{}) ([]byte, error) {
 
 // Used to implement GetCustomDataAs()
 func getCustomDataAs(e CDEventReader, receiver interface{}) error {
-	if e.GetCustomDataContentType() != "application/json" {
-		return fmt.Errorf("cannot unmarshal content-type %s", e.GetCustomDataContentType())
+	contentType := e.GetCustomDataContentType()
+	if contentType != "application/json" && contentType != "" {
+		return fmt.Errorf("cannot unmarshal content-type %s", contentType)
 	}
 	data, err := e.GetCustomDataRaw()
 	if err != nil {
@@ -267,6 +256,9 @@ func getCustomDataAs(e CDEventReader, receiver interface{}) error {
 // Used to implement GetCustomData()
 func getCustomData(contentType string, data interface{}) (interface{}, error) {
 	var v interface{}
+	if contentType == "" {
+		contentType = "application/json"
+	}
 	switch data := data.(type) {
 	case []byte:
 		// The data is JSON but still raw. Let's un-marshal it.
@@ -279,6 +271,16 @@ func getCustomData(contentType string, data interface{}) (interface{}, error) {
 		}
 		// The content type is not JSON, pass through raw data
 		return data, nil
+	case string:
+		if contentType == "application/json" {
+			return nil, fmt.Errorf("content type %s should not be a string: %s", contentType, data)
+		}
+		// If the data is not "application/json", and it's a string after
+		// un-marshalling, we assume it's base64 encoded
+		// NOTE(afrittoli) The standard un-marshaller would decode if the
+		// receiving type was []byte, but we have interface because we need
+		// to be able to store golang objects as well
+		return b64.StdEncoding.DecodeString(data)
 	default:
 		if contentType != "application/json" {
 			return nil, fmt.Errorf("cannot use %v with content type %s", data, contentType)
@@ -291,7 +293,7 @@ func getCustomData(contentType string, data interface{}) (interface{}, error) {
 // Used to implement SetCustomData()
 func checkCustomData(contentType string, data interface{}) error {
 	_, isBytes := data.([]byte)
-	if !isBytes && contentType != "application/json" {
+	if !isBytes && contentType != "application/json" && contentType != "" {
 		return fmt.Errorf("%s data must be set as []bytes, got %v", contentType, data)
 	}
 	return nil
