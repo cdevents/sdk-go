@@ -35,25 +35,28 @@ type testData struct {
 }
 
 var (
-	testSource          = "TestAsCloudEvent"
-	testSubjectId       = "mySubject123"
-	testPipeline        = "myPipeline"
-	testSubjecturl      = "https://www.example.com/mySubject123"
-	testPipelineOutcome = PipelineRunOutcomeFailed
-	testPipelineErrors  = "Something went wrong\nWith some more details"
-	testTaskName        = "myTask"
-	testTaskOutcome     = TaskRunOutcomeFailed
-	testTaskRunErrors   = "Something went wrong\nWith some more details"
-	testRepo            = "TestRepo"
-	testOwner           = "TestOrg"
-	testUrl             = "https://example.org/TestOrg/TestRepo"
-	testViewUrl         = "https://example.org/view/TestOrg/TestRepo"
-	testArtifactId      = "0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
-	testEnvironmentId   = "test123"
-	testEnvironmentName = "testEnv"
-	testEnvironmentUrl  = "https://example.org/testEnv"
-	testDataJson        = testData{TestValues: []map[string]string{{"k1": "v1"}, {"k2": "v2"}}}
-	testDataXml         = []byte("<xml>testData</xml>")
+	testSource               = "TestAsCloudEvent"
+	testSubjectId            = "mySubject123"
+	testPipeline             = "myPipeline"
+	testSubjecturl           = "https://www.example.com/mySubject123"
+	testPipelineOutcome      = PipelineRunOutcomeFailed
+	testPipelineErrors       = "Something went wrong\nWith some more details"
+	testTaskName             = "myTask"
+	testTaskOutcome          = TaskRunOutcomeFailed
+	testTaskRunErrors        = "Something went wrong\nWith some more details"
+	testRepo                 = "TestRepo"
+	testOwner                = "TestOrg"
+	testUrl                  = "https://example.org/TestOrg/TestRepo"
+	testViewUrl              = "https://example.org/view/TestOrg/TestRepo"
+	testArtifactId           = "0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
+	testEnvironmentId        = "test123"
+	testEnvironmentName      = "testEnv"
+	testEnvironmentUrl       = "https://example.org/testEnv"
+	testDataJson             = testData{TestValues: []map[string]string{{"k1": "v1"}, {"k2": "v2"}}}
+	testDataJsonUnmarshalled = map[string]any{
+		"testValues": []any{map[string]any{"k1": string("v1")}, map[string]any{"k2": string("v2")}},
+	}
+	testDataXml = []byte("<xml>testData</xml>")
 
 	pipelineRunQueuedEvent   *PipelineRunQueuedEvent
 	pipelineRunStartedEvent  *PipelineRunStartedEvent
@@ -89,8 +92,9 @@ var (
 	serviceRemovedEvent      *ServiceRemovedEvent
 	servicePublishedEvent    *ServicePublishedEvent
 
-	eventJsonCustomData    *ArtifactPackagedEvent
-	eventNonJsonCustomData *ArtifactPackagedEvent
+	eventJsonCustomData             *ArtifactPackagedEvent
+	eventNonJsonCustomData          *ArtifactPackagedEvent
+	eventJsonCustomDataUnmarshalled *ArtifactPackagedEvent
 
 	pipelineRunQueuedEventJsonTemplate = `
 {
@@ -957,6 +961,11 @@ func init() {
 	err := eventJsonCustomData.SetCustomData("application/json", testDataJson)
 	panicOnError(err)
 
+	eventJsonCustomDataUnmarshalled, _ = NewArtifactPackagedEvent()
+	setContext(eventJsonCustomDataUnmarshalled)
+	err = eventJsonCustomDataUnmarshalled.SetCustomData("application/json", testDataJsonUnmarshalled)
+	panicOnError(err)
+
 	eventNonJsonCustomData, _ = NewArtifactPackagedEvent()
 	setContext(eventNonJsonCustomData)
 	err = eventNonJsonCustomData.SetCustomData("application/xml", testDataXml)
@@ -1182,194 +1191,157 @@ func TestAsJsonString(t *testing.T) {
 		name       string
 		event      CDEvent
 		jsonString string
-		schemaName string
 	}{{
 		name:       "pipelinerun queued",
 		event:      pipelineRunQueuedEvent,
 		jsonString: pipelineRunQueuedEventJson,
-		schemaName: "pipelinerunqueued",
 	}, {
 		name:       "pipelinerun started",
 		event:      pipelineRunStartedEvent,
 		jsonString: pipelineRunStartedEventJson,
-		schemaName: "pipelinerunstarted",
 	}, {
 		name:       "pipelinerun finished",
 		event:      pipelineRunFinishedEvent,
 		jsonString: pipelineRunFinishedEventJson,
-		schemaName: "pipelinerunfinished",
 	}, {
 		name:       "taskrun started",
 		event:      taskRunStartedEvent,
 		jsonString: taskRunStartedEventJson,
-		schemaName: "taskrunstarted",
 	}, {
 		name:       "taskrun finished",
 		event:      taskRunFinishedEvent,
 		jsonString: taskRunFinishedEventJson,
-		schemaName: "taskrunfinished",
 	}, {
 		name:       "change created",
 		event:      changeCreatedEvent,
 		jsonString: changeCreateEventJson,
-		schemaName: "changecreated",
 	}, {
 		name:       "change updated",
 		event:      changeUpdatedEvent,
 		jsonString: changeUpdatedEventJson,
-		schemaName: "changeupdated",
 	}, {
 		name:       "change reviewed",
 		event:      changeReviewedEvent,
 		jsonString: changeReviewedEventJson,
-		schemaName: "changereviewed",
 	}, {
 		name:       "change merged",
 		event:      changeMergedEvent,
 		jsonString: changeMergedEventJson,
-		schemaName: "changemerged",
 	}, {
 		name:       "change abandoned",
 		event:      changeAbandonedEvent,
 		jsonString: changeAbandonedEventJson,
-		schemaName: "changeabandoned",
 	}, {
 		name:       "repository created",
 		event:      repositoryCreatedEvent,
 		jsonString: repositoryCreatedEventJson,
-		schemaName: "repositorycreated",
 	}, {
 		name:       "repository modified",
 		event:      repositoryModifiedEvent,
 		jsonString: repositoryModifiedEventJson,
-		schemaName: "repositorymodified",
 	}, {
 		name:       "repository deleted",
 		event:      repositoryDeletedEvent,
 		jsonString: repositoryDeletedEventJson,
-		schemaName: "repositorydeleted",
 	}, {
 		name:       "branch created",
 		event:      branchCreatedEvent,
 		jsonString: branchCreatedEventJson,
-		schemaName: "branchcreated",
 	}, {
 		name:       "branch deleted",
 		event:      branchDeletedEvent,
 		jsonString: branchDeletedEventJson,
-		schemaName: "branchdeleted",
 	}, {
 		name:       "testcase queued",
 		event:      testCaseQueuedEvent,
 		jsonString: testCaseQueuedEventJson,
-		schemaName: "testcasequeued",
 	}, {
 		name:       "testcase started",
 		event:      testCaseStartedEvent,
 		jsonString: testCaseStartedEventJson,
-		schemaName: "testcasestarted",
 	}, {
 		name:       "testcase finished",
 		event:      testCaseFinishedEvent,
 		jsonString: testCaseFinishedEventJson,
-		schemaName: "testcasefinished",
 	}, {
 		name:       "testsuite started",
 		event:      testSuiteStartedEvent,
 		jsonString: testSuiteStartedEventJson,
-		schemaName: "testsuitestarted",
 	}, {
 		name:       "testsuite finished",
 		event:      testSuiteFinishedEvent,
 		jsonString: testSuiteFinishedEventJson,
-		schemaName: "testsuitefinished",
 	}, {
 		name:       "build queued",
 		event:      buildQueuedEvent,
 		jsonString: buildQueuedEventJson,
-		schemaName: "buildqueued",
 	}, {
 		name:       "build started",
 		event:      buildStartedEvent,
 		jsonString: buildStartedEventJson,
-		schemaName: "buildstarted",
 	}, {
 		name:       "build finished",
 		event:      buildFinishedEvent,
 		jsonString: buildFinishedEventJson,
-		schemaName: "buildfinished",
 	}, {
 		name:       "artifact packaged",
 		event:      artifactPackagedEvent,
 		jsonString: artifactPackagedEventJson,
-		schemaName: "artifactpackaged",
 	}, {
 		name:       "artifact published",
 		event:      artifactPublishedEvent,
 		jsonString: artifactPublishedEventJson,
-		schemaName: "artifactpublished",
 	}, {
 		name:       "environment created",
 		event:      environmentCreatedEvent,
 		jsonString: environmentCreatedEventJson,
-		schemaName: "environmentcreated",
 	}, {
 		name:       "environment modified",
 		event:      environmentModifiedEvent,
 		jsonString: environmentModifiedEventJson,
-		schemaName: "environmentmodified",
 	}, {
 		name:       "environment deleted",
 		event:      environmentDeletedEvent,
 		jsonString: environmentDeletedEventJson,
-		schemaName: "environmentdeleted",
 	}, {
 		name:       "service deployed",
 		event:      serviceDeployedEvent,
 		jsonString: serviceDeployedEventJson,
-		schemaName: "servicedeployed",
 	}, {
 		name:       "service upgraded",
 		event:      serviceUpgradedEvent,
 		jsonString: serviceUpgradedEventJson,
-		schemaName: "serviceupgraded",
 	}, {
 		name:       "service rolledback",
 		event:      serviceRolledBackEvent,
 		jsonString: serviceRolledBackEventJson,
-		schemaName: "servicerolledback",
 	}, {
 		name:       "service removed",
 		event:      serviceRemovedEvent,
 		jsonString: serviceRemovedEventJson,
-		schemaName: "serviceremoved",
 	}, {
 		name:       "service published",
 		event:      servicePublishedEvent,
 		jsonString: servicePublishedEventJson,
-		schemaName: "servicepublished",
 	}, {
 		name:       "json custom data",
 		event:      eventJsonCustomData,
 		jsonString: eventJsonCustomDataJson,
-		schemaName: "artifactpackaged",
 	}, {
 		name:       "json custom data implicit",
 		event:      eventJsonCustomData,
 		jsonString: eventImplicitJsonCustomDataJson,
-		schemaName: "artifactpackaged",
 	}, {
 		name:       "xml custom data",
 		event:      eventNonJsonCustomData,
 		jsonString: eventNonJsonCustomDataJson,
-		schemaName: "artifactpackaged",
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			// First validate that the test JSON compiles against the schema
-			sch, err := compiler.Compile(fmt.Sprintf("../../jsonschema/%s.json", tc.schemaName))
+			sch, err := compiler.Compile(fmt.Sprintf("../../jsonschema/%s.json", tc.event.GetSchema()))
 			if err != nil {
-				t.Fatalf("Cannot compile jsonschema %s", tc.schemaName)
+				t.Fatalf("Cannot compile jsonschema %s", tc.event.GetSchema())
 			}
 			var v interface{}
 			if err := json.Unmarshal([]byte(tc.jsonString), &v); err != nil {
@@ -1449,5 +1421,198 @@ func TestAsJsonStringEmpty(t *testing.T) {
 	}
 	if d := cmp.Diff("", obtainedJsonString); d != "" {
 		t.Errorf("args: diff(-want,+got):\n%s", d)
+	}
+}
+
+func TestNewFromJsonString(t *testing.T) {
+
+	tests := []struct {
+		name       string
+		event      CDEvent
+		jsonString string
+	}{{
+		name:       "pipelinerun queued",
+		event:      pipelineRunQueuedEvent,
+		jsonString: pipelineRunQueuedEventJson,
+	}, {
+		name:       "pipelinerun started",
+		event:      pipelineRunStartedEvent,
+		jsonString: pipelineRunStartedEventJson,
+	}, {
+		name:       "pipelinerun finished",
+		event:      pipelineRunFinishedEvent,
+		jsonString: pipelineRunFinishedEventJson,
+	}, {
+		name:       "taskrun started",
+		event:      taskRunStartedEvent,
+		jsonString: taskRunStartedEventJson,
+	}, {
+		name:       "taskrun finished",
+		event:      taskRunFinishedEvent,
+		jsonString: taskRunFinishedEventJson,
+	}, {
+		name:       "change created",
+		event:      changeCreatedEvent,
+		jsonString: changeCreateEventJson,
+	}, {
+		name:       "change updated",
+		event:      changeUpdatedEvent,
+		jsonString: changeUpdatedEventJson,
+	}, {
+		name:       "change reviewed",
+		event:      changeReviewedEvent,
+		jsonString: changeReviewedEventJson,
+	}, {
+		name:       "change merged",
+		event:      changeMergedEvent,
+		jsonString: changeMergedEventJson,
+	}, {
+		name:       "change abandoned",
+		event:      changeAbandonedEvent,
+		jsonString: changeAbandonedEventJson,
+	}, {
+		name:       "repository created",
+		event:      repositoryCreatedEvent,
+		jsonString: repositoryCreatedEventJson,
+	}, {
+		name:       "repository modified",
+		event:      repositoryModifiedEvent,
+		jsonString: repositoryModifiedEventJson,
+	}, {
+		name:       "repository deleted",
+		event:      repositoryDeletedEvent,
+		jsonString: repositoryDeletedEventJson,
+	}, {
+		name:       "branch created",
+		event:      branchCreatedEvent,
+		jsonString: branchCreatedEventJson,
+	}, {
+		name:       "branch deleted",
+		event:      branchDeletedEvent,
+		jsonString: branchDeletedEventJson,
+	}, {
+		name:       "testcase queued",
+		event:      testCaseQueuedEvent,
+		jsonString: testCaseQueuedEventJson,
+	}, {
+		name:       "testcase started",
+		event:      testCaseStartedEvent,
+		jsonString: testCaseStartedEventJson,
+	}, {
+		name:       "testcase finished",
+		event:      testCaseFinishedEvent,
+		jsonString: testCaseFinishedEventJson,
+	}, {
+		name:       "testsuite started",
+		event:      testSuiteStartedEvent,
+		jsonString: testSuiteStartedEventJson,
+	}, {
+		name:       "testsuite finished",
+		event:      testSuiteFinishedEvent,
+		jsonString: testSuiteFinishedEventJson,
+	}, {
+		name:       "build queued",
+		event:      buildQueuedEvent,
+		jsonString: buildQueuedEventJson,
+	}, {
+		name:       "build started",
+		event:      buildStartedEvent,
+		jsonString: buildStartedEventJson,
+	}, {
+		name:       "build finished",
+		event:      buildFinishedEvent,
+		jsonString: buildFinishedEventJson,
+	}, {
+		name:       "artifact packaged",
+		event:      artifactPackagedEvent,
+		jsonString: artifactPackagedEventJson,
+	}, {
+		name:       "artifact published",
+		event:      artifactPublishedEvent,
+		jsonString: artifactPublishedEventJson,
+	}, {
+		name:       "environment created",
+		event:      environmentCreatedEvent,
+		jsonString: environmentCreatedEventJson,
+	}, {
+		name:       "environment modified",
+		event:      environmentModifiedEvent,
+		jsonString: environmentModifiedEventJson,
+	}, {
+		name:       "environment deleted",
+		event:      environmentDeletedEvent,
+		jsonString: environmentDeletedEventJson,
+	}, {
+		name:       "service deployed",
+		event:      serviceDeployedEvent,
+		jsonString: serviceDeployedEventJson,
+	}, {
+		name:       "service upgraded",
+		event:      serviceUpgradedEvent,
+		jsonString: serviceUpgradedEventJson,
+	}, {
+		name:       "service rolledback",
+		event:      serviceRolledBackEvent,
+		jsonString: serviceRolledBackEventJson,
+	}, {
+		name:       "service removed",
+		event:      serviceRemovedEvent,
+		jsonString: serviceRemovedEventJson,
+	}, {
+		name:       "service published",
+		event:      servicePublishedEvent,
+		jsonString: servicePublishedEventJson,
+	}, {
+		name:       "json custom data",
+		event:      eventJsonCustomDataUnmarshalled,
+		jsonString: eventJsonCustomDataJson,
+	}, {
+		name:       "json custom data implicit",
+		event:      eventJsonCustomDataUnmarshalled,
+		jsonString: eventImplicitJsonCustomDataJson,
+	}, {
+		name:       "xml custom data",
+		event:      eventNonJsonCustomData,
+		jsonString: eventNonJsonCustomDataJson,
+	}}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			obtainedEvent, err := NewFromJsonString(tc.jsonString)
+			if err != nil {
+				t.Fatalf("didn't expected it to fail, but it did: %v", err)
+			}
+			// Check the context
+			if d := cmp.Diff(tc.event.GetId(), obtainedEvent.GetId()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			if d := cmp.Diff(tc.event.GetVersion(), obtainedEvent.GetVersion()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			if d := cmp.Diff(tc.event.GetSource(), obtainedEvent.GetSource()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			if d := cmp.Diff(tc.event.GetTimestamp(), obtainedEvent.GetTimestamp()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			if d := cmp.Diff(tc.event.GetType(), obtainedEvent.GetType()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			// Check the subject
+			if d := cmp.Diff(tc.event.GetSubject(), obtainedEvent.GetSubject()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			// Check the data
+			expectedData, err := tc.event.GetCustomData()
+			if err != nil {
+				t.Fatalf("cannot get data from test event %s", err)
+			}
+			obtainedData, err := obtainedEvent.GetCustomData()
+			if err != nil {
+				t.Fatalf("cannot get data from new event %s", err)
+			}
+			if d := cmp.Diff(expectedData, obtainedData); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+		})
 	}
 }

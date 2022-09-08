@@ -39,7 +39,7 @@ type PipelineRunQueuedSubjectContent struct {
 
 type PipelineRunQueuedSubject struct {
 	SubjectBase
-	Content PipelineRunFinishedSubjectContent `json:"content"`
+	Content PipelineRunQueuedSubjectContent `json:"content"`
 }
 
 func (sc PipelineRunQueuedSubject) GetEventType() CDEventType {

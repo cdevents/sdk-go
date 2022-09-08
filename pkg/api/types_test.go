@@ -26,16 +26,23 @@ import (
 )
 
 const (
-	testXmlString  = "<xml>testData</xml>"
-	testJsonString = "{\"testData\":\"testValue\"}"
+	testXmlString = "<xml>testData</xml>"
 )
 
 var (
-	eventWithNonJsonCustomData *ArtifactPackagedEvent
-	eventWithJsonCustomData    *ArtifactPackagedEvent
+	testObject                               = testType{TestData: "testValue"}
+	testJsonString                           []byte
+	eventWithNonJsonCustomData               *ArtifactPackagedEvent
+	eventWithInterfaceJsonCustomData         *ArtifactPackagedEvent
+	eventWithInterfaceJsonImplicitCustomData *ArtifactPackagedEvent
+	eventWithJsonCustomData                  *ArtifactPackagedEvent
+	eventWithJsonImplicitCustomData          *ArtifactPackagedEvent
 )
 
 func init() {
+	var err error
+	testJsonString, err = json.Marshal(testObject)
+	panicOnError(err)
 
 	eventWithNonJsonCustomData, _ = NewArtifactPackagedEvent()
 	eventWithNonJsonCustomData.CustomDataContentType = "application/xml"
@@ -43,7 +50,19 @@ func init() {
 
 	eventWithJsonCustomData, _ = NewArtifactPackagedEvent()
 	eventWithJsonCustomData.CustomDataContentType = "application/json"
-	eventWithJsonCustomData.CustomData = []byte(testJsonString)
+	eventWithJsonCustomData.CustomData = testJsonString
+
+	eventWithJsonImplicitCustomData, _ = NewArtifactPackagedEvent()
+	eventWithJsonImplicitCustomData.CustomDataContentType = ""
+	eventWithJsonImplicitCustomData.CustomData = testJsonString
+
+	eventWithInterfaceJsonCustomData, _ = NewArtifactPackagedEvent()
+	eventWithInterfaceJsonCustomData.CustomDataContentType = "application/json"
+	eventWithInterfaceJsonCustomData.CustomData = testObject
+
+	eventWithInterfaceJsonImplicitCustomData, _ = NewArtifactPackagedEvent()
+	eventWithInterfaceJsonImplicitCustomData.CustomDataContentType = ""
+	eventWithInterfaceJsonImplicitCustomData.CustomData = testObject
 }
 
 type testType struct {
@@ -74,13 +93,34 @@ func TestGetCustomDataAsJson(t *testing.T) {
 	receiver := &testType{}
 	expectedValue := "testValue"
 
-	err := getCustomDataAs(eventWithJsonCustomData, receiver)
-	if err != nil {
-		t.Fatalf("did not expect an error, got %v", err)
-	}
+	tests := []struct {
+		name  string
+		event CDEvent
+	}{{
+		name:  "json bytes",
+		event: eventWithJsonCustomData,
+	}, {
+		name:  "json bytes, implicit",
+		event: eventWithJsonImplicitCustomData,
+	}, {
+		name:  "interface",
+		event: eventWithInterfaceJsonCustomData,
+	}, {
+		name:  "interface, implicit",
+		event: eventWithInterfaceJsonImplicitCustomData,
+	}}
 
-	if d := cmp.Diff(expectedValue, receiver.TestData); d != "" {
-		t.Errorf("args: diff(-want,+got):\n%s", d)
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			err := getCustomDataAs(tc.event, receiver)
+			if err != nil {
+				t.Fatalf("did not expect an error, got %v", err)
+			}
+
+			if d := cmp.Diff(expectedValue, receiver.TestData); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+		})
 	}
 }
 
@@ -89,13 +129,34 @@ func TestGetCustomDataAsJsonInvalidReceiver(t *testing.T) {
 	receiver := &testWrongType{}
 	expectedReceiver := &testWrongType{}
 
-	err := getCustomDataAs(eventWithJsonCustomData, receiver)
-	if err != nil {
-		t.Fatalf("unmarshal failed: %v", err)
-	}
+	tests := []struct {
+		name  string
+		event CDEvent
+	}{{
+		name:  "json bytes",
+		event: eventWithJsonCustomData,
+	}, {
+		name:  "json bytes, implicit",
+		event: eventWithJsonImplicitCustomData,
+	}, {
+		name:  "interface",
+		event: eventWithInterfaceJsonCustomData,
+	}, {
+		name:  "interface, implicit",
+		event: eventWithInterfaceJsonImplicitCustomData,
+	}}
 
-	if d := cmp.Diff(*expectedReceiver, *receiver); d != "" {
-		t.Errorf("args: diff(-want,+got):\n%s", d)
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			err := getCustomDataAs(tc.event, receiver)
+			if err != nil {
+				t.Fatalf("unmarshal failed: %v", err)
+			}
+
+			if d := cmp.Diff(*expectedReceiver, *receiver); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+		})
 	}
 }
 
@@ -107,18 +168,23 @@ func TestSetCustomData(t *testing.T) {
 		data         interface{}
 		expectedData interface{}
 	}{{
-		name:         "json, bytes",
+		name:         "json, json bytes",
 		contentType:  "application/json",
-		data:         []byte(testJsonString),
-		expectedData: []byte(testJsonString),
+		data:         testJsonString,
+		expectedData: testJsonString,
 	}, {
-		name:         "xml, bytes",
+		name:         "xml, xml bytes",
 		contentType:  "application/xml",
 		data:         []byte(testXmlString),
 		expectedData: []byte(testXmlString),
 	}, {
 		name:         "json, interface",
 		contentType:  "application/json",
+		data:         testObject,
+		expectedData: testObject,
+	}, {
+		name:         "empty, interface",
+		contentType:  "",
 		data:         testType{TestData: "testValue"},
 		expectedData: testType{TestData: "testValue"},
 	}}
@@ -154,20 +220,30 @@ func TestGetCustomData(t *testing.T) {
 		data         interface{}
 		expectedData interface{}
 	}{{
-		name:         "json, bytes",
+		name:         "json, json bytes",
 		contentType:  "application/json",
-		data:         []byte(testJsonString),
+		data:         testJsonString,
 		expectedData: map[string]any{"testData": string("testValue")},
 	}, {
-		name:         "xml, bytes",
+		name:         "xml, xml bytes",
 		contentType:  "application/xml",
 		data:         []byte(testXmlString),
 		expectedData: []byte(testXmlString),
 	}, {
 		name:         "json, interface",
 		contentType:  "application/json",
-		data:         testType{TestData: "testValue"},
-		expectedData: testType{TestData: "testValue"},
+		data:         testObject,
+		expectedData: testObject,
+	}, {
+		name:         "empty, json bytes",
+		contentType:  "",
+		data:         testJsonString,
+		expectedData: map[string]any{"testData": string("testValue")},
+	}, {
+		name:         "empty, interface",
+		contentType:  "application/json",
+		data:         testObject,
+		expectedData: testObject,
 	}}
 
 	for _, tc := range tests {
@@ -202,7 +278,7 @@ func TestGetCustomDataInvalidJson(t *testing.T) {
 	}
 	_, err = e.GetCustomData()
 	if err == nil {
-		t.Fatalf("expected error from broken data, got nil")
+		t.Errorf("expected error from broken data, got nil")
 	}
 }
 
@@ -214,11 +290,12 @@ func TestGetCustomDataXmlNotBytes(t *testing.T) {
 	if err != nil {
 		t.Fatalf("%v", err)
 	}
+
 	// Override content type to XML
 	e.CustomDataContentType = "application/xml"
 	_, err = e.GetCustomData()
 	if err == nil {
-		t.Fatalf("expected error from broken data, got nil")
+		t.Errorf("expected error from broken data, got nil")
 	}
 }
 
@@ -232,8 +309,8 @@ func TestGetCustomDataRaw(t *testing.T) {
 	}{{
 		name:         "json, json bytes",
 		contentType:  "application/json",
-		data:         []byte(testJsonString),
-		expectedData: []byte(testJsonString),
+		data:         testJsonString,
+		expectedData: testJsonString,
 	}, {
 		name:         "json, xml bytes (invalid)",
 		contentType:  "application/json",
