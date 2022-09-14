@@ -32,9 +32,6 @@ type ServiceUpgradedSubjectContent struct {
 
 	// The Environment where the service is deployed
 	Environment Reference `json:"environment,omitempty"`
-
-	// The Id of the target artifact
-	ArtifactId string `json:"artifactId,omitempty"`
 }
 
 type ServiceUpgradedSubject struct {
@@ -149,10 +146,6 @@ func (e ServiceUpgradedEvent) GetSchema() string {
 // Subject field setters
 func (e *ServiceUpgradedEvent) SetSubjectEnvironment(environment Reference) {
 	e.Subject.Content.Environment = environment
-}
-
-func (e *ServiceUpgradedEvent) SetSubjectArtifactId(artifactId string) {
-	e.Subject.Content.ArtifactId = artifactId
 }
 
 func NewServiceUpgradedEvent() (*ServiceUpgradedEvent, error) {
