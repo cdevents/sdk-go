@@ -28,7 +28,11 @@ const (
 	changeUpdatedSchemaFile string      = "changeupdated"
 )
 
-type ChangeUpdatedSubjectContent struct{}
+type ChangeUpdatedSubjectContent struct {
+
+	// Repository where the change occurrence happened
+	Repository Reference `json:"repository"`
+}
 
 type ChangeUpdatedSubject struct {
 	SubjectBase
@@ -137,6 +141,11 @@ func (e *ChangeUpdatedEvent) SetCustomData(contentType string, data interface{})
 
 func (e ChangeUpdatedEvent) GetSchema() string {
 	return changeUpdatedSchemaFile
+}
+
+// Subject field setters
+func (e *ChangeUpdatedEvent) SetSubjectRepository(repository Reference) {
+	e.Subject.Content.Repository = repository
 }
 
 func NewChangeUpdatedEvent() (*ChangeUpdatedEvent, error) {

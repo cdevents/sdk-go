@@ -28,7 +28,11 @@ const (
 	changeAbandonedSchemaFile string      = "changeabandoned"
 )
 
-type ChangeAbandonedSubjectContent struct{}
+type ChangeAbandonedSubjectContent struct {
+
+	// Repository where the change occurrence happened
+	Repository Reference `json:"repository"`
+}
 
 type ChangeAbandonedSubject struct {
 	SubjectBase

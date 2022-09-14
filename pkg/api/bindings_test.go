@@ -56,8 +56,12 @@ var (
 	testDataJsonUnmarshalled = map[string]any{
 		"testValues": []any{map[string]any{"k1": string("v1")}, map[string]any{"k2": string("v2")}},
 	}
-	testDataXml  = []byte("<xml>testData</xml>")
-	testChangeId = "myChange123"
+	testDataXml       = []byte("<xml>testData</xml>")
+	testChangeId      = "myChange123"
+	testRepoReference = Reference{
+		Id:     "TestRepo/TestOrg",
+		Source: "https://example.org",
+	}
 
 	pipelineRunQueuedEvent   *PipelineRunQueuedEvent
 	pipelineRunStartedEvent  *PipelineRunStartedEvent
@@ -215,7 +219,12 @@ var (
 		"id": "mySubject123",
 		"source": "TestAsCloudEvent",
 		"type": "change",
-		"content": {}
+		"content": {
+			"repository": {
+				"id": "TestRepo/TestOrg",
+				"source": "https://example.org"
+			}
+		}
 	}
 }`
 
@@ -231,7 +240,12 @@ var (
 		"id": "mySubject123",
 		"source": "TestAsCloudEvent",
 		"type": "change",
-		"content": {}
+		"content": {
+			"repository": {
+				"id": "TestRepo/TestOrg",
+				"source": "https://example.org"
+			}
+		}
 	}
 }`
 
@@ -247,7 +261,12 @@ var (
 		"id": "mySubject123",
 		"source": "TestAsCloudEvent",
 		"type": "change",
-		"content": {}
+		"content": {
+			"repository": {
+				"id": "TestRepo/TestOrg",
+				"source": "https://example.org"
+			}
+		}
 	}
 }`
 
@@ -263,7 +282,12 @@ var (
 		"id": "mySubject123",
 		"source": "TestAsCloudEvent",
 		"type": "change",
-		"content": {}
+		"content": {
+			"repository": {
+				"id": "TestRepo/TestOrg",
+				"source": "https://example.org"
+			}
+		}
 	}
 }`
 
@@ -279,7 +303,12 @@ var (
 		"id": "mySubject123",
 		"source": "TestAsCloudEvent",
 		"type": "change",
-		"content": {}
+		"content": {
+			"repository": {
+				"id": "TestRepo/TestOrg",
+				"source": "https://example.org"
+			}
+		}
 	}
 }`
 
@@ -868,18 +897,23 @@ func init() {
 
 	changeCreatedEvent, _ = NewChangeCreatedEvent()
 	setContext(changeCreatedEvent)
+	changeCreatedEvent.SetSubjectRepository(testRepoReference)
 
 	changeUpdatedEvent, _ = NewChangeUpdatedEvent()
 	setContext(changeUpdatedEvent)
+	changeUpdatedEvent.SetSubjectRepository(testRepoReference)
 
 	changeReviewedEvent, _ = NewChangeReviewedEvent()
 	setContext(changeReviewedEvent)
+	changeReviewedEvent.SetSubjectRepository(testRepoReference)
 
 	changeMergedEvent, _ = NewChangeMergedEvent()
 	setContext(changeMergedEvent)
+	changeMergedEvent.SetSubjectRepository(testRepoReference)
 
 	changeAbandonedEvent, _ = NewChangeAbandonedEvent()
 	setContext(changeAbandonedEvent)
+	changeAbandonedEvent.SetSubjectRepository(testRepoReference)
 
 	repositoryCreatedEvent, _ = NewRepositoryCreatedEvent()
 	setContext(repositoryCreatedEvent)
@@ -976,19 +1010,19 @@ func init() {
 
 	eventJsonCustomData, _ = NewArtifactPackagedEvent()
 	setContext(eventJsonCustomData)
-	artifactPackagedEvent.SetSubjectChange(Reference{Id: testChangeId})
+	eventJsonCustomData.SetSubjectChange(Reference{Id: testChangeId})
 	err := eventJsonCustomData.SetCustomData("application/json", testDataJson)
 	panicOnError(err)
 
 	eventJsonCustomDataUnmarshalled, _ = NewArtifactPackagedEvent()
 	setContext(eventJsonCustomDataUnmarshalled)
-	artifactPackagedEvent.SetSubjectChange(Reference{Id: testChangeId})
+	eventJsonCustomDataUnmarshalled.SetSubjectChange(Reference{Id: testChangeId})
 	err = eventJsonCustomDataUnmarshalled.SetCustomData("application/json", testDataJsonUnmarshalled)
 	panicOnError(err)
 
 	eventNonJsonCustomData, _ = NewArtifactPackagedEvent()
 	setContext(eventNonJsonCustomData)
-	artifactPackagedEvent.SetSubjectChange(Reference{Id: testChangeId})
+	eventNonJsonCustomData.SetSubjectChange(Reference{Id: testChangeId})
 	err = eventNonJsonCustomData.SetCustomData("application/xml", testDataXml)
 	panicOnError(err)
 
