@@ -654,7 +654,8 @@ var (
 		"content": {
 			"environment": {
 				"id": "test123"
-			}
+			},
+			"artifactId": "0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
 		}
 	}
 }`
@@ -674,7 +675,8 @@ var (
 		"content": {
 			"environment": {
 				"id": "test123"
-			}
+			},
+			"artifactId": "0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
 		}
 	}
 }`
@@ -694,7 +696,8 @@ var (
 		"content": {
 			"environment": {
 				"id": "test123"
-			}
+			},
+			"artifactId": "0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
 		}
 	}
 }`
@@ -1003,14 +1006,17 @@ func init() {
 	serviceDeployedEvent, _ = NewServiceDeployedEvent()
 	setContext(serviceDeployedEvent)
 	serviceDeployedEvent.SetSubjectEnvironment(Reference{Id: testEnvironmentId})
+	serviceDeployedEvent.SetSubjectArtifactId(testArtifactId)
 
 	serviceUpgradedEvent, _ = NewServiceUpgradedEvent()
 	setContext(serviceUpgradedEvent)
 	serviceUpgradedEvent.SetSubjectEnvironment(Reference{Id: testEnvironmentId})
+	serviceUpgradedEvent.SetSubjectArtifactId(testArtifactId)
 
 	serviceRolledBackEvent, _ = NewServiceRolledbackEvent()
 	setContext(serviceRolledBackEvent)
 	serviceRolledBackEvent.SetSubjectEnvironment(Reference{Id: testEnvironmentId})
+	serviceRolledBackEvent.SetSubjectArtifactId(testArtifactId)
 
 	serviceRemovedEvent, _ = NewServiceRemovedEvent()
 	setContext(serviceRemovedEvent)
