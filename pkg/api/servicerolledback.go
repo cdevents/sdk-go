@@ -32,6 +32,9 @@ type ServiceRolledbackSubjectContent struct {
 
 	// The Environment where the service is deployed
 	Environment Reference `json:"environment,omitempty"`
+
+	// The Id of the target artifact
+	ArtifactId string `json:"artifactId,omitempty"`
 }
 
 type ServiceRolledbackSubject struct {
@@ -146,6 +149,10 @@ func (e ServiceRolledbackEvent) GetSchema() string {
 // Subject field setters
 func (e *ServiceRolledbackEvent) SetSubjectEnvironment(environment Reference) {
 	e.Subject.Content.Environment = environment
+}
+
+func (e *ServiceRolledbackEvent) SetSubjectArtifactId(artifactId string) {
+	e.Subject.Content.ArtifactId = artifactId
 }
 
 func NewServiceRolledbackEvent() (*ServiceRolledbackEvent, error) {
