@@ -28,7 +28,11 @@ const (
 	changeMergedSchemaFile string      = "changemerged"
 )
 
-type ChangeMergedSubjectContent struct{}
+type ChangeMergedSubjectContent struct {
+
+	// Repository where the change occurrence happened
+	Repository Reference `json:"repository"`
+}
 
 type ChangeMergedSubject struct {
 	SubjectBase
@@ -137,6 +141,11 @@ func (e *ChangeMergedEvent) SetCustomData(contentType string, data interface{}) 
 
 func (e ChangeMergedEvent) GetSchema() string {
 	return changeMergedSchemaFile
+}
+
+// Subject field setters
+func (e *ChangeMergedEvent) SetSubjectRepository(repository Reference) {
+	e.Subject.Content.Repository = repository
 }
 
 func NewChangeMergedEvent() (*ChangeMergedEvent, error) {
