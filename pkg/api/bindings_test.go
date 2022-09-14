@@ -56,7 +56,8 @@ var (
 	testDataJsonUnmarshalled = map[string]any{
 		"testValues": []any{map[string]any{"k1": string("v1")}, map[string]any{"k2": string("v2")}},
 	}
-	testDataXml = []byte("<xml>testData</xml>")
+	testDataXml  = []byte("<xml>testData</xml>")
+	testChangeId = "myChange123"
 
 	pipelineRunQueuedEvent   *PipelineRunQueuedEvent
 	pipelineRunStartedEvent  *PipelineRunStartedEvent
@@ -519,7 +520,11 @@ var (
 		"id": "mySubject123",
 		"source": "TestAsCloudEvent",
 		"type": "artifact",
-		"content": {}
+		"content": {
+			"change": {
+				"id": "myChange123"
+			}
+		}
 	}
 }`
 
@@ -707,7 +712,11 @@ var (
 		"id": "mySubject123",
 		"source": "TestAsCloudEvent",
 		"type": "artifact",
-		"content": {}
+		"content": {
+			"change": {
+				"id": "myChange123"
+			}
+		}
 	},
 	"customData": {
 		"testValues": [
@@ -730,7 +739,11 @@ var (
 		"id": "mySubject123",
 		"source": "TestAsCloudEvent",
 		"type": "artifact",
-		"content": {}
+		"content": {
+			"change": {
+				"id": "myChange123"
+			}
+		}
 	},
 	"customData": {
 		"testValues": [
@@ -753,7 +766,11 @@ var (
 		"id": "mySubject123",
 		"source": "TestAsCloudEvent",
 		"type": "artifact",
-		"content": {}
+		"content": {
+			"change": {
+				"id": "myChange123"
+			}
+		}
 	},
 	"customData": "PHhtbD50ZXN0RGF0YTwveG1sPg==",
 	"customDataContentType": "application/xml"
@@ -918,6 +935,7 @@ func init() {
 
 	artifactPackagedEvent, _ = NewArtifactPackagedEvent()
 	setContext(artifactPackagedEvent)
+	artifactPackagedEvent.SetSubjectChange(Reference{Id: testChangeId})
 
 	artifactPublishedEvent, _ = NewArtifactPublishedEvent()
 	setContext(artifactPublishedEvent)
@@ -958,16 +976,19 @@ func init() {
 
 	eventJsonCustomData, _ = NewArtifactPackagedEvent()
 	setContext(eventJsonCustomData)
+	artifactPackagedEvent.SetSubjectChange(Reference{Id: testChangeId})
 	err := eventJsonCustomData.SetCustomData("application/json", testDataJson)
 	panicOnError(err)
 
 	eventJsonCustomDataUnmarshalled, _ = NewArtifactPackagedEvent()
 	setContext(eventJsonCustomDataUnmarshalled)
+	artifactPackagedEvent.SetSubjectChange(Reference{Id: testChangeId})
 	err = eventJsonCustomDataUnmarshalled.SetCustomData("application/json", testDataJsonUnmarshalled)
 	panicOnError(err)
 
 	eventNonJsonCustomData, _ = NewArtifactPackagedEvent()
 	setContext(eventNonJsonCustomData)
+	artifactPackagedEvent.SetSubjectChange(Reference{Id: testChangeId})
 	err = eventNonJsonCustomData.SetCustomData("application/xml", testDataXml)
 	panicOnError(err)
 
