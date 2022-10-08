@@ -48,10 +48,11 @@ import (
 
 const (
 	// ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL} event
-	${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}EventV1 CDEventType = "dev.cdevents.${SUBJECT_LOWER}.${PREDICATE_LOWER}.v1"
+	${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}EventV1    CDEventType = "dev.cdevents.${SUBJECT_LOWER}.${PREDICATE_LOWER}.v1"
+	${SUBJECT_LOWER_CAMEL}${PREDICATE_UPPER_CAMEL}SchemaFile string      = "${SUBJECT_LOWER}${PREDICATE_LOWER}"
 )
 
-type ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}SubjectContent struct {}
+type ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}SubjectContent struct{}
 
 type ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Subject struct {
 	SubjectBase
@@ -69,6 +70,7 @@ func (sc ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Subject) GetSubjectType()
 type ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event struct {
 	Context Context                    \`json:"context"\`
 	Subject ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Subject \`json:"subject"\`
+	CDEventCustomData
 }
 
 // CDEventsReader implementation
@@ -105,6 +107,22 @@ func (e ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event) GetSubject() Subjec
 	return e.Subject
 }
 
+func (e ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event) GetCustomData() (interface{}, error) {
+	return getCustomData(e.CustomDataContentType, e.CustomData)
+}
+
+func (e ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event) GetCustomDataAs(receiver interface{}) error {
+	return getCustomDataAs(e, receiver)
+}
+
+func (e ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event) GetCustomDataRaw() ([]byte, error) {
+	return getCustomDataRaw(e.CustomDataContentType, e.CustomData)
+}
+
+func (e ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event) GetCustomDataContentType() string {
+	return e.CustomDataContentType
+}
+
 // CDEventsWriter implementation
 
 func (e *${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event) SetId(id string) {
@@ -131,14 +149,37 @@ func (e *${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event) SetSubjectSource(s
 	e.Subject.Source = subjectSource
 }
 
-func new${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event() CDEvent {
-	return &${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event{
+func (e *${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event) SetCustomData(contentType string, data interface{}) error {
+	err := checkCustomData(contentType, data)
+	if err != nil {
+		return err
+	}
+	e.CustomData = data
+	e.CustomDataContentType = contentType
+	return nil
+}
+
+func (e ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event) GetSchema() string {
+	return ${SUBJECT_LOWER_CAMEL}${PREDICATE_UPPER_CAMEL}SchemaFile
+}
+
+func New${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event() (*${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event, error) {
+	e := &${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event{
 		Context: Context{
 			Type:    ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}EventV1,
 			Version: CDEventsSpecVersion,
 		},
-		Subject: ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Subject{},
+		Subject: ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Subject{
+			SubjectBase: SubjectBase{
+				Type: ${SUBJECT_UPPER_CAMEL}SubjectType,
+			},
+		},
 	}
+	_, err := initCDEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }
 EOF
 
