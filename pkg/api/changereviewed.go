@@ -24,7 +24,7 @@ import (
 
 const (
 	// ChangeReviewed event
-	ChangeReviewedEventV1    CDEventType = "dev.cdevents.change.reviewed.v1"
+	ChangeReviewedEventV1    CDEventType = "dev.cdevents.change.reviewed.0.1.0-draft"
 	changeReviewedSchemaFile string      = "changereviewed"
 )
 

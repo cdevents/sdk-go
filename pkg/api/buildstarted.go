@@ -24,7 +24,7 @@ import (
 
 const (
 	// BuildStarted event
-	BuildStartedEventV1    CDEventType = "dev.cdevents.build.started.v1"
+	BuildStartedEventV1    CDEventType = "dev.cdevents.build.started.0.1.0-draft"
 	buildStartedSchemaFile string      = "buildstarted"
 )
 

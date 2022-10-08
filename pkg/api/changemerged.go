@@ -24,7 +24,7 @@ import (
 
 const (
 	// ChangeMerged event
-	ChangeMergedEventV1    CDEventType = "dev.cdevents.change.merged.v1"
+	ChangeMergedEventV1    CDEventType = "dev.cdevents.change.merged.0.1.0-draft"
 	changeMergedSchemaFile string      = "changemerged"
 )
 
