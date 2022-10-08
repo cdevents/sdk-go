@@ -24,7 +24,7 @@ import (
 
 const (
 	// ArtifactPublished event
-	ArtifactPublishedEventV1    CDEventType = "dev.cdevents.artifact.published.v1"
+	ArtifactPublishedEventV1    CDEventType = "dev.cdevents.artifact.published.0.1.0-draft"
 	artifactPublishedSchemaFile string      = "artifactpublished"
 )
 

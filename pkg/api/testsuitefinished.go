@@ -24,7 +24,7 @@ import (
 
 const (
 	// TestSuiteFinished event
-	TestSuiteFinishedEventV1    CDEventType = "dev.cdevents.testsuite.finished.v1"
+	TestSuiteFinishedEventV1    CDEventType = "dev.cdevents.testsuite.finished.0.1.0-draft"
 	testSuiteFinishedSchemaFile string      = "testsuitefinished"
 )
 

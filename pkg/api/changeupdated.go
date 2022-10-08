@@ -24,7 +24,7 @@ import (
 
 const (
 	// ChangeUpdated event
-	ChangeUpdatedEventV1    CDEventType = "dev.cdevents.change.updated.v1"
+	ChangeUpdatedEventV1    CDEventType = "dev.cdevents.change.updated.0.1.0-draft"
 	changeUpdatedSchemaFile string      = "changeupdated"
 )
 

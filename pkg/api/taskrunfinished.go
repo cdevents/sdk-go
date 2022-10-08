@@ -30,7 +30,7 @@ func (t TaskRunOutcome) String() string {
 
 const (
 	// TaskRunFinished event
-	TaskRunFinishedEventV1 CDEventType = "dev.cdevents.taskrun.finished.v1"
+	TaskRunFinishedEventV1 CDEventType = "dev.cdevents.taskrun.finished.0.1.0-draft"
 
 	TaskRunOutcomeSuccessful TaskRunOutcome = "success"
 

@@ -24,7 +24,7 @@ import (
 
 const (
 	// ServiceRemoved event
-	ServiceRemovedEventV1    CDEventType = "dev.cdevents.service.removed.v1"
+	ServiceRemovedEventV1    CDEventType = "dev.cdevents.service.removed.0.1.0-draft"
 	serviceRemovedSchemaFile string      = "serviceremoved"
 )
 

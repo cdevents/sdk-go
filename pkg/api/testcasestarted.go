@@ -24,7 +24,7 @@ import (
 
 const (
 	// TestCaseStarted event
-	TestCaseStartedEventV1    CDEventType = "dev.cdevents.testcase.started.v1"
+	TestCaseStartedEventV1    CDEventType = "dev.cdevents.testcase.started.0.1.0-draft"
 	testCaseStartedSchemaFile string      = "testcasestarted"
 )
 
