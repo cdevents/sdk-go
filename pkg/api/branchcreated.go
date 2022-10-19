@@ -28,7 +28,11 @@ const (
 	branchCreatedSchemaFile string      = "branchcreated"
 )
 
-type BranchCreatedSubjectContent struct{}
+type BranchCreatedSubjectContent struct {
+
+	// Repository where the branch occurrence happened
+	Repository Reference `json:"repository"`
+}
 
 type BranchCreatedSubject struct {
 	SubjectBase
@@ -137,6 +141,11 @@ func (e *BranchCreatedEvent) SetCustomData(contentType string, data interface{})
 
 func (e BranchCreatedEvent) GetSchema() string {
 	return branchCreatedSchemaFile
+}
+
+// Subject field setters
+func (e *BranchCreatedEvent) SetSubjectRepository(repository Reference) {
+	e.Subject.Content.Repository = repository
 }
 
 func NewBranchCreatedEvent() (*BranchCreatedEvent, error) {
