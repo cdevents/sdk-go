@@ -387,7 +387,12 @@ var (
 		"id": "mySubject123",
 		"source": "TestAsCloudEvent",
 		"type": "branch",
-		"content": {}
+		"content": {
+			"repository": {
+				"id": "TestRepo/TestOrg",
+				"source": "https://example.org"
+			}
+		}
 	}
 }`
 
@@ -403,7 +408,12 @@ var (
 		"id": "mySubject123",
 		"source": "TestAsCloudEvent",
 		"type": "branch",
-		"content": {}
+		"content": {
+			"repository": {
+				"id": "TestRepo/TestOrg",
+				"source": "https://example.org"
+			}
+		}
 	}
 }`
 
@@ -938,9 +948,11 @@ func init() {
 
 	branchCreatedEvent, _ = NewBranchCreatedEvent()
 	setContext(branchCreatedEvent)
+	branchCreatedEvent.SetSubjectRepository(testRepoReference)
 
 	branchDeletedEvent, _ = NewBranchDeletedEvent()
 	setContext(branchDeletedEvent)
+	branchDeletedEvent.SetSubjectRepository(testRepoReference)
 
 	testCaseQueuedEvent, _ = NewTestCaseQueuedEvent()
 	setContext(testCaseQueuedEvent)
