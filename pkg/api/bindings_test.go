@@ -48,7 +48,7 @@ var (
 	testOwner                = "TestOrg"
 	testUrl                  = "https://example.org/TestOrg/TestRepo"
 	testViewUrl              = "https://example.org/view/TestOrg/TestRepo"
-	testArtifactId           = "0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
+	testArtifactId           = "pkg:oci/myapp@sha256%3A0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
 	testEnvironmentId        = "test123"
 	testEnvironmentName      = "testEnv"
 	testEnvironmentUrl       = "https://example.org/testEnv"
@@ -542,7 +542,7 @@ var (
 		"source": "TestAsCloudEvent",
 		"type": "build",
 		"content": {
-			"artifactId": "0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
+			"artifactId": "pkg:oci/myapp@sha256%%3A0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
 		}
 	}
 }`
@@ -655,7 +655,7 @@ var (
 			"environment": {
 				"id": "test123"
 			},
-			"artifactId": "0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
+			"artifactId": "pkg:oci/myapp@sha256%%3A0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
 		}
 	}
 }`
@@ -676,7 +676,7 @@ var (
 			"environment": {
 				"id": "test123"
 			},
-			"artifactId": "0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
+			"artifactId": "pkg:oci/myapp@sha256%%3A0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
 		}
 	}
 }`
@@ -697,7 +697,7 @@ var (
 			"environment": {
 				"id": "test123"
 			},
-			"artifactId": "0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
+			"artifactId": "pkg:oci/myapp@sha256%%3A0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
 		}
 	}
 }`
@@ -1460,6 +1460,32 @@ func TestInvalidEvent(t *testing.T) {
 	eventIncompleteSubject.SetSubjectId(testSubjectId)
 	eventIncompleteSubject.SetSubjectName(testRepo)
 
+	// invalid source format in context
+	eventInvalidSource, _ := NewChangeAbandonedEvent()
+	eventInvalidSource.SetSource("\\--##@@")
+
+	// invalid source format in reference
+	eventInvalidSourceReference, _ := NewServiceDeployedEvent()
+	eventInvalidSourceReference.SetSubjectEnvironment(
+		Reference{Id: "1234", Source: "\\--##@@"})
+
+	// invalid format of purl
+	eventInvalidPurl, _ := NewBuildFinishedEvent()
+	eventInvalidPurl.SetSubjectArtifactId("not-a-valid-purl")
+
+	// invalid event type
+	eventInvalidType := &ServicePublishedEvent{
+		Context: Context{
+			Type:    CDEventType("not-a-valid-type"),
+			Version: CDEventsSpecVersion,
+		},
+		Subject: ServicePublishedSubject{
+			SubjectBase: SubjectBase{
+				Type: ServiceSubjectType,
+			},
+		},
+	}
+
 	tests := []struct {
 		name  string
 		event CDEvent
@@ -1475,6 +1501,18 @@ func TestInvalidEvent(t *testing.T) {
 	}, {
 		name:  "missing subject url",
 		event: eventIncompleteSubject,
+	}, {
+		name:  "invalid source in context",
+		event: eventInvalidSource,
+	}, {
+		name:  "invalid source in reference",
+		event: eventInvalidSourceReference,
+	}, {
+		name:  "invalid purl in build finished",
+		event: eventInvalidPurl,
+	}, {
+		name:  "invalid event type",
+		event: eventInvalidType,
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

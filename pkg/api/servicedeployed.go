@@ -34,7 +34,7 @@ type ServiceDeployedSubjectContent struct {
 	Environment Reference `json:"environment,omitempty"`
 
 	// The Id of the artifact deployed
-	ArtifactId string `json:"artifactId,omitempty"`
+	ArtifactId string `json:"artifactId,omitempty" validate:"purl"`
 }
 
 type ServiceDeployedSubject struct {

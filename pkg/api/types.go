@@ -47,7 +47,7 @@ type Context struct {
 	// purpose of the source is to provide global uniqueness for source + id.
 	// The source MAY identify a single producer or a group of producer that
 	// belong to the same application.
-	Source string `json:"source" jsonschema:"required,minLength=1"`
+	Source string `json:"source" jsonschema:"required,minLength=1" validate:"uri-reference"`
 
 	// Spec: https://cdevents.dev/docs/spec/#type
 	// Description: defines the type of event, as combination of a subject and
@@ -55,7 +55,7 @@ type Context struct {
 	// types should be prefixed with dev.cdevents.
 	// One occurrence may have multiple events associated, as long as they have
 	// different event types
-	Type CDEventType `json:"type" jsonschema:"required,minLength=1"`
+	Type CDEventType `json:"type" jsonschema:"required,minLength=1" validate:"event-type"`
 
 	// Spec: https://cdevents.dev/docs/spec/#timestamp
 	// Description: Description: defines the time of the occurrence. When the
@@ -77,7 +77,7 @@ type Reference struct {
 	// purpose of the source is to provide global uniqueness for source + id.
 	// The source MAY identify a single producer or a group of producer that
 	// belong to the same application.
-	Source string `json:"source,omitempty"`
+	Source string `json:"source,omitempty" validate:"uri-reference"`
 }
 
 type SubjectBase struct {

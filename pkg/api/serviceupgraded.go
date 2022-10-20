@@ -34,7 +34,7 @@ type ServiceUpgradedSubjectContent struct {
 	Environment Reference `json:"environment,omitempty"`
 
 	// The Id of the target artifact
-	ArtifactId string `json:"artifactId,omitempty"`
+	ArtifactId string `json:"artifactId,omitempty" validate:"purl"`
 }
 
 type ServiceUpgradedSubject struct {

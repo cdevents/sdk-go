@@ -21,9 +21,12 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
+	"github.com/go-playground/validator/v10"
 	schemaproducer "github.com/invopop/jsonschema"
+	purl "github.com/package-url/packageurl-go"
 	jsonschema "github.com/santhosh-tekuri/jsonschema/v5"
 )
 
@@ -71,6 +74,9 @@ var (
 
 	// Map CDEventType to empty event objects
 	cdeventsByTypes map[CDEventType]CDEvent
+
+	// Validation helper as singleton
+	validate *validator.Validate
 )
 
 func init() {
@@ -97,6 +103,15 @@ func init() {
 		// Set type to receiver map
 		cdeventsByTypes[eventType.GetType()] = eventType
 	}
+
+	// Register custom validators
+	validate = validator.New()
+	err := validate.RegisterValidation("event-type", ValidateEventType)
+	panicOnError(err)
+	err = validate.RegisterValidation("uri-reference", ValidateUriReference)
+	panicOnError(err)
+	err = validate.RegisterValidation("purl", ValidatePurl)
+	panicOnError(err)
 }
 
 func panicOnError(err error) {
@@ -119,11 +134,27 @@ func ParseType(eventType string) (CDEventType, error) {
 	return t, nil
 }
 
+func ValidateEventType(fl validator.FieldLevel) bool {
+	_, err := ParseType(fl.Field().String())
+	return err == nil
+}
+
+func ValidateUriReference(fl validator.FieldLevel) bool {
+	_, err := url.Parse(fl.Field().String())
+	return err == nil
+}
+
+func ValidatePurl(fl validator.FieldLevel) bool {
+	_, err := purl.FromString(fl.Field().String())
+	return err == nil
+}
+
 // AsCloudEvent renders a CDEvent as a CloudEvent
 func AsCloudEvent(event CDEventReader) (*cloudevents.Event, error) {
 	if event == nil {
 		return nil, fmt.Errorf("nil CDEvent cannot be rendered as CloudEvent")
 	}
+	// Validate the event
 	err := Validate(event)
 	if err != nil {
 		return nil, fmt.Errorf("cannot validate CDEvent %v", err)
@@ -148,7 +179,7 @@ func AsJsonString(event CDEventReader) (string, error) {
 	return string(jsonBytes), nil
 }
 
-// Validate checks the CDEvent against the JSON schema
+// Validate checks the CDEvent against the JSON schema and validate constraints
 func Validate(event CDEventReader) error {
 	schemaName := event.GetSchema()
 	sch, err := jsonschema.CompileString(fmt.Sprintf("%s.json", schemaName), allEventSchemas[schemaName])
@@ -163,7 +194,17 @@ func Validate(event CDEventReader) error {
 	if err := json.Unmarshal([]byte(jsonString), &v); err != nil {
 		return fmt.Errorf("cannot unmarshal event json: %v", err)
 	}
-	return sch.Validate(v)
+	// Validate the "jsonschema" tags
+	err = sch.Validate(v)
+	if err != nil {
+		return err
+	}
+	// Validate the "validate" tags
+	err = validate.Struct(event)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // Build a new CDEventReader from a JSON string

@@ -31,7 +31,7 @@ const (
 type BuildFinishedSubjectContent struct {
 
 	// The Id of the artifact produced by the build
-	ArtifactId string `json:"artifactId,omitempty"`
+	ArtifactId string `json:"artifactId,omitempty" validate:"purl"`
 }
 
 type BuildFinishedSubject struct {
