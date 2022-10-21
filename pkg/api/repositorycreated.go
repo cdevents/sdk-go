@@ -24,7 +24,7 @@ import (
 
 const (
 	// RepositoryCreated event
-	RepositoryCreatedEventV1    CDEventType = "dev.cdevents.repository.created.0.1.0-draft"
+	RepositoryCreatedEventV1    CDEventType = "dev.cdevents.repository.created.0.1.0"
 	repositoryCreatedSchemaFile string      = "repositorycreated"
 )
 

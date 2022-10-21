@@ -104,10 +104,10 @@ var (
 	pipelineRunQueuedEventJsonTemplate = `
 {
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.pipelinerun.queued.0.1.0-draft",
+		"type": "dev.cdevents.pipelinerun.queued.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -123,10 +123,10 @@ var (
 
 	pipelineRunStartedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.pipelinerun.started.0.1.0-draft",
+		"type": "dev.cdevents.pipelinerun.started.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -142,10 +142,10 @@ var (
 
 	pipelineRunFinishedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.pipelinerun.finished.0.1.0-draft",
+		"type": "dev.cdevents.pipelinerun.finished.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -163,10 +163,10 @@ var (
 
 	taskRunStartedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.taskrun.started.0.1.0-draft",
+		"type": "dev.cdevents.taskrun.started.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -185,10 +185,10 @@ var (
 
 	taskRunFinishedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.taskrun.finished.0.1.0-draft",
+		"type": "dev.cdevents.taskrun.finished.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -209,10 +209,10 @@ var (
 
 	changeCreatedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.change.created.0.1.0-draft",
+		"type": "dev.cdevents.change.created.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -230,10 +230,10 @@ var (
 
 	changeUpdatedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.change.updated.0.1.0-draft",
+		"type": "dev.cdevents.change.updated.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -251,10 +251,10 @@ var (
 
 	changeReviewedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.change.reviewed.0.1.0-draft",
+		"type": "dev.cdevents.change.reviewed.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -272,10 +272,10 @@ var (
 
 	changeMergedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.change.merged.0.1.0-draft",
+		"type": "dev.cdevents.change.merged.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -293,10 +293,10 @@ var (
 
 	changeAbandonedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.change.abandoned.0.1.0-draft",
+		"type": "dev.cdevents.change.abandoned.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -314,10 +314,10 @@ var (
 
 	repositoryCreatedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.repository.created.0.1.0-draft",
+		"type": "dev.cdevents.repository.created.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -335,10 +335,10 @@ var (
 
 	repositoryModifiedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.repository.modified.0.1.0-draft",
+		"type": "dev.cdevents.repository.modified.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -356,10 +356,10 @@ var (
 
 	repositoryDeletedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.repository.deleted.0.1.0-draft",
+		"type": "dev.cdevents.repository.deleted.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -377,10 +377,10 @@ var (
 
 	branchCreatedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.branch.created.0.1.0-draft",
+		"type": "dev.cdevents.branch.created.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -398,10 +398,10 @@ var (
 
 	branchDeletedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.branch.deleted.0.1.0-draft",
+		"type": "dev.cdevents.branch.deleted.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -419,10 +419,10 @@ var (
 
 	testCaseQueuedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.testcase.queued.0.1.0-draft",
+		"type": "dev.cdevents.testcase.queued.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -435,10 +435,10 @@ var (
 
 	testCaseStartedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.testcase.started.0.1.0-draft",
+		"type": "dev.cdevents.testcase.started.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -451,10 +451,10 @@ var (
 
 	testCaseFinishedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.testcase.finished.0.1.0-draft",
+		"type": "dev.cdevents.testcase.finished.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -467,10 +467,10 @@ var (
 
 	testSuiteStartedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.testsuite.started.0.1.0-draft",
+		"type": "dev.cdevents.testsuite.started.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -483,10 +483,10 @@ var (
 
 	testSuiteFinishedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.testsuite.finished.0.1.0-draft",
+		"type": "dev.cdevents.testsuite.finished.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -499,10 +499,10 @@ var (
 
 	buildQueuedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.build.queued.0.1.0-draft",
+		"type": "dev.cdevents.build.queued.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -515,10 +515,10 @@ var (
 
 	buildStartedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.build.started.0.1.0-draft",
+		"type": "dev.cdevents.build.started.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -531,10 +531,10 @@ var (
 
 	buildFinishedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.build.finished.0.1.0-draft",
+		"type": "dev.cdevents.build.finished.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -549,10 +549,10 @@ var (
 
 	artifactPackagedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.artifact.packaged.0.1.0-draft",
+		"type": "dev.cdevents.artifact.packaged.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -569,10 +569,10 @@ var (
 
 	artifactPublishedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.artifact.published.0.1.0-draft",
+		"type": "dev.cdevents.artifact.published.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -585,10 +585,10 @@ var (
 
 	environmentCreatedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.environment.created.0.1.0-draft",
+		"type": "dev.cdevents.environment.created.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -604,10 +604,10 @@ var (
 
 	environmentModifiedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.environment.modified.0.1.0-draft",
+		"type": "dev.cdevents.environment.modified.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -623,10 +623,10 @@ var (
 
 	environmentDeletedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.environment.deleted.0.1.0-draft",
+		"type": "dev.cdevents.environment.deleted.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -641,10 +641,10 @@ var (
 
 	serviceDeployedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.service.deployed.0.1.0-draft",
+		"type": "dev.cdevents.service.deployed.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -662,10 +662,10 @@ var (
 
 	serviceUpgradedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.service.upgraded.0.1.0-draft",
+		"type": "dev.cdevents.service.upgraded.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -683,10 +683,10 @@ var (
 
 	serviceRolledBackEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.service.rolledback.0.1.0-draft",
+		"type": "dev.cdevents.service.rolledback.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -704,10 +704,10 @@ var (
 
 	serviceRemovedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.service.removed.0.1.0-draft",
+		"type": "dev.cdevents.service.removed.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -724,10 +724,10 @@ var (
 
 	servicePublishedEventJsonTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.service.published.0.1.0-draft",
+		"type": "dev.cdevents.service.published.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -744,10 +744,10 @@ var (
 
 	eventJsonCustomDataTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.artifact.packaged.0.1.0-draft",
+		"type": "dev.cdevents.artifact.packaged.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -771,10 +771,10 @@ var (
 
 	eventImplicitJsonCustomDataTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.artifact.packaged.0.1.0-draft",
+		"type": "dev.cdevents.artifact.packaged.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -798,10 +798,10 @@ var (
 
 	eventNonJsonCustomDataTemplate = `{
 	"context": {
-		"version": "0.1.0-draft",
+		"version": "0.1.0",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.artifact.packaged.0.1.0-draft",
+		"type": "dev.cdevents.artifact.packaged.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {

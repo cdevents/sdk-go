@@ -24,7 +24,7 @@ import (
 
 const (
 	// ChangeAbandoned event
-	ChangeAbandonedEventV1    CDEventType = "dev.cdevents.change.abandoned.0.1.0-draft"
+	ChangeAbandonedEventV1    CDEventType = "dev.cdevents.change.abandoned.0.1.0"
 	changeAbandonedSchemaFile string      = "changeabandoned"
 )
 

@@ -24,7 +24,7 @@ import (
 
 const (
 	// ServiceDeployed event
-	ServiceDeployedEventV1    CDEventType = "dev.cdevents.service.deployed.0.1.0-draft"
+	ServiceDeployedEventV1    CDEventType = "dev.cdevents.service.deployed.0.1.0"
 	serviceDeployedSchemaFile string      = "servicedeployed"
 )
 

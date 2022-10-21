@@ -24,7 +24,7 @@ import (
 
 const (
 	// EnvironmentDeleted event
-	EnvironmentDeletedEventV1    CDEventType = "dev.cdevents.environment.deleted.0.1.0-draft"
+	EnvironmentDeletedEventV1    CDEventType = "dev.cdevents.environment.deleted.0.1.0"
 	environmentDeletedSchemaFile string      = "environmentdeleted"
 )
 

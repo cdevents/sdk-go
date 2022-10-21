@@ -24,7 +24,7 @@ import (
 
 const (
 	// ServiceRolledback event
-	ServiceRolledbackEventV1    CDEventType = "dev.cdevents.service.rolledback.0.1.0-draft"
+	ServiceRolledbackEventV1    CDEventType = "dev.cdevents.service.rolledback.0.1.0"
 	serviceRolledbackSchemaFile string      = "servicerolledback"
 )
 

@@ -24,7 +24,7 @@ import (
 
 const (
 	// TaskRunStarted event
-	TaskRunStartedEventV1    CDEventType = "dev.cdevents.taskrun.started.0.1.0-draft"
+	TaskRunStartedEventV1    CDEventType = "dev.cdevents.taskrun.started.0.1.0"
 	taskRunStartedSchemaFile string      = "taskrunstarted"
 )
 

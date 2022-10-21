@@ -30,7 +30,7 @@ func (t PipelineRunOutcome) String() string {
 
 const (
 	// PipelineRunFinished event
-	PipelineRunFinishedEventV1 CDEventType = "dev.cdevents.pipelinerun.finished.0.1.0-draft"
+	PipelineRunFinishedEventV1 CDEventType = "dev.cdevents.pipelinerun.finished.0.1.0"
 
 	// PipelineRun successful
 	PipelineRunOutcomeSuccessful PipelineRunOutcome = "success"

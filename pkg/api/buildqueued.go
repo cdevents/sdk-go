@@ -24,7 +24,7 @@ import (
 
 const (
 	// BuildQueued event
-	BuildQueuedEventV1    CDEventType = "dev.cdevents.build.queued.0.1.0-draft"
+	BuildQueuedEventV1    CDEventType = "dev.cdevents.build.queued.0.1.0"
 	buildQueuedSchemaFile string      = "buildqueued"
 )
 

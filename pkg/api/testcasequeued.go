@@ -24,7 +24,7 @@ import (
 
 const (
 	// TestCaseQueued event
-	TestCaseQueuedEventV1    CDEventType = "dev.cdevents.testcase.queued.0.1.0-draft"
+	TestCaseQueuedEventV1    CDEventType = "dev.cdevents.testcase.queued.0.1.0"
 	testCaseQueuedSchemaFile string      = "testcasequeued"
 )
 

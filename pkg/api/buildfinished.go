@@ -24,7 +24,7 @@ import (
 
 const (
 	// BuildFinished event
-	BuildFinishedEventV1    CDEventType = "dev.cdevents.build.finished.0.1.0-draft"
+	BuildFinishedEventV1    CDEventType = "dev.cdevents.build.finished.0.1.0"
 	buildFinishedSchemaFile string      = "buildfinished"
 )
 

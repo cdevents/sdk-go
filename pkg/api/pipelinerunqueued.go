@@ -24,7 +24,7 @@ import (
 
 const (
 	// PipelineRun events
-	PipelineRunQueuedEventV1    CDEventType = "dev.cdevents.pipelinerun.queued.0.1.0-draft"
+	PipelineRunQueuedEventV1    CDEventType = "dev.cdevents.pipelinerun.queued.0.1.0"
 	pipelineRunQueuedSchemaFile string      = "pipelinerunqueued"
 )
 

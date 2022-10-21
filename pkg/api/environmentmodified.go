@@ -24,7 +24,7 @@ import (
 
 const (
 	// EnvironmentModified event
-	EnvironmentModifiedEventV1    CDEventType = "dev.cdevents.environment.modified.0.1.0-draft"
+	EnvironmentModifiedEventV1    CDEventType = "dev.cdevents.environment.modified.0.1.0"
 	environmentModifiedSchemaFile string      = "environmentmodified"
 )
 

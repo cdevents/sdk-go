@@ -24,7 +24,7 @@ import (
 
 const (
 	// RepositoryDeleted event
-	RepositoryDeletedEventV1    CDEventType = "dev.cdevents.repository.deleted.0.1.0-draft"
+	RepositoryDeletedEventV1    CDEventType = "dev.cdevents.repository.deleted.0.1.0"
 	repositoryDeletedSchemaFile string      = "repositorydeleted"
 )
 

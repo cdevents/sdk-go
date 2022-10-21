@@ -24,7 +24,7 @@ import (
 
 const (
 	// PipelineRunStarted event
-	PipelineRunStartedEventV1    CDEventType = "dev.cdevents.pipelinerun.started.0.1.0-draft"
+	PipelineRunStartedEventV1    CDEventType = "dev.cdevents.pipelinerun.started.0.1.0"
 	pipelineRunStartedSchemaFile string      = "pipelinerunstarted"
 )
 

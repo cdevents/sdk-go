@@ -24,7 +24,7 @@ import (
 
 const (
 	// ServiceUpgraded event
-	ServiceUpgradedEventV1    CDEventType = "dev.cdevents.service.upgraded.0.1.0-draft"
+	ServiceUpgradedEventV1    CDEventType = "dev.cdevents.service.upgraded.0.1.0"
 	serviceUpgradedSchemaFile string      = "serviceupgraded"
 )
 

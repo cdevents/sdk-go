@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-const CDEventsSpecVersion = "0.1.0-draft"
+const CDEventsSpecVersion = "0.1.0"
 
 type Context struct {
 	// Spec: https://cdevents.dev/docs/spec/#version
@@ -33,7 +33,7 @@ type Context struct {
 	// uses. This enables the interpretation of the context. Compliant event
 	// producers MUST use a value of draft when referring to this version of the
 	// specification.
-	Version string `json:"version" jsonschema:"required,enum=0.1.0-draft,default=0.1.0-draft"`
+	Version string `json:"version" jsonschema:"required,enum=0.1.0,default=0.1.0"`
 
 	// Spec: https://cdevents.dev/docs/spec/#id
 	// Description: Identifier for an event. Subsequent delivery attempts of the

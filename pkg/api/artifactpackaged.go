@@ -24,7 +24,7 @@ import (
 
 const (
 	// ArtifactPackaged event
-	ArtifactPackagedEventV1    CDEventType = "dev.cdevents.artifact.packaged.0.1.0-draft"
+	ArtifactPackagedEventV1    CDEventType = "dev.cdevents.artifact.packaged.0.1.0"
 	artifactPackagedSchemaFile string      = "artifactpackaged"
 )
 

@@ -24,7 +24,7 @@ import (
 
 const (
 	// BranchDeleted event
-	BranchDeletedEventV1    CDEventType = "dev.cdevents.branch.deleted.0.1.0-draft"
+	BranchDeletedEventV1    CDEventType = "dev.cdevents.branch.deleted.0.1.0"
 	branchDeletedSchemaFile string      = "branchdeleted"
 )
 
