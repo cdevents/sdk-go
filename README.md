@@ -1,6 +1,6 @@
 # Golang CDEvents SDK
 
-Golang SDK to emit [CDEvents](https://cdevents/dev).
+Golang SDK to emit [CDEvents](https://cdevents.dev).
 
 The SDK can be used to create CDEvents and send them as CloudEvents, as well as parse a received CloudEvent into a CDEvent.
 
