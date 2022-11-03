@@ -55,7 +55,7 @@ To send a CDEvent as CloudEvent:
 ```golang
 func main() {
     // (...) set the event first
-    ce := cdevents.AsCloudEvent(event)
+    ce, err := cdevents.AsCloudEvent(event)
 
     // Set send options
     ctx := cloudevents.ContextWithTarget(context.Background(), "http://localhost:8080/")
