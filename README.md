@@ -50,7 +50,7 @@ func main() {
 
 ## Send your first CDEvent as CloudEvent
 
-Import the module in your code
+Import the modules in your code
 
 ```golang
 import cdevents "github.com/cdevents/sdk-go/pkg/api"
