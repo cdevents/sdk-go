@@ -69,15 +69,15 @@ func main() {
     ctx = cloudevents.WithEncodingBinary(ctx)
 
     c, err := cloudevents.NewClientHTTP()
-	if err != nil {
-		log.Fatalf("failed to create client, %v", err)
-	}
+    if err != nil {
+        log.Fatalf("failed to create client, %v", err)
+    }
 
     // Send the CloudEvent
     // c is a CloudEvent client
     if result := c.Send(ctx, *ce); cloudevents.IsUndelivered(result) {
-		log.Fatalf("failed to send, %v", result)
-	}
+        log.Fatalf("failed to send, %v", result)
+    }
 }
 ```
 
