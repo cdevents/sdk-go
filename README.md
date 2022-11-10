@@ -50,20 +50,32 @@ func main() {
 
 ## Send your first CDEvent as CloudEvent
 
+Import the modules in your code
+
+```golang
+import cdevents "github.com/cdevents/sdk-go/pkg/api"
+import cloudevents "github.com/cloudevents/sdk-go/v2"
+```
+
 To send a CDEvent as CloudEvent:
 
 ```golang
 func main() {
     // (...) set the event first
-    ce := cdevents.AsCloudEvent(event)
+    ce, err := cdevents.AsCloudEvent(event)
 
     // Set send options
     ctx := cloudevents.ContextWithTarget(context.Background(), "http://localhost:8080/")
     ctx = cloudevents.WithEncodingBinary(ctx)
 
-    // Sent the CloudEvent
+    c, err := cloudevents.NewClientHTTP()
+    if err != nil {
+        log.Fatalf("failed to create client, %v", err)
+    }
+
+    // Send the CloudEvent
     // c is a CloudEvent client
-    if result := c.Send(ctx, ce); cloudevents.IsUndelivered(result) {
+    if result := c.Send(ctx, *ce); cloudevents.IsUndelivered(result) {
         log.Fatalf("failed to send, %v", result)
     }
 }
