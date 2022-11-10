@@ -53,6 +53,7 @@ func main() {
 Import the module in your code
 
 ```golang
+import cdevents "github.com/cdevents/sdk-go/pkg/api"
 import cloudevents "github.com/cloudevents/sdk-go/v2"
 ```
 
@@ -75,8 +76,8 @@ func main() {
     // Send the CloudEvent
     // c is a CloudEvent client
     if result := c.Send(ctx, *ce); cloudevents.IsUndelivered(result) {
-        log.Fatalf("failed to send, %v", result)
-    }
+		log.Fatalf("failed to send, %v", result)
+	}
 }
 ```
 
