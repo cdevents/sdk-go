@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// TaskRunStarted event
-	TaskRunStartedEventV1    CDEventType = "dev.cdevents.taskrun.started.0.1.0"
-	taskRunStartedSchemaFile string      = "taskrunstarted"
+//go:embed spec/schemas/taskrunstarted.json
+var taskrunstartedschema string
+
+var (
+	// TaskRunStarted event v0.1.0
+	TaskRunStartedEventV1 CDEventType = CDEventType{
+		Subject:   "taskrun",
+		Predicate: "started",
+		Version:   "0.1.0",
+	}
 )
 
 type TaskRunStartedSubjectContent struct {
@@ -159,14 +167,15 @@ func (e *TaskRunStartedEvent) SetSubjectPipelineRun(pipelineRun Reference) {
 	e.Subject.Content.PipelineRun = pipelineRun
 }
 
-func (e TaskRunStartedEvent) GetSchema() string {
-	return taskRunStartedSchemaFile
+func (e TaskRunStartedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), taskrunstartedschema
 }
 
 func NewTaskRunStartedEvent() (*TaskRunStartedEvent, error) {
 	e := &TaskRunStartedEvent{
 		Context: Context{
-			Type:    TaskRunStartedEventV1,
+			Type:    TaskRunStartedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: TaskRunStartedSubject{

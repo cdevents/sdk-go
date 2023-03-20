@@ -58,7 +58,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: PipelineRunQueuedEventV1,
 		expectedEvent: &PipelineRunQueuedEvent{
 			Context: Context{
-				Type:      PipelineRunQueuedEventV1,
+				Type:      PipelineRunQueuedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -74,7 +74,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: PipelineRunStartedEventV1,
 		expectedEvent: &PipelineRunStartedEvent{
 			Context: Context{
-				Type:      PipelineRunStartedEventV1,
+				Type:      PipelineRunStartedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -90,7 +90,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: PipelineRunFinishedEventV1,
 		expectedEvent: &PipelineRunFinishedEvent{
 			Context: Context{
-				Type:      PipelineRunFinishedEventV1,
+				Type:      PipelineRunFinishedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -106,7 +106,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: TaskRunStartedEventV1,
 		expectedEvent: &TaskRunStartedEvent{
 			Context: Context{
-				Type:      TaskRunStartedEventV1,
+				Type:      TaskRunStartedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -122,7 +122,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: TaskRunFinishedEventV1,
 		expectedEvent: &TaskRunFinishedEvent{
 			Context: Context{
-				Type:      TaskRunFinishedEventV1,
+				Type:      TaskRunFinishedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -138,7 +138,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: ChangeCreatedEventV1,
 		expectedEvent: &ChangeCreatedEvent{
 			Context: Context{
-				Type:      ChangeCreatedEventV1,
+				Type:      ChangeCreatedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -154,7 +154,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: ChangeUpdatedEventV1,
 		expectedEvent: &ChangeUpdatedEvent{
 			Context: Context{
-				Type:      ChangeUpdatedEventV1,
+				Type:      ChangeUpdatedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -170,7 +170,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: ChangeReviewedEventV1,
 		expectedEvent: &ChangeReviewedEvent{
 			Context: Context{
-				Type:      ChangeReviewedEventV1,
+				Type:      ChangeReviewedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -186,7 +186,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: ChangeMergedEventV1,
 		expectedEvent: &ChangeMergedEvent{
 			Context: Context{
-				Type:      ChangeMergedEventV1,
+				Type:      ChangeMergedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -202,7 +202,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: ChangeAbandonedEventV1,
 		expectedEvent: &ChangeAbandonedEvent{
 			Context: Context{
-				Type:      ChangeAbandonedEventV1,
+				Type:      ChangeAbandonedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -218,7 +218,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: RepositoryCreatedEventV1,
 		expectedEvent: &RepositoryCreatedEvent{
 			Context: Context{
-				Type:      RepositoryCreatedEventV1,
+				Type:      RepositoryCreatedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -234,7 +234,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: RepositoryModifiedEventV1,
 		expectedEvent: &RepositoryModifiedEvent{
 			Context: Context{
-				Type:      RepositoryModifiedEventV1,
+				Type:      RepositoryModifiedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -250,7 +250,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: RepositoryDeletedEventV1,
 		expectedEvent: &RepositoryDeletedEvent{
 			Context: Context{
-				Type:      RepositoryDeletedEventV1,
+				Type:      RepositoryDeletedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -266,7 +266,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: BranchCreatedEventV1,
 		expectedEvent: &BranchCreatedEvent{
 			Context: Context{
-				Type:      BranchCreatedEventV1,
+				Type:      BranchCreatedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -282,7 +282,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: BranchDeletedEventV1,
 		expectedEvent: &BranchDeletedEvent{
 			Context: Context{
-				Type:      BranchDeletedEventV1,
+				Type:      BranchDeletedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -298,7 +298,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: TestCaseQueuedEventV1,
 		expectedEvent: &TestCaseQueuedEvent{
 			Context: Context{
-				Type:      TestCaseQueuedEventV1,
+				Type:      TestCaseQueuedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -314,7 +314,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: TestCaseStartedEventV1,
 		expectedEvent: &TestCaseStartedEvent{
 			Context: Context{
-				Type:      TestCaseStartedEventV1,
+				Type:      TestCaseStartedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -330,7 +330,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: TestCaseFinishedEventV1,
 		expectedEvent: &TestCaseFinishedEvent{
 			Context: Context{
-				Type:      TestCaseFinishedEventV1,
+				Type:      TestCaseFinishedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -346,7 +346,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: TestSuiteStartedEventV1,
 		expectedEvent: &TestSuiteStartedEvent{
 			Context: Context{
-				Type:      TestSuiteStartedEventV1,
+				Type:      TestSuiteStartedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -362,7 +362,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: TestSuiteFinishedEventV1,
 		expectedEvent: &TestSuiteFinishedEvent{
 			Context: Context{
-				Type:      TestSuiteFinishedEventV1,
+				Type:      TestSuiteFinishedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -378,7 +378,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: BuildQueuedEventV1,
 		expectedEvent: &BuildQueuedEvent{
 			Context: Context{
-				Type:      BuildQueuedEventV1,
+				Type:      BuildQueuedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -394,7 +394,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: BuildStartedEventV1,
 		expectedEvent: &BuildStartedEvent{
 			Context: Context{
-				Type:      BuildStartedEventV1,
+				Type:      BuildStartedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -410,7 +410,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: BuildFinishedEventV1,
 		expectedEvent: &BuildFinishedEvent{
 			Context: Context{
-				Type:      BuildFinishedEventV1,
+				Type:      BuildFinishedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -426,7 +426,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: ArtifactPackagedEventV1,
 		expectedEvent: &ArtifactPackagedEvent{
 			Context: Context{
-				Type:      ArtifactPackagedEventV1,
+				Type:      ArtifactPackagedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -442,7 +442,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: ArtifactPublishedEventV1,
 		expectedEvent: &ArtifactPublishedEvent{
 			Context: Context{
-				Type:      ArtifactPublishedEventV1,
+				Type:      ArtifactPublishedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -458,7 +458,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: EnvironmentCreatedEventV1,
 		expectedEvent: &EnvironmentCreatedEvent{
 			Context: Context{
-				Type:      EnvironmentCreatedEventV1,
+				Type:      EnvironmentCreatedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -474,7 +474,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: EnvironmentModifiedEventV1,
 		expectedEvent: &EnvironmentModifiedEvent{
 			Context: Context{
-				Type:      EnvironmentModifiedEventV1,
+				Type:      EnvironmentModifiedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -490,7 +490,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: EnvironmentDeletedEventV1,
 		expectedEvent: &EnvironmentDeletedEvent{
 			Context: Context{
-				Type:      EnvironmentDeletedEventV1,
+				Type:      EnvironmentDeletedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -506,7 +506,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: ServiceDeployedEventV1,
 		expectedEvent: &ServiceDeployedEvent{
 			Context: Context{
-				Type:      ServiceDeployedEventV1,
+				Type:      ServiceDeployedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -522,7 +522,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: ServiceUpgradedEventV1,
 		expectedEvent: &ServiceUpgradedEvent{
 			Context: Context{
-				Type:      ServiceUpgradedEventV1,
+				Type:      ServiceUpgradedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -538,7 +538,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: ServiceRolledbackEventV1,
 		expectedEvent: &ServiceRolledbackEvent{
 			Context: Context{
-				Type:      ServiceRolledbackEventV1,
+				Type:      ServiceRolledbackEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -554,7 +554,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: ServiceRemovedEventV1,
 		expectedEvent: &ServiceRemovedEvent{
 			Context: Context{
-				Type:      ServiceRemovedEventV1,
+				Type:      ServiceRemovedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -570,7 +570,7 @@ func TestNewCDEvent(t *testing.T) {
 		eventType: ServicePublishedEventV1,
 		expectedEvent: &ServicePublishedEvent{
 			Context: Context{
-				Type:      ServicePublishedEventV1,
+				Type:      ServicePublishedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
@@ -597,7 +597,7 @@ func TestNewCDEvent(t *testing.T) {
 
 func TestNewCDEventFailed(t *testing.T) {
 
-	_, err := NewCDEvent("not supported")
+	_, err := NewCDEvent(CDEventType{Subject: "not supported"})
 	if err == nil {
 		t.Fatalf("expected it to fail, but it didn't")
 	}

@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// TestSuiteStarted event
-	TestSuiteStartedEventV1    CDEventType = "dev.cdevents.testsuite.started.0.1.0"
-	testSuiteStartedSchemaFile string      = "testsuitestarted"
+//go:embed spec/schemas/testsuitestarted.json
+var testsuitestartedschema string
+
+var (
+	// TestSuiteStarted event v0.1.0
+	TestSuiteStartedEventV1 CDEventType = CDEventType{
+		Subject:   "testsuite",
+		Predicate: "started",
+		Version:   "0.1.0",
+	}
 )
 
 type TestSuiteStartedSubjectContent struct{}
@@ -135,14 +143,15 @@ func (e *TestSuiteStartedEvent) SetCustomData(contentType string, data interface
 	return nil
 }
 
-func (e TestSuiteStartedEvent) GetSchema() string {
-	return testSuiteStartedSchemaFile
+func (e TestSuiteStartedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), testsuitestartedschema
 }
 
 func NewTestSuiteStartedEvent() (*TestSuiteStartedEvent, error) {
 	e := &TestSuiteStartedEvent{
 		Context: Context{
-			Type:    TestSuiteStartedEventV1,
+			Type:    TestSuiteStartedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: TestSuiteStartedSubject{

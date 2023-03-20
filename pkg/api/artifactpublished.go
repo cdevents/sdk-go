@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// ArtifactPublished event
-	ArtifactPublishedEventV1    CDEventType = "dev.cdevents.artifact.published.0.1.0"
-	artifactPublishedSchemaFile string      = "artifactpublished"
+//go:embed spec/schemas/artifactpublished.json
+var artifactpublishedschema string
+
+var (
+	// ArtifactPublished event v0.1.0
+	ArtifactPublishedEventV1 CDEventType = CDEventType{
+		Subject:   "artifact",
+		Predicate: "published",
+		Version:   "0.1.0",
+	}
 )
 
 type ArtifactPublishedSubjectContent struct{}
@@ -135,14 +143,15 @@ func (e *ArtifactPublishedEvent) SetCustomData(contentType string, data interfac
 	return nil
 }
 
-func (e ArtifactPublishedEvent) GetSchema() string {
-	return artifactPublishedSchemaFile
+func (e ArtifactPublishedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), artifactpublishedschema
 }
 
 func NewArtifactPublishedEvent() (*ArtifactPublishedEvent, error) {
 	e := &ArtifactPublishedEvent{
 		Context: Context{
-			Type:    ArtifactPublishedEventV1,
+			Type:    ArtifactPublishedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: ArtifactPublishedSubject{

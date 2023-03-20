@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// EnvironmentDeleted event
-	EnvironmentDeletedEventV1    CDEventType = "dev.cdevents.environment.deleted.0.1.0"
-	environmentDeletedSchemaFile string      = "environmentdeleted"
+//go:embed spec/schemas/environmentdeleted.json
+var environmentdeletedschema string
+
+var (
+	// EnvironmentDeleted event v0.1.0
+	EnvironmentDeletedEventV1 CDEventType = CDEventType{
+		Subject:   "environment",
+		Predicate: "deleted",
+		Version:   "0.1.0",
+	}
 )
 
 type EnvironmentDeletedSubjectContent struct {
@@ -139,8 +147,9 @@ func (e *EnvironmentDeletedEvent) SetCustomData(contentType string, data interfa
 	return nil
 }
 
-func (e EnvironmentDeletedEvent) GetSchema() string {
-	return environmentDeletedSchemaFile
+func (e EnvironmentDeletedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), environmentdeletedschema
 }
 
 // Subject field setters
@@ -151,7 +160,7 @@ func (e *EnvironmentDeletedEvent) SetSubjectName(name string) {
 func NewEnvironmentDeletedEvent() (*EnvironmentDeletedEvent, error) {
 	e := &EnvironmentDeletedEvent{
 		Context: Context{
-			Type:    EnvironmentDeletedEventV1,
+			Type:    EnvironmentDeletedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: EnvironmentDeletedSubject{

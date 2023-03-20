@@ -22,10 +22,69 @@ import (
 	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
+	"regexp"
 	"time"
+
+	"golang.org/x/mod/semver"
 )
 
-const CDEventsSpecVersion = "0.1.0"
+const (
+	EventTypeRoot             = "dev.cdevents"
+	CDEventsSpecVersion       = "0.1.0"
+	CDEventsSchemaURLTemplate = "https://cdevents.dev/%s/schema/%s-%s-event"
+	CDEventsTypeRegex         = "^dev\\.cdevents\\.(?P<subject>[a-z]+)\\.(?P<predicate>[a-z]+)\\.(?P<version>.*)$"
+)
+
+var (
+	CDEventsTypeCRegex = regexp.MustCompile(CDEventsTypeRegex)
+	CDEventsTypes      = []CDEvent{
+		&PipelineRunQueuedEvent{},
+		&PipelineRunStartedEvent{},
+		&PipelineRunFinishedEvent{},
+		&TaskRunStartedEvent{},
+		&TaskRunFinishedEvent{},
+		&ChangeCreatedEvent{},
+		&ChangeUpdatedEvent{},
+		&ChangeReviewedEvent{},
+		&ChangeMergedEvent{},
+		&ChangeAbandonedEvent{},
+		&RepositoryCreatedEvent{},
+		&RepositoryModifiedEvent{},
+		&RepositoryDeletedEvent{},
+		&BranchCreatedEvent{},
+		&BranchDeletedEvent{},
+		&TestSuiteStartedEvent{},
+		&TestSuiteFinishedEvent{},
+		&TestCaseQueuedEvent{},
+		&TestCaseStartedEvent{},
+		&TestCaseFinishedEvent{},
+		&BuildQueuedEvent{},
+		&BuildStartedEvent{},
+		&BuildFinishedEvent{},
+		&ArtifactPackagedEvent{},
+		&ArtifactPublishedEvent{},
+		&EnvironmentCreatedEvent{},
+		&EnvironmentModifiedEvent{},
+		&EnvironmentDeletedEvent{},
+		&ServiceDeployedEvent{},
+		&ServiceUpgradedEvent{},
+		&ServiceRolledbackEvent{},
+		&ServiceRemovedEvent{},
+		&ServicePublishedEvent{},
+	}
+
+	// CDEventsByUnversionedTypes maps non-versioned event types with events
+	// set-pup at init time
+	CDEventsByUnversionedTypes map[string]CDEvent
+)
+
+func init() {
+	// Set up CDEventsByUnversionedTypes for convenience
+	CDEventsByUnversionedTypes = make(map[string]CDEvent)
+	for _, event := range CDEventsTypes {
+		CDEventsByUnversionedTypes[event.GetType().UnversionedString()] = event
+	}
+}
 
 type Context struct {
 	// Spec: https://cdevents.dev/docs/spec/#version
@@ -55,7 +114,7 @@ type Context struct {
 	// types should be prefixed with dev.cdevents.
 	// One occurrence may have multiple events associated, as long as they have
 	// different event types
-	Type CDEventType `json:"type" jsonschema:"required,minLength=1" validate:"event-type"`
+	Type string `json:"type" jsonschema:"required,minLength=1" validate:"event-type"`
 
 	// Spec: https://cdevents.dev/docs/spec/#timestamp
 	// Description: Description: defines the time of the occurrence. When the
@@ -99,10 +158,44 @@ type Subject interface {
 	GetSubjectType() SubjectType
 }
 
-type CDEventType string
+type CDEventType struct {
+	Subject   string
+	Predicate string
+
+	// Version is a semantic version in the form <major>.<minor>.<patch>
+	Version string
+}
 
 func (t CDEventType) String() string {
-	return string(t)
+	return EventTypeRoot + "." + t.Subject + "." + t.Predicate + "." + t.Version
+}
+
+func (t CDEventType) UnversionedString() string {
+	return EventTypeRoot + "." + t.Subject + "." + t.Predicate
+}
+
+func (t CDEventType) SchemaFile() string {
+	return t.Subject + t.Predicate
+}
+
+// Two CDEventTypes are compatible if the subject and predicates
+// are identical and they share the same major version
+func (t CDEventType) IsCompatible(other CDEventType) bool {
+	return t.Predicate == other.Predicate &&
+		t.Subject == other.Subject &&
+		semver.Major("v"+t.Version) == semver.Major("v"+other.Version)
+}
+
+func CDEventTypeFromString(cdeventType string) (*CDEventType, error) {
+	parts := CDEventsTypeCRegex.FindStringSubmatch(cdeventType)
+	if len(parts) != 4 {
+		return nil, fmt.Errorf("cannot parse event type %s", cdeventType)
+	}
+	return &CDEventType{
+		Subject:   parts[1],
+		Predicate: parts[2],
+		Version:   parts[3],
+	}, nil
 }
 
 type CDEventReader interface {
@@ -136,8 +229,8 @@ type CDEventReader interface {
 	// for direct access to the content fields
 	GetSubject() Subject
 
-	// The name of the schema file associated to the event type
-	GetSchema() string
+	// The URL and content of the schema file associated to the event type
+	GetSchema() (string, string)
 
 	// The custom data attached to the event
 	// Depends on GetCustomDataContentType()

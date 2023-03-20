@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// BuildFinished event
-	BuildFinishedEventV1    CDEventType = "dev.cdevents.build.finished.0.1.0"
-	buildFinishedSchemaFile string      = "buildfinished"
+//go:embed spec/schemas/buildfinished.json
+var buildfinishedschema string
+
+var (
+	// BuildFinished event v0.1.0
+	BuildFinishedEventV1 CDEventType = CDEventType{
+		Subject:   "build",
+		Predicate: "finished",
+		Version:   "0.1.0",
+	}
 )
 
 type BuildFinishedSubjectContent struct {
@@ -139,8 +147,9 @@ func (e *BuildFinishedEvent) SetCustomData(contentType string, data interface{})
 	return nil
 }
 
-func (e BuildFinishedEvent) GetSchema() string {
-	return buildFinishedSchemaFile
+func (e BuildFinishedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), buildfinishedschema
 }
 
 func (e *BuildFinishedEvent) SetSubjectArtifactId(artifactId string) {
@@ -150,7 +159,7 @@ func (e *BuildFinishedEvent) SetSubjectArtifactId(artifactId string) {
 func NewBuildFinishedEvent() (*BuildFinishedEvent, error) {
 	e := &BuildFinishedEvent{
 		Context: Context{
-			Type:    BuildFinishedEventV1,
+			Type:    BuildFinishedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: BuildFinishedSubject{

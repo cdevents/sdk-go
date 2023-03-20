@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// ArtifactPackaged event
-	ArtifactPackagedEventV1    CDEventType = "dev.cdevents.artifact.packaged.0.1.0"
-	artifactPackagedSchemaFile string      = "artifactpackaged"
+//go:embed spec/schemas/artifactpackaged.json
+var artifactpackagedschema string
+
+var (
+	// ArtifactPackaged event v0.1.0
+	ArtifactPackagedEventV1 CDEventType = CDEventType{
+		Subject:   "artifact",
+		Predicate: "packaged",
+		Version:   "0.1.0",
+	}
 )
 
 type ArtifactPackagedSubjectContent struct {
@@ -140,8 +148,10 @@ func (e *ArtifactPackagedEvent) SetCustomData(contentType string, data interface
 	return nil
 }
 
-func (e ArtifactPackagedEvent) GetSchema() string {
-	return artifactPackagedSchemaFile
+// GetSchema returns the URL and content of the schema
+func (e ArtifactPackagedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), artifactpackagedschema
 }
 
 // Set subject custom fields
@@ -153,7 +163,7 @@ func (e *ArtifactPackagedEvent) SetSubjectChange(change Reference) {
 func NewArtifactPackagedEvent() (*ArtifactPackagedEvent, error) {
 	e := &ArtifactPackagedEvent{
 		Context: Context{
-			Type:    ArtifactPackagedEventV1,
+			Type:    ArtifactPackagedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: ArtifactPackagedSubject{

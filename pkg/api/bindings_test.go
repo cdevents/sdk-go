@@ -22,13 +22,17 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"os"
 	"testing"
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
 	jsonschema "github.com/santhosh-tekuri/jsonschema/v5"
 )
+
+const testsFolder = "tests"
 
 type testData struct {
 	TestValues []map[string]string `json:"testValues"`
@@ -1258,8 +1262,6 @@ func TestAsCloudEventInvalid(t *testing.T) {
 
 func TestAsJsonString(t *testing.T) {
 
-	compiler := jsonschema.NewCompiler()
-
 	tests := []struct {
 		name       string
 		event      CDEvent
@@ -1412,9 +1414,10 @@ func TestAsJsonString(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			// First validate that the test JSON compiles against the schema
-			sch, err := compiler.Compile(fmt.Sprintf("../../spec/schemas/%s.json", tc.event.GetSchema()))
+			schema, url := tc.event.GetSchema()
+			sch, err := jsonschema.CompileString(schema, url)
 			if err != nil {
-				t.Fatalf("Cannot compile jsonschema %s: %v", tc.event.GetSchema(), err)
+				t.Fatalf("Cannot compile jsonschema %s: %v", url, err)
 			}
 			var v interface{}
 			if err := json.Unmarshal([]byte(tc.jsonString), &v); err != nil {
@@ -1471,12 +1474,13 @@ func TestInvalidEvent(t *testing.T) {
 
 	// invalid format of purl
 	eventInvalidPurl, _ := NewBuildFinishedEvent()
+	setContext(eventInvalidPurl)
 	eventInvalidPurl.SetSubjectArtifactId("not-a-valid-purl")
 
 	// invalid event type
 	eventInvalidType := &ServicePublishedEvent{
 		Context: Context{
-			Type:    CDEventType("not-a-valid-type"),
+			Type:    "not-a-valid-type",
 			Version: CDEventsSpecVersion,
 		},
 		Subject: ServicePublishedSubject{
@@ -1723,6 +1727,156 @@ func TestNewFromJsonString(t *testing.T) {
 			}
 			if d := cmp.Diff(expectedData, obtainedData); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+		})
+	}
+}
+
+func TestParseType(t *testing.T) {
+
+	tests := []struct {
+		name      string
+		eventType string
+		want      *CDEventType
+		wantError string
+	}{{
+		name:      "valid",
+		eventType: "dev.cdevents.artifact.packaged.0.1.2-draft",
+		want: &CDEventType{
+			Subject:   "artifact",
+			Predicate: "packaged",
+			Version:   "0.1.2-draft",
+		},
+		wantError: "",
+	}, {
+		name:      "invalid root",
+		eventType: "foo.bar.subject.predicate.0.1.2-draft",
+		want:      nil,
+		wantError: "cannot parse event type foo.bar.subject.predicate.0.1.2-draft",
+	}, {
+		name:      "invalid format",
+		eventType: "dev.cdevents.artifact_packaged_0.1.2-draft",
+		want:      nil,
+		wantError: "cannot parse event type dev.cdevents.artifact_packaged_0.1.2-draft",
+	}, {
+		name:      "unknown subject",
+		eventType: "dev.cdevents.subject.packaged.0.1.2-draft",
+		want:      nil,
+		wantError: "unknown event type dev.cdevents.subject.packaged",
+	}, {
+		name:      "unknown predicate",
+		eventType: "dev.cdevents.artifact.predicate.0.1.2-draft",
+		want:      nil,
+		wantError: "unknown event type dev.cdevents.artifact.predicate",
+	}, {
+		name:      "invalid version",
+		eventType: "dev.cdevents.artifact.packaged.0.1-draft",
+		want:      nil,
+		wantError: "invalid version format 0.1-draft",
+	}}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			obtained, err := ParseType(tc.eventType)
+			if err != nil {
+				if tc.wantError == "" {
+					t.Fatalf("didn't expected it to fail, but it did: %v", err)
+				} else {
+					if d := cmp.Diff(tc.wantError, err.Error()); d != "" {
+						t.Errorf("args: diff(-want,+got):\n%s", d)
+					}
+				}
+			}
+
+			// Check the subject
+			if d := cmp.Diff(tc.want, obtained); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+		})
+	}
+}
+
+func TestNewFromJsonBytes(t *testing.T) {
+
+	minorVersion, _ := NewArtifactPackagedEvent()
+	setContext(minorVersion)
+	minorVersion.SetSubjectChange(Reference{Id: testChangeId})
+	err := minorVersion.SetCustomData("application/json", testDataJsonUnmarshalled)
+	panicOnError(err)
+	minorType, err := ParseType(minorVersion.Context.Type)
+	panicOnError(err)
+	minorType.Version = "0.999.0"
+	minorVersion.Context.Type = minorType.String()
+
+	patchVersion, _ := NewArtifactPackagedEvent()
+	setContext(patchVersion)
+	patchVersion.SetSubjectChange(Reference{Id: testChangeId})
+	err = patchVersion.SetCustomData("application/json", testDataJsonUnmarshalled)
+	panicOnError(err)
+	patchType, err := ParseType(patchVersion.Context.Type)
+	panicOnError(err)
+	patchType.Version = "0.1.999"
+	patchVersion.Context.Type = patchType.String()
+
+	tests := []struct {
+		testFile    string
+		description string
+		wantError   string
+		wantEvent   CDEvent
+	}{{
+		testFile:    "future_event_major_version",
+		description: "A newer major version in the event is backward incompatible and cannot be parsed",
+		wantError:   "sdk event version 0.1.0 not compatible with 999.0.0",
+	}, {
+		testFile:    "future_event_minor_version",
+		description: "A newer minor version in the event is compatible and can be parsed, data is lost",
+		wantEvent:   minorVersion,
+	}, {
+		testFile:    "future_event_patch_version",
+		description: "A newer patch version in the event is compatible and can be parsed",
+		wantEvent:   patchVersion,
+	}, {
+		testFile:    "non_unmarshable",
+		description: "The event has a valid context but fails to unmarshal",
+		wantError:   `invalid character '@' after object key:value pair`,
+	}, {
+		testFile:    "unknown_type",
+		description: "The event has a valid structure but unknown type",
+		wantError:   "unknown event type dev.cdevents.artifact.gazumped",
+	}, {
+		testFile:    "unparsable_context",
+		description: "The context cannot be parsed, mandatory field is missing",
+		wantError:   `invalid character '&' after object key:value pair`,
+	}, {
+		testFile:    "unparsable_type",
+		description: "The context can be parsed, but the type is invalid",
+		wantError:   "cannot parse event type dev.cdevents.artifact_packaged_0.1.0",
+	}}
+	for _, tc := range tests {
+		t.Run(tc.testFile, func(t *testing.T) {
+			eventBytes, err := os.ReadFile(testsFolder + string(os.PathSeparator) + tc.testFile + ".json")
+			if err != nil {
+				t.Fatalf("didn't expected it to fail, but it did: %v", err)
+			}
+			obtained, err := NewFromJsonBytes(eventBytes)
+			if err != nil {
+				if tc.wantError == "" {
+					t.Fatalf("didn't expected it to fail, but it did: %v", err)
+				} else {
+					// Check the error is what is expected
+					if d := cmp.Diff(tc.wantError, err.Error()); d != "" {
+						t.Errorf("args: diff(-want,+got):\n%s", d)
+					}
+				}
+			}
+			if err == nil {
+				if tc.wantError != "" {
+					t.Fatalf("expected an error, but go none")
+				} else {
+					// Check the event is what is expected
+					if d := cmp.Diff(tc.wantEvent, obtained, cmpopts.IgnoreFields(Context{}, "Id", "Timestamp")); d != "" {
+						t.Errorf("args: diff(-want,+got):\n%s", d)
+					}
+				}
 			}
 		})
 	}

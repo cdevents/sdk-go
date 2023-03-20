@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// BranchCreated event
-	BranchCreatedEventV1    CDEventType = "dev.cdevents.branch.created.0.1.0"
-	branchCreatedSchemaFile string      = "branchcreated"
+//go:embed spec/schemas/branchcreated.json
+var branchcreatedschema string
+
+var (
+	// BranchCreated event v0.1.0
+	BranchCreatedEventV1 CDEventType = CDEventType{
+		Subject:   "branch",
+		Predicate: "created",
+		Version:   "0.1.0",
+	}
 )
 
 type BranchCreatedSubjectContent struct {
@@ -139,8 +147,9 @@ func (e *BranchCreatedEvent) SetCustomData(contentType string, data interface{})
 	return nil
 }
 
-func (e BranchCreatedEvent) GetSchema() string {
-	return branchCreatedSchemaFile
+func (e BranchCreatedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), branchcreatedschema
 }
 
 // Subject field setters
@@ -151,7 +160,7 @@ func (e *BranchCreatedEvent) SetSubjectRepository(repository Reference) {
 func NewBranchCreatedEvent() (*BranchCreatedEvent, error) {
 	e := &BranchCreatedEvent{
 		Context: Context{
-			Type:    BranchCreatedEventV1,
+			Type:    BranchCreatedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: BranchCreatedSubject{

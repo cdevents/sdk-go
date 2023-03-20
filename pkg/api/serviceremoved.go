@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// ServiceRemoved event
-	ServiceRemovedEventV1    CDEventType = "dev.cdevents.service.removed.0.1.0"
-	serviceRemovedSchemaFile string      = "serviceremoved"
+//go:embed spec/schemas/serviceremoved.json
+var serviceremovedschema string
+
+var (
+	// ServiceRemoved event v0.1.0
+	ServiceRemovedEventV1 CDEventType = CDEventType{
+		Subject:   "service",
+		Predicate: "removed",
+		Version:   "0.1.0",
+	}
 )
 
 type ServiceRemovedSubjectContent struct {
@@ -139,8 +147,9 @@ func (e *ServiceRemovedEvent) SetCustomData(contentType string, data interface{}
 	return nil
 }
 
-func (e ServiceRemovedEvent) GetSchema() string {
-	return serviceRemovedSchemaFile
+func (e ServiceRemovedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), serviceremovedschema
 }
 
 // Subject field setters
@@ -151,7 +160,7 @@ func (e *ServiceRemovedEvent) SetSubjectEnvironment(environment Reference) {
 func NewServiceRemovedEvent() (*ServiceRemovedEvent, error) {
 	e := &ServiceRemovedEvent{
 		Context: Context{
-			Type:    ServiceRemovedEventV1,
+			Type:    ServiceRemovedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: ServiceRemovedSubject{

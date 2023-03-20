@@ -19,8 +19,13 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
+
+//go:embed spec/schemas/pipelinerunfinished.json
+var pipelinerunfinishedschema string
 
 type PipelineRunOutcome string
 
@@ -29,9 +34,6 @@ func (t PipelineRunOutcome) String() string {
 }
 
 const (
-	// PipelineRunFinished event
-	PipelineRunFinishedEventV1 CDEventType = "dev.cdevents.pipelinerun.finished.0.1.0"
-
 	// PipelineRun successful
 	PipelineRunOutcomeSuccessful PipelineRunOutcome = "success"
 
@@ -40,8 +42,15 @@ const (
 
 	// PipelineRun errored
 	PipelineRunOutcomeErrored PipelineRunOutcome = "error"
+)
 
-	pipelineRunFinishedSchemaFile string = "pipelinerunfinished"
+var (
+	// PipelineRunFinishedEvent event v0.1.0
+	PipelineRunFinishedEventV1 CDEventType = CDEventType{
+		Subject:   "pipelinerun",
+		Predicate: "finished",
+		Version:   "0.1.0",
+	}
 )
 
 type PipelineRunFinishedSubjectContent struct {
@@ -182,14 +191,15 @@ func (e *PipelineRunFinishedEvent) SetSubjectErrors(errors string) {
 	e.Subject.Content.Errors = errors
 }
 
-func (e PipelineRunFinishedEvent) GetSchema() string {
-	return pipelineRunFinishedSchemaFile
+func (e PipelineRunFinishedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), pipelinerunfinishedschema
 }
 
 func NewPipelineRunFinishedEvent() (*PipelineRunFinishedEvent, error) {
 	e := &PipelineRunFinishedEvent{
 		Context: Context{
-			Type:    PipelineRunFinishedEventV1,
+			Type:    PipelineRunFinishedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: PipelineRunFinishedSubject{

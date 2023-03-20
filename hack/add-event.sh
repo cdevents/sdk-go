@@ -46,10 +46,16 @@ import (
 	"time"
 )
 
-const (
-	// ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL} event
-	${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}EventV1    CDEventType = "dev.cdevents.${SUBJECT_LOWER}.${PREDICATE_LOWER}.0.1.0"
-	${SUBJECT_LOWER_CAMEL}${PREDICATE_UPPER_CAMEL}SchemaFile string      = "${SUBJECT_LOWER}${PREDICATE_LOWER}"
+//go:embed spec/schemas/${SUBJECT_LOWER}${PREDICATE_LOWER}.json
+var ${SUBJECT_LOWER}${PREDICATE_LOWER}schema string
+
+var (
+	// ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL} event v0.1.0
+	${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}EventV1 CDEventType CDEventType = CDEventType{
+		Subject:   "${SUBJECT_LOWER}",
+		Predicate: "${PREDICATE_LOWER}",
+		Version:   "0.1.0",
+	}
 )
 
 type ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}SubjectContent struct{}
@@ -159,8 +165,9 @@ func (e *${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event) SetCustomData(cont
 	return nil
 }
 
-func (e ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event) GetSchema() string {
-	return ${SUBJECT_LOWER_CAMEL}${PREDICATE_UPPER_CAMEL}SchemaFile
+func (e ${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), schema${SUBJECT_LOWER}${PREDICATE_LOWER}schema
 }
 
 func New${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event() (*${SUBJECT_UPPER_CAMEL}${PREDICATE_UPPER_CAMEL}Event, error) {

@@ -362,3 +362,52 @@ func TestGetCustomDataRawXmlNotBytes(t *testing.T) {
 		t.Fatalf("expected error from broken data, got nil")
 	}
 }
+
+func TestCDEventTypeFromString(t *testing.T) {
+	tests := []struct {
+		name      string
+		eventType string
+		want      *CDEventType
+		wantError bool
+	}{{
+		name:      "parses",
+		eventType: "dev.cdevents.a.b.123.a-da#@#",
+		want: &CDEventType{
+			Subject:   "a",
+			Predicate: "b",
+			Version:   "123.a-da#@#",
+		},
+		wantError: false,
+	}, {
+		name:      "missing version",
+		eventType: "dev.cdevents.a.b",
+		want:      nil,
+		wantError: true,
+	}, {
+		name:      "wrong beginning",
+		eventType: "dev.wrong.a.b.version",
+		want:      nil,
+		wantError: true,
+	}, {
+		name:      "invalid character",
+		eventType: "dev.cdevents.a1.b2.version",
+		want:      nil,
+		wantError: true,
+	}}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got, err := CDEventTypeFromString(tc.eventType)
+			if tc.wantError && err == nil {
+				t.Fatalf("expected error but got none")
+			}
+			if !tc.wantError && err != nil {
+				t.Fatalf("did not expect error, but got %s", err)
+			}
+
+			if d := cmp.Diff(tc.want, got); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+		})
+	}
+}
