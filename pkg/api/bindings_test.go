@@ -1100,27 +1100,26 @@ func TestParseType(t *testing.T) {
 	}
 }
 
+func testEventWithVersion(eventVersion string, specVersion string) *ArtifactPackagedEvent {
+	event, _ := NewArtifactPackagedEvent()
+	setContext(event)
+	event.SetSubjectChange(Reference{Id: testChangeId})
+	err := event.SetCustomData("application/json", testDataJsonUnmarshalled)
+	panicOnError(err)
+	etype, err := ParseType(event.Context.Type)
+	panicOnError(err)
+	etype.Version = eventVersion
+	event.Context.Version = specVersion
+	event.Context.Type = etype.String()
+	return event
+}
+
 func TestNewFromJsonBytes(t *testing.T) {
 
-	minorVersion, _ := NewArtifactPackagedEvent()
-	setContext(minorVersion)
-	minorVersion.SetSubjectChange(Reference{Id: testChangeId})
-	err := minorVersion.SetCustomData("application/json", testDataJsonUnmarshalled)
-	panicOnError(err)
-	minorType, err := ParseType(minorVersion.Context.Type)
-	panicOnError(err)
-	minorType.Version = "0.999.0"
-	minorVersion.Context.Type = minorType.String()
-
-	patchVersion, _ := NewArtifactPackagedEvent()
-	setContext(patchVersion)
-	patchVersion.SetSubjectChange(Reference{Id: testChangeId})
-	err = patchVersion.SetCustomData("application/json", testDataJsonUnmarshalled)
-	panicOnError(err)
-	patchType, err := ParseType(patchVersion.Context.Type)
-	panicOnError(err)
-	patchType.Version = "0.1.999"
-	patchVersion.Context.Type = patchType.String()
+	minorVersion := testEventWithVersion("0.999.0", CDEventsSpecVersion)
+	patchVersion := testEventWithVersion("0.1.999", CDEventsSpecVersion)
+	pastPatchVersion := testEventWithVersion("0.1.0", CDEventsSpecVersion)
+	pastSpecVersion := testEventWithVersion("0.1.0", "0.1.0")
 
 	tests := []struct {
 		testFile    string
@@ -1139,6 +1138,14 @@ func TestNewFromJsonBytes(t *testing.T) {
 		testFile:    "future_event_patch_version",
 		description: "A newer patch version in the event is compatible and can be parsed",
 		wantEvent:   patchVersion,
+	}, {
+		testFile:    "past_event_patch_version",
+		description: "An older patch version in the event is compatible and can be parsed",
+		wantEvent:   pastPatchVersion,
+	}, {
+		testFile:    "past_spec_patch_version",
+		description: "An older patch version in the spec is compatible and can be parsed",
+		wantEvent:   pastSpecVersion,
 	}, {
 		testFile:    "non_unmarshable",
 		description: "The event has a valid context but fails to unmarshal",
