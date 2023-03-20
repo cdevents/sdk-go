@@ -105,653 +105,12 @@ var (
 	eventNonJsonCustomData          *ArtifactPackagedEvent
 	eventJsonCustomDataUnmarshalled *ArtifactPackagedEvent
 
-	pipelineRunQueuedEventJsonTemplate = `
-{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.pipelinerun.queued.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "pipelineRun",
-		"content": {
-			"pipelineName": "myPipeline",
-			"url": "https://www.example.com/mySubject123"
-		}
-	}
-}`
-
-	pipelineRunStartedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.pipelinerun.started.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "pipelineRun",
-		"content": {
-			"pipelineName": "myPipeline",
-			"url": "https://www.example.com/mySubject123"
-		}
-	}
-}`
-
-	pipelineRunFinishedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.pipelinerun.finished.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "pipelineRun",
-		"content": {
-			"pipelineName": "myPipeline",
-			"url": "https://www.example.com/mySubject123",
-			"outcome": "failure",
-			"errors": "Something went wrong\nWith some more details"
-		}
-	}
-}`
-
-	taskRunStartedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.taskrun.started.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "taskRun",
-		"content": {
-			"taskName": "myTask",
-			"url": "https://www.example.com/mySubject123",
-			"pipelineRun": {
-				"id": "mySubject123"
-			}
-		}
-	}
-}`
-
-	taskRunFinishedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.taskrun.finished.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "taskRun",
-		"content": {
-			"taskName": "myTask",
-			"url": "https://www.example.com/mySubject123",
-			"pipelineRun": {
-				"id": "mySubject123"
-			},
-			"outcome": "failure",
-			"errors": "Something went wrong\nWith some more details"
-		}
-	}
-}`
-
-	changeCreatedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.change.created.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "change",
-		"content": {
-			"repository": {
-				"id": "TestRepo/TestOrg",
-				"source": "https://example.org"
-			}
-		}
-	}
-}`
-
-	changeUpdatedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.change.updated.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "change",
-		"content": {
-			"repository": {
-				"id": "TestRepo/TestOrg",
-				"source": "https://example.org"
-			}
-		}
-	}
-}`
-
-	changeReviewedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.change.reviewed.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "change",
-		"content": {
-			"repository": {
-				"id": "TestRepo/TestOrg",
-				"source": "https://example.org"
-			}
-		}
-	}
-}`
-
-	changeMergedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.change.merged.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "change",
-		"content": {
-			"repository": {
-				"id": "TestRepo/TestOrg",
-				"source": "https://example.org"
-			}
-		}
-	}
-}`
-
-	changeAbandonedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.change.abandoned.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "change",
-		"content": {
-			"repository": {
-				"id": "TestRepo/TestOrg",
-				"source": "https://example.org"
-			}
-		}
-	}
-}`
-
-	repositoryCreatedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.repository.created.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "repository",
-		"content": {
-			"name": "TestRepo",
-			"owner": "TestOrg",
-			"url": "https://example.org/TestOrg/TestRepo",
-			"viewUrl": "https://example.org/view/TestOrg/TestRepo"
-		}
-	}
-}`
-
-	repositoryModifiedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.repository.modified.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "repository",
-		"content": {
-			"name": "TestRepo",
-			"owner": "TestOrg",
-			"url": "https://example.org/TestOrg/TestRepo",
-			"viewUrl": "https://example.org/view/TestOrg/TestRepo"
-		}
-	}
-}`
-
-	repositoryDeletedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.repository.deleted.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "repository",
-		"content": {
-			"name": "TestRepo",
-			"owner": "TestOrg",
-			"url": "https://example.org/TestOrg/TestRepo",
-			"viewUrl": "https://example.org/view/TestOrg/TestRepo"
-		}
-	}
-}`
-
-	branchCreatedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.branch.created.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "branch",
-		"content": {
-			"repository": {
-				"id": "TestRepo/TestOrg",
-				"source": "https://example.org"
-			}
-		}
-	}
-}`
-
-	branchDeletedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.branch.deleted.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "branch",
-		"content": {
-			"repository": {
-				"id": "TestRepo/TestOrg",
-				"source": "https://example.org"
-			}
-		}
-	}
-}`
-
-	testCaseQueuedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.testcase.queued.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "testCase",
-		"content": {}
-	}
-}`
-
-	testCaseStartedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.testcase.started.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "testCase",
-		"content": {}
-	}
-}`
-
-	testCaseFinishedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.testcase.finished.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "testCase",
-		"content": {}
-	}
-}`
-
-	testSuiteStartedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.testsuite.started.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "testSuite",
-		"content": {}
-	}
-}`
-
-	testSuiteFinishedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.testsuite.finished.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "testSuite",
-		"content": {}
-	}
-}`
-
-	buildQueuedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.build.queued.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "build",
-		"content": {}
-	}
-}`
-
-	buildStartedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.build.started.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "build",
-		"content": {}
-	}
-}`
-
-	buildFinishedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.build.finished.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "build",
-		"content": {
-			"artifactId": "pkg:oci/myapp@sha256%%3A0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
-		}
-	}
-}`
-
-	artifactPackagedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.artifact.packaged.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "artifact",
-		"content": {
-			"change": {
-				"id": "myChange123"
-			}
-		}
-	}
-}`
-
-	artifactPublishedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.artifact.published.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "artifact",
-		"content": {}
-	}
-}`
-
-	environmentCreatedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.environment.created.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "environment",
-		"content": {
-			"name": "testEnv",
-			"url": "https://example.org/testEnv"
-		}
-	}
-}`
-
-	environmentModifiedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.environment.modified.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "environment",
-		"content": {
-			"name": "testEnv",
-			"url": "https://example.org/testEnv"
-		}
-	}
-}`
-
-	environmentDeletedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.environment.deleted.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "environment",
-		"content": {
-			"name": "testEnv"
-		}
-	}
-}`
-
-	serviceDeployedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.service.deployed.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "service",
-		"content": {
-			"environment": {
-				"id": "test123"
-			},
-			"artifactId": "pkg:oci/myapp@sha256%%3A0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
-		}
-	}
-}`
-
-	serviceUpgradedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.service.upgraded.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "service",
-		"content": {
-			"environment": {
-				"id": "test123"
-			},
-			"artifactId": "pkg:oci/myapp@sha256%%3A0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
-		}
-	}
-}`
-
-	serviceRolledBackEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.service.rolledback.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "service",
-		"content": {
-			"environment": {
-				"id": "test123"
-			},
-			"artifactId": "pkg:oci/myapp@sha256%%3A0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
-		}
-	}
-}`
-
-	serviceRemovedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.service.removed.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "service",
-		"content": {
-			"environment": {
-				"id": "test123"
-			}
-		}
-	}
-}`
-
-	servicePublishedEventJsonTemplate = `{
-	"context": {
-		"version": "0.1.0",
-		"id": "%s",
-		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.service.published.0.1.0",
-		"timestamp": "%s"
-	},
-	"subject": {
-		"id": "mySubject123",
-		"source": "TestAsCloudEvent",
-		"type": "service",
-		"content": {
-			"environment": {
-				"id": "test123"
-			}
-		}
-	}
-}`
-
 	eventJsonCustomDataTemplate = `{
 	"context": {
-		"version": "0.1.0",
+		"version": "0.1.1",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.artifact.packaged.0.1.0",
+		"type": "dev.cdevents.artifact.packaged.0.1.1",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -775,10 +134,10 @@ var (
 
 	eventImplicitJsonCustomDataTemplate = `{
 	"context": {
-		"version": "0.1.0",
+		"version": "0.1.1",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.artifact.packaged.0.1.0",
+		"type": "dev.cdevents.artifact.packaged.0.1.1",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -802,10 +161,10 @@ var (
 
 	eventNonJsonCustomDataTemplate = `{
 	"context": {
-		"version": "0.1.0",
+		"version": "0.1.1",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.artifact.packaged.0.1.0",
+		"type": "dev.cdevents.artifact.packaged.0.1.1",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -822,39 +181,7 @@ var (
 	"customDataContentType": "application/xml"
 }`
 
-	pipelineRunQueuedEventJson      string
-	pipelineRunStartedEventJson     string
-	pipelineRunFinishedEventJson    string
-	taskRunStartedEventJson         string
-	taskRunFinishedEventJson        string
-	changeCreateEventJson           string
-	changeUpdatedEventJson          string
-	changeReviewedEventJson         string
-	changeMergedEventJson           string
-	changeAbandonedEventJson        string
-	repositoryCreatedEventJson      string
-	repositoryModifiedEventJson     string
-	repositoryDeletedEventJson      string
-	branchCreatedEventJson          string
-	branchDeletedEventJson          string
-	testCaseQueuedEventJson         string
-	testCaseStartedEventJson        string
-	testCaseFinishedEventJson       string
-	testSuiteStartedEventJson       string
-	testSuiteFinishedEventJson      string
-	buildQueuedEventJson            string
-	buildStartedEventJson           string
-	buildFinishedEventJson          string
-	artifactPackagedEventJson       string
-	artifactPublishedEventJson      string
-	environmentCreatedEventJson     string
-	environmentModifiedEventJson    string
-	environmentDeletedEventJson     string
-	serviceDeployedEventJson        string
-	serviceUpgradedEventJson        string
-	serviceRolledBackEventJson      string
-	serviceRemovedEventJson         string
-	servicePublishedEventJson       string
+	testEvents                      map[string][]byte
 	eventJsonCustomDataJson         string
 	eventImplicitJsonCustomDataJson string
 	eventNonJsonCustomDataJson      string
@@ -863,13 +190,13 @@ var (
 func init() {
 
 	// Get the time once
-	t := time.Now().Round(0)
+	t, _ := time.Parse(time.RFC3339Nano, "2023-03-20T14:27:05.315384Z")
 	timeNow = func() time.Time {
 		return t
 	}
 
-	// Get the UUID once
-	u, _ := uuid.NewRandom()
+	// Set the UUID to a fixed one
+	u, _ := uuid.Parse("271069a8-fc18-44f1-b38f-9d70a1695819")
 	uuidNewRandom = func() (uuid.UUID, error) {
 		return u, nil
 	}
@@ -1050,39 +377,17 @@ func init() {
 
 	newUUID, _ := uuidNewRandom()
 	newTime := timeNow().Format(time.RFC3339Nano)
-	pipelineRunQueuedEventJson = fmt.Sprintf(pipelineRunQueuedEventJsonTemplate, newUUID, newTime)
-	pipelineRunStartedEventJson = fmt.Sprintf(pipelineRunStartedEventJsonTemplate, newUUID, newTime)
-	pipelineRunFinishedEventJson = fmt.Sprintf(pipelineRunFinishedEventJsonTemplate, newUUID, newTime)
-	taskRunStartedEventJson = fmt.Sprintf(taskRunStartedEventJsonTemplate, newUUID, newTime)
-	taskRunFinishedEventJson = fmt.Sprintf(taskRunFinishedEventJsonTemplate, newUUID, newTime)
-	changeCreateEventJson = fmt.Sprintf(changeCreatedEventJsonTemplate, newUUID, newTime)
-	changeUpdatedEventJson = fmt.Sprintf(changeUpdatedEventJsonTemplate, newUUID, newTime)
-	changeReviewedEventJson = fmt.Sprintf(changeReviewedEventJsonTemplate, newUUID, newTime)
-	changeMergedEventJson = fmt.Sprintf(changeMergedEventJsonTemplate, newUUID, newTime)
-	changeAbandonedEventJson = fmt.Sprintf(changeAbandonedEventJsonTemplate, newUUID, newTime)
-	repositoryCreatedEventJson = fmt.Sprintf(repositoryCreatedEventJsonTemplate, newUUID, newTime)
-	repositoryModifiedEventJson = fmt.Sprintf(repositoryModifiedEventJsonTemplate, newUUID, newTime)
-	repositoryDeletedEventJson = fmt.Sprintf(repositoryDeletedEventJsonTemplate, newUUID, newTime)
-	branchCreatedEventJson = fmt.Sprintf(branchCreatedEventJsonTemplate, newUUID, newTime)
-	branchDeletedEventJson = fmt.Sprintf(branchDeletedEventJsonTemplate, newUUID, newTime)
-	testCaseQueuedEventJson = fmt.Sprintf(testCaseQueuedEventJsonTemplate, newUUID, newTime)
-	testCaseStartedEventJson = fmt.Sprintf(testCaseStartedEventJsonTemplate, newUUID, newTime)
-	testCaseFinishedEventJson = fmt.Sprintf(testCaseFinishedEventJsonTemplate, newUUID, newTime)
-	testSuiteStartedEventJson = fmt.Sprintf(testSuiteStartedEventJsonTemplate, newUUID, newTime)
-	testSuiteFinishedEventJson = fmt.Sprintf(testSuiteFinishedEventJsonTemplate, newUUID, newTime)
-	buildQueuedEventJson = fmt.Sprintf(buildQueuedEventJsonTemplate, newUUID, newTime)
-	buildStartedEventJson = fmt.Sprintf(buildStartedEventJsonTemplate, newUUID, newTime)
-	buildFinishedEventJson = fmt.Sprintf(buildFinishedEventJsonTemplate, newUUID, newTime)
-	artifactPackagedEventJson = fmt.Sprintf(artifactPackagedEventJsonTemplate, newUUID, newTime)
-	artifactPublishedEventJson = fmt.Sprintf(artifactPublishedEventJsonTemplate, newUUID, newTime)
-	environmentCreatedEventJson = fmt.Sprintf(environmentCreatedEventJsonTemplate, newUUID, newTime)
-	environmentModifiedEventJson = fmt.Sprintf(environmentModifiedEventJsonTemplate, newUUID, newTime)
-	environmentDeletedEventJson = fmt.Sprintf(environmentDeletedEventJsonTemplate, newUUID, newTime)
-	serviceDeployedEventJson = fmt.Sprintf(serviceDeployedEventJsonTemplate, newUUID, newTime)
-	serviceUpgradedEventJson = fmt.Sprintf(serviceUpgradedEventJsonTemplate, newUUID, newTime)
-	serviceRolledBackEventJson = fmt.Sprintf(serviceRolledBackEventJsonTemplate, newUUID, newTime)
-	serviceRemovedEventJson = fmt.Sprintf(serviceRemovedEventJsonTemplate, newUUID, newTime)
-	servicePublishedEventJson = fmt.Sprintf(servicePublishedEventJsonTemplate, newUUID, newTime)
+
+	testEvents = make(map[string][]byte)
+
+	// Load base event test data
+	for _, event := range CDEventsTypes {
+		short := event.GetType().Short()
+		testEvents[short], err = os.ReadFile(testsFolder + string(os.PathSeparator) + short + ".json")
+		panicOnError(err)
+	}
+
+	// Load extra data
 	eventJsonCustomDataJson = fmt.Sprintf(eventJsonCustomDataTemplate, newUUID, newTime)
 	eventImplicitJsonCustomDataJson = fmt.Sprintf(eventImplicitJsonCustomDataTemplate, newUUID, newTime)
 	eventNonJsonCustomDataJson = fmt.Sprintf(eventNonJsonCustomDataTemplate, newUUID, newTime)
@@ -1269,135 +574,135 @@ func TestAsJsonString(t *testing.T) {
 	}{{
 		name:       "pipelinerun queued",
 		event:      pipelineRunQueuedEvent,
-		jsonString: pipelineRunQueuedEventJson,
+		jsonString: string(testEvents[pipelineRunQueuedEvent.GetType().Short()]),
 	}, {
 		name:       "pipelinerun started",
 		event:      pipelineRunStartedEvent,
-		jsonString: pipelineRunStartedEventJson,
+		jsonString: string(testEvents[pipelineRunStartedEvent.GetType().Short()]),
 	}, {
 		name:       "pipelinerun finished",
 		event:      pipelineRunFinishedEvent,
-		jsonString: pipelineRunFinishedEventJson,
+		jsonString: string(testEvents[pipelineRunFinishedEvent.GetType().Short()]),
 	}, {
 		name:       "taskrun started",
 		event:      taskRunStartedEvent,
-		jsonString: taskRunStartedEventJson,
+		jsonString: string(testEvents[taskRunStartedEvent.GetType().Short()]),
 	}, {
 		name:       "taskrun finished",
 		event:      taskRunFinishedEvent,
-		jsonString: taskRunFinishedEventJson,
+		jsonString: string(testEvents[taskRunFinishedEvent.GetType().Short()]),
 	}, {
 		name:       "change created",
 		event:      changeCreatedEvent,
-		jsonString: changeCreateEventJson,
+		jsonString: string(testEvents[changeCreatedEvent.GetType().Short()]),
 	}, {
 		name:       "change updated",
 		event:      changeUpdatedEvent,
-		jsonString: changeUpdatedEventJson,
+		jsonString: string(testEvents[changeUpdatedEvent.GetType().Short()]),
 	}, {
 		name:       "change reviewed",
 		event:      changeReviewedEvent,
-		jsonString: changeReviewedEventJson,
+		jsonString: string(testEvents[changeReviewedEvent.GetType().Short()]),
 	}, {
 		name:       "change merged",
 		event:      changeMergedEvent,
-		jsonString: changeMergedEventJson,
+		jsonString: string(testEvents[changeMergedEvent.GetType().Short()]),
 	}, {
 		name:       "change abandoned",
 		event:      changeAbandonedEvent,
-		jsonString: changeAbandonedEventJson,
+		jsonString: string(testEvents[changeAbandonedEvent.GetType().Short()]),
 	}, {
 		name:       "repository created",
 		event:      repositoryCreatedEvent,
-		jsonString: repositoryCreatedEventJson,
+		jsonString: string(testEvents[repositoryCreatedEvent.GetType().Short()]),
 	}, {
 		name:       "repository modified",
 		event:      repositoryModifiedEvent,
-		jsonString: repositoryModifiedEventJson,
+		jsonString: string(testEvents[repositoryModifiedEvent.GetType().Short()]),
 	}, {
 		name:       "repository deleted",
 		event:      repositoryDeletedEvent,
-		jsonString: repositoryDeletedEventJson,
+		jsonString: string(testEvents[repositoryDeletedEvent.GetType().Short()]),
 	}, {
 		name:       "branch created",
 		event:      branchCreatedEvent,
-		jsonString: branchCreatedEventJson,
+		jsonString: string(testEvents[branchCreatedEvent.GetType().Short()]),
 	}, {
 		name:       "branch deleted",
 		event:      branchDeletedEvent,
-		jsonString: branchDeletedEventJson,
+		jsonString: string(testEvents[branchDeletedEvent.GetType().Short()]),
 	}, {
 		name:       "testcase queued",
 		event:      testCaseQueuedEvent,
-		jsonString: testCaseQueuedEventJson,
+		jsonString: string(testEvents[testCaseQueuedEvent.GetType().Short()]),
 	}, {
 		name:       "testcase started",
 		event:      testCaseStartedEvent,
-		jsonString: testCaseStartedEventJson,
+		jsonString: string(testEvents[testCaseStartedEvent.GetType().Short()]),
 	}, {
 		name:       "testcase finished",
 		event:      testCaseFinishedEvent,
-		jsonString: testCaseFinishedEventJson,
+		jsonString: string(testEvents[testCaseFinishedEvent.GetType().Short()]),
 	}, {
 		name:       "testsuite started",
 		event:      testSuiteStartedEvent,
-		jsonString: testSuiteStartedEventJson,
+		jsonString: string(testEvents[testSuiteStartedEvent.GetType().Short()]),
 	}, {
 		name:       "testsuite finished",
 		event:      testSuiteFinishedEvent,
-		jsonString: testSuiteFinishedEventJson,
+		jsonString: string(testEvents[testSuiteFinishedEvent.GetType().Short()]),
 	}, {
 		name:       "build queued",
 		event:      buildQueuedEvent,
-		jsonString: buildQueuedEventJson,
+		jsonString: string(testEvents[buildQueuedEvent.GetType().Short()]),
 	}, {
 		name:       "build started",
 		event:      buildStartedEvent,
-		jsonString: buildStartedEventJson,
+		jsonString: string(testEvents[buildStartedEvent.GetType().Short()]),
 	}, {
 		name:       "build finished",
 		event:      buildFinishedEvent,
-		jsonString: buildFinishedEventJson,
+		jsonString: string(testEvents[buildFinishedEvent.GetType().Short()]),
 	}, {
 		name:       "artifact packaged",
 		event:      artifactPackagedEvent,
-		jsonString: artifactPackagedEventJson,
+		jsonString: string(testEvents[artifactPackagedEvent.GetType().Short()]),
 	}, {
 		name:       "artifact published",
 		event:      artifactPublishedEvent,
-		jsonString: artifactPublishedEventJson,
+		jsonString: string(testEvents[artifactPublishedEvent.GetType().Short()]),
 	}, {
 		name:       "environment created",
 		event:      environmentCreatedEvent,
-		jsonString: environmentCreatedEventJson,
+		jsonString: string(testEvents[environmentCreatedEvent.GetType().Short()]),
 	}, {
 		name:       "environment modified",
 		event:      environmentModifiedEvent,
-		jsonString: environmentModifiedEventJson,
+		jsonString: string(testEvents[environmentModifiedEvent.GetType().Short()]),
 	}, {
 		name:       "environment deleted",
 		event:      environmentDeletedEvent,
-		jsonString: environmentDeletedEventJson,
+		jsonString: string(testEvents[environmentDeletedEvent.GetType().Short()]),
 	}, {
 		name:       "service deployed",
 		event:      serviceDeployedEvent,
-		jsonString: serviceDeployedEventJson,
+		jsonString: string(testEvents[serviceDeployedEvent.GetType().Short()]),
 	}, {
 		name:       "service upgraded",
 		event:      serviceUpgradedEvent,
-		jsonString: serviceUpgradedEventJson,
+		jsonString: string(testEvents[serviceUpgradedEvent.GetType().Short()]),
 	}, {
 		name:       "service rolledback",
 		event:      serviceRolledBackEvent,
-		jsonString: serviceRolledBackEventJson,
+		jsonString: string(testEvents[serviceRolledBackEvent.GetType().Short()]),
 	}, {
 		name:       "service removed",
 		event:      serviceRemovedEvent,
-		jsonString: serviceRemovedEventJson,
+		jsonString: string(testEvents[serviceRemovedEvent.GetType().Short()]),
 	}, {
 		name:       "service published",
 		event:      servicePublishedEvent,
-		jsonString: servicePublishedEventJson,
+		jsonString: string(testEvents[servicePublishedEvent.GetType().Short()]),
 	}, {
 		name:       "json custom data",
 		event:      eventJsonCustomData,
@@ -1548,135 +853,135 @@ func TestNewFromJsonString(t *testing.T) {
 	}{{
 		name:       "pipelinerun queued",
 		event:      pipelineRunQueuedEvent,
-		jsonString: pipelineRunQueuedEventJson,
+		jsonString: string(testEvents[pipelineRunQueuedEvent.GetType().Short()]),
 	}, {
 		name:       "pipelinerun started",
 		event:      pipelineRunStartedEvent,
-		jsonString: pipelineRunStartedEventJson,
+		jsonString: string(testEvents[pipelineRunStartedEvent.GetType().Short()]),
 	}, {
 		name:       "pipelinerun finished",
 		event:      pipelineRunFinishedEvent,
-		jsonString: pipelineRunFinishedEventJson,
+		jsonString: string(testEvents[pipelineRunFinishedEvent.GetType().Short()]),
 	}, {
 		name:       "taskrun started",
 		event:      taskRunStartedEvent,
-		jsonString: taskRunStartedEventJson,
+		jsonString: string(testEvents[taskRunStartedEvent.GetType().Short()]),
 	}, {
 		name:       "taskrun finished",
 		event:      taskRunFinishedEvent,
-		jsonString: taskRunFinishedEventJson,
+		jsonString: string(testEvents[taskRunFinishedEvent.GetType().Short()]),
 	}, {
 		name:       "change created",
 		event:      changeCreatedEvent,
-		jsonString: changeCreateEventJson,
+		jsonString: string(testEvents[changeCreatedEvent.GetType().Short()]),
 	}, {
 		name:       "change updated",
 		event:      changeUpdatedEvent,
-		jsonString: changeUpdatedEventJson,
+		jsonString: string(testEvents[changeUpdatedEvent.GetType().Short()]),
 	}, {
 		name:       "change reviewed",
 		event:      changeReviewedEvent,
-		jsonString: changeReviewedEventJson,
+		jsonString: string(testEvents[changeReviewedEvent.GetType().Short()]),
 	}, {
 		name:       "change merged",
 		event:      changeMergedEvent,
-		jsonString: changeMergedEventJson,
+		jsonString: string(testEvents[changeMergedEvent.GetType().Short()]),
 	}, {
 		name:       "change abandoned",
 		event:      changeAbandonedEvent,
-		jsonString: changeAbandonedEventJson,
+		jsonString: string(testEvents[changeAbandonedEvent.GetType().Short()]),
 	}, {
 		name:       "repository created",
 		event:      repositoryCreatedEvent,
-		jsonString: repositoryCreatedEventJson,
+		jsonString: string(testEvents[repositoryCreatedEvent.GetType().Short()]),
 	}, {
 		name:       "repository modified",
 		event:      repositoryModifiedEvent,
-		jsonString: repositoryModifiedEventJson,
+		jsonString: string(testEvents[repositoryModifiedEvent.GetType().Short()]),
 	}, {
 		name:       "repository deleted",
 		event:      repositoryDeletedEvent,
-		jsonString: repositoryDeletedEventJson,
+		jsonString: string(testEvents[repositoryDeletedEvent.GetType().Short()]),
 	}, {
 		name:       "branch created",
 		event:      branchCreatedEvent,
-		jsonString: branchCreatedEventJson,
+		jsonString: string(testEvents[branchCreatedEvent.GetType().Short()]),
 	}, {
 		name:       "branch deleted",
 		event:      branchDeletedEvent,
-		jsonString: branchDeletedEventJson,
+		jsonString: string(testEvents[branchDeletedEvent.GetType().Short()]),
 	}, {
 		name:       "testcase queued",
 		event:      testCaseQueuedEvent,
-		jsonString: testCaseQueuedEventJson,
+		jsonString: string(testEvents[testCaseQueuedEvent.GetType().Short()]),
 	}, {
 		name:       "testcase started",
 		event:      testCaseStartedEvent,
-		jsonString: testCaseStartedEventJson,
+		jsonString: string(testEvents[testCaseStartedEvent.GetType().Short()]),
 	}, {
 		name:       "testcase finished",
 		event:      testCaseFinishedEvent,
-		jsonString: testCaseFinishedEventJson,
+		jsonString: string(testEvents[testCaseFinishedEvent.GetType().Short()]),
 	}, {
 		name:       "testsuite started",
 		event:      testSuiteStartedEvent,
-		jsonString: testSuiteStartedEventJson,
+		jsonString: string(testEvents[testSuiteStartedEvent.GetType().Short()]),
 	}, {
 		name:       "testsuite finished",
 		event:      testSuiteFinishedEvent,
-		jsonString: testSuiteFinishedEventJson,
+		jsonString: string(testEvents[testSuiteFinishedEvent.GetType().Short()]),
 	}, {
 		name:       "build queued",
 		event:      buildQueuedEvent,
-		jsonString: buildQueuedEventJson,
+		jsonString: string(testEvents[buildQueuedEvent.GetType().Short()]),
 	}, {
 		name:       "build started",
 		event:      buildStartedEvent,
-		jsonString: buildStartedEventJson,
+		jsonString: string(testEvents[buildStartedEvent.GetType().Short()]),
 	}, {
 		name:       "build finished",
 		event:      buildFinishedEvent,
-		jsonString: buildFinishedEventJson,
+		jsonString: string(testEvents[buildFinishedEvent.GetType().Short()]),
 	}, {
 		name:       "artifact packaged",
 		event:      artifactPackagedEvent,
-		jsonString: artifactPackagedEventJson,
+		jsonString: string(testEvents[artifactPackagedEvent.GetType().Short()]),
 	}, {
 		name:       "artifact published",
 		event:      artifactPublishedEvent,
-		jsonString: artifactPublishedEventJson,
+		jsonString: string(testEvents[artifactPublishedEvent.GetType().Short()]),
 	}, {
 		name:       "environment created",
 		event:      environmentCreatedEvent,
-		jsonString: environmentCreatedEventJson,
+		jsonString: string(testEvents[environmentCreatedEvent.GetType().Short()]),
 	}, {
 		name:       "environment modified",
 		event:      environmentModifiedEvent,
-		jsonString: environmentModifiedEventJson,
+		jsonString: string(testEvents[environmentModifiedEvent.GetType().Short()]),
 	}, {
 		name:       "environment deleted",
 		event:      environmentDeletedEvent,
-		jsonString: environmentDeletedEventJson,
+		jsonString: string(testEvents[environmentDeletedEvent.GetType().Short()]),
 	}, {
 		name:       "service deployed",
 		event:      serviceDeployedEvent,
-		jsonString: serviceDeployedEventJson,
+		jsonString: string(testEvents[serviceDeployedEvent.GetType().Short()]),
 	}, {
 		name:       "service upgraded",
 		event:      serviceUpgradedEvent,
-		jsonString: serviceUpgradedEventJson,
+		jsonString: string(testEvents[serviceUpgradedEvent.GetType().Short()]),
 	}, {
 		name:       "service rolledback",
 		event:      serviceRolledBackEvent,
-		jsonString: serviceRolledBackEventJson,
+		jsonString: string(testEvents[serviceRolledBackEvent.GetType().Short()]),
 	}, {
 		name:       "service removed",
 		event:      serviceRemovedEvent,
-		jsonString: serviceRemovedEventJson,
+		jsonString: string(testEvents[serviceRemovedEvent.GetType().Short()]),
 	}, {
 		name:       "service published",
 		event:      servicePublishedEvent,
-		jsonString: servicePublishedEventJson,
+		jsonString: string(testEvents[servicePublishedEvent.GetType().Short()]),
 	}, {
 		name:       "json custom data",
 		event:      eventJsonCustomDataUnmarshalled,
@@ -1825,7 +1130,7 @@ func TestNewFromJsonBytes(t *testing.T) {
 	}{{
 		testFile:    "future_event_major_version",
 		description: "A newer major version in the event is backward incompatible and cannot be parsed",
-		wantError:   "sdk event version 0.1.0 not compatible with 999.0.0",
+		wantError:   "sdk event version 0.1.1 not compatible with 999.0.0",
 	}, {
 		testFile:    "future_event_minor_version",
 		description: "A newer minor version in the event is compatible and can be parsed, data is lost",
