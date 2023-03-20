@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// ServiceRolledback event
-	ServiceRolledbackEventV1    CDEventType = "dev.cdevents.service.rolledback.0.1.0"
-	serviceRolledbackSchemaFile string      = "servicerolledback"
+//go:embed spec/schemas/servicerolledback.json
+var servicerolledbackschema string
+
+var (
+	// ServiceRolledback event v0.1.0
+	ServiceRolledbackEventV1 CDEventType = CDEventType{
+		Subject:   "service",
+		Predicate: "rolledback",
+		Version:   "0.1.0",
+	}
 )
 
 type ServiceRolledbackSubjectContent struct {
@@ -142,8 +150,9 @@ func (e *ServiceRolledbackEvent) SetCustomData(contentType string, data interfac
 	return nil
 }
 
-func (e ServiceRolledbackEvent) GetSchema() string {
-	return serviceRolledbackSchemaFile
+func (e ServiceRolledbackEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), servicerolledbackschema
 }
 
 // Subject field setters
@@ -158,7 +167,7 @@ func (e *ServiceRolledbackEvent) SetSubjectArtifactId(artifactId string) {
 func NewServiceRolledbackEvent() (*ServiceRolledbackEvent, error) {
 	e := &ServiceRolledbackEvent{
 		Context: Context{
-			Type:    ServiceRolledbackEventV1,
+			Type:    ServiceRolledbackEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: ServiceRolledbackSubject{

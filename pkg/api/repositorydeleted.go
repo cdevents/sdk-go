@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// RepositoryDeleted event
-	RepositoryDeletedEventV1    CDEventType = "dev.cdevents.repository.deleted.0.1.0"
-	repositoryDeletedSchemaFile string      = "repositorydeleted"
+//go:embed spec/schemas/repositorydeleted.json
+var repositorydeletedschema string
+
+var (
+	// RepositoryDeleted event v0.1.0
+	RepositoryDeletedEventV1 CDEventType = CDEventType{
+		Subject:   "repository",
+		Predicate: "deleted",
+		Version:   "0.1.0",
+	}
 )
 
 type RepositoryDeletedSubjectContent struct {
@@ -148,8 +156,9 @@ func (e *RepositoryDeletedEvent) SetCustomData(contentType string, data interfac
 	return nil
 }
 
-func (e RepositoryDeletedEvent) GetSchema() string {
-	return repositoryDeletedSchemaFile
+func (e RepositoryDeletedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), repositorydeletedschema
 }
 
 // Subject field setters
@@ -172,7 +181,7 @@ func (e *RepositoryDeletedEvent) SetSubjectViewUrl(viewUrl string) {
 func NewRepositoryDeletedEvent() (*RepositoryDeletedEvent, error) {
 	e := &RepositoryDeletedEvent{
 		Context: Context{
-			Type:    RepositoryDeletedEventV1,
+			Type:    RepositoryDeletedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: RepositoryDeletedSubject{

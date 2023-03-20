@@ -1,0 +1,25 @@
+{
+	"context": {
+		"version": "0.1.0",
+		"id": "122CB7D5-84A7-4CCE-AD3F-D93ED17D7D65",
+		"source": "TestAsCloudEvent",
+		"type": "dev.cdevents.artifact.packaged.999.0.0",
+		"timestamp": "2023-03-20T17:31:00Z"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "TestAsCloudEvent",
+		"contentRenamed": {
+			"change": {
+				"id": "myChange123"
+			}
+		}
+	},
+	"customData": {
+		"testValues": [
+			{"k1": "v1"},
+			{"k2": "v2"}
+		]
+	},
+	"customDataContentType": "application/json"
+}

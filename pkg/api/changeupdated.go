@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// ChangeUpdated event
-	ChangeUpdatedEventV1    CDEventType = "dev.cdevents.change.updated.0.1.0"
-	changeUpdatedSchemaFile string      = "changeupdated"
+//go:embed spec/schemas/changeupdated.json
+var changeupdatedschema string
+
+var (
+	// ChangeUpdated event v0.1.0
+	ChangeUpdatedEventV1 CDEventType = CDEventType{
+		Subject:   "change",
+		Predicate: "updated",
+		Version:   "0.1.0",
+	}
 )
 
 type ChangeUpdatedSubjectContent struct {
@@ -139,8 +147,9 @@ func (e *ChangeUpdatedEvent) SetCustomData(contentType string, data interface{})
 	return nil
 }
 
-func (e ChangeUpdatedEvent) GetSchema() string {
-	return changeUpdatedSchemaFile
+func (e ChangeUpdatedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), changeupdatedschema
 }
 
 // Subject field setters
@@ -151,7 +160,7 @@ func (e *ChangeUpdatedEvent) SetSubjectRepository(repository Reference) {
 func NewChangeUpdatedEvent() (*ChangeUpdatedEvent, error) {
 	e := &ChangeUpdatedEvent{
 		Context: Context{
-			Type:    ChangeUpdatedEventV1,
+			Type:    ChangeUpdatedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: ChangeUpdatedSubject{

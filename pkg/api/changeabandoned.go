@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// ChangeAbandoned event
-	ChangeAbandonedEventV1    CDEventType = "dev.cdevents.change.abandoned.0.1.0"
-	changeAbandonedSchemaFile string      = "changeabandoned"
+//go:embed spec/schemas/changeabandoned.json
+var changeabandonedschema string
+
+var (
+	// ChangeAbandoned event v0.1.0
+	ChangeAbandonedEventV1 CDEventType = CDEventType{
+		Subject:   "change",
+		Predicate: "abandoned",
+		Version:   "0.1.0",
+	}
 )
 
 type ChangeAbandonedSubjectContent struct {
@@ -139,8 +147,9 @@ func (e *ChangeAbandonedEvent) SetCustomData(contentType string, data interface{
 	return nil
 }
 
-func (e ChangeAbandonedEvent) GetSchema() string {
-	return changeAbandonedSchemaFile
+func (e ChangeAbandonedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), changeabandonedschema
 }
 
 // Subject field setters
@@ -151,7 +160,7 @@ func (e *ChangeAbandonedEvent) SetSubjectRepository(repository Reference) {
 func NewChangeAbandonedEvent() (*ChangeAbandonedEvent, error) {
 	e := &ChangeAbandonedEvent{
 		Context: Context{
-			Type:    ChangeAbandonedEventV1,
+			Type:    ChangeAbandonedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: ChangeAbandonedSubject{

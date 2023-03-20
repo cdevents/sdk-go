@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// BuildQueued event
-	BuildQueuedEventV1    CDEventType = "dev.cdevents.build.queued.0.1.0"
-	buildQueuedSchemaFile string      = "buildqueued"
+//go:embed spec/schemas/buildqueued.json
+var buildqueuedschema string
+
+var (
+	// BuildQueued event v0.1.0
+	BuildQueuedEventV1 CDEventType = CDEventType{
+		Subject:   "build",
+		Predicate: "queued",
+		Version:   "0.1.0",
+	}
 )
 
 type BuildQueuedSubjectContent struct{}
@@ -135,14 +143,15 @@ func (e *BuildQueuedEvent) SetCustomData(contentType string, data interface{}) e
 	return nil
 }
 
-func (e BuildQueuedEvent) GetSchema() string {
-	return buildQueuedSchemaFile
+func (e BuildQueuedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), buildqueuedschema
 }
 
 func NewBuildQueuedEvent() (*BuildQueuedEvent, error) {
 	e := &BuildQueuedEvent{
 		Context: Context{
-			Type:    BuildQueuedEventV1,
+			Type:    BuildQueuedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: BuildQueuedSubject{

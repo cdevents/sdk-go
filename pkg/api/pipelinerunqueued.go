@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// PipelineRun events
-	PipelineRunQueuedEventV1    CDEventType = "dev.cdevents.pipelinerun.queued.0.1.0"
-	pipelineRunQueuedSchemaFile string      = "pipelinerunqueued"
+//go:embed spec/schemas/pipelinerunqueued.json
+var pipelinerunqueuedschema string
+
+var (
+	// PipelineRunQueued event v0.1.0
+	PipelineRunQueuedEventV1 CDEventType = CDEventType{
+		Subject:   "pipelinerun",
+		Predicate: "queued",
+		Version:   "0.1.0",
+	}
 )
 
 type PipelineRunQueuedSubjectContent struct {
@@ -152,14 +160,15 @@ func (e *PipelineRunQueuedEvent) SetSubjectUrl(url string) {
 	e.Subject.Content.Url = url
 }
 
-func (e PipelineRunQueuedEvent) GetSchema() string {
-	return pipelineRunQueuedSchemaFile
+func (e PipelineRunQueuedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), pipelinerunqueuedschema
 }
 
 func NewPipelineRunQueuedEvent() (*PipelineRunQueuedEvent, error) {
 	e := &PipelineRunQueuedEvent{
 		Context: Context{
-			Type:    PipelineRunQueuedEventV1,
+			Type:    PipelineRunQueuedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: PipelineRunQueuedSubject{

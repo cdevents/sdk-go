@@ -19,6 +19,8 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
@@ -29,9 +31,6 @@ func (t TaskRunOutcome) String() string {
 }
 
 const (
-	// TaskRunFinished event
-	TaskRunFinishedEventV1 CDEventType = "dev.cdevents.taskrun.finished.0.1.0"
-
 	TaskRunOutcomeSuccessful TaskRunOutcome = "success"
 
 	// PipelineRun failed
@@ -39,8 +38,18 @@ const (
 
 	// PipelineRun errored
 	TaskRunOutcomeErrored TaskRunOutcome = "error"
+)
 
-	taskRunFinishedSchemaFile string = "taskrunfinished"
+//go:embed spec/schemas/taskrunfinished.json
+var taskrunfinishedschema string
+
+var (
+	// TaskRunFinishedEvent event v0.1.0
+	TaskRunFinishedEventV1 CDEventType = CDEventType{
+		Subject:   "taskrun",
+		Predicate: "finished",
+		Version:   "0.1.0",
+	}
 )
 
 type TaskRunFinishedSubjectContent struct {
@@ -188,14 +197,15 @@ func (e *TaskRunFinishedEvent) SetSubjectErrors(errors string) {
 	e.Subject.Content.Errors = errors
 }
 
-func (e TaskRunFinishedEvent) GetSchema() string {
-	return taskRunFinishedSchemaFile
+func (e TaskRunFinishedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), taskrunfinishedschema
 }
 
 func NewTaskRunFinishedEvent() (*TaskRunFinishedEvent, error) {
 	e := &TaskRunFinishedEvent{
 		Context: Context{
-			Type:    TaskRunFinishedEventV1,
+			Type:    TaskRunFinishedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: TaskRunFinishedSubject{

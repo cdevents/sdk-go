@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// RepositoryCreated event
-	RepositoryCreatedEventV1    CDEventType = "dev.cdevents.repository.created.0.1.0"
-	repositoryCreatedSchemaFile string      = "repositorycreated"
+//go:embed spec/schemas/repositorycreated.json
+var repositorycreatedschema string
+
+var (
+	// RepositoryCreated event v0.1.0
+	RepositoryCreatedEventV1 CDEventType = CDEventType{
+		Subject:   "repository",
+		Predicate: "created",
+		Version:   "0.1.0",
+	}
 )
 
 type RepositoryCreatedSubjectContent struct {
@@ -148,8 +156,9 @@ func (e *RepositoryCreatedEvent) SetCustomData(contentType string, data interfac
 	return nil
 }
 
-func (e RepositoryCreatedEvent) GetSchema() string {
-	return repositoryCreatedSchemaFile
+func (e RepositoryCreatedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), repositorycreatedschema
 }
 
 // Subject field setters
@@ -172,7 +181,7 @@ func (e *RepositoryCreatedEvent) SetSubjectViewUrl(viewUrl string) {
 func NewRepositoryCreatedEvent() (*RepositoryCreatedEvent, error) {
 	e := &RepositoryCreatedEvent{
 		Context: Context{
-			Type:    RepositoryCreatedEventV1,
+			Type:    RepositoryCreatedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: RepositoryCreatedSubject{

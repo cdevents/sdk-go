@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// ChangeMerged event
-	ChangeMergedEventV1    CDEventType = "dev.cdevents.change.merged.0.1.0"
-	changeMergedSchemaFile string      = "changemerged"
+//go:embed spec/schemas/changemerged.json
+var changemergedschema string
+
+var (
+	// ChangeMerged event v0.1.0
+	ChangeMergedEventV1 CDEventType = CDEventType{
+		Subject:   "change",
+		Predicate: "merged",
+		Version:   "0.1.0",
+	}
 )
 
 type ChangeMergedSubjectContent struct {
@@ -139,8 +147,9 @@ func (e *ChangeMergedEvent) SetCustomData(contentType string, data interface{}) 
 	return nil
 }
 
-func (e ChangeMergedEvent) GetSchema() string {
-	return changeMergedSchemaFile
+func (e ChangeMergedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), changemergedschema
 }
 
 // Subject field setters
@@ -151,7 +160,7 @@ func (e *ChangeMergedEvent) SetSubjectRepository(repository Reference) {
 func NewChangeMergedEvent() (*ChangeMergedEvent, error) {
 	e := &ChangeMergedEvent{
 		Context: Context{
-			Type:    ChangeMergedEventV1,
+			Type:    ChangeMergedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: ChangeMergedSubject{

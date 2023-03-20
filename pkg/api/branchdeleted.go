@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// BranchDeleted event
-	BranchDeletedEventV1    CDEventType = "dev.cdevents.branch.deleted.0.1.0"
-	branchDeletedSchemaFile string      = "branchdeleted"
+//go:embed spec/schemas/branchdeleted.json
+var branchdeletedschema string
+
+var (
+	// BranchDeleted event v0.1.0
+	BranchDeletedEventV1 CDEventType = CDEventType{
+		Subject:   "branch",
+		Predicate: "deleted",
+		Version:   "0.1.0",
+	}
 )
 
 type BranchDeletedSubjectContent struct {
@@ -139,8 +147,9 @@ func (e *BranchDeletedEvent) SetCustomData(contentType string, data interface{})
 	return nil
 }
 
-func (e BranchDeletedEvent) GetSchema() string {
-	return branchDeletedSchemaFile
+func (e BranchDeletedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), branchdeletedschema
 }
 
 // Subject field setters
@@ -151,7 +160,7 @@ func (e *BranchDeletedEvent) SetSubjectRepository(repository Reference) {
 func NewBranchDeletedEvent() (*BranchDeletedEvent, error) {
 	e := &BranchDeletedEvent{
 		Context: Context{
-			Type:    BranchDeletedEventV1,
+			Type:    BranchDeletedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: BranchDeletedSubject{

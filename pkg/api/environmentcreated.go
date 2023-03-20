@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// EnvironmentCreated event
-	EnvironmentCreatedEventV1    CDEventType = "dev.cdevents.environment.created.0.1.0"
-	environmentCreatedSchemaFile string      = "environmentcreated"
+//go:embed spec/schemas/environmentcreated.json
+var environmentcreatedschema string
+
+var (
+	// EnvironmentCreated event v0.1.0
+	EnvironmentCreatedEventV1 CDEventType = CDEventType{
+		Subject:   "environment",
+		Predicate: "created",
+		Version:   "0.1.0",
+	}
 )
 
 type EnvironmentCreatedSubjectContent struct {
@@ -142,8 +150,9 @@ func (e *EnvironmentCreatedEvent) SetCustomData(contentType string, data interfa
 	return nil
 }
 
-func (e EnvironmentCreatedEvent) GetSchema() string {
-	return environmentCreatedSchemaFile
+func (e EnvironmentCreatedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), environmentcreatedschema
 }
 
 // Subject field setters
@@ -158,7 +167,7 @@ func (e *EnvironmentCreatedEvent) SetSubjectUrl(url string) {
 func NewEnvironmentCreatedEvent() (*EnvironmentCreatedEvent, error) {
 	e := &EnvironmentCreatedEvent{
 		Context: Context{
-			Type:    EnvironmentCreatedEventV1,
+			Type:    EnvironmentCreatedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: EnvironmentCreatedSubject{

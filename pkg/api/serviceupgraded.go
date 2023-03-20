@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// ServiceUpgraded event
-	ServiceUpgradedEventV1    CDEventType = "dev.cdevents.service.upgraded.0.1.0"
-	serviceUpgradedSchemaFile string      = "serviceupgraded"
+//go:embed spec/schemas/serviceupgraded.json
+var serviceupgradedschema string
+
+var (
+	// ServiceUpgraded event v0.1.0
+	ServiceUpgradedEventV1 CDEventType = CDEventType{
+		Subject:   "service",
+		Predicate: "upgraded",
+		Version:   "0.1.0",
+	}
 )
 
 type ServiceUpgradedSubjectContent struct {
@@ -142,8 +150,9 @@ func (e *ServiceUpgradedEvent) SetCustomData(contentType string, data interface{
 	return nil
 }
 
-func (e ServiceUpgradedEvent) GetSchema() string {
-	return serviceUpgradedSchemaFile
+func (e ServiceUpgradedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), serviceupgradedschema
 }
 
 // Subject field setters
@@ -158,7 +167,7 @@ func (e *ServiceUpgradedEvent) SetSubjectArtifactId(artifactId string) {
 func NewServiceUpgradedEvent() (*ServiceUpgradedEvent, error) {
 	e := &ServiceUpgradedEvent{
 		Context: Context{
-			Type:    ServiceUpgradedEventV1,
+			Type:    ServiceUpgradedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: ServiceUpgradedSubject{

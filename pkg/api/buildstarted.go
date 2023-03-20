@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// BuildStarted event
-	BuildStartedEventV1    CDEventType = "dev.cdevents.build.started.0.1.0"
-	buildStartedSchemaFile string      = "buildstarted"
+//go:embed spec/schemas/buildstarted.json
+var buildstartedschema string
+
+var (
+	// BuildStarted event v0.1.0
+	BuildStartedEventV1 CDEventType = CDEventType{
+		Subject:   "build",
+		Predicate: "started",
+		Version:   "0.1.0",
+	}
 )
 
 type BuildStartedSubjectContent struct{}
@@ -135,14 +143,15 @@ func (e *BuildStartedEvent) SetCustomData(contentType string, data interface{}) 
 	return nil
 }
 
-func (e BuildStartedEvent) GetSchema() string {
-	return buildStartedSchemaFile
+func (e BuildStartedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), buildstartedschema
 }
 
 func NewBuildStartedEvent() (*BuildStartedEvent, error) {
 	e := &BuildStartedEvent{
 		Context: Context{
-			Type:    BuildStartedEventV1,
+			Type:    BuildStartedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: BuildStartedSubject{

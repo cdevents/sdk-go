@@ -25,85 +25,17 @@ import (
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	"github.com/go-playground/validator/v10"
-	schemaproducer "github.com/invopop/jsonschema"
 	purl "github.com/package-url/packageurl-go"
 	jsonschema "github.com/santhosh-tekuri/jsonschema/v5"
+	"golang.org/x/mod/semver"
 )
 
 var (
-
-	// All event types
-	allEvents = []CDEvent{
-		&PipelineRunQueuedEvent{},
-		&PipelineRunStartedEvent{},
-		&PipelineRunFinishedEvent{},
-		&TaskRunStartedEvent{},
-		&TaskRunFinishedEvent{},
-		&ChangeCreatedEvent{},
-		&ChangeUpdatedEvent{},
-		&ChangeReviewedEvent{},
-		&ChangeMergedEvent{},
-		&ChangeAbandonedEvent{},
-		&RepositoryCreatedEvent{},
-		&RepositoryModifiedEvent{},
-		&RepositoryDeletedEvent{},
-		&BranchCreatedEvent{},
-		&BranchDeletedEvent{},
-		&TestSuiteStartedEvent{},
-		&TestSuiteFinishedEvent{},
-		&TestCaseQueuedEvent{},
-		&TestCaseStartedEvent{},
-		&TestCaseFinishedEvent{},
-		&BuildQueuedEvent{},
-		&BuildStartedEvent{},
-		&BuildFinishedEvent{},
-		&ArtifactPackagedEvent{},
-		&ArtifactPublishedEvent{},
-		&EnvironmentCreatedEvent{},
-		&EnvironmentModifiedEvent{},
-		&EnvironmentDeletedEvent{},
-		&ServiceDeployedEvent{},
-		&ServiceUpgradedEvent{},
-		&ServiceRolledbackEvent{},
-		&ServiceRemovedEvent{},
-		&ServicePublishedEvent{},
-	}
-
-	// Map schema names to schema strings
-	allEventSchemas map[string]string
-
-	// Map CDEventType to empty event objects
-	cdeventsByTypes map[CDEventType]CDEvent
-
 	// Validation helper as singleton
 	validate *validator.Validate
 )
 
 func init() {
-
-	// Init the schema map
-	allEventSchemas = make(map[string]string)
-	cdeventsByTypes = make(map[CDEventType]CDEvent)
-
-	// Setup a reflector
-	id := schemaproducer.EmptyID
-	id = id.Add(fmt.Sprintf("https://cdevents.dev/%s/schema", CDEventsSpecVersion))
-	reflector := schemaproducer.Reflector{
-		BaseSchemaID:   id,
-		DoNotReference: true,
-	}
-
-	for _, eventType := range allEvents {
-		// Setup schema strings
-		s := reflector.Reflect(eventType)
-		data, err := json.MarshalIndent(s, "", "  ")
-		panicOnError(err)
-		allEventSchemas[eventType.GetSchema()] = string(data)
-
-		// Set type to receiver map
-		cdeventsByTypes[eventType.GetType()] = eventType
-	}
-
 	// Register custom validators
 	validate = validator.New()
 	err := validate.RegisterValidation("event-type", ValidateEventType)
@@ -124,12 +56,18 @@ func panicOnError(err error) {
 // const CDEventsContentType = "application/cdevents+json"
 // but it's not yet in the spec
 
-// ParseType returns a CDEventType is eventType is a valid type
-func ParseType(eventType string) (CDEventType, error) {
-	t := CDEventType(eventType)
-	_, ok := cdeventsByTypes[t]
+// ParseType returns a CDEventType if eventType is a valid type
+func ParseType(eventType string) (*CDEventType, error) {
+	t, err := CDEventTypeFromString(eventType)
+	if err != nil {
+		return nil, err
+	}
+	_, ok := CDEventsByUnversionedTypes[t.UnversionedString()]
 	if !ok {
-		return "", fmt.Errorf("unknown event type %s", eventType)
+		return nil, fmt.Errorf("unknown event type %s", t.UnversionedString())
+	}
+	if !semver.IsValid("v" + t.Version) {
+		return nil, fmt.Errorf("invalid version format %s", t.Version)
 	}
 	return t, nil
 }
@@ -181,10 +119,10 @@ func AsJsonString(event CDEventReader) (string, error) {
 
 // Validate checks the CDEvent against the JSON schema and validate constraints
 func Validate(event CDEventReader) error {
-	schemaName := event.GetSchema()
-	sch, err := jsonschema.CompileString(fmt.Sprintf("%s.json", schemaName), allEventSchemas[schemaName])
+	url, schema := event.GetSchema()
+	sch, err := jsonschema.CompileString(url, schema)
 	if err != nil {
-		return fmt.Errorf("cannot compile jsonschema %s, %s", schemaName, err)
+		return fmt.Errorf("cannot compile jsonschema %s, %s", url, err)
 	}
 	var v interface{}
 	jsonString, err := AsJsonString(event)
@@ -221,9 +159,22 @@ func NewFromJsonBytes(event []byte) (CDEvent, error) {
 	if err != nil {
 		return nil, err
 	}
-	receiver, ok := cdeventsByTypes[CDEventType(eventAux.Context.Type)]
+	eventType, err := ParseType(eventAux.Context.Type)
+	if err != nil {
+		return nil, err
+	}
+	receiver, ok := CDEventsByUnversionedTypes[eventType.UnversionedString()]
 	if !ok {
+		// This cannot really happen as ParseType checks if the type is known to the SDK
 		return nil, fmt.Errorf("unknown event type %s", eventAux.Context.Type)
+	}
+	// Check if the receiver is compatible. It must have the same subject and predicate
+	// and share the same major version.
+	// If the minor version is different and the message received as a version that is
+	// greater than the SDK one, some fields may be lost, as newer versions may add new
+	// fields to the event specification.
+	if !eventType.IsCompatible(receiver.GetType()) {
+		return nil, fmt.Errorf("sdk event version %s not compatible with %s", receiver.GetType().Version, eventType.Version)
 	}
 	err = json.Unmarshal(event, receiver)
 	if err != nil {

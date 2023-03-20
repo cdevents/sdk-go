@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// ServiceDeployed event
-	ServiceDeployedEventV1    CDEventType = "dev.cdevents.service.deployed.0.1.0"
-	serviceDeployedSchemaFile string      = "servicedeployed"
+//go:embed spec/schemas/servicedeployed.json
+var servicedeployedschema string
+
+var (
+	// ServiceDeployed event v0.1.0
+	ServiceDeployedEventV1 CDEventType = CDEventType{
+		Subject:   "service",
+		Predicate: "deployed",
+		Version:   "0.1.0",
+	}
 )
 
 type ServiceDeployedSubjectContent struct {
@@ -142,8 +150,9 @@ func (e *ServiceDeployedEvent) SetCustomData(contentType string, data interface{
 	return nil
 }
 
-func (e ServiceDeployedEvent) GetSchema() string {
-	return serviceDeployedSchemaFile
+func (e ServiceDeployedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), servicedeployedschema
 }
 
 // Subject field setters
@@ -158,7 +167,7 @@ func (e *ServiceDeployedEvent) SetSubjectArtifactId(artifactId string) {
 func NewServiceDeployedEvent() (*ServiceDeployedEvent, error) {
 	e := &ServiceDeployedEvent{
 		Context: Context{
-			Type:    ServiceDeployedEventV1,
+			Type:    ServiceDeployedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: ServiceDeployedSubject{

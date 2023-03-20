@@ -19,13 +19,21 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	_ "embed"
+	"fmt"
 	"time"
 )
 
-const (
-	// PipelineRunStarted event
-	PipelineRunStartedEventV1    CDEventType = "dev.cdevents.pipelinerun.started.0.1.0"
-	pipelineRunStartedSchemaFile string      = "pipelinerunstarted"
+//go:embed spec/schemas/pipelinerunstarted.json
+var pipelinerunstartedschema string
+
+var (
+	// PipelineRunStarted event v0.1.0
+	PipelineRunStartedEventV1 CDEventType = CDEventType{
+		Subject:   "pipelinerun",
+		Predicate: "started",
+		Version:   "0.1.0",
+	}
 )
 
 type PipelineRunStartedSubjectContent struct {
@@ -152,14 +160,15 @@ func (e *PipelineRunStartedEvent) SetSubjectUrl(url string) {
 	e.Subject.Content.Url = url
 }
 
-func (e PipelineRunStartedEvent) GetSchema() string {
-	return pipelineRunStartedSchemaFile
+func (e PipelineRunStartedEvent) GetSchema() (string, string) {
+	eType := e.GetType()
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), pipelinerunstartedschema
 }
 
 func NewPipelineRunStartedEvent() (*PipelineRunStartedEvent, error) {
 	e := &PipelineRunStartedEvent{
 		Context: Context{
-			Type:    PipelineRunStartedEventV1,
+			Type:    PipelineRunStartedEventV1.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: PipelineRunStartedSubject{
