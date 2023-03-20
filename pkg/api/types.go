@@ -30,7 +30,7 @@ import (
 
 const (
 	EventTypeRoot             = "dev.cdevents"
-	CDEventsSpecVersion       = "0.1.0"
+	CDEventsSpecVersion       = "0.1.1"
 	CDEventsSchemaURLTemplate = "https://cdevents.dev/%s/schema/%s-%s-event"
 	CDEventsTypeRegex         = "^dev\\.cdevents\\.(?P<subject>[a-z]+)\\.(?P<predicate>[a-z]+)\\.(?P<version>.*)$"
 )
@@ -92,7 +92,7 @@ type Context struct {
 	// uses. This enables the interpretation of the context. Compliant event
 	// producers MUST use a value of draft when referring to this version of the
 	// specification.
-	Version string `json:"version" jsonschema:"required,enum=0.1.0,default=0.1.0"`
+	Version string `json:"version" jsonschema:"required"`
 
 	// Spec: https://cdevents.dev/docs/spec/#id
 	// Description: Identifier for an event. Subsequent delivery attempts of the
@@ -174,8 +174,8 @@ func (t CDEventType) UnversionedString() string {
 	return EventTypeRoot + "." + t.Subject + "." + t.Predicate
 }
 
-func (t CDEventType) SchemaFile() string {
-	return t.Subject + t.Predicate
+func (t CDEventType) Short() string {
+	return t.Subject + "_" + t.Predicate
 }
 
 // Two CDEventTypes are compatible if the subject and predicates
