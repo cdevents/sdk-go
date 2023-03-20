@@ -1,6 +1,6 @@
 {
   "context": {
-    "version": "0.1.1",
+    "version": "0.1.2",
     "id": "122CB7D5-84A7-4CCE-AD3F-D93ED17D7D65",
     "source": "TestAsCloudEvent",
     "type": "dev.cdevents.artifact.packaged.0.999.0",

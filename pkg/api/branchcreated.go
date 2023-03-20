@@ -28,11 +28,11 @@ import (
 var branchcreatedschema string
 
 var (
-	// BranchCreated event v0.1.0
+	// BranchCreated event v0.1.1
 	BranchCreatedEventV1 CDEventType = CDEventType{
 		Subject:   "branch",
 		Predicate: "created",
-		Version:   "0.1.0",
+		Version:   "0.1.1",
 	}
 )
 

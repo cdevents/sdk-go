@@ -28,11 +28,11 @@ import (
 var changemergedschema string
 
 var (
-	// ChangeMerged event v0.1.0
+	// ChangeMerged event v0.1.1
 	ChangeMergedEventV1 CDEventType = CDEventType{
 		Subject:   "change",
 		Predicate: "merged",
-		Version:   "0.1.0",
+		Version:   "0.1.1",
 	}
 )
 
