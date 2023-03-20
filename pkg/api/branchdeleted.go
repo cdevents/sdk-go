@@ -28,11 +28,11 @@ import (
 var branchdeletedschema string
 
 var (
-	// BranchDeleted event v0.1.0
+	// BranchDeleted event v0.1.1
 	BranchDeletedEventV1 CDEventType = CDEventType{
 		Subject:   "branch",
 		Predicate: "deleted",
-		Version:   "0.1.0",
+		Version:   "0.1.1",
 	}
 )
 

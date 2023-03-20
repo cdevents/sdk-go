@@ -1,6 +1,6 @@
 {
   "context": {
-    "version": "0.1.1",
+    "version": "0.1.2",
     "id": "271069a8-fc18-44f1-b38f-9d70a1695819",
     "source": "TestAsCloudEvent",
     "type": "dev.cdevents.testsuite.started.0.1.0",

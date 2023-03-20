@@ -28,11 +28,11 @@ import (
 var changecreatedschema string
 
 var (
-	// ChangeCreated event v0.1.0
+	// ChangeCreated event v0.1.1
 	ChangeCreatedEventV1 CDEventType = CDEventType{
 		Subject:   "change",
 		Predicate: "created",
-		Version:   "0.1.0",
+		Version:   "0.1.1",
 	}
 )
 
