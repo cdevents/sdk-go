@@ -107,10 +107,10 @@ var (
 
 	eventJsonCustomDataTemplate = `{
 	"context": {
-		"version": "0.1.1",
+		"version": "0.1.2",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.artifact.packaged.0.1.1",
+		"type": "dev.cdevents.artifact.packaged.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -134,10 +134,10 @@ var (
 
 	eventImplicitJsonCustomDataTemplate = `{
 	"context": {
-		"version": "0.1.1",
+		"version": "0.1.2",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.artifact.packaged.0.1.1",
+		"type": "dev.cdevents.artifact.packaged.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -161,10 +161,10 @@ var (
 
 	eventNonJsonCustomDataTemplate = `{
 	"context": {
-		"version": "0.1.1",
+		"version": "0.1.2",
 		"id": "%s",
 		"source": "TestAsCloudEvent",
-		"type": "dev.cdevents.artifact.packaged.0.1.1",
+		"type": "dev.cdevents.artifact.packaged.0.1.0",
 		"timestamp": "%s"
 	},
 	"subject": {
@@ -1130,7 +1130,7 @@ func TestNewFromJsonBytes(t *testing.T) {
 	}{{
 		testFile:    "future_event_major_version",
 		description: "A newer major version in the event is backward incompatible and cannot be parsed",
-		wantError:   "sdk event version 0.1.1 not compatible with 999.0.0",
+		wantError:   "sdk event version 0.1.0 not compatible with 999.0.0",
 	}, {
 		testFile:    "future_event_minor_version",
 		description: "A newer minor version in the event is compatible and can be parsed, data is lost",
