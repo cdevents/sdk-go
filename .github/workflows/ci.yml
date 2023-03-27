@@ -29,6 +29,8 @@ jobs:
       uses: golangci/golangci-lint-action@v3
       with:
         version: v1.52
+    - name: Check generated code
+      run: make generate
 
   test:
     runs-on: ubuntu-latest
