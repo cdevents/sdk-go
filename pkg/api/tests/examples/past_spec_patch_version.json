@@ -1,0 +1,32 @@
+{
+  "context": {
+    "version": "0.1.0",
+    "id": "271069a8-fc18-44f1-b38f-9d70a1695819",
+    "source": "/event/source/123",
+    "type": "dev.cdevents.foosubject.barpredicate.1.2.3",
+    "timestamp": "2023-03-20T14:27:05.315384Z"
+  },
+  "subject": {
+    "id": "mySubject123",
+    "source": "/event/source/123",
+    "type": "fooSubject",
+    "content": {
+      "plainField": "testValue",
+      "artifactId": "pkg:oci/myapp@sha256%3A0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427",
+      "referenceField": {
+        "id": "myChange123"
+      }
+    }
+  },
+  "customData": {
+    "testValues": [
+      {
+        "k1": "v1"
+      },
+      {
+        "k2": "v2"
+      }
+    ]
+  },
+  "customDataContentType": "application/json"
+}

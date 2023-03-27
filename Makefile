@@ -61,7 +61,10 @@ get-fmt-deps: ## Install test dependencies
 lint: ## Lint the code
 	./hack/gofmt.sh
 	./hack/linter.sh
+
+.PHONY: generate # Regenerate code
+generate:
 	./hack/generate.sh
 
 .PHONY: all
-all: fmt test lint
+all: fmt test lint generate

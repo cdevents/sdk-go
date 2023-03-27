@@ -78,7 +78,7 @@ func TestGetCustomDataAsNonJson(t *testing.T) {
 	receiver := &testType{}
 	expectedError := "cannot unmarshal content-type application/xml"
 
-	err := getCustomDataAs(eventWithNonJsonCustomData, receiver)
+	err := GetCustomDataAs(eventWithNonJsonCustomData, receiver)
 	if err == nil {
 		t.Fatalf("expected error, got nil")
 	}
@@ -112,7 +112,7 @@ func TestGetCustomDataAsJson(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			err := getCustomDataAs(tc.event, receiver)
+			err := GetCustomDataAs(tc.event, receiver)
 			if err != nil {
 				t.Fatalf("did not expect an error, got %v", err)
 			}
@@ -148,7 +148,7 @@ func TestGetCustomDataAsJsonInvalidReceiver(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			err := getCustomDataAs(tc.event, receiver)
+			err := GetCustomDataAs(tc.event, receiver)
 			if err != nil {
 				t.Fatalf("unmarshal failed: %v", err)
 			}

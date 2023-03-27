@@ -30,61 +30,18 @@ import (
 
 const (
 	EventTypeRoot             = "dev.cdevents"
-	CDEventsSpecVersion       = "0.1.2"
+	CDEventsSpecVersion       = "0.2.0"
 	CDEventsSchemaURLTemplate = "https://cdevents.dev/%s/schema/%s-%s-event"
 	CDEventsTypeRegex         = "^dev\\.cdevents\\.(?P<subject>[a-z]+)\\.(?P<predicate>[a-z]+)\\.(?P<version>.*)$"
 )
 
 var (
 	CDEventsTypeCRegex = regexp.MustCompile(CDEventsTypeRegex)
-	CDEventsTypes      = []CDEvent{
-		&PipelineRunQueuedEvent{},
-		&PipelineRunStartedEvent{},
-		&PipelineRunFinishedEvent{},
-		&TaskRunStartedEvent{},
-		&TaskRunFinishedEvent{},
-		&ChangeCreatedEvent{},
-		&ChangeUpdatedEvent{},
-		&ChangeReviewedEvent{},
-		&ChangeMergedEvent{},
-		&ChangeAbandonedEvent{},
-		&RepositoryCreatedEvent{},
-		&RepositoryModifiedEvent{},
-		&RepositoryDeletedEvent{},
-		&BranchCreatedEvent{},
-		&BranchDeletedEvent{},
-		&TestSuiteStartedEvent{},
-		&TestSuiteFinishedEvent{},
-		&TestCaseQueuedEvent{},
-		&TestCaseStartedEvent{},
-		&TestCaseFinishedEvent{},
-		&BuildQueuedEvent{},
-		&BuildStartedEvent{},
-		&BuildFinishedEvent{},
-		&ArtifactPackagedEvent{},
-		&ArtifactPublishedEvent{},
-		&EnvironmentCreatedEvent{},
-		&EnvironmentModifiedEvent{},
-		&EnvironmentDeletedEvent{},
-		&ServiceDeployedEvent{},
-		&ServiceUpgradedEvent{},
-		&ServiceRolledbackEvent{},
-		&ServiceRemovedEvent{},
-		&ServicePublishedEvent{},
-	}
 
 	// CDEventsByUnversionedTypes maps non-versioned event types with events
 	// set-pup at init time
 	CDEventsByUnversionedTypes map[string]CDEvent
 )
-
-func init() {
-	// Set up CDEventsByUnversionedTypes for convenience
-	CDEventsByUnversionedTypes = make(map[string]CDEvent)
-	for _, event := range CDEventsTypes {
-		CDEventsByUnversionedTypes[event.GetType().UnversionedString()] = event
-	}
-}
 
 type Context struct {
 	// Spec: https://cdevents.dev/docs/spec/#version
@@ -319,8 +276,8 @@ type CDEvent interface {
 	CDEventWriter
 }
 
-// Used to implement GetCustomDataRaw()
-func getCustomDataRaw(contentType string, data interface{}) ([]byte, error) {
+// Used to implement type specific GetCustomDataRaw()
+func GetCustomDataRaw(contentType string, data interface{}) ([]byte, error) {
 	switch data := data.(type) {
 	case []byte:
 		return data, nil
@@ -333,8 +290,8 @@ func getCustomDataRaw(contentType string, data interface{}) ([]byte, error) {
 	}
 }
 
-// Used to implement GetCustomDataAs()
-func getCustomDataAs(e CDEventReader, receiver interface{}) error {
+// Used to implement type specific GetCustomDataAs()
+func GetCustomDataAs(e CDEventReader, receiver interface{}) error {
 	contentType := e.GetCustomDataContentType()
 	if contentType != "application/json" && contentType != "" {
 		return fmt.Errorf("cannot unmarshal content-type %s", contentType)
@@ -346,8 +303,8 @@ func getCustomDataAs(e CDEventReader, receiver interface{}) error {
 	return json.Unmarshal(data, receiver)
 }
 
-// Used to implement GetCustomData()
-func getCustomData(contentType string, data interface{}) (interface{}, error) {
+// Used to implement type specific GetCustomData()
+func GetCustomData(contentType string, data interface{}) (interface{}, error) {
 	var v interface{}
 	if contentType == "" {
 		contentType = "application/json"
@@ -384,7 +341,7 @@ func getCustomData(contentType string, data interface{}) (interface{}, error) {
 }
 
 // Used to implement SetCustomData()
-func checkCustomData(contentType string, data interface{}) error {
+func CheckCustomData(contentType string, data interface{}) error {
 	_, isBytes := data.([]byte)
 	if !isBytes && contentType != "application/json" && contentType != "" {
 		return fmt.Errorf("%s data must be set as []bytes, got %v", contentType, data)

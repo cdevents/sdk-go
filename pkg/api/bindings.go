@@ -105,12 +105,21 @@ func AsCloudEvent(event CDEventReader) (*cloudevents.Event, error) {
 	return &ce, err
 }
 
-// AsJsonString renders a CDEvent as a JSON string
-func AsJsonString(event CDEventReader) (string, error) {
+// AsJsonBytes renders a CDEvent as a JSON string
+func AsJsonBytes(event CDEventReader) ([]byte, error) {
 	if event == nil {
-		return "", nil
+		return nil, nil
 	}
 	jsonBytes, err := json.Marshal(event)
+	if err != nil {
+		return nil, err
+	}
+	return jsonBytes, nil
+}
+
+// AsJsonString renders a CDEvent as a JSON string
+func AsJsonString(event CDEventReader) (string, error) {
+	jsonBytes, err := AsJsonBytes(event)
 	if err != nil {
 		return "", err
 	}

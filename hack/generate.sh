@@ -13,7 +13,18 @@ fi
 
 echo "Running validation scripts..."
 
+function cleanupGenerateAndCheck() {
+    find . -name 'zz_*' -exec rm {} +
+    go run tools/generator.go
+    GIT_STATUS=$(git status -s)
+    if [[ ! -z $GIT_STATUS ]]; then
+        echo -e "Changes detected:\n$GIT_STATUS"
+        return 1
+    fi
+}
+
 scripts=(
+    cleanupGenerateAndCheck
 )
 fail=0
 for s in "${scripts[@]}"; do
