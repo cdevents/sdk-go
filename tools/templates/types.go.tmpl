@@ -38,10 +38,10 @@ func init() {
 
 // NewCDEvent produces a CDEvent by type
 // This function can be used by users but it's meant mainly for testing purposes
-func NewCDEvent(eventType CDEventType) (CDEvent, error) {
+func NewCDEvent(eventType string) (CDEvent, error) {
 	switch eventType {
 {{- range $i, $data := . }}
-	case {{ .Subject }}{{ .Predicate }}EventV1:
+	case {{ .Subject }}{{ .Predicate }}EventV1.String():
         return New{{ .Subject }}{{ .Predicate }}Event()
 {{- end }}
 	default:

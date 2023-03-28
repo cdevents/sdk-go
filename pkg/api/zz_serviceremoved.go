@@ -47,10 +47,6 @@ type ServiceRemovedSubject struct {
 	Content ServiceRemovedSubjectContent `json:"content"`
 }
 
-func (sc ServiceRemovedSubject) GetEventType() CDEventType {
-	return ServiceRemovedEventV1
-}
-
 func (sc ServiceRemovedSubject) GetSubjectType() SubjectType {
 	return "service"
 }

@@ -47,10 +47,6 @@ type ChangeUpdatedSubject struct {
 	Content ChangeUpdatedSubjectContent `json:"content"`
 }
 
-func (sc ChangeUpdatedSubject) GetEventType() CDEventType {
-	return ChangeUpdatedEventV1
-}
-
 func (sc ChangeUpdatedSubject) GetSubjectType() SubjectType {
 	return "change"
 }

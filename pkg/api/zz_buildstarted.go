@@ -46,10 +46,6 @@ type BuildStartedSubject struct {
 	Content BuildStartedSubjectContent `json:"content"`
 }
 
-func (sc BuildStartedSubject) GetEventType() CDEventType {
-	return BuildStartedEventV1
-}
-
 func (sc BuildStartedSubject) GetSubjectType() SubjectType {
 	return "build"
 }

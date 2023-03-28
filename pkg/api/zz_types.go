@@ -71,79 +71,79 @@ func init() {
 
 // NewCDEvent produces a CDEvent by type
 // This function can be used by users but it's meant mainly for testing purposes
-func NewCDEvent(eventType CDEventType) (CDEvent, error) {
+func NewCDEvent(eventType string) (CDEvent, error) {
 	switch eventType {
-	case ArtifactPackagedEventV1:
+	case ArtifactPackagedEventV1.String():
 		return NewArtifactPackagedEvent()
-	case ArtifactPublishedEventV1:
+	case ArtifactPublishedEventV1.String():
 		return NewArtifactPublishedEvent()
-	case BranchCreatedEventV1:
+	case BranchCreatedEventV1.String():
 		return NewBranchCreatedEvent()
-	case BranchDeletedEventV1:
+	case BranchDeletedEventV1.String():
 		return NewBranchDeletedEvent()
-	case BuildFinishedEventV1:
+	case BuildFinishedEventV1.String():
 		return NewBuildFinishedEvent()
-	case BuildQueuedEventV1:
+	case BuildQueuedEventV1.String():
 		return NewBuildQueuedEvent()
-	case BuildStartedEventV1:
+	case BuildStartedEventV1.String():
 		return NewBuildStartedEvent()
-	case ChangeAbandonedEventV1:
+	case ChangeAbandonedEventV1.String():
 		return NewChangeAbandonedEvent()
-	case ChangeCreatedEventV1:
+	case ChangeCreatedEventV1.String():
 		return NewChangeCreatedEvent()
-	case ChangeMergedEventV1:
+	case ChangeMergedEventV1.String():
 		return NewChangeMergedEvent()
-	case ChangeReviewedEventV1:
+	case ChangeReviewedEventV1.String():
 		return NewChangeReviewedEvent()
-	case ChangeUpdatedEventV1:
+	case ChangeUpdatedEventV1.String():
 		return NewChangeUpdatedEvent()
-	case EnvironmentCreatedEventV1:
+	case EnvironmentCreatedEventV1.String():
 		return NewEnvironmentCreatedEvent()
-	case EnvironmentDeletedEventV1:
+	case EnvironmentDeletedEventV1.String():
 		return NewEnvironmentDeletedEvent()
-	case EnvironmentModifiedEventV1:
+	case EnvironmentModifiedEventV1.String():
 		return NewEnvironmentModifiedEvent()
-	case IncidentDetectedEventV1:
+	case IncidentDetectedEventV1.String():
 		return NewIncidentDetectedEvent()
-	case IncidentReportedEventV1:
+	case IncidentReportedEventV1.String():
 		return NewIncidentReportedEvent()
-	case IncidentResolvedEventV1:
+	case IncidentResolvedEventV1.String():
 		return NewIncidentResolvedEvent()
-	case PipelineRunFinishedEventV1:
+	case PipelineRunFinishedEventV1.String():
 		return NewPipelineRunFinishedEvent()
-	case PipelineRunQueuedEventV1:
+	case PipelineRunQueuedEventV1.String():
 		return NewPipelineRunQueuedEvent()
-	case PipelineRunStartedEventV1:
+	case PipelineRunStartedEventV1.String():
 		return NewPipelineRunStartedEvent()
-	case RepositoryCreatedEventV1:
+	case RepositoryCreatedEventV1.String():
 		return NewRepositoryCreatedEvent()
-	case RepositoryDeletedEventV1:
+	case RepositoryDeletedEventV1.String():
 		return NewRepositoryDeletedEvent()
-	case RepositoryModifiedEventV1:
+	case RepositoryModifiedEventV1.String():
 		return NewRepositoryModifiedEvent()
-	case ServiceDeployedEventV1:
+	case ServiceDeployedEventV1.String():
 		return NewServiceDeployedEvent()
-	case ServicePublishedEventV1:
+	case ServicePublishedEventV1.String():
 		return NewServicePublishedEvent()
-	case ServiceRemovedEventV1:
+	case ServiceRemovedEventV1.String():
 		return NewServiceRemovedEvent()
-	case ServiceRolledbackEventV1:
+	case ServiceRolledbackEventV1.String():
 		return NewServiceRolledbackEvent()
-	case ServiceUpgradedEventV1:
+	case ServiceUpgradedEventV1.String():
 		return NewServiceUpgradedEvent()
-	case TaskRunFinishedEventV1:
+	case TaskRunFinishedEventV1.String():
 		return NewTaskRunFinishedEvent()
-	case TaskRunStartedEventV1:
+	case TaskRunStartedEventV1.String():
 		return NewTaskRunStartedEvent()
-	case TestCaseFinishedEventV1:
+	case TestCaseFinishedEventV1.String():
 		return NewTestCaseFinishedEvent()
-	case TestCaseQueuedEventV1:
+	case TestCaseQueuedEventV1.String():
 		return NewTestCaseQueuedEvent()
-	case TestCaseStartedEventV1:
+	case TestCaseStartedEventV1.String():
 		return NewTestCaseStartedEvent()
-	case TestSuiteFinishedEventV1:
+	case TestSuiteFinishedEventV1.String():
 		return NewTestSuiteFinishedEvent()
-	case TestSuiteStartedEventV1:
+	case TestSuiteStartedEventV1.String():
 		return NewTestSuiteStartedEvent()
 	default:
 		return nil, fmt.Errorf("event %v not supported", eventType)

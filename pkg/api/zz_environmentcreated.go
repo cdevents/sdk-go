@@ -49,10 +49,6 @@ type EnvironmentCreatedSubject struct {
 	Content EnvironmentCreatedSubjectContent `json:"content"`
 }
 
-func (sc EnvironmentCreatedSubject) GetEventType() CDEventType {
-	return EnvironmentCreatedEventV1
-}
-
 func (sc EnvironmentCreatedSubject) GetSubjectType() SubjectType {
 	return "environment"
 }

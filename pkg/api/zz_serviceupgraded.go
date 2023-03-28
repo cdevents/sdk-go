@@ -49,10 +49,6 @@ type ServiceUpgradedSubject struct {
 	Content ServiceUpgradedSubjectContent `json:"content"`
 }
 
-func (sc ServiceUpgradedSubject) GetEventType() CDEventType {
-	return ServiceUpgradedEventV1
-}
-
 func (sc ServiceUpgradedSubject) GetSubjectType() SubjectType {
 	return "service"
 }

@@ -46,10 +46,6 @@ type BuildQueuedSubject struct {
 	Content BuildQueuedSubjectContent `json:"content"`
 }
 
-func (sc BuildQueuedSubject) GetEventType() CDEventType {
-	return BuildQueuedEventV1
-}
-
 func (sc BuildQueuedSubject) GetSubjectType() SubjectType {
 	return "build"
 }

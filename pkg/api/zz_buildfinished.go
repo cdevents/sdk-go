@@ -47,10 +47,6 @@ type BuildFinishedSubject struct {
 	Content BuildFinishedSubjectContent `json:"content"`
 }
 
-func (sc BuildFinishedSubject) GetEventType() CDEventType {
-	return BuildFinishedEventV1
-}
-
 func (sc BuildFinishedSubject) GetSubjectType() SubjectType {
 	return "build"
 }

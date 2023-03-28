@@ -46,10 +46,6 @@ type ArtifactPublishedSubject struct {
 	Content ArtifactPublishedSubjectContent `json:"content"`
 }
 
-func (sc ArtifactPublishedSubject) GetEventType() CDEventType {
-	return ArtifactPublishedEventV1
-}
-
 func (sc ArtifactPublishedSubject) GetSubjectType() SubjectType {
 	return "artifact"
 }

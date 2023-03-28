@@ -19,6 +19,7 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"testing"
 	"time"
@@ -47,541 +48,23 @@ func testUUID() string {
 	return fmt.Sprintf("%v", u)
 }
 
-func TestNewCDEvent(t *testing.T) {
+type testNewCDEventType struct {
+	name          string
+	eventType     string
+	expectedEvent CDEvent
+}
 
-	tests := []struct {
-		name          string
-		eventType     CDEventType
-		expectedEvent CDEvent
-	}{{
-		name:      "pipelinerun queued",
-		eventType: PipelineRunQueuedEventV1,
-		expectedEvent: &PipelineRunQueuedEvent{
-			Context: Context{
-				Type:      PipelineRunQueuedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: PipelineRunQueuedSubject{
-				SubjectBase: SubjectBase{
-					Type: PipelineRunSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "pipelinerun started",
-		eventType: PipelineRunStartedEventV1,
-		expectedEvent: &PipelineRunStartedEvent{
-			Context: Context{
-				Type:      PipelineRunStartedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: PipelineRunStartedSubject{
-				SubjectBase: SubjectBase{
-					Type: PipelineRunSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "pipelinerun finished",
-		eventType: PipelineRunFinishedEventV1,
-		expectedEvent: &PipelineRunFinishedEvent{
-			Context: Context{
-				Type:      PipelineRunFinishedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: PipelineRunFinishedSubject{
-				SubjectBase: SubjectBase{
-					Type: PipelineRunSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "taskrun started",
-		eventType: TaskRunStartedEventV1,
-		expectedEvent: &TaskRunStartedEvent{
-			Context: Context{
-				Type:      TaskRunStartedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: TaskRunStartedSubject{
-				SubjectBase: SubjectBase{
-					Type: TaskRunSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "taskrun finished",
-		eventType: TaskRunFinishedEventV1,
-		expectedEvent: &TaskRunFinishedEvent{
-			Context: Context{
-				Type:      TaskRunFinishedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: TaskRunFinishedSubject{
-				SubjectBase: SubjectBase{
-					Type: TaskRunSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "change created",
-		eventType: ChangeCreatedEventV1,
-		expectedEvent: &ChangeCreatedEvent{
-			Context: Context{
-				Type:      ChangeCreatedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: ChangeCreatedSubject{
-				SubjectBase: SubjectBase{
-					Type: ChangeSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "change updated",
-		eventType: ChangeUpdatedEventV1,
-		expectedEvent: &ChangeUpdatedEvent{
-			Context: Context{
-				Type:      ChangeUpdatedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: ChangeUpdatedSubject{
-				SubjectBase: SubjectBase{
-					Type: ChangeSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "change reviewed",
-		eventType: ChangeReviewedEventV1,
-		expectedEvent: &ChangeReviewedEvent{
-			Context: Context{
-				Type:      ChangeReviewedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: ChangeReviewedSubject{
-				SubjectBase: SubjectBase{
-					Type: ChangeSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "change merged",
-		eventType: ChangeMergedEventV1,
-		expectedEvent: &ChangeMergedEvent{
-			Context: Context{
-				Type:      ChangeMergedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: ChangeMergedSubject{
-				SubjectBase: SubjectBase{
-					Type: ChangeSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "change abandoned",
-		eventType: ChangeAbandonedEventV1,
-		expectedEvent: &ChangeAbandonedEvent{
-			Context: Context{
-				Type:      ChangeAbandonedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: ChangeAbandonedSubject{
-				SubjectBase: SubjectBase{
-					Type: ChangeSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "repository created",
-		eventType: RepositoryCreatedEventV1,
-		expectedEvent: &RepositoryCreatedEvent{
-			Context: Context{
-				Type:      RepositoryCreatedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: RepositoryCreatedSubject{
-				SubjectBase: SubjectBase{
-					Type: RepositorySubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "repository modified",
-		eventType: RepositoryModifiedEventV1,
-		expectedEvent: &RepositoryModifiedEvent{
-			Context: Context{
-				Type:      RepositoryModifiedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: RepositoryModifiedSubject{
-				SubjectBase: SubjectBase{
-					Type: RepositorySubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "repository deleted",
-		eventType: RepositoryDeletedEventV1,
-		expectedEvent: &RepositoryDeletedEvent{
-			Context: Context{
-				Type:      RepositoryDeletedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: RepositoryDeletedSubject{
-				SubjectBase: SubjectBase{
-					Type: RepositorySubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "branch created",
-		eventType: BranchCreatedEventV1,
-		expectedEvent: &BranchCreatedEvent{
-			Context: Context{
-				Type:      BranchCreatedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: BranchCreatedSubject{
-				SubjectBase: SubjectBase{
-					Type: BranchSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "branch deleted",
-		eventType: BranchDeletedEventV1,
-		expectedEvent: &BranchDeletedEvent{
-			Context: Context{
-				Type:      BranchDeletedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: BranchDeletedSubject{
-				SubjectBase: SubjectBase{
-					Type: BranchSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "testcase queued",
-		eventType: TestCaseQueuedEventV1,
-		expectedEvent: &TestCaseQueuedEvent{
-			Context: Context{
-				Type:      TestCaseQueuedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: TestCaseQueuedSubject{
-				SubjectBase: SubjectBase{
-					Type: TestCaseSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "testcase started",
-		eventType: TestCaseStartedEventV1,
-		expectedEvent: &TestCaseStartedEvent{
-			Context: Context{
-				Type:      TestCaseStartedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: TestCaseStartedSubject{
-				SubjectBase: SubjectBase{
-					Type: TestCaseSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "testcase finished",
-		eventType: TestCaseFinishedEventV1,
-		expectedEvent: &TestCaseFinishedEvent{
-			Context: Context{
-				Type:      TestCaseFinishedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: TestCaseFinishedSubject{
-				SubjectBase: SubjectBase{
-					Type: TestCaseSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "testsuite started",
-		eventType: TestSuiteStartedEventV1,
-		expectedEvent: &TestSuiteStartedEvent{
-			Context: Context{
-				Type:      TestSuiteStartedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: TestSuiteStartedSubject{
-				SubjectBase: SubjectBase{
-					Type: TestSuiteSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "testsuite finished",
-		eventType: TestSuiteFinishedEventV1,
-		expectedEvent: &TestSuiteFinishedEvent{
-			Context: Context{
-				Type:      TestSuiteFinishedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: TestSuiteFinishedSubject{
-				SubjectBase: SubjectBase{
-					Type: TestSuiteSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "build queued",
-		eventType: BuildQueuedEventV1,
-		expectedEvent: &BuildQueuedEvent{
-			Context: Context{
-				Type:      BuildQueuedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: BuildQueuedSubject{
-				SubjectBase: SubjectBase{
-					Type: BuildSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "build started",
-		eventType: BuildStartedEventV1,
-		expectedEvent: &BuildStartedEvent{
-			Context: Context{
-				Type:      BuildStartedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: BuildStartedSubject{
-				SubjectBase: SubjectBase{
-					Type: BuildSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "build finished",
-		eventType: BuildFinishedEventV1,
-		expectedEvent: &BuildFinishedEvent{
-			Context: Context{
-				Type:      BuildFinishedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: BuildFinishedSubject{
-				SubjectBase: SubjectBase{
-					Type: BuildSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "artifact packaged",
-		eventType: ArtifactPackagedEventV1,
-		expectedEvent: &ArtifactPackagedEvent{
-			Context: Context{
-				Type:      ArtifactPackagedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: ArtifactPackagedSubject{
-				SubjectBase: SubjectBase{
-					Type: ArtifactSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "artifact published",
-		eventType: ArtifactPublishedEventV1,
-		expectedEvent: &ArtifactPublishedEvent{
-			Context: Context{
-				Type:      ArtifactPublishedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: ArtifactPublishedSubject{
-				SubjectBase: SubjectBase{
-					Type: ArtifactSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "environment created",
-		eventType: EnvironmentCreatedEventV1,
-		expectedEvent: &EnvironmentCreatedEvent{
-			Context: Context{
-				Type:      EnvironmentCreatedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: EnvironmentCreatedSubject{
-				SubjectBase: SubjectBase{
-					Type: EnvironmentSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "environment modified",
-		eventType: EnvironmentModifiedEventV1,
-		expectedEvent: &EnvironmentModifiedEvent{
-			Context: Context{
-				Type:      EnvironmentModifiedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: EnvironmentModifiedSubject{
-				SubjectBase: SubjectBase{
-					Type: EnvironmentSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "environment deleted",
-		eventType: EnvironmentDeletedEventV1,
-		expectedEvent: &EnvironmentDeletedEvent{
-			Context: Context{
-				Type:      EnvironmentDeletedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: EnvironmentDeletedSubject{
-				SubjectBase: SubjectBase{
-					Type: EnvironmentSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "service deployed",
-		eventType: ServiceDeployedEventV1,
-		expectedEvent: &ServiceDeployedEvent{
-			Context: Context{
-				Type:      ServiceDeployedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: ServiceDeployedSubject{
-				SubjectBase: SubjectBase{
-					Type: ServiceSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "service upgraded",
-		eventType: ServiceUpgradedEventV1,
-		expectedEvent: &ServiceUpgradedEvent{
-			Context: Context{
-				Type:      ServiceUpgradedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: ServiceUpgradedSubject{
-				SubjectBase: SubjectBase{
-					Type: ServiceSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "service rolledback",
-		eventType: ServiceRolledbackEventV1,
-		expectedEvent: &ServiceRolledbackEvent{
-			Context: Context{
-				Type:      ServiceRolledbackEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: ServiceRolledbackSubject{
-				SubjectBase: SubjectBase{
-					Type: ServiceSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "service removed",
-		eventType: ServiceRemovedEventV1,
-		expectedEvent: &ServiceRemovedEvent{
-			Context: Context{
-				Type:      ServiceRemovedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: ServiceRemovedSubject{
-				SubjectBase: SubjectBase{
-					Type: ServiceSubjectType,
-				},
-			},
-		},
-	}, {
-		name:      "service published",
-		eventType: ServicePublishedEventV1,
-		expectedEvent: &ServicePublishedEvent{
-			Context: Context{
-				Type:      ServicePublishedEventV1.String(),
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
-			},
-			Subject: ServicePublishedSubject{
-				SubjectBase: SubjectBase{
-					Type: ServiceSubjectType,
-				},
-			},
-		},
-	}}
+// tests is used in TestNewCDEvents. It's content is
+// generated in zz_factory_tests.go
+var tests []testNewCDEventType
+var testContentType = "application/json"
+
+func TestNewCDEvent(t *testing.T) {
+	testDataJsonBytes, err := json.Marshal(testDataJson)
+	if err != nil {
+		t.Fatalf("didn't expected it to fail, but it did: %v", err)
+	}
+
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			event, err := NewCDEvent(tc.eventType)
@@ -591,13 +74,53 @@ func TestNewCDEvent(t *testing.T) {
 			if d := cmp.Diff(tc.expectedEvent, event); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
+			// Check GetType
+			if d := cmp.Diff(tc.eventType, event.GetType().String()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			// CustomData set and get
+			err = event.SetCustomData(testContentType, testDataJsonBytes)
+			if err != nil {
+				t.Fatalf("didn't expected it to fail, but it did: %v", err)
+			}
+			customDataRawGot, err := event.GetCustomDataRaw()
+			if err != nil {
+				t.Fatalf("didn't expected it to fail, but it did: %v", err)
+			}
+			if d := cmp.Diff(testDataJsonBytes, customDataRawGot); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			customDataGot, err := event.GetCustomData()
+			if err != nil {
+				t.Fatalf("didn't expected it to fail, but it did: %v", err)
+			}
+			if d := cmp.Diff(testDataJsonUnmarshalled, customDataGot); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			var customDataAsGot testData
+			err = event.GetCustomDataAs(&customDataAsGot)
+			if err != nil {
+				t.Fatalf("didn't expected it to fail, but it did: %v", err)
+			}
+			if d := cmp.Diff(testDataJson, customDataAsGot); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			if d := cmp.Diff(event.GetCustomDataContentType(), testContentType); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			// Subject source set and get
+			event.SetSubjectSource("randomSubjectSource")
+			gotSubjectSource := event.GetSubjectSource()
+			if d := cmp.Diff("randomSubjectSource", gotSubjectSource); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
 		})
 	}
 }
 
 func TestNewCDEventFailed(t *testing.T) {
 
-	_, err := NewCDEvent(CDEventType{Subject: "not supported"})
+	_, err := NewCDEvent(CDEventType{Subject: "not supported"}.String())
 	if err == nil {
 		t.Fatalf("expected it to fail, but it didn't")
 	}

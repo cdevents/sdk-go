@@ -47,10 +47,6 @@ type EnvironmentDeletedSubject struct {
 	Content EnvironmentDeletedSubjectContent `json:"content"`
 }
 
-func (sc EnvironmentDeletedSubject) GetEventType() CDEventType {
-	return EnvironmentDeletedEventV1
-}
-
 func (sc EnvironmentDeletedSubject) GetSubjectType() SubjectType {
 	return "environment"
 }

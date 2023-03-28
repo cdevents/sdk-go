@@ -49,10 +49,6 @@ type PipelineRunQueuedSubject struct {
 	Content PipelineRunQueuedSubjectContent `json:"content"`
 }
 
-func (sc PipelineRunQueuedSubject) GetEventType() CDEventType {
-	return PipelineRunQueuedEventV1
-}
-
 func (sc PipelineRunQueuedSubject) GetSubjectType() SubjectType {
 	return "pipelineRun"
 }
