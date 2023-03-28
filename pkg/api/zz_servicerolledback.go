@@ -49,10 +49,6 @@ type ServiceRolledbackSubject struct {
 	Content ServiceRolledbackSubjectContent `json:"content"`
 }
 
-func (sc ServiceRolledbackSubject) GetEventType() CDEventType {
-	return ServiceRolledbackEventV1
-}
-
 func (sc ServiceRolledbackSubject) GetSubjectType() SubjectType {
 	return "service"
 }

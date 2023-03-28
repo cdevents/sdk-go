@@ -53,10 +53,6 @@ type IncidentDetectedSubject struct {
 	Content IncidentDetectedSubjectContent `json:"content"`
 }
 
-func (sc IncidentDetectedSubject) GetEventType() CDEventType {
-	return IncidentDetectedEventV1
-}
-
 func (sc IncidentDetectedSubject) GetSubjectType() SubjectType {
 	return "incident"
 }

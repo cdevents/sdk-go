@@ -47,10 +47,6 @@ type ChangeMergedSubject struct {
 	Content ChangeMergedSubjectContent `json:"content"`
 }
 
-func (sc ChangeMergedSubject) GetEventType() CDEventType {
-	return ChangeMergedEventV1
-}
-
 func (sc ChangeMergedSubject) GetSubjectType() SubjectType {
 	return "change"
 }

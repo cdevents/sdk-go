@@ -53,10 +53,6 @@ type {{.Subject}}{{.Predicate}}Subject struct {
 	Content {{.Subject}}{{.Predicate}}SubjectContent `json:"content"`
 }
 
-func (sc {{.Subject}}{{.Predicate}}Subject) GetEventType() CDEventType {
-	return {{.Subject}}{{.Predicate}}EventV1
-}
-
 func (sc {{.Subject}}{{.Predicate}}Subject) GetSubjectType() SubjectType {
 	return "{{.SubjectType}}"
 }

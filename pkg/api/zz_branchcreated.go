@@ -47,10 +47,6 @@ type BranchCreatedSubject struct {
 	Content BranchCreatedSubjectContent `json:"content"`
 }
 
-func (sc BranchCreatedSubject) GetEventType() CDEventType {
-	return BranchCreatedEventV1
-}
-
 func (sc BranchCreatedSubject) GetSubjectType() SubjectType {
 	return "branch"
 }

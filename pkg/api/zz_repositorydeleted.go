@@ -53,10 +53,6 @@ type RepositoryDeletedSubject struct {
 	Content RepositoryDeletedSubjectContent `json:"content"`
 }
 
-func (sc RepositoryDeletedSubject) GetEventType() CDEventType {
-	return RepositoryDeletedEventV1
-}
-
 func (sc RepositoryDeletedSubject) GetSubjectType() SubjectType {
 	return "repository"
 }

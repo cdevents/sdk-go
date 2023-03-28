@@ -51,10 +51,6 @@ type TaskRunStartedSubject struct {
 	Content TaskRunStartedSubjectContent `json:"content"`
 }
 
-func (sc TaskRunStartedSubject) GetEventType() CDEventType {
-	return TaskRunStartedEventV1
-}
-
 func (sc TaskRunStartedSubject) GetSubjectType() SubjectType {
 	return "taskRun"
 }

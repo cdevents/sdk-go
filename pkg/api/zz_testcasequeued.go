@@ -46,10 +46,6 @@ type TestCaseQueuedSubject struct {
 	Content TestCaseQueuedSubjectContent `json:"content"`
 }
 
-func (sc TestCaseQueuedSubject) GetEventType() CDEventType {
-	return TestCaseQueuedEventV1
-}
-
 func (sc TestCaseQueuedSubject) GetSubjectType() SubjectType {
 	return "testCase"
 }

@@ -110,8 +110,6 @@ func (t SubjectType) String() string {
 }
 
 type Subject interface {
-	GetEventType() CDEventType
-
 	GetSubjectType() SubjectType
 }
 

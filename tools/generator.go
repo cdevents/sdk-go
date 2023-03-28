@@ -58,9 +58,12 @@ var (
 	}
 
 	// Templates
-	eventTemplateFileName         = "event.go.tmpl"
-	typesTemplateFileName         = "types.go.tmpl"
-	examplesTestsTemplateFileName = "examples_test.go.tmpl"
+	eventTemplateFileName          = "event.go.tmpl"
+	typesTemplateFileName          = "types.go.tmpl"
+	examplesTestsTemplateFileNames = []string{
+		"examples_test.go.tmpl",
+		"factory_test.go.tmpl",
+	}
 
 	// Tool
 	capitalizer cases.Caser
@@ -159,10 +162,12 @@ func generate(templatesFolder, schemaFolder, genFolder, prefix string, goTypes m
 
 	// Process example test files - only for real data
 	if prefix == "" {
-		outputFileName := genFolder + string(os.PathSeparator) + "zz_" + prefix + strings.TrimSuffix(examplesTestsTemplateFileName, filepath.Ext(examplesTestsTemplateFileName))
-		err = executeTemplate(allTemplates, examplesTestsTemplateFileName, outputFileName, allData.Slice)
-		if err != nil {
-			return err
+		for _, examplesTestsTemplateFileName := range examplesTestsTemplateFileNames {
+			outputFileName := genFolder + string(os.PathSeparator) + "zz_" + prefix + strings.TrimSuffix(examplesTestsTemplateFileName, filepath.Ext(examplesTestsTemplateFileName))
+			err = executeTemplate(allTemplates, examplesTestsTemplateFileName, outputFileName, allData.Slice)
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil

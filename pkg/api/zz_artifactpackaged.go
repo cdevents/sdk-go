@@ -47,10 +47,6 @@ type ArtifactPackagedSubject struct {
 	Content ArtifactPackagedSubjectContent `json:"content"`
 }
 
-func (sc ArtifactPackagedSubject) GetEventType() CDEventType {
-	return ArtifactPackagedEventV1
-}
-
 func (sc ArtifactPackagedSubject) GetSubjectType() SubjectType {
 	return "artifact"
 }

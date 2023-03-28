@@ -325,6 +325,11 @@ func TestExamples(t *testing.T) {
 			if !ok {
 				t.Fatalf("missing produced event for event type: %v", name)
 			}
+			// Check that the produced event is valid
+			err := Validate(produced)
+			if err != nil {
+				t.Errorf("produced event failed to validate: %v", err)
+			}
 			consumed, err := NewFromJsonBytes(exampleConsumed)
 			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did: %v", err)
@@ -343,7 +348,6 @@ func TestExamples(t *testing.T) {
 			if d := cmp.Diff(consumed.GetSubject(), produced.GetSubject()); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
-
 		})
 	}
 }

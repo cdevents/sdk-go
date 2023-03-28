@@ -49,10 +49,6 @@ type ServiceDeployedSubject struct {
 	Content ServiceDeployedSubjectContent `json:"content"`
 }
 
-func (sc ServiceDeployedSubject) GetEventType() CDEventType {
-	return ServiceDeployedEventV1
-}
-
 func (sc ServiceDeployedSubject) GetSubjectType() SubjectType {
 	return "service"
 }

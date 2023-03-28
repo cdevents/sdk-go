@@ -47,10 +47,6 @@ type BranchDeletedSubject struct {
 	Content BranchDeletedSubjectContent `json:"content"`
 }
 
-func (sc BranchDeletedSubject) GetEventType() CDEventType {
-	return BranchDeletedEventV1
-}
-
 func (sc BranchDeletedSubject) GetSubjectType() SubjectType {
 	return "branch"
 }

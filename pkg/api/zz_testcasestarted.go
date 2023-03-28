@@ -46,10 +46,6 @@ type TestCaseStartedSubject struct {
 	Content TestCaseStartedSubjectContent `json:"content"`
 }
 
-func (sc TestCaseStartedSubject) GetEventType() CDEventType {
-	return TestCaseStartedEventV1
-}
-
 func (sc TestCaseStartedSubject) GetSubjectType() SubjectType {
 	return "testCase"
 }
