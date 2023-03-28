@@ -80,9 +80,56 @@ To run unit tests:
 $ make test
 ```
 
+To refresh generated code:
+```shell
+$ make generate
+```
+
 To run all targets, before creating a commit:
 
 ```shell
 make all
 ```
 
+### Updating the SDK with a new version of CDEvents
+
+When a new version of the CDEvents spec is released, the
+SDK needs to be updated and released accordingly. To do so,
+perform the following steps.
+
+Update the spec submodule:
+```shell
+CDEVENTS_TAG=<git tag of the new version>
+pushd pgk/api/spec
+git fetch --all
+git checkout ${CDEVENTS_TAG}
+popd
+```
+
+Update the spec version in the [code](https://github.com/cdevents/sdk-go/blob/5fdad604dc7c15f82e285f9ec6307a81f42e9612/pkg/api/types.go#L33)
+```golang
+	CDEventsSpecVersion       = "<CDEVENTS_TAG>"
+```
+
+Regenerate the code and tests from the schemas:
+```shell
+make generate
+```
+
+The SDK includes one test [`examples_test.go`](https://github.com/cdevents/sdk-go/blob/main/pkg/api/examples_test.go),
+that verifies it's possible, through the SDK, to create the example
+events defined in the spec.
+New events, changes to the schemas of existing events and changes to the
+examples may cause this test to fail. After updating the code,
+run all tests and fix any failure as required.
+
+```shell
+make test
+```
+
+Once all tests are passing, create a new commit and verify that
+`generate` does not trigger any change to the code. 
+
+```shell
+make generate  # or make all, to also check formatting at tests
+```
