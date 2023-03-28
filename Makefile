@@ -36,7 +36,8 @@ COVER_OUT:=$(REPORTS_DIR)/cover.out
 COVERFLAGS=-coverprofile=$(COVER_OUT) --covermode=count --coverpkg=./...
 
 test: ## Run tests with the "unit" build tag
-	CGO_ENABLED=$(CGO_ENABLED) $(GOTEST) --tags=unit -failfast -short ./...
+	mkdir -p $(REPORTS_DIR)
+	CGO_ENABLED=$(CGO_ENABLED) $(GOTEST) $(COVERFLAGS) --tags=unit -failfast -short ./...
 
 .PHONY: fmt
 fmt: importfmt ## Format the code
