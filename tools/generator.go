@@ -20,6 +20,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"go/format"
@@ -84,6 +85,7 @@ type Data struct {
 	SubjectType    string
 	Contents       []ContentField
 	Prefix         string
+	Schema         string
 }
 
 type AllData struct {
@@ -116,7 +118,6 @@ func main() {
 	log.SetPrefix("generator: ")
 	flag.Parse()
 
-	// Parse Templates to global `allTemplates`
 	var err error
 
 	// Generate SDK files
@@ -220,6 +221,17 @@ func getWalkProcessor(allTemplates *template.Template, genFolder string, goTypes
 			return err
 		}
 		data.Prefix = prefix
+		// Load the raw schema data
+		rawSchema, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		compressedRawSchema := bytes.NewBuffer([]byte{})
+		err = json.Compact(compressedRawSchema, rawSchema)
+		if err != nil {
+			return err
+		}
+		data.Schema = compressedRawSchema.String()
 		allData.Slice = append(allData.Slice, *data)
 
 		// Execute the template
