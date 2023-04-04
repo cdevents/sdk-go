@@ -21,13 +21,11 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
-	_ "embed"
 	"fmt"
 	"time"
 )
 
-//go:embed tests/schemas/foosubjectbarpredicate.json
-var foosubjectbarpredicateschema string
+var foosubjectbarpredicateschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.2.0/schema/foosubject-barpredicate-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.foosubject.barpredicate.1.2.3"],"default":"dev.cdevents.foosubject.barpredicate.1.2.3"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["fooSubject"],"default":"fooSubject"},"content":{"properties":{"plainField":{"type":"string","minLength":1},"referenceField":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"artifactId":{"type":"string"}},"additionalProperties":false,"type":"object","required":["plainField","referenceField"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// FooSubjectBarPredicate event v1.2.3
