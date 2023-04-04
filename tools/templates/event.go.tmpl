@@ -21,13 +21,11 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
-	_ "embed"
 	"fmt"
 	"time"
 )
 
-//go:embed spec/schemas/{{.SubjectLower}}{{.PredicateLower}}.json
-var {{.SubjectLower}}{{.PredicateLower}}schema string
+var {{.SubjectLower}}{{.PredicateLower}}schema = `{{ .Schema }}`
 
 var (
 	// {{.Subject}}{{.Predicate}} event v{{.Version}}
