@@ -21,13 +21,11 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
-	_ "embed"
 	"fmt"
 	"time"
 )
 
-//go:embed spec/schemas/incidentreported.json
-var incidentreportedschema string
+var incidentreportedschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.2.0/schema/incident-reported-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.incident.reported.0.1.0"],"default":"dev.cdevents.incident.reported.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["incident"],"default":"incident"},"content":{"properties":{"description":{"type":"string"},"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"ticketURI":{"type":"string","format":"uri","minLength":1},"service":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"artifactId":{"type":"string","minLength":1}},"additionalProperties":false,"type":"object","required":["environment","ticketURI"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// IncidentReported event v0.1.0
