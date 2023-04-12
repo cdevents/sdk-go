@@ -25,6 +25,7 @@ import "fmt"
 var CDEventsTypes = []CDEvent{
 	&ArtifactPackagedEvent{},
 	&ArtifactPublishedEvent{},
+	&ArtifactSignedEvent{},
 	&BranchCreatedEvent{},
 	&BranchDeletedEvent{},
 	&BuildFinishedEvent{},
@@ -54,11 +55,13 @@ var CDEventsTypes = []CDEvent{
 	&ServiceUpgradedEvent{},
 	&TaskRunFinishedEvent{},
 	&TaskRunStartedEvent{},
-	&TestCaseFinishedEvent{},
-	&TestCaseQueuedEvent{},
-	&TestCaseStartedEvent{},
-	&TestSuiteFinishedEvent{},
-	&TestSuiteStartedEvent{},
+	&TestCaseRunFinishedEvent{},
+	&TestCaseRunQueuedEvent{},
+	&TestCaseRunStartedEvent{},
+	&TestOutputPublishedEvent{},
+	&TestSuiteRunFinishedEvent{},
+	&TestSuiteRunQueuedEvent{},
+	&TestSuiteRunStartedEvent{},
 }
 
 func init() {
@@ -77,6 +80,8 @@ func NewCDEvent(eventType string) (CDEvent, error) {
 		return NewArtifactPackagedEvent()
 	case ArtifactPublishedEventV1.String():
 		return NewArtifactPublishedEvent()
+	case ArtifactSignedEventV1.String():
+		return NewArtifactSignedEvent()
 	case BranchCreatedEventV1.String():
 		return NewBranchCreatedEvent()
 	case BranchDeletedEventV1.String():
@@ -135,16 +140,20 @@ func NewCDEvent(eventType string) (CDEvent, error) {
 		return NewTaskRunFinishedEvent()
 	case TaskRunStartedEventV1.String():
 		return NewTaskRunStartedEvent()
-	case TestCaseFinishedEventV1.String():
-		return NewTestCaseFinishedEvent()
-	case TestCaseQueuedEventV1.String():
-		return NewTestCaseQueuedEvent()
-	case TestCaseStartedEventV1.String():
-		return NewTestCaseStartedEvent()
-	case TestSuiteFinishedEventV1.String():
-		return NewTestSuiteFinishedEvent()
-	case TestSuiteStartedEventV1.String():
-		return NewTestSuiteStartedEvent()
+	case TestCaseRunFinishedEventV1.String():
+		return NewTestCaseRunFinishedEvent()
+	case TestCaseRunQueuedEventV1.String():
+		return NewTestCaseRunQueuedEvent()
+	case TestCaseRunStartedEventV1.String():
+		return NewTestCaseRunStartedEvent()
+	case TestOutputPublishedEventV1.String():
+		return NewTestOutputPublishedEvent()
+	case TestSuiteRunFinishedEventV1.String():
+		return NewTestSuiteRunFinishedEvent()
+	case TestSuiteRunQueuedEventV1.String():
+		return NewTestSuiteRunQueuedEvent()
+	case TestSuiteRunStartedEventV1.String():
+		return NewTestSuiteRunStartedEvent()
 	default:
 		return nil, fmt.Errorf("event %v not supported", eventType)
 	}

@@ -1,6 +1,9 @@
 # IDEs
 .vscode
 
+# build
 dist/
 build/
+
+# coverage
 **/cover.out

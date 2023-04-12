@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var taskrunfinishedschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.2.0/schema/task-run-finished-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.taskrun.finished.0.1.1"],"default":"dev.cdevents.taskrun.finished.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["taskRun"],"default":"taskRun"},"content":{"properties":{"taskName":{"type":"string"},"url":{"type":"string"},"pipelineRun":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"outcome":{"type":"string"},"errors":{"type":"string"}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+var taskrunfinishedschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/task-run-finished-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.taskrun.finished.0.1.1"],"default":"dev.cdevents.taskrun.finished.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["taskRun"],"default":"taskRun"},"content":{"properties":{"taskName":{"type":"string"},"url":{"type":"string"},"pipelineRun":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"outcome":{"type":"string"},"errors":{"type":"string"}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// TaskRunFinished event v0.1.1
@@ -37,15 +37,15 @@ var (
 )
 
 type TaskRunFinishedSubjectContent struct {
-	Errors string `json:"errors"`
+	Errors string `json:"errors,omitempty"`
 
-	Outcome string `json:"outcome"`
+	Outcome string `json:"outcome,omitempty"`
 
-	PipelineRun Reference `json:"pipelineRun"`
+	PipelineRun *Reference `json:"pipelineRun,omitempty"`
 
-	TaskName string `json:"taskName"`
+	TaskName string `json:"taskName,omitempty"`
 
-	Url string `json:"url"`
+	Url string `json:"url,omitempty"`
 }
 
 type TaskRunFinishedSubject struct {
@@ -164,7 +164,7 @@ func (e *TaskRunFinishedEvent) SetSubjectOutcome(outcome string) {
 	e.Subject.Content.Outcome = outcome
 }
 
-func (e *TaskRunFinishedEvent) SetSubjectPipelineRun(pipelineRun Reference) {
+func (e *TaskRunFinishedEvent) SetSubjectPipelineRun(pipelineRun *Reference) {
 	e.Subject.Content.PipelineRun = pipelineRun
 }
 
