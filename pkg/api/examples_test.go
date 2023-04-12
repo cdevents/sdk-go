@@ -47,20 +47,46 @@ var (
 	testEnvironmentId     = "test123"
 	testEnvironmentName   = "testEnv"
 	testEnvironmentUrl    = "https://example.org/testEnv"
-	testRepoReference     = Reference{
-		Id:     "TestRepo/TestOrg",
-		Source: "https://example.org",
-	}
+	testRepoReference     = &Reference{
+		Id: "TestRepo/TestOrg", Source: "https://example.org"}
 	testIncidentSubjectId    = "incident-123"
 	testIncidentSource       = "/monitoring/prod1"
-	testEnvironmentReference = Reference{
-		Id:     "prod1",
-		Source: "/iaas/geo1",
-	}
-	testServiceReference = Reference{
-		Id:     "myApp",
-		Source: "/clusterA/namespaceB",
-	}
+	testEnvironmentReference = &Reference{
+		Id: "prod1", Source: "/iaas/geo1"}
+	testServiceReference = &Reference{
+		Id: "myApp", Source: "/clusterA/namespaceB"}
+	testTestRunId       = "myTestCaseRun123"
+	testSignature       = "MEYCIQCBT8U5ypDXWCjlNKfzTV4KH516/SK13NZSh8znnSMNkQIhAJ3XiQlc9PM1KyjITcZXHotdMB+J3NGua5T/yshmiPmp"
+	testTestEnvironment = &Reference{
+		Id: "dev", Source: "testkube-dev-123"}
+	testTestCaseStarted = &TestCaseRunStartedSubjectContentTestCase{
+		Id: "92834723894", Name: "Login Test", Type: "integration", Version: "1.0"}
+	testTestCaseFinished = &TestCaseRunFinishedSubjectContentTestCase{
+		Id: "92834723894", Name: "Login Test", Type: "integration", Version: "1.0"}
+	testTestCaseQueued = &TestCaseRunQueuedSubjectContentTestCase{
+		Id: "92834723894", Name: "Login Test", Type: "integration", Version: "1.0"}
+	testTestTriggerQueued = &TestCaseRunQueuedSubjectContentTrigger{
+		Type: "schedule"}
+	testTestTriggerStarted = &TestCaseRunStartedSubjectContentTrigger{
+		Type: "schedule"}
+	testTestOutcome             = "pass"
+	testTestOutputSubjectId     = "testrunreport-12123"
+	testTestOutputSubjectSource = "/event/source/testrunreport-12123"
+	testTestOutputFormat        = "video/quicktime"
+	testTestOutputOutputType    = "video"
+	testTestCaseRun             = &Reference{Id: testTestRunId, Source: "testkube-dev-123"}
+	testTestSuiteRunId          = "myTestSuiteRun123"
+	testTestSuiteStarted        = &TestSuiteRunStartedSubjectContentTestSuite{
+		Id: "92834723894", Name: "Auth TestSuite", Version: "1.0"}
+	testTestSuiteQueued = &TestSuiteRunQueuedSubjectContentTestSuite{
+		Id: "92834723894", Name: "Auth TestSuite", Version: "1.0"}
+	testTestSuiteFinished = &TestSuiteRunFinishedSubjectContentTestSuite{
+		Id: "92834723894", Name: "Auth TestSuite", Version: "1.0"}
+	testTestSuiteOutcome        = "fail"
+	testTestSuiteReason         = "Host 123.34.23.32 not found"
+	testTestSuiteSeverity       = "critical"
+	testTestSuiteTriggerQueued  = &TestSuiteRunQueuedSubjectContentTrigger{Type: "pipeline"}
+	testTestSuiteTriggerStarted = &TestSuiteRunStartedSubjectContentTrigger{Type: "pipeline"}
 
 	examplesConsumed map[string][]byte
 	examplesProduced map[string]CDEvent
@@ -84,12 +110,18 @@ func init() {
 func exampleArtifactPackagedEvent(e *ArtifactPackagedEvent) {
 	// Set example specific fields
 	setContext(e, testArtifactSubjectId)
-	e.SetSubjectChange(Reference{Id: testChangeId, Source: testChangeSource})
+	e.SetSubjectChange(&Reference{Id: testChangeId, Source: testChangeSource})
 }
 
 func exampleArtifactPublishedEvent(e *ArtifactPublishedEvent) {
 	// Set example specific fields
 	setContext(e, testArtifactSubjectId)
+}
+
+func exampleArtifactSignedEvent(e *ArtifactSignedEvent) {
+	// Set example specific fields
+	setContext(e, testArtifactSubjectId)
+	e.SetSubjectSignature(testSignature)
 }
 
 func exampleBranchCreatedEvent(e *BranchCreatedEvent) {
@@ -237,29 +269,29 @@ func exampleRepositoryModifiedEvent(e *RepositoryModifiedEvent) {
 
 func exampleServiceDeployedEvent(e *ServiceDeployedEvent) {
 	// Set example specific fields
-	e.SetSubjectEnvironment(Reference{Id: testEnvironmentId})
+	e.SetSubjectEnvironment(&Reference{Id: testEnvironmentId})
 	e.SetSubjectArtifactId(testArtifactId)
 }
 
 func exampleServicePublishedEvent(e *ServicePublishedEvent) {
 	// Set example specific fields
-	e.SetSubjectEnvironment(Reference{Id: testEnvironmentId})
+	e.SetSubjectEnvironment(&Reference{Id: testEnvironmentId})
 }
 
 func exampleServiceRemovedEvent(e *ServiceRemovedEvent) {
 	// Set example specific fields
-	e.SetSubjectEnvironment(Reference{Id: testEnvironmentId})
+	e.SetSubjectEnvironment(&Reference{Id: testEnvironmentId})
 }
 
 func exampleServiceRolledbackEvent(e *ServiceRolledbackEvent) {
 	// Set example specific fields
-	e.SetSubjectEnvironment(Reference{Id: testEnvironmentId})
+	e.SetSubjectEnvironment(&Reference{Id: testEnvironmentId})
 	e.SetSubjectArtifactId(testArtifactId)
 }
 
 func exampleServiceUpgradedEvent(e *ServiceUpgradedEvent) {
 	// Set example specific fields
-	e.SetSubjectEnvironment(Reference{Id: testEnvironmentId})
+	e.SetSubjectEnvironment(&Reference{Id: testEnvironmentId})
 	e.SetSubjectArtifactId(testArtifactId)
 }
 
@@ -267,7 +299,7 @@ func exampleTaskRunFinishedEvent(e *TaskRunFinishedEvent) {
 	// Set example specific fields
 	e.SetSubjectTaskName(testTaskName)
 	e.SetSubjectUrl(testSubjecturl)
-	e.SetSubjectPipelineRun(Reference{Id: testSubjectId})
+	e.SetSubjectPipelineRun(&Reference{Id: testSubjectId})
 	e.SetSubjectOutcome(testTaskOutcome)
 	e.SetSubjectErrors(testTaskRunErrors)
 }
@@ -276,27 +308,68 @@ func exampleTaskRunStartedEvent(e *TaskRunStartedEvent) {
 	// Set example specific fields
 	e.SetSubjectTaskName(testTaskName)
 	e.SetSubjectUrl(testSubjecturl)
-	e.SetSubjectPipelineRun(Reference{Id: testSubjectId})
+	e.SetSubjectPipelineRun(&Reference{Id: testSubjectId})
 }
 
-func exampleTestCaseFinishedEvent(e *TestCaseFinishedEvent) {
+func exampleTestCaseRunFinishedEvent(e *TestCaseRunFinishedEvent) {
 	// Set example specific fields
+	e.SetSubjectId(testTestRunId)
+	e.SetSubjectId(testTestRunId)
+	e.SetSubjectEnvironment(testTestEnvironment)
+	e.SetSubjectTestCase(testTestCaseFinished)
+	e.SetSubjectOutcome(testTestOutcome)
 }
 
-func exampleTestCaseQueuedEvent(e *TestCaseQueuedEvent) {
+func exampleTestCaseRunQueuedEvent(e *TestCaseRunQueuedEvent) {
 	// Set example specific fields
+	e.SetSubjectId(testTestRunId)
+	e.SetSubjectId(testTestRunId)
+	e.SetSubjectEnvironment(testTestEnvironment)
+	e.SetSubjectTestCase(testTestCaseQueued)
+	e.SetSubjectTrigger(testTestTriggerQueued)
 }
 
-func exampleTestCaseStartedEvent(e *TestCaseStartedEvent) {
+func exampleTestCaseRunStartedEvent(e *TestCaseRunStartedEvent) {
 	// Set example specific fields
+	e.SetSubjectId(testTestRunId)
+	e.SetSubjectEnvironment(testTestEnvironment)
+	e.SetSubjectTestCase(testTestCaseStarted)
+	e.SetSubjectTrigger(testTestTriggerStarted)
 }
 
-func exampleTestSuiteFinishedEvent(e *TestSuiteFinishedEvent) {
+func exampleTestSuiteRunFinishedEvent(e *TestSuiteRunFinishedEvent) {
 	// Set example specific fields
+	e.SetSubjectId(testTestSuiteRunId)
+	e.SetSubjectEnvironment(testTestEnvironment)
+	e.SetSubjectTestSuite(testTestSuiteFinished)
+	e.SetSubjectOutcome(testTestSuiteOutcome)
+	e.SetSubjectSeverity(testTestSuiteSeverity)
+	e.SetSubjectReason(testTestSuiteReason)
 }
 
-func exampleTestSuiteStartedEvent(e *TestSuiteStartedEvent) {
+func exampleTestSuiteRunStartedEvent(e *TestSuiteRunStartedEvent) {
 	// Set example specific fields
+	e.SetSubjectId(testTestSuiteRunId)
+	e.SetSubjectEnvironment(testTestEnvironment)
+	e.SetSubjectTestSuite(testTestSuiteStarted)
+	e.SetSubjectTrigger(testTestSuiteTriggerStarted)
+}
+
+func exampleTestSuiteRunQueuedEvent(e *TestSuiteRunQueuedEvent) {
+	// Set example specific fields
+	e.SetSubjectId(testTestSuiteRunId)
+	e.SetSubjectEnvironment(testTestEnvironment)
+	e.SetSubjectTestSuite(testTestSuiteQueued)
+	e.SetSubjectTrigger(testTestSuiteTriggerQueued)
+}
+
+func exampleTestOutputPublishedEvent(e *TestOutputPublishedEvent) {
+	// Set example specific fields
+	e.SetSubjectId(testTestOutputSubjectId)
+	e.SetSubjectSource(testTestOutputSubjectSource)
+	e.SetSubjectOutputType(testTestOutputOutputType)
+	e.SetSubjectFormat(testTestOutputFormat)
+	e.SetSubjectTestCaseRun(testTestCaseRun)
 }
 
 func init() {

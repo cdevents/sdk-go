@@ -57,6 +57,23 @@ func init() {
 		},
 	})
 	tests = append(tests, testNewCDEventType{
+		name:      "artifact signed",
+		eventType: ArtifactSignedEventV1.String(),
+		expectedEvent: &ArtifactSignedEvent{
+			Context: Context{
+				Type:      ArtifactSignedEventV1.String(),
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: ArtifactSignedSubject{
+				SubjectBase: SubjectBase{
+					Type: "artifact",
+				},
+			},
+		},
+	})
+	tests = append(tests, testNewCDEventType{
 		name:      "branch created",
 		eventType: BranchCreatedEventV1.String(),
 		expectedEvent: &BranchCreatedEvent{
@@ -550,86 +567,120 @@ func init() {
 		},
 	})
 	tests = append(tests, testNewCDEventType{
-		name:      "testcase finished",
-		eventType: TestCaseFinishedEventV1.String(),
-		expectedEvent: &TestCaseFinishedEvent{
+		name:      "testcaserun finished",
+		eventType: TestCaseRunFinishedEventV1.String(),
+		expectedEvent: &TestCaseRunFinishedEvent{
 			Context: Context{
-				Type:      TestCaseFinishedEventV1.String(),
+				Type:      TestCaseRunFinishedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
 			},
-			Subject: TestCaseFinishedSubject{
+			Subject: TestCaseRunFinishedSubject{
 				SubjectBase: SubjectBase{
-					Type: "testCase",
+					Type: "testCaseRun",
 				},
 			},
 		},
 	})
 	tests = append(tests, testNewCDEventType{
-		name:      "testcase queued",
-		eventType: TestCaseQueuedEventV1.String(),
-		expectedEvent: &TestCaseQueuedEvent{
+		name:      "testcaserun queued",
+		eventType: TestCaseRunQueuedEventV1.String(),
+		expectedEvent: &TestCaseRunQueuedEvent{
 			Context: Context{
-				Type:      TestCaseQueuedEventV1.String(),
+				Type:      TestCaseRunQueuedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
 			},
-			Subject: TestCaseQueuedSubject{
+			Subject: TestCaseRunQueuedSubject{
 				SubjectBase: SubjectBase{
-					Type: "testCase",
+					Type: "testCaseRun",
 				},
 			},
 		},
 	})
 	tests = append(tests, testNewCDEventType{
-		name:      "testcase started",
-		eventType: TestCaseStartedEventV1.String(),
-		expectedEvent: &TestCaseStartedEvent{
+		name:      "testcaserun started",
+		eventType: TestCaseRunStartedEventV1.String(),
+		expectedEvent: &TestCaseRunStartedEvent{
 			Context: Context{
-				Type:      TestCaseStartedEventV1.String(),
+				Type:      TestCaseRunStartedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
 			},
-			Subject: TestCaseStartedSubject{
+			Subject: TestCaseRunStartedSubject{
 				SubjectBase: SubjectBase{
-					Type: "testCase",
+					Type: "testCaseRun",
 				},
 			},
 		},
 	})
 	tests = append(tests, testNewCDEventType{
-		name:      "testsuite finished",
-		eventType: TestSuiteFinishedEventV1.String(),
-		expectedEvent: &TestSuiteFinishedEvent{
+		name:      "testoutput published",
+		eventType: TestOutputPublishedEventV1.String(),
+		expectedEvent: &TestOutputPublishedEvent{
 			Context: Context{
-				Type:      TestSuiteFinishedEventV1.String(),
+				Type:      TestOutputPublishedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
 			},
-			Subject: TestSuiteFinishedSubject{
+			Subject: TestOutputPublishedSubject{
 				SubjectBase: SubjectBase{
-					Type: "testSuite",
+					Type: "testOutput",
 				},
 			},
 		},
 	})
 	tests = append(tests, testNewCDEventType{
-		name:      "testsuite started",
-		eventType: TestSuiteStartedEventV1.String(),
-		expectedEvent: &TestSuiteStartedEvent{
+		name:      "testsuiterun finished",
+		eventType: TestSuiteRunFinishedEventV1.String(),
+		expectedEvent: &TestSuiteRunFinishedEvent{
 			Context: Context{
-				Type:      TestSuiteStartedEventV1.String(),
+				Type:      TestSuiteRunFinishedEventV1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   CDEventsSpecVersion,
 			},
-			Subject: TestSuiteStartedSubject{
+			Subject: TestSuiteRunFinishedSubject{
 				SubjectBase: SubjectBase{
-					Type: "testSuite",
+					Type: "testSuiteRun",
+				},
+			},
+		},
+	})
+	tests = append(tests, testNewCDEventType{
+		name:      "testsuiterun queued",
+		eventType: TestSuiteRunQueuedEventV1.String(),
+		expectedEvent: &TestSuiteRunQueuedEvent{
+			Context: Context{
+				Type:      TestSuiteRunQueuedEventV1.String(),
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: TestSuiteRunQueuedSubject{
+				SubjectBase: SubjectBase{
+					Type: "testSuiteRun",
+				},
+			},
+		},
+	})
+	tests = append(tests, testNewCDEventType{
+		name:      "testsuiterun started",
+		eventType: TestSuiteRunStartedEventV1.String(),
+		expectedEvent: &TestSuiteRunStartedEvent{
+			Context: Context{
+				Type:      TestSuiteRunStartedEventV1.String(),
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+				Version:   CDEventsSpecVersion,
+			},
+			Subject: TestSuiteRunStartedSubject{
+				SubjectBase: SubjectBase{
+					Type: "testSuiteRun",
 				},
 			},
 		},

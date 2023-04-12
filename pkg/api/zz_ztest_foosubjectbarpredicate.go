@@ -37,13 +37,13 @@ var (
 )
 
 type FooSubjectBarPredicateSubjectContent struct {
-	ArtifactId string `json:"artifactId" validate:"purl"`
+	ArtifactId string `json:"artifactId,omitempty" validate:"purl"`
 
-	ObjectField FooSubjectBarPredicateSubjectContentObjectField `json:"objectField"`
+	ObjectField *FooSubjectBarPredicateSubjectContentObjectField `json:"objectField,omitempty"`
 
 	PlainField string `json:"plainField"`
 
-	ReferenceField Reference `json:"referenceField"`
+	ReferenceField *Reference `json:"referenceField"`
 }
 
 type FooSubjectBarPredicateSubject struct {
@@ -162,7 +162,7 @@ func (e *FooSubjectBarPredicateEvent) SetSubjectArtifactId(artifactId string) {
 	e.Subject.Content.ArtifactId = artifactId
 }
 
-func (e *FooSubjectBarPredicateEvent) SetSubjectObjectField(objectField FooSubjectBarPredicateSubjectContentObjectField) {
+func (e *FooSubjectBarPredicateEvent) SetSubjectObjectField(objectField *FooSubjectBarPredicateSubjectContentObjectField) {
 	e.Subject.Content.ObjectField = objectField
 }
 
@@ -170,7 +170,7 @@ func (e *FooSubjectBarPredicateEvent) SetSubjectPlainField(plainField string) {
 	e.Subject.Content.PlainField = plainField
 }
 
-func (e *FooSubjectBarPredicateEvent) SetSubjectReferenceField(referenceField Reference) {
+func (e *FooSubjectBarPredicateEvent) SetSubjectReferenceField(referenceField *Reference) {
 	e.Subject.Content.ReferenceField = referenceField
 }
 
@@ -196,7 +196,7 @@ func NewFooSubjectBarPredicateEvent() (*FooSubjectBarPredicateEvent, error) {
 
 // FooSubjectBarPredicateSubjectContentObjectField holds the content of a ObjectField field in the content
 type FooSubjectBarPredicateSubjectContentObjectField struct {
-	Optional string `json:"optional"`
+	Optional string `json:"optional,omitempty"`
 
 	Required string `json:"required"`
 }

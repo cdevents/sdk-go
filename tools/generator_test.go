@@ -65,15 +65,17 @@ func TestDataFromSchema(t *testing.T) {
 		}, {
 			Name:      "ReferenceField",
 			NameLower: "referenceField",
-			Type:      "Reference",
+			Type:      "*Reference",
+			Required:  true,
 		}, {
 			Name:      "PlainField",
 			NameLower: "plainField",
 			Type:      "string",
+			Required:  true,
 		}, {
 			Name:      "ObjectField",
 			NameLower: "objectField",
-			Type:      "ObjectField",
+			Type:      "*FooSubjectBarPredicateSubjectContentObjectField",
 		}},
 		ContentTypes: []ContentType{{
 			Name: "ObjectField",
@@ -81,6 +83,7 @@ func TestDataFromSchema(t *testing.T) {
 				Name:      "Required",
 				NameLower: "required",
 				Type:      "string",
+				Required:  true,
 			}, {
 				Name:      "Optional",
 				NameLower: "optional",

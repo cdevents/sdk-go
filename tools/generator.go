@@ -47,10 +47,11 @@ var (
 	TEST_OUTPUT_PREFIX   = "ztest_"
 
 	GO_TYPES_NAMES = map[string]string{
-		"taskrun":     "TaskRun",
-		"pipelinerun": "PipelineRun",
-		"testcase":    "TestCase",
-		"testsuite":   "TestSuite",
+		"taskrun":      "TaskRun",
+		"pipelinerun":  "PipelineRun",
+		"testcaserun":  "TestCaseRun",
+		"testsuiterun": "TestSuiteRun",
+		"testoutput":   "TestOutput",
 	}
 
 	GO_TYPES_TEST_NAMES = map[string]string{
@@ -70,11 +71,14 @@ var (
 	capitalizer cases.Caser
 )
 
+const REFERENCE_TYPE = "Reference"
+
 // ContentField holds the name and type of each content field
 type ContentField struct {
 	Name      string
 	NameLower string
 	Type      string
+	Required  bool
 }
 
 // ContentType holds the data required to render any custom
@@ -301,6 +305,12 @@ func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string) (*Dat
 		contentField := ContentField{}
 		contentField.NameLower = name
 		contentField.Name = capitalizer.String(name)
+		contentField.Required = false
+		for _, value := range contentSchema.Required {
+			if name == value {
+				contentField.Required = true
+			}
+		}
 		if len(propertySchema.Types) != 1 {
 			return nil, fmt.Errorf("only one type allowed for content property in schema %s", propertySchema.Location)
 		}
@@ -310,11 +320,17 @@ func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string) (*Dat
 			if err != nil {
 				return nil, err
 			}
-			contentField.Type = GoTypeName(contentType.Name, mappings)
-			// If this is a "Reference" we don't need to define a new type
-			if contentType.Name != "Reference" {
+			namespacedType := GoTypeName(contentType.Name, mappings)
+			if contentType.Name != REFERENCE_TYPE {
+				// If this is not a "Reference" we need to define a new type
 				contentTypes = append(contentTypes, *contentType)
+				// If this is not a "Reference" we need to namespace the type name to the event
+				namespacedType = GoTypeName(eventType.Subject, mappings) +
+					GoTypeName(eventType.Predicate, mappings) + "SubjectContent" +
+					GoTypeName(contentType.Name, mappings)
 			}
+			// We must use pointers here for "omitempty" to work when rendering to JSON
+			contentField.Type = "*" + namespacedType
 		case "string":
 			contentField.Type = "string"
 		default:
@@ -364,12 +380,18 @@ func typesForSchema(name string, property *jsonschema.Schema, mappings map[strin
 			NameLower: name,
 			Name:      GoTypeName(name, mappings),
 			Type:      "string",
+			Required:  false,
+		}
+		for _, value := range property.Required {
+			if name == value {
+				field.Required = true
+			}
 		}
 		fields = append(fields, field)
 	}
 	// Check if this is a reference
 	if len(referenceFields) == 2 && len(otherNames) == 0 {
-		name = "Reference"
+		name = REFERENCE_TYPE
 	}
 	// Sort fields for consistent generation
 	sort.Slice(fields, func(i, j int) bool {

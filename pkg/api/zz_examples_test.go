@@ -35,6 +35,12 @@ func init() {
 	exampleArtifactPublishedEvent(newArtifactPublished)
 	examplesProduced[newArtifactPublished.GetType().Short()] = newArtifactPublished
 
+	// ArtifactSigned Event producer
+	newArtifactSigned, _ := NewArtifactSignedEvent()
+	setContext(newArtifactSigned, testSubjectId)
+	exampleArtifactSignedEvent(newArtifactSigned)
+	examplesProduced[newArtifactSigned.GetType().Short()] = newArtifactSigned
+
 	// BranchCreated Event producer
 	newBranchCreated, _ := NewBranchCreatedEvent()
 	setContext(newBranchCreated, testSubjectId)
@@ -209,34 +215,46 @@ func init() {
 	exampleTaskRunStartedEvent(newTaskRunStarted)
 	examplesProduced[newTaskRunStarted.GetType().Short()] = newTaskRunStarted
 
-	// TestCaseFinished Event producer
-	newTestCaseFinished, _ := NewTestCaseFinishedEvent()
-	setContext(newTestCaseFinished, testSubjectId)
-	exampleTestCaseFinishedEvent(newTestCaseFinished)
-	examplesProduced[newTestCaseFinished.GetType().Short()] = newTestCaseFinished
+	// TestCaseRunFinished Event producer
+	newTestCaseRunFinished, _ := NewTestCaseRunFinishedEvent()
+	setContext(newTestCaseRunFinished, testSubjectId)
+	exampleTestCaseRunFinishedEvent(newTestCaseRunFinished)
+	examplesProduced[newTestCaseRunFinished.GetType().Short()] = newTestCaseRunFinished
 
-	// TestCaseQueued Event producer
-	newTestCaseQueued, _ := NewTestCaseQueuedEvent()
-	setContext(newTestCaseQueued, testSubjectId)
-	exampleTestCaseQueuedEvent(newTestCaseQueued)
-	examplesProduced[newTestCaseQueued.GetType().Short()] = newTestCaseQueued
+	// TestCaseRunQueued Event producer
+	newTestCaseRunQueued, _ := NewTestCaseRunQueuedEvent()
+	setContext(newTestCaseRunQueued, testSubjectId)
+	exampleTestCaseRunQueuedEvent(newTestCaseRunQueued)
+	examplesProduced[newTestCaseRunQueued.GetType().Short()] = newTestCaseRunQueued
 
-	// TestCaseStarted Event producer
-	newTestCaseStarted, _ := NewTestCaseStartedEvent()
-	setContext(newTestCaseStarted, testSubjectId)
-	exampleTestCaseStartedEvent(newTestCaseStarted)
-	examplesProduced[newTestCaseStarted.GetType().Short()] = newTestCaseStarted
+	// TestCaseRunStarted Event producer
+	newTestCaseRunStarted, _ := NewTestCaseRunStartedEvent()
+	setContext(newTestCaseRunStarted, testSubjectId)
+	exampleTestCaseRunStartedEvent(newTestCaseRunStarted)
+	examplesProduced[newTestCaseRunStarted.GetType().Short()] = newTestCaseRunStarted
 
-	// TestSuiteFinished Event producer
-	newTestSuiteFinished, _ := NewTestSuiteFinishedEvent()
-	setContext(newTestSuiteFinished, testSubjectId)
-	exampleTestSuiteFinishedEvent(newTestSuiteFinished)
-	examplesProduced[newTestSuiteFinished.GetType().Short()] = newTestSuiteFinished
+	// TestOutputPublished Event producer
+	newTestOutputPublished, _ := NewTestOutputPublishedEvent()
+	setContext(newTestOutputPublished, testSubjectId)
+	exampleTestOutputPublishedEvent(newTestOutputPublished)
+	examplesProduced[newTestOutputPublished.GetType().Short()] = newTestOutputPublished
 
-	// TestSuiteStarted Event producer
-	newTestSuiteStarted, _ := NewTestSuiteStartedEvent()
-	setContext(newTestSuiteStarted, testSubjectId)
-	exampleTestSuiteStartedEvent(newTestSuiteStarted)
-	examplesProduced[newTestSuiteStarted.GetType().Short()] = newTestSuiteStarted
+	// TestSuiteRunFinished Event producer
+	newTestSuiteRunFinished, _ := NewTestSuiteRunFinishedEvent()
+	setContext(newTestSuiteRunFinished, testSubjectId)
+	exampleTestSuiteRunFinishedEvent(newTestSuiteRunFinished)
+	examplesProduced[newTestSuiteRunFinished.GetType().Short()] = newTestSuiteRunFinished
+
+	// TestSuiteRunQueued Event producer
+	newTestSuiteRunQueued, _ := NewTestSuiteRunQueuedEvent()
+	setContext(newTestSuiteRunQueued, testSubjectId)
+	exampleTestSuiteRunQueuedEvent(newTestSuiteRunQueued)
+	examplesProduced[newTestSuiteRunQueued.GetType().Short()] = newTestSuiteRunQueued
+
+	// TestSuiteRunStarted Event producer
+	newTestSuiteRunStarted, _ := NewTestSuiteRunStartedEvent()
+	setContext(newTestSuiteRunStarted, testSubjectId)
+	exampleTestSuiteRunStartedEvent(newTestSuiteRunStarted)
+	examplesProduced[newTestSuiteRunStarted.GetType().Short()] = newTestSuiteRunStarted
 
 }

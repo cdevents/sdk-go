@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var repositorycreatedschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.2.0/schema/repository-created-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.repository.created.0.1.1"],"default":"dev.cdevents.repository.created.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["repository"],"default":"repository"},"content":{"properties":{"name":{"type":"string","minLength":1},"owner":{"type":"string"},"url":{"type":"string","minLength":1},"viewUrl":{"type":"string"}},"additionalProperties":false,"type":"object","required":["name","url"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+var repositorycreatedschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/repository-created-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.repository.created.0.1.1"],"default":"dev.cdevents.repository.created.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["repository"],"default":"repository"},"content":{"properties":{"name":{"type":"string","minLength":1},"owner":{"type":"string"},"url":{"type":"string","minLength":1},"viewUrl":{"type":"string"}},"additionalProperties":false,"type":"object","required":["name","url"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// RepositoryCreated event v0.1.1
@@ -39,11 +39,11 @@ var (
 type RepositoryCreatedSubjectContent struct {
 	Name string `json:"name"`
 
-	Owner string `json:"owner"`
+	Owner string `json:"owner,omitempty"`
 
 	Url string `json:"url"`
 
-	ViewUrl string `json:"viewUrl"`
+	ViewUrl string `json:"viewUrl,omitempty"`
 }
 
 type RepositoryCreatedSubject struct {
