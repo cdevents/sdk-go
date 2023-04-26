@@ -38,11 +38,7 @@ var (
 
 type {{.Subject}}{{.Predicate}}SubjectContent  struct{
 {{ range $i, $field := .Contents }}
-{{ if eq .Name "ArtifactId" }}
-	{{ .Name }} {{ .Type }} `json:"{{ .NameLower }}" validate:"purl"`
-{{- else }}
-	{{ .Name }} {{ .Type }} `json:"{{ .NameLower }}"`
-{{- end }}
+	{{ .Name }} {{ if and (ne .Type "string") (ne .Type "Reference") }}{{$.Subject}}{{$.Predicate}}SubjectContent{{ end }}{{ .Type }} `json:"{{ .NameLower }}"{{ if eq .Name "ArtifactId" }} validate:"purl"{{ end }}`
 {{ end }}
 }
 
@@ -154,7 +150,7 @@ func (e {{.Subject}}{{.Predicate}}Event) GetSchema() (string, string) {
 
 // Set subject custom fields
 {{ range $i, $field := .Contents }}
-func (e *{{$.Subject}}{{$.Predicate}}Event) SetSubject{{ .Name }}({{ .NameLower }} {{ .Type }}) {
+func (e *{{$.Subject}}{{$.Predicate}}Event) SetSubject{{ .Name }}({{ .NameLower }} {{ if and (ne .Type "string") (ne .Type "Reference") }}{{$.Subject}}{{$.Predicate}}SubjectContent{{ end }}{{ .Type }}) {
 	e.Subject.Content.{{ .Name }} = {{ .NameLower }}
 }
 {{ end }}
@@ -178,3 +174,12 @@ func New{{.Subject}}{{.Predicate}}Event() (*{{.Subject}}{{.Predicate}}Event, err
 	}
 	return e, nil
 }
+
+{{ range $i, $type := .ContentTypes }}
+// {{$.Subject}}{{$.Predicate}}SubjectContent{{ .Name }} holds the content of a {{ .Name }} field in the content 
+type {{$.Subject}}{{$.Predicate}}SubjectContent{{ .Name }} struct{
+{{ range $j, $field := .Fields }}
+	{{ .Name }} {{ .Type }} `json:"{{ .NameLower }}"`
+{{ end }}
+}
+{{ end }}

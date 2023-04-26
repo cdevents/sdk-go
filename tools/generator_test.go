@@ -70,8 +70,23 @@ func TestDataFromSchema(t *testing.T) {
 			Name:      "PlainField",
 			NameLower: "plainField",
 			Type:      "string",
-		},
-		},
+		}, {
+			Name:      "ObjectField",
+			NameLower: "objectField",
+			Type:      "ObjectField",
+		}},
+		ContentTypes: []ContentType{{
+			Name: "ObjectField",
+			Fields: []ContentField{{
+				Name:      "Required",
+				NameLower: "required",
+				Type:      "string",
+			}, {
+				Name:      "Optional",
+				NameLower: "optional",
+				Type:      "string",
+			}},
+		}},
 	}
 
 	mappings := map[string]string{

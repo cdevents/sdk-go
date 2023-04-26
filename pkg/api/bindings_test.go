@@ -67,6 +67,7 @@ func init() {
 	eventJsonCustomData.SetSubjectReferenceField(Reference{Id: testChangeId})
 	eventJsonCustomData.SetSubjectPlainField(testValue)
 	eventJsonCustomData.SetSubjectArtifactId(testArtifactId)
+	eventJsonCustomData.SetSubjectObjectField(FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
 	err := eventJsonCustomData.SetCustomData("application/json", testDataJson)
 	panicOnError(err)
 
@@ -75,6 +76,7 @@ func init() {
 	eventJsonCustomDataUnmarshalled.SetSubjectReferenceField(Reference{Id: testChangeId})
 	eventJsonCustomDataUnmarshalled.SetSubjectPlainField(testValue)
 	eventJsonCustomDataUnmarshalled.SetSubjectArtifactId(testArtifactId)
+	eventJsonCustomDataUnmarshalled.SetSubjectObjectField(FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
 	err = eventJsonCustomDataUnmarshalled.SetCustomData("application/json", testDataJsonUnmarshalled)
 	panicOnError(err)
 
@@ -83,6 +85,7 @@ func init() {
 	eventNonJsonCustomData.SetSubjectReferenceField(Reference{Id: testChangeId})
 	eventNonJsonCustomData.SetSubjectPlainField(testValue)
 	eventNonJsonCustomData.SetSubjectArtifactId(testArtifactId)
+	eventNonJsonCustomData.SetSubjectObjectField(FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
 	err = eventNonJsonCustomData.SetCustomData("application/xml", testDataXml)
 	panicOnError(err)
 
@@ -459,6 +462,7 @@ func testEventWithVersion(eventVersion string, specVersion string) *FooSubjectBa
 	event.SetSubjectReferenceField(Reference{Id: testChangeId})
 	event.SetSubjectPlainField(testValue)
 	event.SetSubjectArtifactId(testArtifactId)
+	event.SetSubjectObjectField(FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
 	err := event.SetCustomData("application/json", testDataJsonUnmarshalled)
 	panicOnError(err)
 	etype, err := ParseType(event.Context.Type)
