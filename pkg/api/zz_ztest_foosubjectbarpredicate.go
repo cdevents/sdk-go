@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var foosubjectbarpredicateschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.2.0/schema/foosubject-barpredicate-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.foosubject.barpredicate.1.2.3"],"default":"dev.cdevents.foosubject.barpredicate.1.2.3"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["fooSubject"],"default":"fooSubject"},"content":{"properties":{"plainField":{"type":"string","minLength":1},"referenceField":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"artifactId":{"type":"string"}},"additionalProperties":false,"type":"object","required":["plainField","referenceField"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+var foosubjectbarpredicateschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.2.0/schema/foosubject-barpredicate-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.foosubject.barpredicate.1.2.3"],"default":"dev.cdevents.foosubject.barpredicate.1.2.3"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["fooSubject"],"default":"fooSubject"},"content":{"properties":{"plainField":{"type":"string","minLength":1},"referenceField":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"artifactId":{"type":"string"},"objectField":{"properties":{"required":{"type":"string","minLength":1},"optional":{"type":"string","format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["required"]}},"additionalProperties":false,"type":"object","required":["plainField","referenceField"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// FooSubjectBarPredicate event v1.2.3
@@ -38,6 +38,8 @@ var (
 
 type FooSubjectBarPredicateSubjectContent struct {
 	ArtifactId string `json:"artifactId" validate:"purl"`
+
+	ObjectField FooSubjectBarPredicateSubjectContentObjectField `json:"objectField"`
 
 	PlainField string `json:"plainField"`
 
@@ -160,6 +162,10 @@ func (e *FooSubjectBarPredicateEvent) SetSubjectArtifactId(artifactId string) {
 	e.Subject.Content.ArtifactId = artifactId
 }
 
+func (e *FooSubjectBarPredicateEvent) SetSubjectObjectField(objectField FooSubjectBarPredicateSubjectContentObjectField) {
+	e.Subject.Content.ObjectField = objectField
+}
+
 func (e *FooSubjectBarPredicateEvent) SetSubjectPlainField(plainField string) {
 	e.Subject.Content.PlainField = plainField
 }
@@ -186,4 +192,11 @@ func NewFooSubjectBarPredicateEvent() (*FooSubjectBarPredicateEvent, error) {
 	e.SetTimestamp(t)
 	e.SetId("271069a8-fc18-44f1-b38f-9d70a1695819")
 	return e, nil
+}
+
+// FooSubjectBarPredicateSubjectContentObjectField holds the content of a ObjectField field in the content
+type FooSubjectBarPredicateSubjectContentObjectField struct {
+	Optional string `json:"optional"`
+
+	Required string `json:"required"`
 }

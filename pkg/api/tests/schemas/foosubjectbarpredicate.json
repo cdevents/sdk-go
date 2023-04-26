@@ -83,7 +83,25 @@
 				]
 			  },
 			  "artifactId": {
-				"type": "string"			  }
+				"type": "string"
+			  },
+			  "objectField": {
+				"properties": {
+				  "required": {
+					"type": "string",
+					"minLength": 1
+				  },
+				  "optional": {
+					"type": "string",
+					"format": "uri-reference"
+				  }
+				},
+				"additionalProperties": false,
+				"type": "object",
+				"required": [
+				  "required"
+				]
+			  }
 			},
 			"additionalProperties": false,
 			"type": "object",

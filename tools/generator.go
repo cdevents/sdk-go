@@ -70,10 +70,18 @@ var (
 	capitalizer cases.Caser
 )
 
+// ContentField holds the name and type of each content field
 type ContentField struct {
 	Name      string
 	NameLower string
 	Type      string
+}
+
+// ContentType holds the data required to render any custom
+// type used within the content.
+type ContentType struct {
+	Name   string
+	Fields []ContentField
 }
 
 type Data struct {
@@ -84,6 +92,7 @@ type Data struct {
 	Version        string
 	SubjectType    string
 	Contents       []ContentField
+	ContentTypes   []ContentType
 	Prefix         string
 	Schema         string
 }
@@ -283,6 +292,7 @@ func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string) (*Dat
 
 	// Parse the subject content fields
 	contentFields := []ContentField{}
+	contentTypes := []ContentType{}
 	contentSchema, ok := subjectSchema.Properties["content"]
 	if !ok {
 		return nil, fmt.Errorf("no content property in schema %s", subjectSchema.Location)
@@ -296,7 +306,15 @@ func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string) (*Dat
 		}
 		switch propertySchema.Types[0] {
 		case "object":
-			contentField.Type = "Reference"
+			contentType, err := typesForSchema(name, propertySchema, mappings)
+			if err != nil {
+				return nil, err
+			}
+			contentField.Type = GoTypeName(contentType.Name, mappings)
+			// If this is a "Reference" we don't need to define a new type
+			if contentType.Name != "Reference" {
+				contentTypes = append(contentTypes, *contentType)
+			}
 		case "string":
 			contentField.Type = "string"
 		default:
@@ -308,6 +326,9 @@ func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string) (*Dat
 	sort.Slice(contentFields, func(i, j int) bool {
 		return contentFields[i].Name < contentFields[j].Name
 	})
+	sort.Slice(contentTypes, func(i, j int) bool {
+		return contentTypes[i].Name < contentTypes[j].Name
+	})
 	return &Data{
 		Subject:        GoTypeName(eventType.Subject, mappings),
 		Predicate:      GoTypeName(eventType.Predicate, mappings),
@@ -316,5 +337,46 @@ func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string) (*Dat
 		Version:        eventType.Version,
 		SubjectType:    subjectTypeString,
 		Contents:       contentFields,
+		ContentTypes:   contentTypes,
+	}, nil
+}
+
+// typesForSchema takes a property from a jsonschema and produces
+// a ContentType object, as long as all fields are of type string
+func typesForSchema(name string, property *jsonschema.Schema, mappings map[string]string) (*ContentType, error) {
+	fields := []ContentField{}
+	otherNames := []string{}
+	referenceFields := []string{}
+	for name, propertySchema := range property.Properties {
+		switch name {
+		case "id", "source":
+			referenceFields = append(referenceFields, name)
+		default:
+			otherNames = append(otherNames, name)
+		}
+		if len(propertySchema.Types) != 1 {
+			return nil, fmt.Errorf("only one type allowed for content property in schema %s", propertySchema.Location)
+		}
+		if propertySchema.Types[0] != "string" {
+			return nil, fmt.Errorf("only one string type allowed for content property in schema %s", propertySchema.Location)
+		}
+		field := ContentField{
+			NameLower: name,
+			Name:      GoTypeName(name, mappings),
+			Type:      "string",
+		}
+		fields = append(fields, field)
+	}
+	// Check if this is a reference
+	if len(referenceFields) == 2 && len(otherNames) == 0 {
+		name = "Reference"
+	}
+	// Sort fields for consistent generation
+	sort.Slice(fields, func(i, j int) bool {
+		return fields[i].Name < fields[j].Name
+	})
+	return &ContentType{
+		Name:   GoTypeName(name, mappings),
+		Fields: fields,
 	}, nil
 }
