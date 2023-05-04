@@ -83,6 +83,3 @@ If you would like to contribute, see our [development](DEVELOPMENT.md) guide.
 ## References
 
 - [CDEvents](https://cdevents.dev)
-- [CDFoundation SIG Events Vocabulary Draft](https://github.com/cdfoundation/sig-events/tree/main/vocabulary-draft)
-
-[old-sdk]: https://github.com/cdfoundation/sig-events/tree/main/cde/sdk/go
