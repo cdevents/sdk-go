@@ -6,7 +6,7 @@ require (
 	github.com/cloudevents/sdk-go/v2 v2.10.1
 	github.com/google/go-cmp v0.5.8
 	github.com/google/uuid v1.1.2
-	github.com/package-url/packageurl-go v0.1.0
+	github.com/package-url/packageurl-go v0.1.1
 	github.com/santhosh-tekuri/jsonschema/v5 v5.0.0
 	golang.org/x/text v0.3.7
 )

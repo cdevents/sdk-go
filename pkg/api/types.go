@@ -30,7 +30,7 @@ import (
 
 const (
 	EventTypeRoot             = "dev.cdevents"
-	CDEventsSpecVersion       = "0.2.0"
+	CDEventsSpecVersion       = "0.3.0"
 	CDEventsSchemaURLTemplate = "https://cdevents.dev/%s/schema/%s-%s-event"
 	CDEventsTypeRegex         = "^dev\\.cdevents\\.(?P<subject>[a-z]+)\\.(?P<predicate>[a-z]+)\\.(?P<version>.*)$"
 )
