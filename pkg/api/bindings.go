@@ -98,6 +98,7 @@ func AsCloudEvent(event CDEventReader) (*cloudevents.Event, error) {
 		return nil, fmt.Errorf("cannot validate CDEvent %v", err)
 	}
 	ce := cloudevents.NewEvent()
+	ce.SetID(event.GetId())
 	ce.SetSource(event.GetSource())
 	ce.SetSubject(event.GetSubjectId())
 	ce.SetType(event.GetType().String())

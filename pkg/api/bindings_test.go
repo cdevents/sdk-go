@@ -116,6 +116,9 @@ func TestAsCloudEvent(t *testing.T) {
 			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did: %v", err)
 			}
+			if d := cmp.Diff(tc.event.GetId(), ce.Context.GetID()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
 			if d := cmp.Diff(testSubjectId, ce.Context.GetSubject()); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
