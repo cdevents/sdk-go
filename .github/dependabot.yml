@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: gomod
+    directory: /pkg # Location of package manifests
+    schedule:
+      interval: daily
+    labels:
+    - dependencies
+  - package-ecosystem: gomod
+    directory: /tools # Location of package manifests
+    schedule:
+      interval: weekly
+    labels:
+    - dependencies
