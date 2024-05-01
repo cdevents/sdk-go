@@ -3,11 +3,12 @@ name: CI
 on:
   pull_request:
     types:
-      - "opened"
-      - "synchronize"
+      - opened
+      - synchronize
     paths-ignore:
-      - "README.md"
-      - ".gitignore"
+      - README.md
+      - .gitignore
+  merge_group:
 
 jobs:
   lint:
