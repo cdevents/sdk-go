@@ -97,6 +97,7 @@ type Data struct {
 	Predicate      string
 	PredicateLower string
 	Version        string
+	VersionName    string
 	SubjectType    string
 	Contents       []ContentField
 	ContentTypes   []ContentType
@@ -109,7 +110,7 @@ type AllData struct {
 }
 
 func (d Data) OutputFile() string {
-	return "zz_" + d.Prefix + d.SubjectLower + d.PredicateLower + ".go"
+	return "zz_" + d.Prefix + d.SubjectLower + d.PredicateLower + "_" + d.VersionName + ".go"
 }
 
 func init() {
@@ -175,7 +176,7 @@ func generate(templatesFolder, schemaFolder, genFolder, prefix string, goTypes m
 	}
 
 	// Process the types template
-	outputFileName := genFolder + string(os.PathSeparator) + "zz_" + prefix + strings.TrimSuffix(typesTemplateFileName, filepath.Ext(typesTemplateFileName))
+	outputFileName := filepath.Join(genFolder, "zz_"+prefix+strings.TrimSuffix(typesTemplateFileName, filepath.Ext(typesTemplateFileName)))
 	err = executeTemplate(allTemplates, typesTemplateFileName, outputFileName, allData.Slice)
 	if err != nil {
 		return err
@@ -184,7 +185,7 @@ func generate(templatesFolder, schemaFolder, genFolder, prefix string, goTypes m
 	// Process example test files - only for real data
 	if prefix == "" {
 		for _, examplesTestsTemplateFileName := range examplesTestsTemplateFileNames {
-			outputFileName := genFolder + string(os.PathSeparator) + "zz_" + prefix + strings.TrimSuffix(examplesTestsTemplateFileName, filepath.Ext(examplesTestsTemplateFileName))
+			outputFileName := filepath.Join(genFolder, "zz_"+prefix+strings.TrimSuffix(examplesTestsTemplateFileName, filepath.Ext(examplesTestsTemplateFileName)))
 			err = executeTemplate(allTemplates, examplesTestsTemplateFileName, outputFileName, allData.Slice)
 			if err != nil {
 				return err
@@ -197,6 +198,7 @@ func generate(templatesFolder, schemaFolder, genFolder, prefix string, goTypes m
 func executeTemplate(allTemplates *template.Template, templateName, outputFileName string, data interface{}) error {
 	// Write the template output to a buffer
 	generated := new(bytes.Buffer)
+
 	err := allTemplates.ExecuteTemplate(generated, templateName, data)
 	if err != nil {
 		return err
@@ -255,7 +257,7 @@ func getWalkProcessor(allTemplates *template.Template, genFolder string, goTypes
 		allData.Slice = append(allData.Slice, *data)
 
 		// Execute the template
-		return executeTemplate(allTemplates, eventTemplateFileName, genFolder+string(os.PathSeparator)+data.OutputFile(), data)
+		return executeTemplate(allTemplates, eventTemplateFileName, filepath.Join(genFolder, data.OutputFile()), data)
 	}
 }
 
@@ -358,6 +360,7 @@ func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string) (*Dat
 		SubjectLower:   eventType.Subject,
 		PredicateLower: eventType.Predicate,
 		Version:        eventType.Version,
+		VersionName:    strings.ReplaceAll(eventType.Version, ".", "_"),
 		SubjectType:    subjectTypeString,
 		Contents:       contentFields,
 		ContentTypes:   contentTypes,

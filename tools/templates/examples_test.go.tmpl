@@ -18,15 +18,17 @@ limitations under the License.
 SPDX-License-Identifier: Apache-2.0
 */
 
-package api
+package api_test
+
+import "github.com/cdevents/sdk-go/pkg/api"
 
 func init() {
     // Create events equal to examples in the spec
-	examplesProduced = make(map[string]CDEvent)
+	examplesProduced = make(map[string]api.CDEvent)
 
 {{- range $i, $data := . }}
     // {{ .Subject }}{{ .Predicate }} Event producer
-    new{{ .Subject }}{{ .Predicate }}, _ := New{{ .Subject }}{{ .Predicate }}Event()
+    new{{ .Subject }}{{ .Predicate }}, _ := api.New{{ .Subject }}{{ .Predicate }}EventV{{ .VersionName }}()
     setContext(new{{ .Subject }}{{ .Predicate }}, testSubjectId)
     example{{ .Subject }}{{ .Predicate }}Event(new{{ .Subject }}{{ .Predicate }})
     examplesProduced[new{{ .Subject }}{{ .Predicate }}.GetType().Short()] = new{{ .Subject }}{{ .Predicate }}

@@ -16,13 +16,14 @@ limitations under the License.
 SPDX-License-Identifier: Apache-2.0
 */
 
-package api
+package api_test
 
 import (
 	"encoding/json"
 	"os"
 	"testing"
 
+	"github.com/cdevents/sdk-go/pkg/api"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	jsonschema "github.com/santhosh-tekuri/jsonschema/v5"
@@ -47,51 +48,57 @@ var (
 	testDataXml  = []byte("<xml>testData</xml>")
 	testChangeId = "myChange123"
 
-	eventJsonCustomData             *FooSubjectBarPredicateEvent
-	eventNonJsonCustomData          *FooSubjectBarPredicateEvent
-	eventJsonCustomDataUnmarshalled *FooSubjectBarPredicateEvent
+	eventJsonCustomData             *api.FooSubjectBarPredicateEvent
+	eventNonJsonCustomData          *api.FooSubjectBarPredicateEvent
+	eventJsonCustomDataUnmarshalled *api.FooSubjectBarPredicateEvent
 
 	eventJsonCustomDataFile         = "json_custom_data"
 	eventImplicitJsonCustomDataFile = "implicit_json_custom_data"
 	eventNonJsonCustomDataFile      = "non_json_custom_data"
 )
 
-func setContext(event CDEventWriter, subjectId string) {
+func panicOnError(err error) {
+	if err != nil {
+		panic(err.Error())
+	}
+}
+
+func setContext(event api.CDEventWriter, subjectId string) {
 	event.SetSource(testSource)
 	event.SetSubjectId(subjectId)
 }
 
 func init() {
-	eventJsonCustomData, _ = NewFooSubjectBarPredicateEvent()
+	eventJsonCustomData, _ = api.NewFooSubjectBarPredicateEvent()
 	setContext(eventJsonCustomData, testSubjectId)
-	eventJsonCustomData.SetSubjectReferenceField(&Reference{Id: testChangeId})
+	eventJsonCustomData.SetSubjectReferenceField(&api.Reference{Id: testChangeId})
 	eventJsonCustomData.SetSubjectPlainField(testValue)
 	eventJsonCustomData.SetSubjectArtifactId(testArtifactId)
-	eventJsonCustomData.SetSubjectObjectField(&FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
+	eventJsonCustomData.SetSubjectObjectField(&api.FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
 	err := eventJsonCustomData.SetCustomData("application/json", testDataJson)
 	panicOnError(err)
 
-	eventJsonCustomDataUnmarshalled, _ = NewFooSubjectBarPredicateEvent()
+	eventJsonCustomDataUnmarshalled, _ = api.NewFooSubjectBarPredicateEvent()
 	setContext(eventJsonCustomDataUnmarshalled, testSubjectId)
-	eventJsonCustomDataUnmarshalled.SetSubjectReferenceField(&Reference{Id: testChangeId})
+	eventJsonCustomDataUnmarshalled.SetSubjectReferenceField(&api.Reference{Id: testChangeId})
 	eventJsonCustomDataUnmarshalled.SetSubjectPlainField(testValue)
 	eventJsonCustomDataUnmarshalled.SetSubjectArtifactId(testArtifactId)
-	eventJsonCustomDataUnmarshalled.SetSubjectObjectField(&FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
+	eventJsonCustomDataUnmarshalled.SetSubjectObjectField(&api.FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
 	err = eventJsonCustomDataUnmarshalled.SetCustomData("application/json", testDataJsonUnmarshalled)
 	panicOnError(err)
 
-	eventNonJsonCustomData, _ = NewFooSubjectBarPredicateEvent()
+	eventNonJsonCustomData, _ = api.NewFooSubjectBarPredicateEvent()
 	setContext(eventNonJsonCustomData, testSubjectId)
-	eventNonJsonCustomData.SetSubjectReferenceField(&Reference{Id: testChangeId})
+	eventNonJsonCustomData.SetSubjectReferenceField(&api.Reference{Id: testChangeId})
 	eventNonJsonCustomData.SetSubjectPlainField(testValue)
 	eventNonJsonCustomData.SetSubjectArtifactId(testArtifactId)
-	eventNonJsonCustomData.SetSubjectObjectField(&FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
+	eventNonJsonCustomData.SetSubjectObjectField(&api.FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
 	err = eventNonJsonCustomData.SetCustomData("application/xml", testDataXml)
 	panicOnError(err)
 
 	// Extend the map of valid events with the test ones
-	for k, v := range TestCDEventsByUnversionedTypes {
-		CDEventsByUnversionedTypes[k] = v
+	for k, v := range api.TestCDEventsByUnversionedTypes {
+		api.CDEventsByUnversionedTypes[k] = v
 	}
 }
 
@@ -101,7 +108,7 @@ func TestAsCloudEvent(t *testing.T) {
 
 	tests := []struct {
 		name  string
-		event CDEventReader
+		event api.CDEventReader
 	}{{
 		name:  "event with JSON custom data",
 		event: eventJsonCustomData,
@@ -111,8 +118,8 @@ func TestAsCloudEvent(t *testing.T) {
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			payloadReceiver := &FooSubjectBarPredicateEvent{}
-			ce, err := AsCloudEvent(tc.event)
+			payloadReceiver := &api.FooSubjectBarPredicateEvent{}
+			ce, err := api.AsCloudEvent(tc.event)
 			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did: %v", err)
 			}
@@ -132,7 +139,7 @@ func TestAsCloudEvent(t *testing.T) {
 			if err != nil {
 				t.Fatalf("somehow cannot unmarshal test event %v, %v", ce, err)
 			}
-			if d := cmp.Diff(tc.event, payloadReceiver, cmpopts.IgnoreFields(CDEventCustomData{}, "CustomData")); d != "" {
+			if d := cmp.Diff(tc.event, payloadReceiver, cmpopts.IgnoreFields(api.CDEventCustomData{}, "CustomData")); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
 			if tc.event.GetCustomDataContentType() == "application/json" {
@@ -168,7 +175,7 @@ func TestAsCloudEvent(t *testing.T) {
 }
 
 func TestAsCloudEventInvalid(t *testing.T) {
-	_, err := AsCloudEvent(nil)
+	_, err := api.AsCloudEvent(nil)
 	if err == nil {
 		t.Fatalf("expected it to fail, but it didn't")
 	}
@@ -182,7 +189,7 @@ func TestAsJsonBytes(t *testing.T) {
 
 	tests := []struct {
 		name     string
-		event    CDEvent
+		event    api.CDEvent
 		fileName string
 	}{{
 		name:     "json custom data",
@@ -216,7 +223,7 @@ func TestAsJsonBytes(t *testing.T) {
 				t.Fatalf("Failed to validate events %s", err)
 			}
 			// Then test that AsJsonBytes produces a matching JSON from the event
-			obtainedJsonString, err := AsJsonBytes(tc.event)
+			obtainedJsonString, err := api.AsJsonBytes(tc.event)
 			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did: %v", err)
 			}
@@ -238,44 +245,44 @@ func TestAsJsonBytes(t *testing.T) {
 func TestInvalidEvent(t *testing.T) {
 
 	// mandatory source missing
-	eventNoSource, _ := NewFooSubjectBarPredicateEvent()
+	eventNoSource, _ := api.NewFooSubjectBarPredicateEvent()
 	eventNoSource.SetSubjectId(testSubjectId)
 
 	// mandatory subject id missing
-	eventNoSubjectId, _ := NewFooSubjectBarPredicateEvent()
+	eventNoSubjectId, _ := api.NewFooSubjectBarPredicateEvent()
 	eventNoSubjectId.SetSource(testSource)
 
 	// forced invalid version
-	eventBadVersion, _ := NewFooSubjectBarPredicateEvent()
+	eventBadVersion, _ := api.NewFooSubjectBarPredicateEvent()
 	eventBadVersion.Context.Version = "invalid"
 
 	// mandatory plainField and referenceField missing
-	eventIncompleteSubject, _ := NewFooSubjectBarPredicateEvent()
+	eventIncompleteSubject, _ := api.NewFooSubjectBarPredicateEvent()
 	eventIncompleteSubject.SetSource(testSource)
 	eventIncompleteSubject.SetSubjectId(testSubjectId)
 
 	// invalid source format in context
-	eventInvalidSource, _ := NewFooSubjectBarPredicateEvent()
+	eventInvalidSource, _ := api.NewFooSubjectBarPredicateEvent()
 	eventInvalidSource.SetSource("\\--##@@")
 
 	// invalid source format in reference
-	eventInvalidSourceReference, _ := NewFooSubjectBarPredicateEvent()
+	eventInvalidSourceReference, _ := api.NewFooSubjectBarPredicateEvent()
 	eventInvalidSourceReference.SetSubjectReferenceField(
-		&Reference{Id: "1234", Source: "\\--##@@"})
+		&api.Reference{Id: "1234", Source: "\\--##@@"})
 
 	// invalid format of purl
-	eventInvalidPurl, _ := NewFooSubjectBarPredicateEvent()
+	eventInvalidPurl, _ := api.NewFooSubjectBarPredicateEvent()
 	setContext(eventInvalidPurl, testSubjectId)
 	eventInvalidPurl.SetSubjectArtifactId("not-a-valid-purl")
 
 	// invalid event type
-	eventInvalidType := &FooSubjectBarPredicateEvent{
-		Context: Context{
+	eventInvalidType := &api.FooSubjectBarPredicateEvent{
+		Context: api.Context{
 			Type:    "not-a-valid-type",
-			Version: CDEventsSpecVersion,
+			Version: api.CDEventsSpecVersion,
 		},
-		Subject: FooSubjectBarPredicateSubject{
-			SubjectBase: SubjectBase{
+		Subject: api.FooSubjectBarPredicateSubject{
+			SubjectBase: api.SubjectBase{
 				Type: "notAValidSubjectType",
 			},
 		},
@@ -283,7 +290,7 @@ func TestInvalidEvent(t *testing.T) {
 
 	tests := []struct {
 		name  string
-		event CDEvent
+		event api.CDEvent
 	}{{
 		name:  "missing source",
 		event: eventNoSource,
@@ -312,7 +319,7 @@ func TestInvalidEvent(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			// First validate that the test JSON compiles against the schema
-			err := Validate(tc.event)
+			err := api.Validate(tc.event)
 			if err == nil {
 				t.Fatalf("Expected validation to fail, but it succeeded instead")
 			}
@@ -321,7 +328,7 @@ func TestInvalidEvent(t *testing.T) {
 }
 
 func TestAsJsonStringEmpty(t *testing.T) {
-	obtainedJsonString, err := AsJsonString(nil)
+	obtainedJsonString, err := api.AsJsonString(nil)
 	if err != nil {
 		t.Fatalf("didn't expected it to fail, but it did: %v", err)
 	}
@@ -334,7 +341,7 @@ func TestNewFromJsonString(t *testing.T) {
 
 	tests := []struct {
 		name     string
-		event    CDEvent
+		event    api.CDEvent
 		fileName string
 	}{{
 		name:     "json custom data",
@@ -356,7 +363,7 @@ func TestNewFromJsonString(t *testing.T) {
 			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did: %v", err)
 			}
-			obtainedEvent, err := NewFromJsonBytes(eventBytes)
+			obtainedEvent, err := api.NewFromJsonBytes(eventBytes)
 			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did: %v", err)
 			}
@@ -401,12 +408,12 @@ func TestParseType(t *testing.T) {
 	tests := []struct {
 		name      string
 		eventType string
-		want      *CDEventType
+		want      *api.CDEventType
 		wantError string
 	}{{
 		name:      "valid",
 		eventType: "dev.cdevents.foosubject.barpredicate.0.1.2-draft",
-		want: &CDEventType{
+		want: &api.CDEventType{
 			Subject:   "foosubject",
 			Predicate: "barpredicate",
 			Version:   "0.1.2-draft",
@@ -440,7 +447,7 @@ func TestParseType(t *testing.T) {
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			obtained, err := ParseType(tc.eventType)
+			obtained, err := api.ParseType(tc.eventType)
 			if err != nil {
 				if tc.wantError == "" {
 					t.Fatalf("didn't expected it to fail, but it did: %v", err)
@@ -459,16 +466,16 @@ func TestParseType(t *testing.T) {
 	}
 }
 
-func testEventWithVersion(eventVersion string, specVersion string) *FooSubjectBarPredicateEvent {
-	event, _ := NewFooSubjectBarPredicateEvent()
+func testEventWithVersion(eventVersion string, specVersion string) *api.FooSubjectBarPredicateEvent {
+	event, _ := api.NewFooSubjectBarPredicateEvent()
 	setContext(event, testSubjectId)
-	event.SetSubjectReferenceField(&Reference{Id: testChangeId})
+	event.SetSubjectReferenceField(&api.Reference{Id: testChangeId})
 	event.SetSubjectPlainField(testValue)
 	event.SetSubjectArtifactId(testArtifactId)
-	event.SetSubjectObjectField(&FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
+	event.SetSubjectObjectField(&api.FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
 	err := event.SetCustomData("application/json", testDataJsonUnmarshalled)
 	panicOnError(err)
-	etype, err := ParseType(event.Context.Type)
+	etype, err := api.ParseType(event.Context.Type)
 	panicOnError(err)
 	etype.Version = eventVersion
 	event.Context.Version = specVersion
@@ -478,16 +485,16 @@ func testEventWithVersion(eventVersion string, specVersion string) *FooSubjectBa
 
 func TestNewFromJsonBytes(t *testing.T) {
 
-	minorVersion := testEventWithVersion("1.999.0", CDEventsSpecVersion)
-	patchVersion := testEventWithVersion("1.2.999", CDEventsSpecVersion)
-	pastPatchVersion := testEventWithVersion("1.2.0", CDEventsSpecVersion)
+	minorVersion := testEventWithVersion("1.999.0", api.CDEventsSpecVersion)
+	patchVersion := testEventWithVersion("1.2.999", api.CDEventsSpecVersion)
+	pastPatchVersion := testEventWithVersion("1.2.0", api.CDEventsSpecVersion)
 	pastSpecVersion := testEventWithVersion("1.2.3", "0.1.0")
 
 	tests := []struct {
 		testFile    string
 		description string
 		wantError   string
-		wantEvent   CDEvent
+		wantEvent   api.CDEvent
 	}{{
 		testFile:    "future_event_major_version",
 		description: "A newer major version in the event is backward incompatible and cannot be parsed",
@@ -531,7 +538,7 @@ func TestNewFromJsonBytes(t *testing.T) {
 			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did: %v", err)
 			}
-			obtained, err := NewFromJsonBytes(eventBytes)
+			obtained, err := api.NewFromJsonBytes(eventBytes)
 			if err != nil {
 				if tc.wantError == "" {
 					t.Fatalf("didn't expected it to fail, but it did: %v", err)
@@ -547,7 +554,7 @@ func TestNewFromJsonBytes(t *testing.T) {
 					t.Fatalf("expected an error, but go none")
 				} else {
 					// Check the event is what is expected
-					if d := cmp.Diff(tc.wantEvent, obtained, cmpopts.IgnoreFields(Context{}, "Id", "Timestamp")); d != "" {
+					if d := cmp.Diff(tc.wantEvent, obtained, cmpopts.IgnoreFields(api.Context{}, "Id", "Timestamp")); d != "" {
 						t.Errorf("args: diff(-want,+got):\n%s", d)
 					}
 				}

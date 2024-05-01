@@ -35,6 +35,7 @@ var (
 	testSubjectType = "fooSubject"
 	testPredicate   = "BarPredicate"
 	testVersion     = "1.2.3"
+	testVersionName = "1_2_3"
 )
 
 func panicOnError(err error) {
@@ -57,6 +58,7 @@ func TestDataFromSchema(t *testing.T) {
 		SubjectLower:   strings.ToLower(testSubject),
 		PredicateLower: strings.ToLower(testPredicate),
 		Version:        testVersion,
+		VersionName:    testVersionName,
 		SubjectType:    testSubjectType,
 		Contents: []ContentField{{
 			Name:      "ArtifactId",

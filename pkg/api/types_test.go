@@ -16,12 +16,13 @@ limitations under the License.
 SPDX-License-Identifier: Apache-2.0
 */
 
-package api
+package api_test
 
 import (
 	"encoding/json"
 	"testing"
 
+	"github.com/cdevents/sdk-go/pkg/api"
 	"github.com/google/go-cmp/cmp"
 )
 
@@ -32,11 +33,11 @@ const (
 var (
 	testObject                               = testType{TestData: "testValue"}
 	testJsonString                           []byte
-	eventWithNonJsonCustomData               *ArtifactPackagedEvent
-	eventWithInterfaceJsonCustomData         *ArtifactPackagedEvent
-	eventWithInterfaceJsonImplicitCustomData *ArtifactPackagedEvent
-	eventWithJsonCustomData                  *ArtifactPackagedEvent
-	eventWithJsonImplicitCustomData          *ArtifactPackagedEvent
+	eventWithNonJsonCustomData               *api.ArtifactPackagedEventV0_1_1
+	eventWithInterfaceJsonCustomData         *api.ArtifactPackagedEventV0_1_1
+	eventWithInterfaceJsonImplicitCustomData *api.ArtifactPackagedEventV0_1_1
+	eventWithJsonCustomData                  *api.ArtifactPackagedEventV0_1_1
+	eventWithJsonImplicitCustomData          *api.ArtifactPackagedEventV0_1_1
 )
 
 func init() {
@@ -44,23 +45,23 @@ func init() {
 	testJsonString, err = json.Marshal(testObject)
 	panicOnError(err)
 
-	eventWithNonJsonCustomData, _ = NewArtifactPackagedEvent()
+	eventWithNonJsonCustomData, _ = api.NewArtifactPackagedEventV0_1_1()
 	eventWithNonJsonCustomData.CustomDataContentType = "application/xml"
 	eventWithNonJsonCustomData.CustomData = []byte(testXmlString)
 
-	eventWithJsonCustomData, _ = NewArtifactPackagedEvent()
+	eventWithJsonCustomData, _ = api.NewArtifactPackagedEventV0_1_1()
 	eventWithJsonCustomData.CustomDataContentType = "application/json"
 	eventWithJsonCustomData.CustomData = testJsonString
 
-	eventWithJsonImplicitCustomData, _ = NewArtifactPackagedEvent()
+	eventWithJsonImplicitCustomData, _ = api.NewArtifactPackagedEventV0_1_1()
 	eventWithJsonImplicitCustomData.CustomDataContentType = ""
 	eventWithJsonImplicitCustomData.CustomData = testJsonString
 
-	eventWithInterfaceJsonCustomData, _ = NewArtifactPackagedEvent()
+	eventWithInterfaceJsonCustomData, _ = api.NewArtifactPackagedEventV0_1_1()
 	eventWithInterfaceJsonCustomData.CustomDataContentType = "application/json"
 	eventWithInterfaceJsonCustomData.CustomData = testObject
 
-	eventWithInterfaceJsonImplicitCustomData, _ = NewArtifactPackagedEvent()
+	eventWithInterfaceJsonImplicitCustomData, _ = api.NewArtifactPackagedEventV0_1_1()
 	eventWithInterfaceJsonImplicitCustomData.CustomDataContentType = ""
 	eventWithInterfaceJsonImplicitCustomData.CustomData = testObject
 }
@@ -78,7 +79,7 @@ func TestGetCustomDataAsNonJson(t *testing.T) {
 	receiver := &testType{}
 	expectedError := "cannot unmarshal content-type application/xml"
 
-	err := GetCustomDataAs(eventWithNonJsonCustomData, receiver)
+	err := api.GetCustomDataAs(eventWithNonJsonCustomData, receiver)
 	if err == nil {
 		t.Fatalf("expected error, got nil")
 	}
@@ -95,7 +96,7 @@ func TestGetCustomDataAsJson(t *testing.T) {
 
 	tests := []struct {
 		name  string
-		event CDEvent
+		event api.CDEvent
 	}{{
 		name:  "json bytes",
 		event: eventWithJsonCustomData,
@@ -112,7 +113,7 @@ func TestGetCustomDataAsJson(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			err := GetCustomDataAs(tc.event, receiver)
+			err := api.GetCustomDataAs(tc.event, receiver)
 			if err != nil {
 				t.Fatalf("did not expect an error, got %v", err)
 			}
@@ -131,7 +132,7 @@ func TestGetCustomDataAsJsonInvalidReceiver(t *testing.T) {
 
 	tests := []struct {
 		name  string
-		event CDEvent
+		event api.CDEvent
 	}{{
 		name:  "json bytes",
 		event: eventWithJsonCustomData,
@@ -148,7 +149,7 @@ func TestGetCustomDataAsJsonInvalidReceiver(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			err := GetCustomDataAs(tc.event, receiver)
+			err := api.GetCustomDataAs(tc.event, receiver)
 			if err != nil {
 				t.Fatalf("unmarshal failed: %v", err)
 			}
@@ -191,7 +192,7 @@ func TestSetCustomData(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			e, _ := NewArtifactPackagedEvent()
+			e, _ := api.NewArtifactPackagedEventV0_1_1()
 			err := e.SetCustomData(tc.contentType, tc.data)
 			if err != nil {
 				t.Fatalf("expected to set the custom data, but got %v", err)
@@ -205,7 +206,7 @@ func TestSetCustomData(t *testing.T) {
 }
 
 func TestSetCustomDataInvalid(t *testing.T) {
-	e, _ := NewArtifactPackagedEvent()
+	e, _ := api.NewArtifactPackagedEventV0_1_1()
 	err := e.SetCustomData("application/xml", testType{TestData: "testValue"})
 	if err == nil {
 		t.Fatalf("did not expect this to work, but it did")
@@ -248,7 +249,7 @@ func TestGetCustomData(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			e, _ := NewArtifactPackagedEvent()
+			e, _ := api.NewArtifactPackagedEventV0_1_1()
 			err := e.SetCustomData(tc.contentType, tc.data)
 			if err != nil {
 				t.Fatalf("expected to set the custom data, but got %v", err)
@@ -266,7 +267,7 @@ func TestGetCustomData(t *testing.T) {
 }
 
 func TestGetCustomDataInvalidJson(t *testing.T) {
-	e, _ := NewArtifactPackagedEvent()
+	e, _ := api.NewArtifactPackagedEventV0_1_1()
 	data := testType{TestData: "testValue"}
 	dataBytes, err := json.Marshal(data)
 	if err != nil {
@@ -283,7 +284,7 @@ func TestGetCustomDataInvalidJson(t *testing.T) {
 }
 
 func TestGetCustomDataXmlNotBytes(t *testing.T) {
-	e, _ := NewArtifactPackagedEvent()
+	e, _ := api.NewArtifactPackagedEventV0_1_1()
 	data := testType{TestData: "testValue"}
 	// Set using "application/json", else it won't be allowed
 	err := e.SetCustomData("application/json", data)
@@ -330,7 +331,7 @@ func TestGetCustomDataRaw(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			e, _ := NewArtifactPackagedEvent()
+			e, _ := api.NewArtifactPackagedEventV0_1_1()
 			err := e.SetCustomData(tc.contentType, tc.data)
 			if err != nil {
 				t.Fatalf("expected to set the custom data, but got %v", err)
@@ -348,7 +349,7 @@ func TestGetCustomDataRaw(t *testing.T) {
 }
 
 func TestGetCustomDataRawXmlNotBytes(t *testing.T) {
-	e, _ := NewArtifactPackagedEvent()
+	e, _ := api.NewArtifactPackagedEventV0_1_1()
 	data := testType{TestData: "testValue"}
 	// Set using "application/json", else it won't be allowed
 	err := e.SetCustomData("application/json", data)
@@ -367,12 +368,12 @@ func TestCDEventTypeFromString(t *testing.T) {
 	tests := []struct {
 		name      string
 		eventType string
-		want      *CDEventType
+		want      *api.CDEventType
 		wantError bool
 	}{{
 		name:      "parses",
 		eventType: "dev.cdevents.a.b.123.a-da#@#",
-		want: &CDEventType{
+		want: &api.CDEventType{
 			Subject:   "a",
 			Predicate: "b",
 			Version:   "123.a-da#@#",
@@ -397,7 +398,7 @@ func TestCDEventTypeFromString(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			got, err := CDEventTypeFromString(tc.eventType)
+			got, err := api.CDEventTypeFromString(tc.eventType)
 			if tc.wantError && err == nil {
 				t.Fatalf("expected error but got none")
 			}

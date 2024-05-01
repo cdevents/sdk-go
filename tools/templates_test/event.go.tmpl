@@ -29,7 +29,7 @@ var {{.SubjectLower}}{{.PredicateLower}}schema = `{{ .Schema }}`
 
 var (
 	// {{.Subject}}{{.Predicate}} event v{{.Version}}
-	{{.Subject}}{{.Predicate}}EventV1 CDEventType = CDEventType{
+	{{.Subject}}{{.Predicate}}EventV{{.VersionName}} CDEventType = CDEventType{
 		Subject:   "{{.SubjectLower}}",
 		Predicate: "{{.PredicateLower}}",
 		Version:   "{{.Version}}",
@@ -48,7 +48,7 @@ type {{.Subject}}{{.Predicate}}Subject struct {
 }
 
 func (sc {{.Subject}}{{.Predicate}}Subject) GetEventType() CDEventType {
-	return {{.Subject}}{{.Predicate}}EventV1
+	return {{.Subject}}{{.Predicate}}EventV{{.VersionName}}
 }
 
 func (sc {{.Subject}}{{.Predicate}}Subject) GetSubjectType() SubjectType {
@@ -64,7 +64,7 @@ type {{.Subject}}{{.Predicate}}Event struct {
 // CDEventsReader implementation
 
 func (e {{.Subject}}{{.Predicate}}Event) GetType() CDEventType {
-	return {{.Subject}}{{.Predicate}}EventV1
+	return {{.Subject}}{{.Predicate}}EventV{{.VersionName}}
 }
 
 func (e {{.Subject}}{{.Predicate}}Event) GetVersion() string {
@@ -163,7 +163,7 @@ func (e *{{$.Subject}}{{$.Predicate}}Event) SetSubject{{ .Name }}({{ .NameLower 
 func New{{.Subject}}{{.Predicate}}Event() (*{{.Subject}}{{.Predicate}}Event, error) {
 	e := &{{.Subject}}{{.Predicate}}Event{
 		Context: Context{
-			Type:    {{.Subject}}{{.Predicate}}EventV1.String(),
+			Type:    {{.Subject}}{{.Predicate}}EventV{{.VersionName}}.String(),
 			Version: CDEventsSpecVersion,
 		},
 		Subject: {{.Subject}}{{.Predicate}}Subject{
