@@ -39,10 +39,13 @@ import (
 
 var (
 	TEMPLATES            = "tools/templates/*.tmpl"
-	SCHEMA_FOLDER        = "./pkg/api/spec/schemas"
+	PROJECT_ROOT         = "./pkg/api"
+	SPEC_FOLDER_PREFIX   = "spec-"
+	SPEC_VERSIONS        = []string{"v0.3"}
+	SCHEMA_FOLDER        = "schemas"
 	GEN_CODE_FOLDER      = "./pkg/api"
 	TEST_TEMPLATES       = "tools/templates_test/*.tmpl"
-	TEST_SCHEMA_FOLDER   = "./pkg/api/tests/schemas"
+	TEST_SCHEMA_FOLDER   = "tests"
 	TEST_GEN_CODE_FOLDER = "./pkg/api"
 	TEST_OUTPUT_PREFIX   = "ztest_"
 
@@ -134,15 +137,19 @@ func main() {
 	var err error
 
 	// Generate SDK files
-	log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEMPLATES, SCHEMA_FOLDER, GEN_CODE_FOLDER)
-	err = generate(TEMPLATES, SCHEMA_FOLDER, GEN_CODE_FOLDER, "", GO_TYPES_NAMES)
-	if err != nil {
-		log.Fatalf("%s", err.Error())
+	for _, version := range SPEC_VERSIONS {
+		versioned_schema_folder := filepath.Join(PROJECT_ROOT, SPEC_FOLDER_PREFIX+version, SCHEMA_FOLDER)
+		log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEMPLATES, versioned_schema_folder, GEN_CODE_FOLDER)
+		err = generate(TEMPLATES, versioned_schema_folder, GEN_CODE_FOLDER, "", GO_TYPES_NAMES)
+		if err != nil {
+			log.Fatalf("%s", err.Error())
+		}
 	}
 
 	// Generate SDK test files
-	log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEST_TEMPLATES, TEST_SCHEMA_FOLDER, TEST_GEN_CODE_FOLDER)
-	err = generate(TEST_TEMPLATES, TEST_SCHEMA_FOLDER, TEST_GEN_CODE_FOLDER, TEST_OUTPUT_PREFIX, GO_TYPES_TEST_NAMES)
+	test_schema_folder := filepath.Join(PROJECT_ROOT, TEST_SCHEMA_FOLDER, SCHEMA_FOLDER)
+	log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEST_TEMPLATES, test_schema_folder, TEST_GEN_CODE_FOLDER)
+	err = generate(TEST_TEMPLATES, test_schema_folder, TEST_GEN_CODE_FOLDER, TEST_OUTPUT_PREFIX, GO_TYPES_TEST_NAMES)
 	if err != nil {
 		log.Fatalf("%s", err.Error())
 	}
