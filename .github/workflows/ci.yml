@@ -17,7 +17,7 @@ jobs:
       GOPATH: /home/runner/go
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: recursive
     - name: Setup Go
@@ -39,7 +39,7 @@ jobs:
       GOPATH: /home/runner/go
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: recursive
     - name: Setup Go
