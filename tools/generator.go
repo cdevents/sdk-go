@@ -69,6 +69,7 @@ var (
 		"examples_test.go.tmpl",
 		"factory_test.go.tmpl",
 	}
+	specTemplateFileName = "docs.go.tmpl"
 
 	// Tool
 	capitalizer cases.Caser
@@ -106,7 +107,9 @@ type Data struct {
 }
 
 type AllData struct {
-	Slice []Data
+	Slice           []Data
+	SpecVersion     string
+	SpecVersionName string
 }
 
 func (d Data) OutputFile() string {
@@ -141,7 +144,7 @@ func main() {
 	for _, version := range SPEC_VERSIONS {
 		versioned_schema_folder := filepath.Join(PROJECT_ROOT, SPEC_FOLDER_PREFIX+version, SCHEMA_FOLDER)
 		log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEMPLATES, versioned_schema_folder, GEN_CODE_FOLDER)
-		err = generate(TEMPLATES, versioned_schema_folder, GEN_CODE_FOLDER, "", GO_TYPES_NAMES)
+		err = generate(TEMPLATES, versioned_schema_folder, GEN_CODE_FOLDER, "", version, GO_TYPES_NAMES)
 		if err != nil {
 			log.Fatalf("%s", err.Error())
 		}
@@ -150,17 +153,19 @@ func main() {
 	// Generate SDK test files
 	test_schema_folder := filepath.Join(PROJECT_ROOT, TEST_SCHEMA_FOLDER, SCHEMA_FOLDER)
 	log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEST_TEMPLATES, test_schema_folder, TEST_GEN_CODE_FOLDER)
-	err = generate(TEST_TEMPLATES, test_schema_folder, TEST_GEN_CODE_FOLDER, TEST_OUTPUT_PREFIX, GO_TYPES_TEST_NAMES)
+	err = generate(TEST_TEMPLATES, test_schema_folder, TEST_GEN_CODE_FOLDER, TEST_OUTPUT_PREFIX, "", GO_TYPES_TEST_NAMES)
 	if err != nil {
 		log.Fatalf("%s", err.Error())
 	}
 }
 
-func generate(templatesFolder, schemaFolder, genFolder, prefix string, goTypes map[string]string) error {
+func generate(templatesFolder, schemaFolder, genFolder, prefix, specVersion string, goTypes map[string]string) error {
 	// allData is used to accumulate data from all jsonschemas
 	// which is then used to run shared templates
 	allData := AllData{
-		Slice: make([]Data, 0),
+		Slice:           make([]Data, 0),
+		SpecVersion:     specVersion,
+		SpecVersionName: strings.Replace(specVersion, ".", "", -1),
 	}
 
 	allTemplates, err := template.ParseGlob(templatesFolder)
@@ -180,6 +185,20 @@ func generate(templatesFolder, schemaFolder, genFolder, prefix string, goTypes m
 	err = executeTemplate(allTemplates, typesTemplateFileName, outputFileName, allData.Slice)
 	if err != nil {
 		return err
+	}
+
+	// Process the spec template. Create the target folder is it doesn't exist
+	if specVersion != "" {
+		specFileFolder := filepath.Join(genFolder, specVersion)
+		err = os.MkdirAll(specFileFolder, os.ModePerm)
+		if err != nil {
+			return err
+		}
+		specFileName := filepath.Join(genFolder, specVersion, strings.TrimSuffix(specTemplateFileName, filepath.Ext(specTemplateFileName)))
+		err = executeTemplate(allTemplates, specTemplateFileName, specFileName, allData)
+		if err != nil {
+			return err
+		}
 	}
 
 	// Process example test files - only for real data
