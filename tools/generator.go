@@ -39,10 +39,13 @@ import (
 
 var (
 	TEMPLATES            = "tools/templates/*.tmpl"
-	SCHEMA_FOLDER        = "./pkg/api/spec/schemas"
+	PROJECT_ROOT         = "./pkg/api"
+	SPEC_FOLDER_PREFIX   = "spec-"
+	SPEC_VERSIONS        = []string{"v0.3"}
+	SCHEMA_FOLDER        = "schemas"
 	GEN_CODE_FOLDER      = "./pkg/api"
 	TEST_TEMPLATES       = "tools/templates_test/*.tmpl"
-	TEST_SCHEMA_FOLDER   = "./pkg/api/tests/schemas"
+	TEST_SCHEMA_FOLDER   = "tests"
 	TEST_GEN_CODE_FOLDER = "./pkg/api"
 	TEST_OUTPUT_PREFIX   = "ztest_"
 
@@ -94,6 +97,7 @@ type Data struct {
 	Predicate      string
 	PredicateLower string
 	Version        string
+	VersionName    string
 	SubjectType    string
 	Contents       []ContentField
 	ContentTypes   []ContentType
@@ -106,7 +110,7 @@ type AllData struct {
 }
 
 func (d Data) OutputFile() string {
-	return "zz_" + d.Prefix + d.SubjectLower + d.PredicateLower + ".go"
+	return "zz_" + d.Prefix + d.SubjectLower + d.PredicateLower + "_" + d.VersionName + ".go"
 }
 
 func init() {
@@ -134,15 +138,19 @@ func main() {
 	var err error
 
 	// Generate SDK files
-	log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEMPLATES, SCHEMA_FOLDER, GEN_CODE_FOLDER)
-	err = generate(TEMPLATES, SCHEMA_FOLDER, GEN_CODE_FOLDER, "", GO_TYPES_NAMES)
-	if err != nil {
-		log.Fatalf("%s", err.Error())
+	for _, version := range SPEC_VERSIONS {
+		versioned_schema_folder := filepath.Join(PROJECT_ROOT, SPEC_FOLDER_PREFIX+version, SCHEMA_FOLDER)
+		log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEMPLATES, versioned_schema_folder, GEN_CODE_FOLDER)
+		err = generate(TEMPLATES, versioned_schema_folder, GEN_CODE_FOLDER, "", GO_TYPES_NAMES)
+		if err != nil {
+			log.Fatalf("%s", err.Error())
+		}
 	}
 
 	// Generate SDK test files
-	log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEST_TEMPLATES, TEST_SCHEMA_FOLDER, TEST_GEN_CODE_FOLDER)
-	err = generate(TEST_TEMPLATES, TEST_SCHEMA_FOLDER, TEST_GEN_CODE_FOLDER, TEST_OUTPUT_PREFIX, GO_TYPES_TEST_NAMES)
+	test_schema_folder := filepath.Join(PROJECT_ROOT, TEST_SCHEMA_FOLDER, SCHEMA_FOLDER)
+	log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEST_TEMPLATES, test_schema_folder, TEST_GEN_CODE_FOLDER)
+	err = generate(TEST_TEMPLATES, test_schema_folder, TEST_GEN_CODE_FOLDER, TEST_OUTPUT_PREFIX, GO_TYPES_TEST_NAMES)
 	if err != nil {
 		log.Fatalf("%s", err.Error())
 	}
@@ -168,7 +176,7 @@ func generate(templatesFolder, schemaFolder, genFolder, prefix string, goTypes m
 	}
 
 	// Process the types template
-	outputFileName := genFolder + string(os.PathSeparator) + "zz_" + prefix + strings.TrimSuffix(typesTemplateFileName, filepath.Ext(typesTemplateFileName))
+	outputFileName := filepath.Join(genFolder, "zz_"+prefix+strings.TrimSuffix(typesTemplateFileName, filepath.Ext(typesTemplateFileName)))
 	err = executeTemplate(allTemplates, typesTemplateFileName, outputFileName, allData.Slice)
 	if err != nil {
 		return err
@@ -177,7 +185,7 @@ func generate(templatesFolder, schemaFolder, genFolder, prefix string, goTypes m
 	// Process example test files - only for real data
 	if prefix == "" {
 		for _, examplesTestsTemplateFileName := range examplesTestsTemplateFileNames {
-			outputFileName := genFolder + string(os.PathSeparator) + "zz_" + prefix + strings.TrimSuffix(examplesTestsTemplateFileName, filepath.Ext(examplesTestsTemplateFileName))
+			outputFileName := filepath.Join(genFolder, "zz_"+prefix+strings.TrimSuffix(examplesTestsTemplateFileName, filepath.Ext(examplesTestsTemplateFileName)))
 			err = executeTemplate(allTemplates, examplesTestsTemplateFileName, outputFileName, allData.Slice)
 			if err != nil {
 				return err
@@ -190,6 +198,7 @@ func generate(templatesFolder, schemaFolder, genFolder, prefix string, goTypes m
 func executeTemplate(allTemplates *template.Template, templateName, outputFileName string, data interface{}) error {
 	// Write the template output to a buffer
 	generated := new(bytes.Buffer)
+
 	err := allTemplates.ExecuteTemplate(generated, templateName, data)
 	if err != nil {
 		return err
@@ -248,7 +257,7 @@ func getWalkProcessor(allTemplates *template.Template, genFolder string, goTypes
 		allData.Slice = append(allData.Slice, *data)
 
 		// Execute the template
-		return executeTemplate(allTemplates, eventTemplateFileName, genFolder+string(os.PathSeparator)+data.OutputFile(), data)
+		return executeTemplate(allTemplates, eventTemplateFileName, filepath.Join(genFolder, data.OutputFile()), data)
 	}
 }
 
@@ -351,6 +360,7 @@ func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string) (*Dat
 		SubjectLower:   eventType.Subject,
 		PredicateLower: eventType.Predicate,
 		Version:        eventType.Version,
+		VersionName:    strings.ReplaceAll(eventType.Version, ".", "_"),
 		SubjectType:    subjectTypeString,
 		Contents:       contentFields,
 		ContentTypes:   contentTypes,

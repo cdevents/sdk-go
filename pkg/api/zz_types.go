@@ -23,45 +23,45 @@ package api
 import "fmt"
 
 var CDEventsTypes = []CDEvent{
-	&ArtifactPackagedEvent{},
-	&ArtifactPublishedEvent{},
-	&ArtifactSignedEvent{},
-	&BranchCreatedEvent{},
-	&BranchDeletedEvent{},
-	&BuildFinishedEvent{},
-	&BuildQueuedEvent{},
-	&BuildStartedEvent{},
-	&ChangeAbandonedEvent{},
-	&ChangeCreatedEvent{},
-	&ChangeMergedEvent{},
-	&ChangeReviewedEvent{},
-	&ChangeUpdatedEvent{},
-	&EnvironmentCreatedEvent{},
-	&EnvironmentDeletedEvent{},
-	&EnvironmentModifiedEvent{},
-	&IncidentDetectedEvent{},
-	&IncidentReportedEvent{},
-	&IncidentResolvedEvent{},
-	&PipelineRunFinishedEvent{},
-	&PipelineRunQueuedEvent{},
-	&PipelineRunStartedEvent{},
-	&RepositoryCreatedEvent{},
-	&RepositoryDeletedEvent{},
-	&RepositoryModifiedEvent{},
-	&ServiceDeployedEvent{},
-	&ServicePublishedEvent{},
-	&ServiceRemovedEvent{},
-	&ServiceRolledbackEvent{},
-	&ServiceUpgradedEvent{},
-	&TaskRunFinishedEvent{},
-	&TaskRunStartedEvent{},
-	&TestCaseRunFinishedEvent{},
-	&TestCaseRunQueuedEvent{},
-	&TestCaseRunStartedEvent{},
-	&TestOutputPublishedEvent{},
-	&TestSuiteRunFinishedEvent{},
-	&TestSuiteRunQueuedEvent{},
-	&TestSuiteRunStartedEvent{},
+	&ArtifactPackagedEventV0_1_1{},
+	&ArtifactPublishedEventV0_1_1{},
+	&ArtifactSignedEventV0_1_0{},
+	&BranchCreatedEventV0_1_2{},
+	&BranchDeletedEventV0_1_2{},
+	&BuildFinishedEventV0_1_1{},
+	&BuildQueuedEventV0_1_1{},
+	&BuildStartedEventV0_1_1{},
+	&ChangeAbandonedEventV0_1_2{},
+	&ChangeCreatedEventV0_1_2{},
+	&ChangeMergedEventV0_1_2{},
+	&ChangeReviewedEventV0_1_2{},
+	&ChangeUpdatedEventV0_1_2{},
+	&EnvironmentCreatedEventV0_1_1{},
+	&EnvironmentDeletedEventV0_1_1{},
+	&EnvironmentModifiedEventV0_1_1{},
+	&IncidentDetectedEventV0_1_0{},
+	&IncidentReportedEventV0_1_0{},
+	&IncidentResolvedEventV0_1_0{},
+	&PipelineRunFinishedEventV0_1_1{},
+	&PipelineRunQueuedEventV0_1_1{},
+	&PipelineRunStartedEventV0_1_1{},
+	&RepositoryCreatedEventV0_1_1{},
+	&RepositoryDeletedEventV0_1_1{},
+	&RepositoryModifiedEventV0_1_1{},
+	&ServiceDeployedEventV0_1_1{},
+	&ServicePublishedEventV0_1_1{},
+	&ServiceRemovedEventV0_1_1{},
+	&ServiceRolledbackEventV0_1_1{},
+	&ServiceUpgradedEventV0_1_1{},
+	&TaskRunFinishedEventV0_1_1{},
+	&TaskRunStartedEventV0_1_1{},
+	&TestCaseRunFinishedEventV0_1_0{},
+	&TestCaseRunQueuedEventV0_1_0{},
+	&TestCaseRunStartedEventV0_1_0{},
+	&TestOutputPublishedEventV0_1_0{},
+	&TestSuiteRunFinishedEventV0_1_0{},
+	&TestSuiteRunQueuedEventV0_1_0{},
+	&TestSuiteRunStartedEventV0_1_0{},
 }
 
 func init() {
@@ -76,84 +76,84 @@ func init() {
 // This function can be used by users but it's meant mainly for testing purposes
 func NewCDEvent(eventType string) (CDEvent, error) {
 	switch eventType {
-	case ArtifactPackagedEventV1.String():
-		return NewArtifactPackagedEvent()
-	case ArtifactPublishedEventV1.String():
-		return NewArtifactPublishedEvent()
-	case ArtifactSignedEventV1.String():
-		return NewArtifactSignedEvent()
-	case BranchCreatedEventV1.String():
-		return NewBranchCreatedEvent()
-	case BranchDeletedEventV1.String():
-		return NewBranchDeletedEvent()
-	case BuildFinishedEventV1.String():
-		return NewBuildFinishedEvent()
-	case BuildQueuedEventV1.String():
-		return NewBuildQueuedEvent()
-	case BuildStartedEventV1.String():
-		return NewBuildStartedEvent()
-	case ChangeAbandonedEventV1.String():
-		return NewChangeAbandonedEvent()
-	case ChangeCreatedEventV1.String():
-		return NewChangeCreatedEvent()
-	case ChangeMergedEventV1.String():
-		return NewChangeMergedEvent()
-	case ChangeReviewedEventV1.String():
-		return NewChangeReviewedEvent()
-	case ChangeUpdatedEventV1.String():
-		return NewChangeUpdatedEvent()
-	case EnvironmentCreatedEventV1.String():
-		return NewEnvironmentCreatedEvent()
-	case EnvironmentDeletedEventV1.String():
-		return NewEnvironmentDeletedEvent()
-	case EnvironmentModifiedEventV1.String():
-		return NewEnvironmentModifiedEvent()
-	case IncidentDetectedEventV1.String():
-		return NewIncidentDetectedEvent()
-	case IncidentReportedEventV1.String():
-		return NewIncidentReportedEvent()
-	case IncidentResolvedEventV1.String():
-		return NewIncidentResolvedEvent()
-	case PipelineRunFinishedEventV1.String():
-		return NewPipelineRunFinishedEvent()
-	case PipelineRunQueuedEventV1.String():
-		return NewPipelineRunQueuedEvent()
-	case PipelineRunStartedEventV1.String():
-		return NewPipelineRunStartedEvent()
-	case RepositoryCreatedEventV1.String():
-		return NewRepositoryCreatedEvent()
-	case RepositoryDeletedEventV1.String():
-		return NewRepositoryDeletedEvent()
-	case RepositoryModifiedEventV1.String():
-		return NewRepositoryModifiedEvent()
-	case ServiceDeployedEventV1.String():
-		return NewServiceDeployedEvent()
-	case ServicePublishedEventV1.String():
-		return NewServicePublishedEvent()
-	case ServiceRemovedEventV1.String():
-		return NewServiceRemovedEvent()
-	case ServiceRolledbackEventV1.String():
-		return NewServiceRolledbackEvent()
-	case ServiceUpgradedEventV1.String():
-		return NewServiceUpgradedEvent()
-	case TaskRunFinishedEventV1.String():
-		return NewTaskRunFinishedEvent()
-	case TaskRunStartedEventV1.String():
-		return NewTaskRunStartedEvent()
-	case TestCaseRunFinishedEventV1.String():
-		return NewTestCaseRunFinishedEvent()
-	case TestCaseRunQueuedEventV1.String():
-		return NewTestCaseRunQueuedEvent()
-	case TestCaseRunStartedEventV1.String():
-		return NewTestCaseRunStartedEvent()
-	case TestOutputPublishedEventV1.String():
-		return NewTestOutputPublishedEvent()
-	case TestSuiteRunFinishedEventV1.String():
-		return NewTestSuiteRunFinishedEvent()
-	case TestSuiteRunQueuedEventV1.String():
-		return NewTestSuiteRunQueuedEvent()
-	case TestSuiteRunStartedEventV1.String():
-		return NewTestSuiteRunStartedEvent()
+	case ArtifactPackagedEventTypeV0_1_1.String():
+		return NewArtifactPackagedEventV0_1_1()
+	case ArtifactPublishedEventTypeV0_1_1.String():
+		return NewArtifactPublishedEventV0_1_1()
+	case ArtifactSignedEventTypeV0_1_0.String():
+		return NewArtifactSignedEventV0_1_0()
+	case BranchCreatedEventTypeV0_1_2.String():
+		return NewBranchCreatedEventV0_1_2()
+	case BranchDeletedEventTypeV0_1_2.String():
+		return NewBranchDeletedEventV0_1_2()
+	case BuildFinishedEventTypeV0_1_1.String():
+		return NewBuildFinishedEventV0_1_1()
+	case BuildQueuedEventTypeV0_1_1.String():
+		return NewBuildQueuedEventV0_1_1()
+	case BuildStartedEventTypeV0_1_1.String():
+		return NewBuildStartedEventV0_1_1()
+	case ChangeAbandonedEventTypeV0_1_2.String():
+		return NewChangeAbandonedEventV0_1_2()
+	case ChangeCreatedEventTypeV0_1_2.String():
+		return NewChangeCreatedEventV0_1_2()
+	case ChangeMergedEventTypeV0_1_2.String():
+		return NewChangeMergedEventV0_1_2()
+	case ChangeReviewedEventTypeV0_1_2.String():
+		return NewChangeReviewedEventV0_1_2()
+	case ChangeUpdatedEventTypeV0_1_2.String():
+		return NewChangeUpdatedEventV0_1_2()
+	case EnvironmentCreatedEventTypeV0_1_1.String():
+		return NewEnvironmentCreatedEventV0_1_1()
+	case EnvironmentDeletedEventTypeV0_1_1.String():
+		return NewEnvironmentDeletedEventV0_1_1()
+	case EnvironmentModifiedEventTypeV0_1_1.String():
+		return NewEnvironmentModifiedEventV0_1_1()
+	case IncidentDetectedEventTypeV0_1_0.String():
+		return NewIncidentDetectedEventV0_1_0()
+	case IncidentReportedEventTypeV0_1_0.String():
+		return NewIncidentReportedEventV0_1_0()
+	case IncidentResolvedEventTypeV0_1_0.String():
+		return NewIncidentResolvedEventV0_1_0()
+	case PipelineRunFinishedEventTypeV0_1_1.String():
+		return NewPipelineRunFinishedEventV0_1_1()
+	case PipelineRunQueuedEventTypeV0_1_1.String():
+		return NewPipelineRunQueuedEventV0_1_1()
+	case PipelineRunStartedEventTypeV0_1_1.String():
+		return NewPipelineRunStartedEventV0_1_1()
+	case RepositoryCreatedEventTypeV0_1_1.String():
+		return NewRepositoryCreatedEventV0_1_1()
+	case RepositoryDeletedEventTypeV0_1_1.String():
+		return NewRepositoryDeletedEventV0_1_1()
+	case RepositoryModifiedEventTypeV0_1_1.String():
+		return NewRepositoryModifiedEventV0_1_1()
+	case ServiceDeployedEventTypeV0_1_1.String():
+		return NewServiceDeployedEventV0_1_1()
+	case ServicePublishedEventTypeV0_1_1.String():
+		return NewServicePublishedEventV0_1_1()
+	case ServiceRemovedEventTypeV0_1_1.String():
+		return NewServiceRemovedEventV0_1_1()
+	case ServiceRolledbackEventTypeV0_1_1.String():
+		return NewServiceRolledbackEventV0_1_1()
+	case ServiceUpgradedEventTypeV0_1_1.String():
+		return NewServiceUpgradedEventV0_1_1()
+	case TaskRunFinishedEventTypeV0_1_1.String():
+		return NewTaskRunFinishedEventV0_1_1()
+	case TaskRunStartedEventTypeV0_1_1.String():
+		return NewTaskRunStartedEventV0_1_1()
+	case TestCaseRunFinishedEventTypeV0_1_0.String():
+		return NewTestCaseRunFinishedEventV0_1_0()
+	case TestCaseRunQueuedEventTypeV0_1_0.String():
+		return NewTestCaseRunQueuedEventV0_1_0()
+	case TestCaseRunStartedEventTypeV0_1_0.String():
+		return NewTestCaseRunStartedEventV0_1_0()
+	case TestOutputPublishedEventTypeV0_1_0.String():
+		return NewTestOutputPublishedEventV0_1_0()
+	case TestSuiteRunFinishedEventTypeV0_1_0.String():
+		return NewTestSuiteRunFinishedEventV0_1_0()
+	case TestSuiteRunQueuedEventTypeV0_1_0.String():
+		return NewTestSuiteRunQueuedEventV0_1_0()
+	case TestSuiteRunStartedEventTypeV0_1_0.String():
+		return NewTestSuiteRunStartedEventV0_1_0()
 	default:
 		return nil, fmt.Errorf("event %v not supported", eventType)
 	}

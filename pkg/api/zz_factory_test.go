@@ -18,22 +18,24 @@ limitations under the License.
 SPDX-License-Identifier: Apache-2.0
 */
 
-package api
+package api_test
+
+import "github.com/cdevents/sdk-go/pkg/api"
 
 func init() {
 	tests = []testNewCDEventType{}
 	tests = append(tests, testNewCDEventType{
 		name:      "artifact packaged",
-		eventType: ArtifactPackagedEventV1.String(),
-		expectedEvent: &ArtifactPackagedEvent{
-			Context: Context{
-				Type:      ArtifactPackagedEventV1.String(),
+		eventType: api.ArtifactPackagedEventTypeV0_1_1.String(),
+		expectedEvent: &api.ArtifactPackagedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.ArtifactPackagedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: ArtifactPackagedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.ArtifactPackagedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "artifact",
 				},
 			},
@@ -41,16 +43,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "artifact published",
-		eventType: ArtifactPublishedEventV1.String(),
-		expectedEvent: &ArtifactPublishedEvent{
-			Context: Context{
-				Type:      ArtifactPublishedEventV1.String(),
+		eventType: api.ArtifactPublishedEventTypeV0_1_1.String(),
+		expectedEvent: &api.ArtifactPublishedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.ArtifactPublishedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: ArtifactPublishedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.ArtifactPublishedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "artifact",
 				},
 			},
@@ -58,16 +60,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "artifact signed",
-		eventType: ArtifactSignedEventV1.String(),
-		expectedEvent: &ArtifactSignedEvent{
-			Context: Context{
-				Type:      ArtifactSignedEventV1.String(),
+		eventType: api.ArtifactSignedEventTypeV0_1_0.String(),
+		expectedEvent: &api.ArtifactSignedEventV0_1_0{
+			Context: api.Context{
+				Type:      api.ArtifactSignedEventTypeV0_1_0.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: ArtifactSignedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.ArtifactSignedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "artifact",
 				},
 			},
@@ -75,16 +77,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "branch created",
-		eventType: BranchCreatedEventV1.String(),
-		expectedEvent: &BranchCreatedEvent{
-			Context: Context{
-				Type:      BranchCreatedEventV1.String(),
+		eventType: api.BranchCreatedEventTypeV0_1_2.String(),
+		expectedEvent: &api.BranchCreatedEventV0_1_2{
+			Context: api.Context{
+				Type:      api.BranchCreatedEventTypeV0_1_2.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: BranchCreatedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.BranchCreatedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "branch",
 				},
 			},
@@ -92,16 +94,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "branch deleted",
-		eventType: BranchDeletedEventV1.String(),
-		expectedEvent: &BranchDeletedEvent{
-			Context: Context{
-				Type:      BranchDeletedEventV1.String(),
+		eventType: api.BranchDeletedEventTypeV0_1_2.String(),
+		expectedEvent: &api.BranchDeletedEventV0_1_2{
+			Context: api.Context{
+				Type:      api.BranchDeletedEventTypeV0_1_2.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: BranchDeletedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.BranchDeletedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "branch",
 				},
 			},
@@ -109,16 +111,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "build finished",
-		eventType: BuildFinishedEventV1.String(),
-		expectedEvent: &BuildFinishedEvent{
-			Context: Context{
-				Type:      BuildFinishedEventV1.String(),
+		eventType: api.BuildFinishedEventTypeV0_1_1.String(),
+		expectedEvent: &api.BuildFinishedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.BuildFinishedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: BuildFinishedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.BuildFinishedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "build",
 				},
 			},
@@ -126,16 +128,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "build queued",
-		eventType: BuildQueuedEventV1.String(),
-		expectedEvent: &BuildQueuedEvent{
-			Context: Context{
-				Type:      BuildQueuedEventV1.String(),
+		eventType: api.BuildQueuedEventTypeV0_1_1.String(),
+		expectedEvent: &api.BuildQueuedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.BuildQueuedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: BuildQueuedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.BuildQueuedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "build",
 				},
 			},
@@ -143,16 +145,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "build started",
-		eventType: BuildStartedEventV1.String(),
-		expectedEvent: &BuildStartedEvent{
-			Context: Context{
-				Type:      BuildStartedEventV1.String(),
+		eventType: api.BuildStartedEventTypeV0_1_1.String(),
+		expectedEvent: &api.BuildStartedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.BuildStartedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: BuildStartedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.BuildStartedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "build",
 				},
 			},
@@ -160,16 +162,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "change abandoned",
-		eventType: ChangeAbandonedEventV1.String(),
-		expectedEvent: &ChangeAbandonedEvent{
-			Context: Context{
-				Type:      ChangeAbandonedEventV1.String(),
+		eventType: api.ChangeAbandonedEventTypeV0_1_2.String(),
+		expectedEvent: &api.ChangeAbandonedEventV0_1_2{
+			Context: api.Context{
+				Type:      api.ChangeAbandonedEventTypeV0_1_2.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: ChangeAbandonedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.ChangeAbandonedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "change",
 				},
 			},
@@ -177,16 +179,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "change created",
-		eventType: ChangeCreatedEventV1.String(),
-		expectedEvent: &ChangeCreatedEvent{
-			Context: Context{
-				Type:      ChangeCreatedEventV1.String(),
+		eventType: api.ChangeCreatedEventTypeV0_1_2.String(),
+		expectedEvent: &api.ChangeCreatedEventV0_1_2{
+			Context: api.Context{
+				Type:      api.ChangeCreatedEventTypeV0_1_2.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: ChangeCreatedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.ChangeCreatedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "change",
 				},
 			},
@@ -194,16 +196,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "change merged",
-		eventType: ChangeMergedEventV1.String(),
-		expectedEvent: &ChangeMergedEvent{
-			Context: Context{
-				Type:      ChangeMergedEventV1.String(),
+		eventType: api.ChangeMergedEventTypeV0_1_2.String(),
+		expectedEvent: &api.ChangeMergedEventV0_1_2{
+			Context: api.Context{
+				Type:      api.ChangeMergedEventTypeV0_1_2.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: ChangeMergedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.ChangeMergedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "change",
 				},
 			},
@@ -211,16 +213,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "change reviewed",
-		eventType: ChangeReviewedEventV1.String(),
-		expectedEvent: &ChangeReviewedEvent{
-			Context: Context{
-				Type:      ChangeReviewedEventV1.String(),
+		eventType: api.ChangeReviewedEventTypeV0_1_2.String(),
+		expectedEvent: &api.ChangeReviewedEventV0_1_2{
+			Context: api.Context{
+				Type:      api.ChangeReviewedEventTypeV0_1_2.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: ChangeReviewedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.ChangeReviewedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "change",
 				},
 			},
@@ -228,16 +230,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "change updated",
-		eventType: ChangeUpdatedEventV1.String(),
-		expectedEvent: &ChangeUpdatedEvent{
-			Context: Context{
-				Type:      ChangeUpdatedEventV1.String(),
+		eventType: api.ChangeUpdatedEventTypeV0_1_2.String(),
+		expectedEvent: &api.ChangeUpdatedEventV0_1_2{
+			Context: api.Context{
+				Type:      api.ChangeUpdatedEventTypeV0_1_2.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: ChangeUpdatedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.ChangeUpdatedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "change",
 				},
 			},
@@ -245,16 +247,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "environment created",
-		eventType: EnvironmentCreatedEventV1.String(),
-		expectedEvent: &EnvironmentCreatedEvent{
-			Context: Context{
-				Type:      EnvironmentCreatedEventV1.String(),
+		eventType: api.EnvironmentCreatedEventTypeV0_1_1.String(),
+		expectedEvent: &api.EnvironmentCreatedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.EnvironmentCreatedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: EnvironmentCreatedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.EnvironmentCreatedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "environment",
 				},
 			},
@@ -262,16 +264,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "environment deleted",
-		eventType: EnvironmentDeletedEventV1.String(),
-		expectedEvent: &EnvironmentDeletedEvent{
-			Context: Context{
-				Type:      EnvironmentDeletedEventV1.String(),
+		eventType: api.EnvironmentDeletedEventTypeV0_1_1.String(),
+		expectedEvent: &api.EnvironmentDeletedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.EnvironmentDeletedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: EnvironmentDeletedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.EnvironmentDeletedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "environment",
 				},
 			},
@@ -279,16 +281,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "environment modified",
-		eventType: EnvironmentModifiedEventV1.String(),
-		expectedEvent: &EnvironmentModifiedEvent{
-			Context: Context{
-				Type:      EnvironmentModifiedEventV1.String(),
+		eventType: api.EnvironmentModifiedEventTypeV0_1_1.String(),
+		expectedEvent: &api.EnvironmentModifiedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.EnvironmentModifiedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: EnvironmentModifiedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.EnvironmentModifiedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "environment",
 				},
 			},
@@ -296,16 +298,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "incident detected",
-		eventType: IncidentDetectedEventV1.String(),
-		expectedEvent: &IncidentDetectedEvent{
-			Context: Context{
-				Type:      IncidentDetectedEventV1.String(),
+		eventType: api.IncidentDetectedEventTypeV0_1_0.String(),
+		expectedEvent: &api.IncidentDetectedEventV0_1_0{
+			Context: api.Context{
+				Type:      api.IncidentDetectedEventTypeV0_1_0.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: IncidentDetectedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.IncidentDetectedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "incident",
 				},
 			},
@@ -313,16 +315,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "incident reported",
-		eventType: IncidentReportedEventV1.String(),
-		expectedEvent: &IncidentReportedEvent{
-			Context: Context{
-				Type:      IncidentReportedEventV1.String(),
+		eventType: api.IncidentReportedEventTypeV0_1_0.String(),
+		expectedEvent: &api.IncidentReportedEventV0_1_0{
+			Context: api.Context{
+				Type:      api.IncidentReportedEventTypeV0_1_0.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: IncidentReportedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.IncidentReportedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "incident",
 				},
 			},
@@ -330,16 +332,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "incident resolved",
-		eventType: IncidentResolvedEventV1.String(),
-		expectedEvent: &IncidentResolvedEvent{
-			Context: Context{
-				Type:      IncidentResolvedEventV1.String(),
+		eventType: api.IncidentResolvedEventTypeV0_1_0.String(),
+		expectedEvent: &api.IncidentResolvedEventV0_1_0{
+			Context: api.Context{
+				Type:      api.IncidentResolvedEventTypeV0_1_0.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: IncidentResolvedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.IncidentResolvedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "incident",
 				},
 			},
@@ -347,16 +349,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "pipelinerun finished",
-		eventType: PipelineRunFinishedEventV1.String(),
-		expectedEvent: &PipelineRunFinishedEvent{
-			Context: Context{
-				Type:      PipelineRunFinishedEventV1.String(),
+		eventType: api.PipelineRunFinishedEventTypeV0_1_1.String(),
+		expectedEvent: &api.PipelineRunFinishedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.PipelineRunFinishedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: PipelineRunFinishedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.PipelineRunFinishedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "pipelineRun",
 				},
 			},
@@ -364,16 +366,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "pipelinerun queued",
-		eventType: PipelineRunQueuedEventV1.String(),
-		expectedEvent: &PipelineRunQueuedEvent{
-			Context: Context{
-				Type:      PipelineRunQueuedEventV1.String(),
+		eventType: api.PipelineRunQueuedEventTypeV0_1_1.String(),
+		expectedEvent: &api.PipelineRunQueuedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.PipelineRunQueuedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: PipelineRunQueuedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.PipelineRunQueuedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "pipelineRun",
 				},
 			},
@@ -381,16 +383,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "pipelinerun started",
-		eventType: PipelineRunStartedEventV1.String(),
-		expectedEvent: &PipelineRunStartedEvent{
-			Context: Context{
-				Type:      PipelineRunStartedEventV1.String(),
+		eventType: api.PipelineRunStartedEventTypeV0_1_1.String(),
+		expectedEvent: &api.PipelineRunStartedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.PipelineRunStartedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: PipelineRunStartedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.PipelineRunStartedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "pipelineRun",
 				},
 			},
@@ -398,16 +400,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "repository created",
-		eventType: RepositoryCreatedEventV1.String(),
-		expectedEvent: &RepositoryCreatedEvent{
-			Context: Context{
-				Type:      RepositoryCreatedEventV1.String(),
+		eventType: api.RepositoryCreatedEventTypeV0_1_1.String(),
+		expectedEvent: &api.RepositoryCreatedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.RepositoryCreatedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: RepositoryCreatedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.RepositoryCreatedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "repository",
 				},
 			},
@@ -415,16 +417,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "repository deleted",
-		eventType: RepositoryDeletedEventV1.String(),
-		expectedEvent: &RepositoryDeletedEvent{
-			Context: Context{
-				Type:      RepositoryDeletedEventV1.String(),
+		eventType: api.RepositoryDeletedEventTypeV0_1_1.String(),
+		expectedEvent: &api.RepositoryDeletedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.RepositoryDeletedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: RepositoryDeletedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.RepositoryDeletedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "repository",
 				},
 			},
@@ -432,16 +434,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "repository modified",
-		eventType: RepositoryModifiedEventV1.String(),
-		expectedEvent: &RepositoryModifiedEvent{
-			Context: Context{
-				Type:      RepositoryModifiedEventV1.String(),
+		eventType: api.RepositoryModifiedEventTypeV0_1_1.String(),
+		expectedEvent: &api.RepositoryModifiedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.RepositoryModifiedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: RepositoryModifiedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.RepositoryModifiedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "repository",
 				},
 			},
@@ -449,16 +451,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "service deployed",
-		eventType: ServiceDeployedEventV1.String(),
-		expectedEvent: &ServiceDeployedEvent{
-			Context: Context{
-				Type:      ServiceDeployedEventV1.String(),
+		eventType: api.ServiceDeployedEventTypeV0_1_1.String(),
+		expectedEvent: &api.ServiceDeployedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.ServiceDeployedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: ServiceDeployedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.ServiceDeployedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "service",
 				},
 			},
@@ -466,16 +468,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "service published",
-		eventType: ServicePublishedEventV1.String(),
-		expectedEvent: &ServicePublishedEvent{
-			Context: Context{
-				Type:      ServicePublishedEventV1.String(),
+		eventType: api.ServicePublishedEventTypeV0_1_1.String(),
+		expectedEvent: &api.ServicePublishedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.ServicePublishedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: ServicePublishedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.ServicePublishedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "service",
 				},
 			},
@@ -483,16 +485,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "service removed",
-		eventType: ServiceRemovedEventV1.String(),
-		expectedEvent: &ServiceRemovedEvent{
-			Context: Context{
-				Type:      ServiceRemovedEventV1.String(),
+		eventType: api.ServiceRemovedEventTypeV0_1_1.String(),
+		expectedEvent: &api.ServiceRemovedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.ServiceRemovedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: ServiceRemovedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.ServiceRemovedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "service",
 				},
 			},
@@ -500,16 +502,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "service rolledback",
-		eventType: ServiceRolledbackEventV1.String(),
-		expectedEvent: &ServiceRolledbackEvent{
-			Context: Context{
-				Type:      ServiceRolledbackEventV1.String(),
+		eventType: api.ServiceRolledbackEventTypeV0_1_1.String(),
+		expectedEvent: &api.ServiceRolledbackEventV0_1_1{
+			Context: api.Context{
+				Type:      api.ServiceRolledbackEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: ServiceRolledbackSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.ServiceRolledbackSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "service",
 				},
 			},
@@ -517,16 +519,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "service upgraded",
-		eventType: ServiceUpgradedEventV1.String(),
-		expectedEvent: &ServiceUpgradedEvent{
-			Context: Context{
-				Type:      ServiceUpgradedEventV1.String(),
+		eventType: api.ServiceUpgradedEventTypeV0_1_1.String(),
+		expectedEvent: &api.ServiceUpgradedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.ServiceUpgradedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: ServiceUpgradedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.ServiceUpgradedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "service",
 				},
 			},
@@ -534,16 +536,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "taskrun finished",
-		eventType: TaskRunFinishedEventV1.String(),
-		expectedEvent: &TaskRunFinishedEvent{
-			Context: Context{
-				Type:      TaskRunFinishedEventV1.String(),
+		eventType: api.TaskRunFinishedEventTypeV0_1_1.String(),
+		expectedEvent: &api.TaskRunFinishedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.TaskRunFinishedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: TaskRunFinishedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.TaskRunFinishedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "taskRun",
 				},
 			},
@@ -551,16 +553,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "taskrun started",
-		eventType: TaskRunStartedEventV1.String(),
-		expectedEvent: &TaskRunStartedEvent{
-			Context: Context{
-				Type:      TaskRunStartedEventV1.String(),
+		eventType: api.TaskRunStartedEventTypeV0_1_1.String(),
+		expectedEvent: &api.TaskRunStartedEventV0_1_1{
+			Context: api.Context{
+				Type:      api.TaskRunStartedEventTypeV0_1_1.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: TaskRunStartedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.TaskRunStartedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "taskRun",
 				},
 			},
@@ -568,16 +570,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "testcaserun finished",
-		eventType: TestCaseRunFinishedEventV1.String(),
-		expectedEvent: &TestCaseRunFinishedEvent{
-			Context: Context{
-				Type:      TestCaseRunFinishedEventV1.String(),
+		eventType: api.TestCaseRunFinishedEventTypeV0_1_0.String(),
+		expectedEvent: &api.TestCaseRunFinishedEventV0_1_0{
+			Context: api.Context{
+				Type:      api.TestCaseRunFinishedEventTypeV0_1_0.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: TestCaseRunFinishedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.TestCaseRunFinishedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "testCaseRun",
 				},
 			},
@@ -585,16 +587,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "testcaserun queued",
-		eventType: TestCaseRunQueuedEventV1.String(),
-		expectedEvent: &TestCaseRunQueuedEvent{
-			Context: Context{
-				Type:      TestCaseRunQueuedEventV1.String(),
+		eventType: api.TestCaseRunQueuedEventTypeV0_1_0.String(),
+		expectedEvent: &api.TestCaseRunQueuedEventV0_1_0{
+			Context: api.Context{
+				Type:      api.TestCaseRunQueuedEventTypeV0_1_0.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: TestCaseRunQueuedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.TestCaseRunQueuedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "testCaseRun",
 				},
 			},
@@ -602,16 +604,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "testcaserun started",
-		eventType: TestCaseRunStartedEventV1.String(),
-		expectedEvent: &TestCaseRunStartedEvent{
-			Context: Context{
-				Type:      TestCaseRunStartedEventV1.String(),
+		eventType: api.TestCaseRunStartedEventTypeV0_1_0.String(),
+		expectedEvent: &api.TestCaseRunStartedEventV0_1_0{
+			Context: api.Context{
+				Type:      api.TestCaseRunStartedEventTypeV0_1_0.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: TestCaseRunStartedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.TestCaseRunStartedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "testCaseRun",
 				},
 			},
@@ -619,16 +621,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "testoutput published",
-		eventType: TestOutputPublishedEventV1.String(),
-		expectedEvent: &TestOutputPublishedEvent{
-			Context: Context{
-				Type:      TestOutputPublishedEventV1.String(),
+		eventType: api.TestOutputPublishedEventTypeV0_1_0.String(),
+		expectedEvent: &api.TestOutputPublishedEventV0_1_0{
+			Context: api.Context{
+				Type:      api.TestOutputPublishedEventTypeV0_1_0.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: TestOutputPublishedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.TestOutputPublishedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "testOutput",
 				},
 			},
@@ -636,16 +638,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "testsuiterun finished",
-		eventType: TestSuiteRunFinishedEventV1.String(),
-		expectedEvent: &TestSuiteRunFinishedEvent{
-			Context: Context{
-				Type:      TestSuiteRunFinishedEventV1.String(),
+		eventType: api.TestSuiteRunFinishedEventTypeV0_1_0.String(),
+		expectedEvent: &api.TestSuiteRunFinishedEventV0_1_0{
+			Context: api.Context{
+				Type:      api.TestSuiteRunFinishedEventTypeV0_1_0.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: TestSuiteRunFinishedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.TestSuiteRunFinishedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "testSuiteRun",
 				},
 			},
@@ -653,16 +655,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "testsuiterun queued",
-		eventType: TestSuiteRunQueuedEventV1.String(),
-		expectedEvent: &TestSuiteRunQueuedEvent{
-			Context: Context{
-				Type:      TestSuiteRunQueuedEventV1.String(),
+		eventType: api.TestSuiteRunQueuedEventTypeV0_1_0.String(),
+		expectedEvent: &api.TestSuiteRunQueuedEventV0_1_0{
+			Context: api.Context{
+				Type:      api.TestSuiteRunQueuedEventTypeV0_1_0.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: TestSuiteRunQueuedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.TestSuiteRunQueuedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "testSuiteRun",
 				},
 			},
@@ -670,16 +672,16 @@ func init() {
 	})
 	tests = append(tests, testNewCDEventType{
 		name:      "testsuiterun started",
-		eventType: TestSuiteRunStartedEventV1.String(),
-		expectedEvent: &TestSuiteRunStartedEvent{
-			Context: Context{
-				Type:      TestSuiteRunStartedEventV1.String(),
+		eventType: api.TestSuiteRunStartedEventTypeV0_1_0.String(),
+		expectedEvent: &api.TestSuiteRunStartedEventV0_1_0{
+			Context: api.Context{
+				Type:      api.TestSuiteRunStartedEventTypeV0_1_0.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: TestSuiteRunStartedSubject{
-				SubjectBase: SubjectBase{
+			Subject: api.TestSuiteRunStartedSubject{
+				SubjectBase: api.SubjectBase{
 					Type: "testSuiteRun",
 				},
 			},

@@ -24,7 +24,7 @@ import "fmt"
 
 var CDEventsTypes = []CDEvent{
 {{- range $i, $data := . }}
-    &{{ .Subject }}{{ .Predicate }}Event{},
+    &{{ .Subject }}{{ .Predicate }}EventV{{ .VersionName }}{},
 {{- end }}
 }
 
@@ -41,8 +41,8 @@ func init() {
 func NewCDEvent(eventType string) (CDEvent, error) {
 	switch eventType {
 {{- range $i, $data := . }}
-	case {{ .Subject }}{{ .Predicate }}EventV1.String():
-        return New{{ .Subject }}{{ .Predicate }}Event()
+	case {{ .Subject }}{{ .Predicate }}EventTypeV{{.VersionName}}.String():
+        return New{{ .Subject }}{{ .Predicate }}EventV{{.VersionName}}()
 {{- end }}
 	default:
 		return nil, fmt.Errorf("event %v not supported", eventType)

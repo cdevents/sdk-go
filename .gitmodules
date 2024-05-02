@@ -1,3 +1,4 @@
-[submodule "pkg/api/spec"]
-	path = pkg/api/spec
+[submodule "pkg/api/spec-v0.3"]
+	path = pkg/api/spec-v0.3
 	url = https://github.com/cdevents/spec
+	branch = spec-v0.3

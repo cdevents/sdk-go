@@ -18,7 +18,9 @@ limitations under the License.
 SPDX-License-Identifier: Apache-2.0
 */
 
-package api
+package api_test
+
+import "github.com/cdevents/sdk-go/pkg/api"
 
 func init() {
     tests = []testNewCDEventType{}
@@ -26,16 +28,16 @@ func init() {
 {{- range $i, $data := . }}
     tests = append(tests, testNewCDEventType{
         name:          "{{ .SubjectLower }} {{ .PredicateLower }}",
-        eventType:     {{ .Subject }}{{ .Predicate }}EventV1.  String(),
-        expectedEvent: &{{ .Subject }}{{ .Predicate }}Event{
-			Context: Context{
-				Type:      {{ .Subject }}{{ .Predicate }}EventV1.String(),
+        eventType:     api.{{ .Subject }}{{ .Predicate }}EventTypeV{{.VersionName}}.String(),
+        expectedEvent: &api.{{ .Subject }}{{ .Predicate }}EventV{{.VersionName}}{
+			Context: api.Context{
+				Type:      api.{{ .Subject }}{{ .Predicate }}EventTypeV{{.VersionName}}.String(),
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   CDEventsSpecVersion,
+				Version:   api.CDEventsSpecVersion,
 			},
-			Subject: {{ .Subject }}{{ .Predicate }}Subject{
-				SubjectBase: SubjectBase{
+			Subject: api.{{ .Subject }}{{ .Predicate }}Subject{
+				SubjectBase: api.SubjectBase{
 					Type: "{{ .SubjectType }}",
 				},
 			},
