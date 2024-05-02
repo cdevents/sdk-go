@@ -177,11 +177,11 @@ func (e *TestSuiteRunFinishedEventV0_1_0) SetSubjectTestSuite(testSuite *TestSui
 }
 
 // New creates a new TestSuiteRunFinishedEventV0_1_0
-func NewTestSuiteRunFinishedEventV0_1_0() (*TestSuiteRunFinishedEventV0_1_0, error) {
+func NewTestSuiteRunFinishedEventV0_1_0(specVersion string) (*TestSuiteRunFinishedEventV0_1_0, error) {
 	e := &TestSuiteRunFinishedEventV0_1_0{
 		Context: Context{
-			Type:    TestSuiteRunFinishedEventTypeV0_1_0.String(),
-			Version: CDEventsSpecVersion,
+			Type:    TestSuiteRunFinishedEventTypeV0_1_0,
+			Version: specVersion,
 		},
 		Subject: TestSuiteRunFinishedSubject{
 			SubjectBase: SubjectBase{

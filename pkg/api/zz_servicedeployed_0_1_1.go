@@ -159,11 +159,11 @@ func (e *ServiceDeployedEventV0_1_1) SetSubjectEnvironment(environment *Referenc
 }
 
 // New creates a new ServiceDeployedEventV0_1_1
-func NewServiceDeployedEventV0_1_1() (*ServiceDeployedEventV0_1_1, error) {
+func NewServiceDeployedEventV0_1_1(specVersion string) (*ServiceDeployedEventV0_1_1, error) {
 	e := &ServiceDeployedEventV0_1_1{
 		Context: Context{
-			Type:    ServiceDeployedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    ServiceDeployedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: ServiceDeployedSubject{
 			SubjectBase: SubjectBase{

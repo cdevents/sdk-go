@@ -171,11 +171,11 @@ func (e *RepositoryCreatedEventV0_1_1) SetSubjectViewUrl(viewUrl string) {
 }
 
 // New creates a new RepositoryCreatedEventV0_1_1
-func NewRepositoryCreatedEventV0_1_1() (*RepositoryCreatedEventV0_1_1, error) {
+func NewRepositoryCreatedEventV0_1_1(specVersion string) (*RepositoryCreatedEventV0_1_1, error) {
 	e := &RepositoryCreatedEventV0_1_1{
 		Context: Context{
-			Type:    RepositoryCreatedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    RepositoryCreatedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: RepositoryCreatedSubject{
 			SubjectBase: SubjectBase{

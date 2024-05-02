@@ -178,7 +178,7 @@ func (e *FooSubjectBarPredicateEvent) SetSubjectReferenceField(referenceField *R
 func NewFooSubjectBarPredicateEvent() (*FooSubjectBarPredicateEvent, error) {
 	e := &FooSubjectBarPredicateEvent{
 		Context: Context{
-			Type:    FooSubjectBarPredicateEventV1_2_3.String(),
+			Type:    FooSubjectBarPredicateEventV1_2_3,
 			Version: CDEventsSpecVersion,
 		},
 		Subject: FooSubjectBarPredicateSubject{

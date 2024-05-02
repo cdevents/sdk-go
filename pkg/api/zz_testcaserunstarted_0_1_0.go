@@ -171,11 +171,11 @@ func (e *TestCaseRunStartedEventV0_1_0) SetSubjectTrigger(trigger *TestCaseRunSt
 }
 
 // New creates a new TestCaseRunStartedEventV0_1_0
-func NewTestCaseRunStartedEventV0_1_0() (*TestCaseRunStartedEventV0_1_0, error) {
+func NewTestCaseRunStartedEventV0_1_0(specVersion string) (*TestCaseRunStartedEventV0_1_0, error) {
 	e := &TestCaseRunStartedEventV0_1_0{
 		Context: Context{
-			Type:    TestCaseRunStartedEventTypeV0_1_0.String(),
-			Version: CDEventsSpecVersion,
+			Type:    TestCaseRunStartedEventTypeV0_1_0,
+			Version: specVersion,
 		},
 		Subject: TestCaseRunStartedSubject{
 			SubjectBase: SubjectBase{

@@ -33,6 +33,7 @@ import (
 
 	cdevents "github.com/cdevents/sdk-go/pkg/api"
 	jsonschema "github.com/santhosh-tekuri/jsonschema/v5"
+	"golang.org/x/mod/semver"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
@@ -41,7 +42,7 @@ var (
 	TEMPLATES            = "tools/templates/*.tmpl"
 	PROJECT_ROOT         = "./pkg/api"
 	SPEC_FOLDER_PREFIX   = "spec-"
-	SPEC_VERSIONS        = []string{"v0.3"}
+	SPEC_VERSIONS        = []string{"v0.3.0"}
 	SCHEMA_FOLDER        = "schemas"
 	GEN_CODE_FOLDER      = "./pkg/api"
 	TEST_TEMPLATES       = "tools/templates_test/*.tmpl"
@@ -107,9 +108,10 @@ type Data struct {
 }
 
 type AllData struct {
-	Slice           []Data
-	SpecVersion     string
-	SpecVersionName string
+	Slice            []Data
+	SpecVersion      string
+	SpecVersionShort string
+	SpecVersionName  string
 }
 
 func (d Data) OutputFile() string {
@@ -142,7 +144,8 @@ func main() {
 
 	// Generate SDK files
 	for _, version := range SPEC_VERSIONS {
-		versioned_schema_folder := filepath.Join(PROJECT_ROOT, SPEC_FOLDER_PREFIX+version, SCHEMA_FOLDER)
+		shortVersion := semver.MajorMinor(version)
+		versioned_schema_folder := filepath.Join(PROJECT_ROOT, SPEC_FOLDER_PREFIX+shortVersion, SCHEMA_FOLDER)
 		log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEMPLATES, versioned_schema_folder, GEN_CODE_FOLDER)
 		err = generate(TEMPLATES, versioned_schema_folder, GEN_CODE_FOLDER, "", version, GO_TYPES_NAMES)
 		if err != nil {
@@ -162,10 +165,12 @@ func main() {
 func generate(templatesFolder, schemaFolder, genFolder, prefix, specVersion string, goTypes map[string]string) error {
 	// allData is used to accumulate data from all jsonschemas
 	// which is then used to run shared templates
+	shortSpecVersion := semver.MajorMinor(specVersion)
 	allData := AllData{
-		Slice:           make([]Data, 0),
-		SpecVersion:     specVersion,
-		SpecVersionName: strings.Replace(specVersion, ".", "", -1),
+		Slice:            make([]Data, 0),
+		SpecVersion:      specVersion,
+		SpecVersionShort: shortSpecVersion,
+		SpecVersionName:  strings.Replace(shortSpecVersion, ".", "", -1),
 	}
 
 	allTemplates, err := template.ParseGlob(templatesFolder)
@@ -188,13 +193,13 @@ func generate(templatesFolder, schemaFolder, genFolder, prefix, specVersion stri
 	}
 
 	// Process the spec template. Create the target folder is it doesn't exist
-	if specVersion != "" {
-		specFileFolder := filepath.Join(genFolder, specVersion)
+	if shortSpecVersion != "" {
+		specFileFolder := filepath.Join(genFolder, shortSpecVersion)
 		err = os.MkdirAll(specFileFolder, os.ModePerm)
 		if err != nil {
 			return err
 		}
-		specFileName := filepath.Join(genFolder, specVersion, strings.TrimSuffix(specTemplateFileName, filepath.Ext(specTemplateFileName)))
+		specFileName := filepath.Join(genFolder, shortSpecVersion, strings.TrimSuffix(specTemplateFileName, filepath.Ext(specTemplateFileName)))
 		err = executeTemplate(allTemplates, specTemplateFileName, specFileName, allData)
 		if err != nil {
 			return err
@@ -205,7 +210,7 @@ func generate(templatesFolder, schemaFolder, genFolder, prefix, specVersion stri
 	if prefix == "" {
 		for _, examplesTestsTemplateFileName := range examplesTestsTemplateFileNames {
 			outputFileName := filepath.Join(genFolder, "zz_"+prefix+strings.TrimSuffix(examplesTestsTemplateFileName, filepath.Ext(examplesTestsTemplateFileName)))
-			err = executeTemplate(allTemplates, examplesTestsTemplateFileName, outputFileName, allData.Slice)
+			err = executeTemplate(allTemplates, examplesTestsTemplateFileName, outputFileName, allData)
 			if err != nil {
 				return err
 			}

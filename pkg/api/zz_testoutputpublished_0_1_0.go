@@ -171,11 +171,11 @@ func (e *TestOutputPublishedEventV0_1_0) SetSubjectUri(uri string) {
 }
 
 // New creates a new TestOutputPublishedEventV0_1_0
-func NewTestOutputPublishedEventV0_1_0() (*TestOutputPublishedEventV0_1_0, error) {
+func NewTestOutputPublishedEventV0_1_0(specVersion string) (*TestOutputPublishedEventV0_1_0, error) {
 	e := &TestOutputPublishedEventV0_1_0{
 		Context: Context{
-			Type:    TestOutputPublishedEventTypeV0_1_0.String(),
-			Version: CDEventsSpecVersion,
+			Type:    TestOutputPublishedEventTypeV0_1_0,
+			Version: specVersion,
 		},
 		Subject: TestOutputPublishedSubject{
 			SubjectBase: SubjectBase{

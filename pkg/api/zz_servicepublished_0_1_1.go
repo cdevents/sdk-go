@@ -153,11 +153,11 @@ func (e *ServicePublishedEventV0_1_1) SetSubjectEnvironment(environment *Referen
 }
 
 // New creates a new ServicePublishedEventV0_1_1
-func NewServicePublishedEventV0_1_1() (*ServicePublishedEventV0_1_1, error) {
+func NewServicePublishedEventV0_1_1(specVersion string) (*ServicePublishedEventV0_1_1, error) {
 	e := &ServicePublishedEventV0_1_1{
 		Context: Context{
-			Type:    ServicePublishedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    ServicePublishedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: ServicePublishedSubject{
 			SubjectBase: SubjectBase{

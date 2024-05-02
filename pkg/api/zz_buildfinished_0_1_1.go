@@ -153,11 +153,11 @@ func (e *BuildFinishedEventV0_1_1) SetSubjectArtifactId(artifactId string) {
 }
 
 // New creates a new BuildFinishedEventV0_1_1
-func NewBuildFinishedEventV0_1_1() (*BuildFinishedEventV0_1_1, error) {
+func NewBuildFinishedEventV0_1_1(specVersion string) (*BuildFinishedEventV0_1_1, error) {
 	e := &BuildFinishedEventV0_1_1{
 		Context: Context{
-			Type:    BuildFinishedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    BuildFinishedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: BuildFinishedSubject{
 			SubjectBase: SubjectBase{

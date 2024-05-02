@@ -163,7 +163,7 @@ func (e *{{$.Subject}}{{$.Predicate}}Event) SetSubject{{ .Name }}({{ .NameLower 
 func New{{.Subject}}{{.Predicate}}Event() (*{{.Subject}}{{.Predicate}}Event, error) {
 	e := &{{.Subject}}{{.Predicate}}Event{
 		Context: Context{
-			Type:    {{.Subject}}{{.Predicate}}EventV{{.VersionName}}.String(),
+			Type:    {{.Subject}}{{.Predicate}}EventV{{.VersionName}},
 			Version: CDEventsSpecVersion,
 		},
 		Subject: {{.Subject}}{{.Predicate}}Subject{

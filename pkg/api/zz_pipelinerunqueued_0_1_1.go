@@ -159,11 +159,11 @@ func (e *PipelineRunQueuedEventV0_1_1) SetSubjectUrl(url string) {
 }
 
 // New creates a new PipelineRunQueuedEventV0_1_1
-func NewPipelineRunQueuedEventV0_1_1() (*PipelineRunQueuedEventV0_1_1, error) {
+func NewPipelineRunQueuedEventV0_1_1(specVersion string) (*PipelineRunQueuedEventV0_1_1, error) {
 	e := &PipelineRunQueuedEventV0_1_1{
 		Context: Context{
-			Type:    PipelineRunQueuedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    PipelineRunQueuedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: PipelineRunQueuedSubject{
 			SubjectBase: SubjectBase{

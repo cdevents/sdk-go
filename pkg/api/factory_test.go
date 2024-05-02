@@ -64,6 +64,7 @@ var (
 	testContentType = "application/json"
 	timeNow         = time.Now
 	uuidNewRandom   = uuid.NewRandom
+	testSpecVersion = "0.3.0"
 )
 
 func TestNewCDEvent(t *testing.T) {
@@ -74,7 +75,7 @@ func TestNewCDEvent(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			event, err := cdevents.NewCDEvent(tc.eventType)
+			event, err := cdevents.NewCDEvent(tc.eventType, testSpecVersion)
 			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did: %v", err)
 			}
@@ -129,7 +130,7 @@ func TestNewCDEvent(t *testing.T) {
 
 func TestNewCDEventFailed(t *testing.T) {
 
-	_, err := cdevents.NewCDEvent(api.CDEventType{Subject: "not supported"}.String())
+	_, err := cdevents.NewCDEvent(api.CDEventType{Subject: "not supported"}.String(), testSpecVersion)
 	if err == nil {
 		t.Fatalf("expected it to fail, but it didn't")
 	}

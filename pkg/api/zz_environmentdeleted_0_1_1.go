@@ -153,11 +153,11 @@ func (e *EnvironmentDeletedEventV0_1_1) SetSubjectName(name string) {
 }
 
 // New creates a new EnvironmentDeletedEventV0_1_1
-func NewEnvironmentDeletedEventV0_1_1() (*EnvironmentDeletedEventV0_1_1, error) {
+func NewEnvironmentDeletedEventV0_1_1(specVersion string) (*EnvironmentDeletedEventV0_1_1, error) {
 	e := &EnvironmentDeletedEventV0_1_1{
 		Context: Context{
-			Type:    EnvironmentDeletedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    EnvironmentDeletedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: EnvironmentDeletedSubject{
 			SubjectBase: SubjectBase{

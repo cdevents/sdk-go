@@ -25,13 +25,13 @@ import "github.com/cdevents/sdk-go/pkg/api"
 func init() {
     tests = []testNewCDEventType{}
 
-{{- range $i, $data := . }}
+{{- range $i, $data := .Slice }}
     tests = append(tests, testNewCDEventType{
         name:          "{{ .SubjectLower }} {{ .PredicateLower }}",
         eventType:     api.{{ .Subject }}{{ .Predicate }}EventTypeV{{.VersionName}}.String(),
         expectedEvent: &api.{{ .Subject }}{{ .Predicate }}EventV{{.VersionName}}{
 			Context: api.Context{
-				Type:      api.{{ .Subject }}{{ .Predicate }}EventTypeV{{.VersionName}}.String(),
+				Type:      api.{{ .Subject }}{{ .Predicate }}EventTypeV{{.VersionName}},
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,

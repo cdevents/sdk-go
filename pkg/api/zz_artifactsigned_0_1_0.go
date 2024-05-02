@@ -153,11 +153,11 @@ func (e *ArtifactSignedEventV0_1_0) SetSubjectSignature(signature string) {
 }
 
 // New creates a new ArtifactSignedEventV0_1_0
-func NewArtifactSignedEventV0_1_0() (*ArtifactSignedEventV0_1_0, error) {
+func NewArtifactSignedEventV0_1_0(specVersion string) (*ArtifactSignedEventV0_1_0, error) {
 	e := &ArtifactSignedEventV0_1_0{
 		Context: Context{
-			Type:    ArtifactSignedEventTypeV0_1_0.String(),
-			Version: CDEventsSpecVersion,
+			Type:    ArtifactSignedEventTypeV0_1_0,
+			Version: specVersion,
 		},
 		Subject: ArtifactSignedSubject{
 			SubjectBase: SubjectBase{

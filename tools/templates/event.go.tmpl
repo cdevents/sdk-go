@@ -156,11 +156,11 @@ func (e *{{$.Subject}}{{$.Predicate}}EventV{{$.VersionName}}) SetSubject{{ .Name
 {{ end }}
 
 // New creates a new {{.Subject}}{{.Predicate}}EventV{{.VersionName}}
-func New{{.Subject}}{{.Predicate}}EventV{{.VersionName}}() (*{{.Subject}}{{.Predicate}}EventV{{.VersionName}}, error) {
+func New{{.Subject}}{{.Predicate}}EventV{{.VersionName}}(specVersion string) (*{{.Subject}}{{.Predicate}}EventV{{.VersionName}}, error) {
 	e := &{{.Subject}}{{.Predicate}}EventV{{.VersionName}}{
 		Context: Context{
-			Type:    {{.Subject}}{{.Predicate}}EventTypeV{{.VersionName}}.String(),
-			Version: CDEventsSpecVersion,
+			Type:    {{.Subject}}{{.Predicate}}EventTypeV{{.VersionName}},
+			Version: specVersion,
 		},
 		Subject: {{.Subject}}{{.Predicate}}Subject{
 			SubjectBase: SubjectBase{

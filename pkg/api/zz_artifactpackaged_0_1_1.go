@@ -153,11 +153,11 @@ func (e *ArtifactPackagedEventV0_1_1) SetSubjectChange(change *Reference) {
 }
 
 // New creates a new ArtifactPackagedEventV0_1_1
-func NewArtifactPackagedEventV0_1_1() (*ArtifactPackagedEventV0_1_1, error) {
+func NewArtifactPackagedEventV0_1_1(specVersion string) (*ArtifactPackagedEventV0_1_1, error) {
 	e := &ArtifactPackagedEventV0_1_1{
 		Context: Context{
-			Type:    ArtifactPackagedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    ArtifactPackagedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: ArtifactPackagedSubject{
 			SubjectBase: SubjectBase{

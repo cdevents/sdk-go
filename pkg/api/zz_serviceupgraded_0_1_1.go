@@ -159,11 +159,11 @@ func (e *ServiceUpgradedEventV0_1_1) SetSubjectEnvironment(environment *Referenc
 }
 
 // New creates a new ServiceUpgradedEventV0_1_1
-func NewServiceUpgradedEventV0_1_1() (*ServiceUpgradedEventV0_1_1, error) {
+func NewServiceUpgradedEventV0_1_1(specVersion string) (*ServiceUpgradedEventV0_1_1, error) {
 	e := &ServiceUpgradedEventV0_1_1{
 		Context: Context{
-			Type:    ServiceUpgradedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    ServiceUpgradedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: ServiceUpgradedSubject{
 			SubjectBase: SubjectBase{

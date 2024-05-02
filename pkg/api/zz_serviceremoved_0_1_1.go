@@ -153,11 +153,11 @@ func (e *ServiceRemovedEventV0_1_1) SetSubjectEnvironment(environment *Reference
 }
 
 // New creates a new ServiceRemovedEventV0_1_1
-func NewServiceRemovedEventV0_1_1() (*ServiceRemovedEventV0_1_1, error) {
+func NewServiceRemovedEventV0_1_1(specVersion string) (*ServiceRemovedEventV0_1_1, error) {
 	e := &ServiceRemovedEventV0_1_1{
 		Context: Context{
-			Type:    ServiceRemovedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    ServiceRemovedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: ServiceRemovedSubject{
 			SubjectBase: SubjectBase{

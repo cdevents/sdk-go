@@ -159,11 +159,11 @@ func (e *EnvironmentModifiedEventV0_1_1) SetSubjectUrl(url string) {
 }
 
 // New creates a new EnvironmentModifiedEventV0_1_1
-func NewEnvironmentModifiedEventV0_1_1() (*EnvironmentModifiedEventV0_1_1, error) {
+func NewEnvironmentModifiedEventV0_1_1(specVersion string) (*EnvironmentModifiedEventV0_1_1, error) {
 	e := &EnvironmentModifiedEventV0_1_1{
 		Context: Context{
-			Type:    EnvironmentModifiedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    EnvironmentModifiedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: EnvironmentModifiedSubject{
 			SubjectBase: SubjectBase{

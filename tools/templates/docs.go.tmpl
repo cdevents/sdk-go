@@ -19,15 +19,17 @@ SPDX-License-Identifier: Apache-2.0
 */
 
 // Package v03 contains method to create events that belong to the
-// CDEvents specification {{.SpecVersion}}.x
+// CDEvents specification {{.SpecVersionShort}}.x
 
 package {{.SpecVersionName}}
 
 import "github.com/cdevents/sdk-go/pkg/api"
 
+var specVersion = "{{.SpecVersion}}"
+
 {{- range $i, $data := .Slice }}
 type {{.Subject}}{{.Predicate}}Event = api.{{.Subject}}{{.Predicate}}EventV{{.VersionName}}
 func New{{.Subject}}{{.Predicate}}Event() (*{{.Subject}}{{.Predicate}}Event, error) {
-	return api.New{{.Subject}}{{.Predicate}}EventV{{.VersionName}}()
+	return api.New{{.Subject}}{{.Predicate}}EventV{{.VersionName}}(specVersion)
 }
 {{- end }}

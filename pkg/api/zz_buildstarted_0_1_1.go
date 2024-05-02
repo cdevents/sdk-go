@@ -148,11 +148,11 @@ func (e BuildStartedEventV0_1_1) GetSchema() (string, string) {
 // Set subject custom fields
 
 // New creates a new BuildStartedEventV0_1_1
-func NewBuildStartedEventV0_1_1() (*BuildStartedEventV0_1_1, error) {
+func NewBuildStartedEventV0_1_1(specVersion string) (*BuildStartedEventV0_1_1, error) {
 	e := &BuildStartedEventV0_1_1{
 		Context: Context{
-			Type:    BuildStartedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    BuildStartedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: BuildStartedSubject{
 			SubjectBase: SubjectBase{

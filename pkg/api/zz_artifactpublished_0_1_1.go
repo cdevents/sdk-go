@@ -148,11 +148,11 @@ func (e ArtifactPublishedEventV0_1_1) GetSchema() (string, string) {
 // Set subject custom fields
 
 // New creates a new ArtifactPublishedEventV0_1_1
-func NewArtifactPublishedEventV0_1_1() (*ArtifactPublishedEventV0_1_1, error) {
+func NewArtifactPublishedEventV0_1_1(specVersion string) (*ArtifactPublishedEventV0_1_1, error) {
 	e := &ArtifactPublishedEventV0_1_1{
 		Context: Context{
-			Type:    ArtifactPublishedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    ArtifactPublishedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: ArtifactPublishedSubject{
 			SubjectBase: SubjectBase{

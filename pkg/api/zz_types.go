@@ -74,86 +74,86 @@ func init() {
 
 // NewCDEvent produces a CDEvent by type
 // This function can be used by users but it's meant mainly for testing purposes
-func NewCDEvent(eventType string) (CDEvent, error) {
+func NewCDEvent(eventType, specVersion string) (CDEvent, error) {
 	switch eventType {
 	case ArtifactPackagedEventTypeV0_1_1.String():
-		return NewArtifactPackagedEventV0_1_1()
+		return NewArtifactPackagedEventV0_1_1(specVersion)
 	case ArtifactPublishedEventTypeV0_1_1.String():
-		return NewArtifactPublishedEventV0_1_1()
+		return NewArtifactPublishedEventV0_1_1(specVersion)
 	case ArtifactSignedEventTypeV0_1_0.String():
-		return NewArtifactSignedEventV0_1_0()
+		return NewArtifactSignedEventV0_1_0(specVersion)
 	case BranchCreatedEventTypeV0_1_2.String():
-		return NewBranchCreatedEventV0_1_2()
+		return NewBranchCreatedEventV0_1_2(specVersion)
 	case BranchDeletedEventTypeV0_1_2.String():
-		return NewBranchDeletedEventV0_1_2()
+		return NewBranchDeletedEventV0_1_2(specVersion)
 	case BuildFinishedEventTypeV0_1_1.String():
-		return NewBuildFinishedEventV0_1_1()
+		return NewBuildFinishedEventV0_1_1(specVersion)
 	case BuildQueuedEventTypeV0_1_1.String():
-		return NewBuildQueuedEventV0_1_1()
+		return NewBuildQueuedEventV0_1_1(specVersion)
 	case BuildStartedEventTypeV0_1_1.String():
-		return NewBuildStartedEventV0_1_1()
+		return NewBuildStartedEventV0_1_1(specVersion)
 	case ChangeAbandonedEventTypeV0_1_2.String():
-		return NewChangeAbandonedEventV0_1_2()
+		return NewChangeAbandonedEventV0_1_2(specVersion)
 	case ChangeCreatedEventTypeV0_1_2.String():
-		return NewChangeCreatedEventV0_1_2()
+		return NewChangeCreatedEventV0_1_2(specVersion)
 	case ChangeMergedEventTypeV0_1_2.String():
-		return NewChangeMergedEventV0_1_2()
+		return NewChangeMergedEventV0_1_2(specVersion)
 	case ChangeReviewedEventTypeV0_1_2.String():
-		return NewChangeReviewedEventV0_1_2()
+		return NewChangeReviewedEventV0_1_2(specVersion)
 	case ChangeUpdatedEventTypeV0_1_2.String():
-		return NewChangeUpdatedEventV0_1_2()
+		return NewChangeUpdatedEventV0_1_2(specVersion)
 	case EnvironmentCreatedEventTypeV0_1_1.String():
-		return NewEnvironmentCreatedEventV0_1_1()
+		return NewEnvironmentCreatedEventV0_1_1(specVersion)
 	case EnvironmentDeletedEventTypeV0_1_1.String():
-		return NewEnvironmentDeletedEventV0_1_1()
+		return NewEnvironmentDeletedEventV0_1_1(specVersion)
 	case EnvironmentModifiedEventTypeV0_1_1.String():
-		return NewEnvironmentModifiedEventV0_1_1()
+		return NewEnvironmentModifiedEventV0_1_1(specVersion)
 	case IncidentDetectedEventTypeV0_1_0.String():
-		return NewIncidentDetectedEventV0_1_0()
+		return NewIncidentDetectedEventV0_1_0(specVersion)
 	case IncidentReportedEventTypeV0_1_0.String():
-		return NewIncidentReportedEventV0_1_0()
+		return NewIncidentReportedEventV0_1_0(specVersion)
 	case IncidentResolvedEventTypeV0_1_0.String():
-		return NewIncidentResolvedEventV0_1_0()
+		return NewIncidentResolvedEventV0_1_0(specVersion)
 	case PipelineRunFinishedEventTypeV0_1_1.String():
-		return NewPipelineRunFinishedEventV0_1_1()
+		return NewPipelineRunFinishedEventV0_1_1(specVersion)
 	case PipelineRunQueuedEventTypeV0_1_1.String():
-		return NewPipelineRunQueuedEventV0_1_1()
+		return NewPipelineRunQueuedEventV0_1_1(specVersion)
 	case PipelineRunStartedEventTypeV0_1_1.String():
-		return NewPipelineRunStartedEventV0_1_1()
+		return NewPipelineRunStartedEventV0_1_1(specVersion)
 	case RepositoryCreatedEventTypeV0_1_1.String():
-		return NewRepositoryCreatedEventV0_1_1()
+		return NewRepositoryCreatedEventV0_1_1(specVersion)
 	case RepositoryDeletedEventTypeV0_1_1.String():
-		return NewRepositoryDeletedEventV0_1_1()
+		return NewRepositoryDeletedEventV0_1_1(specVersion)
 	case RepositoryModifiedEventTypeV0_1_1.String():
-		return NewRepositoryModifiedEventV0_1_1()
+		return NewRepositoryModifiedEventV0_1_1(specVersion)
 	case ServiceDeployedEventTypeV0_1_1.String():
-		return NewServiceDeployedEventV0_1_1()
+		return NewServiceDeployedEventV0_1_1(specVersion)
 	case ServicePublishedEventTypeV0_1_1.String():
-		return NewServicePublishedEventV0_1_1()
+		return NewServicePublishedEventV0_1_1(specVersion)
 	case ServiceRemovedEventTypeV0_1_1.String():
-		return NewServiceRemovedEventV0_1_1()
+		return NewServiceRemovedEventV0_1_1(specVersion)
 	case ServiceRolledbackEventTypeV0_1_1.String():
-		return NewServiceRolledbackEventV0_1_1()
+		return NewServiceRolledbackEventV0_1_1(specVersion)
 	case ServiceUpgradedEventTypeV0_1_1.String():
-		return NewServiceUpgradedEventV0_1_1()
+		return NewServiceUpgradedEventV0_1_1(specVersion)
 	case TaskRunFinishedEventTypeV0_1_1.String():
-		return NewTaskRunFinishedEventV0_1_1()
+		return NewTaskRunFinishedEventV0_1_1(specVersion)
 	case TaskRunStartedEventTypeV0_1_1.String():
-		return NewTaskRunStartedEventV0_1_1()
+		return NewTaskRunStartedEventV0_1_1(specVersion)
 	case TestCaseRunFinishedEventTypeV0_1_0.String():
-		return NewTestCaseRunFinishedEventV0_1_0()
+		return NewTestCaseRunFinishedEventV0_1_0(specVersion)
 	case TestCaseRunQueuedEventTypeV0_1_0.String():
-		return NewTestCaseRunQueuedEventV0_1_0()
+		return NewTestCaseRunQueuedEventV0_1_0(specVersion)
 	case TestCaseRunStartedEventTypeV0_1_0.String():
-		return NewTestCaseRunStartedEventV0_1_0()
+		return NewTestCaseRunStartedEventV0_1_0(specVersion)
 	case TestOutputPublishedEventTypeV0_1_0.String():
-		return NewTestOutputPublishedEventV0_1_0()
+		return NewTestOutputPublishedEventV0_1_0(specVersion)
 	case TestSuiteRunFinishedEventTypeV0_1_0.String():
-		return NewTestSuiteRunFinishedEventV0_1_0()
+		return NewTestSuiteRunFinishedEventV0_1_0(specVersion)
 	case TestSuiteRunQueuedEventTypeV0_1_0.String():
-		return NewTestSuiteRunQueuedEventV0_1_0()
+		return NewTestSuiteRunQueuedEventV0_1_0(specVersion)
 	case TestSuiteRunStartedEventTypeV0_1_0.String():
-		return NewTestSuiteRunStartedEventV0_1_0()
+		return NewTestSuiteRunStartedEventV0_1_0(specVersion)
 	default:
 		return nil, fmt.Errorf("event %v not supported", eventType)
 	}

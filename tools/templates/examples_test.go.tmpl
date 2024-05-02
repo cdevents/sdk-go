@@ -20,15 +20,18 @@ SPDX-License-Identifier: Apache-2.0
 
 package api_test
 
-import "github.com/cdevents/sdk-go/pkg/api"
+import (
+    "github.com/cdevents/sdk-go/pkg/api"
+    spec{{ .SpecVersionName }} "github.com/cdevents/sdk-go/pkg/api/{{ .SpecVersionShort }}"
+)
 
 func init() {
     // Create events equal to examples in the spec
 	examplesProduced = make(map[string]api.CDEvent)
 
-{{- range $i, $data := . }}
+{{- range $i, $data := .Slice }}
     // {{ .Subject }}{{ .Predicate }} Event producer
-    new{{ .Subject }}{{ .Predicate }}, _ := api.New{{ .Subject }}{{ .Predicate }}EventV{{ .VersionName }}()
+    new{{ .Subject }}{{ .Predicate }}, _ := spec{{ $.SpecVersionName }}.New{{ .Subject }}{{ .Predicate }}Event()
     setContext(new{{ .Subject }}{{ .Predicate }}, testSubjectId)
     example{{ .Subject }}{{ .Predicate }}Event(new{{ .Subject }}{{ .Predicate }})
     examplesProduced[new{{ .Subject }}{{ .Predicate }}.GetType().Short()] = new{{ .Subject }}{{ .Predicate }}

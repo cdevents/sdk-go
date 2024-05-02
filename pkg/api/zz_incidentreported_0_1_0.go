@@ -177,11 +177,11 @@ func (e *IncidentReportedEventV0_1_0) SetSubjectTicketURI(ticketURI string) {
 }
 
 // New creates a new IncidentReportedEventV0_1_0
-func NewIncidentReportedEventV0_1_0() (*IncidentReportedEventV0_1_0, error) {
+func NewIncidentReportedEventV0_1_0(specVersion string) (*IncidentReportedEventV0_1_0, error) {
 	e := &IncidentReportedEventV0_1_0{
 		Context: Context{
-			Type:    IncidentReportedEventTypeV0_1_0.String(),
-			Version: CDEventsSpecVersion,
+			Type:    IncidentReportedEventTypeV0_1_0,
+			Version: specVersion,
 		},
 		Subject: IncidentReportedSubject{
 			SubjectBase: SubjectBase{

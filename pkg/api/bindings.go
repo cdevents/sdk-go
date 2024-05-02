@@ -160,23 +160,23 @@ func NewFromJsonString(event string) (CDEvent, error) {
 	return NewFromJsonBytes([]byte(event))
 }
 
-// Build a new CDEventReader from a JSON string as []bytes
-func NewFromJsonBytes(event []byte) (CDEvent, error) {
+// NewFromJsonBytesContext[ContextType] builds a new CDEventReader from a JSON string as []bytes
+// This works by unmarshalling the context first, extracting the event type and using
+// that to unmarshal the rest of the event into the correct object.
+// `ContextType` defines the type of Context that can be used to unmarshal the event.
+func NewFromJsonBytesContext[ContextType BaseContextReader](event []byte) (CDEvent, error) {
 	eventAux := &struct {
-		Context Context `json:"context"`
+		Context ContextType `json:"context"`
 	}{}
 	err := json.Unmarshal(event, eventAux)
 	if err != nil {
 		return nil, err
 	}
-	eventType, err := ParseType(eventAux.Context.Type)
-	if err != nil {
-		return nil, err
-	}
+	eventType := eventAux.Context.GetType()
 	receiver, ok := CDEventsByUnversionedTypes[eventType.UnversionedString()]
 	if !ok {
-		// This cannot really happen as ParseType checks if the type is known to the SDK
-		return nil, fmt.Errorf("unknown event type %s", eventAux.Context.Type)
+		// This should not happen as unmarshalling and validate checks if the type is known to the SDK
+		return nil, fmt.Errorf("unknown event type %s", eventAux.Context.GetType())
 	}
 	// Check if the receiver is compatible. It must have the same subject and predicate
 	// and share the same major version.
@@ -191,4 +191,12 @@ func NewFromJsonBytes(event []byte) (CDEvent, error) {
 		return nil, err
 	}
 	return receiver, nil
+}
+
+// NewFromJsonBytes builds a new CDEventReader from a JSON string as []bytes
+// This works by unmarshalling the context first, extracting the event type and using
+// that to unmarshal the rest of the event into the correct object.
+// It assumes the context can be unmarshalled in a `Context` object.
+func NewFromJsonBytes(event []byte) (CDEvent, error) {
+	return NewFromJsonBytesContext[Context](event)
 }

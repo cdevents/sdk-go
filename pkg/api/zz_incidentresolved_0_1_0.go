@@ -171,11 +171,11 @@ func (e *IncidentResolvedEventV0_1_0) SetSubjectService(service *Reference) {
 }
 
 // New creates a new IncidentResolvedEventV0_1_0
-func NewIncidentResolvedEventV0_1_0() (*IncidentResolvedEventV0_1_0, error) {
+func NewIncidentResolvedEventV0_1_0(specVersion string) (*IncidentResolvedEventV0_1_0, error) {
 	e := &IncidentResolvedEventV0_1_0{
 		Context: Context{
-			Type:    IncidentResolvedEventTypeV0_1_0.String(),
-			Version: CDEventsSpecVersion,
+			Type:    IncidentResolvedEventTypeV0_1_0,
+			Version: specVersion,
 		},
 		Subject: IncidentResolvedSubject{
 			SubjectBase: SubjectBase{

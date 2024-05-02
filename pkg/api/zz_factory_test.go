@@ -29,7 +29,7 @@ func init() {
 		eventType: api.ArtifactPackagedEventTypeV0_1_1.String(),
 		expectedEvent: &api.ArtifactPackagedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.ArtifactPackagedEventTypeV0_1_1.String(),
+				Type:      api.ArtifactPackagedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -46,7 +46,7 @@ func init() {
 		eventType: api.ArtifactPublishedEventTypeV0_1_1.String(),
 		expectedEvent: &api.ArtifactPublishedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.ArtifactPublishedEventTypeV0_1_1.String(),
+				Type:      api.ArtifactPublishedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -63,7 +63,7 @@ func init() {
 		eventType: api.ArtifactSignedEventTypeV0_1_0.String(),
 		expectedEvent: &api.ArtifactSignedEventV0_1_0{
 			Context: api.Context{
-				Type:      api.ArtifactSignedEventTypeV0_1_0.String(),
+				Type:      api.ArtifactSignedEventTypeV0_1_0,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -80,7 +80,7 @@ func init() {
 		eventType: api.BranchCreatedEventTypeV0_1_2.String(),
 		expectedEvent: &api.BranchCreatedEventV0_1_2{
 			Context: api.Context{
-				Type:      api.BranchCreatedEventTypeV0_1_2.String(),
+				Type:      api.BranchCreatedEventTypeV0_1_2,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -97,7 +97,7 @@ func init() {
 		eventType: api.BranchDeletedEventTypeV0_1_2.String(),
 		expectedEvent: &api.BranchDeletedEventV0_1_2{
 			Context: api.Context{
-				Type:      api.BranchDeletedEventTypeV0_1_2.String(),
+				Type:      api.BranchDeletedEventTypeV0_1_2,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -114,7 +114,7 @@ func init() {
 		eventType: api.BuildFinishedEventTypeV0_1_1.String(),
 		expectedEvent: &api.BuildFinishedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.BuildFinishedEventTypeV0_1_1.String(),
+				Type:      api.BuildFinishedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -131,7 +131,7 @@ func init() {
 		eventType: api.BuildQueuedEventTypeV0_1_1.String(),
 		expectedEvent: &api.BuildQueuedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.BuildQueuedEventTypeV0_1_1.String(),
+				Type:      api.BuildQueuedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -148,7 +148,7 @@ func init() {
 		eventType: api.BuildStartedEventTypeV0_1_1.String(),
 		expectedEvent: &api.BuildStartedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.BuildStartedEventTypeV0_1_1.String(),
+				Type:      api.BuildStartedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -165,7 +165,7 @@ func init() {
 		eventType: api.ChangeAbandonedEventTypeV0_1_2.String(),
 		expectedEvent: &api.ChangeAbandonedEventV0_1_2{
 			Context: api.Context{
-				Type:      api.ChangeAbandonedEventTypeV0_1_2.String(),
+				Type:      api.ChangeAbandonedEventTypeV0_1_2,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -182,7 +182,7 @@ func init() {
 		eventType: api.ChangeCreatedEventTypeV0_1_2.String(),
 		expectedEvent: &api.ChangeCreatedEventV0_1_2{
 			Context: api.Context{
-				Type:      api.ChangeCreatedEventTypeV0_1_2.String(),
+				Type:      api.ChangeCreatedEventTypeV0_1_2,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -199,7 +199,7 @@ func init() {
 		eventType: api.ChangeMergedEventTypeV0_1_2.String(),
 		expectedEvent: &api.ChangeMergedEventV0_1_2{
 			Context: api.Context{
-				Type:      api.ChangeMergedEventTypeV0_1_2.String(),
+				Type:      api.ChangeMergedEventTypeV0_1_2,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -216,7 +216,7 @@ func init() {
 		eventType: api.ChangeReviewedEventTypeV0_1_2.String(),
 		expectedEvent: &api.ChangeReviewedEventV0_1_2{
 			Context: api.Context{
-				Type:      api.ChangeReviewedEventTypeV0_1_2.String(),
+				Type:      api.ChangeReviewedEventTypeV0_1_2,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -233,7 +233,7 @@ func init() {
 		eventType: api.ChangeUpdatedEventTypeV0_1_2.String(),
 		expectedEvent: &api.ChangeUpdatedEventV0_1_2{
 			Context: api.Context{
-				Type:      api.ChangeUpdatedEventTypeV0_1_2.String(),
+				Type:      api.ChangeUpdatedEventTypeV0_1_2,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -250,7 +250,7 @@ func init() {
 		eventType: api.EnvironmentCreatedEventTypeV0_1_1.String(),
 		expectedEvent: &api.EnvironmentCreatedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.EnvironmentCreatedEventTypeV0_1_1.String(),
+				Type:      api.EnvironmentCreatedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -267,7 +267,7 @@ func init() {
 		eventType: api.EnvironmentDeletedEventTypeV0_1_1.String(),
 		expectedEvent: &api.EnvironmentDeletedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.EnvironmentDeletedEventTypeV0_1_1.String(),
+				Type:      api.EnvironmentDeletedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -284,7 +284,7 @@ func init() {
 		eventType: api.EnvironmentModifiedEventTypeV0_1_1.String(),
 		expectedEvent: &api.EnvironmentModifiedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.EnvironmentModifiedEventTypeV0_1_1.String(),
+				Type:      api.EnvironmentModifiedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -301,7 +301,7 @@ func init() {
 		eventType: api.IncidentDetectedEventTypeV0_1_0.String(),
 		expectedEvent: &api.IncidentDetectedEventV0_1_0{
 			Context: api.Context{
-				Type:      api.IncidentDetectedEventTypeV0_1_0.String(),
+				Type:      api.IncidentDetectedEventTypeV0_1_0,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -318,7 +318,7 @@ func init() {
 		eventType: api.IncidentReportedEventTypeV0_1_0.String(),
 		expectedEvent: &api.IncidentReportedEventV0_1_0{
 			Context: api.Context{
-				Type:      api.IncidentReportedEventTypeV0_1_0.String(),
+				Type:      api.IncidentReportedEventTypeV0_1_0,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -335,7 +335,7 @@ func init() {
 		eventType: api.IncidentResolvedEventTypeV0_1_0.String(),
 		expectedEvent: &api.IncidentResolvedEventV0_1_0{
 			Context: api.Context{
-				Type:      api.IncidentResolvedEventTypeV0_1_0.String(),
+				Type:      api.IncidentResolvedEventTypeV0_1_0,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -352,7 +352,7 @@ func init() {
 		eventType: api.PipelineRunFinishedEventTypeV0_1_1.String(),
 		expectedEvent: &api.PipelineRunFinishedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.PipelineRunFinishedEventTypeV0_1_1.String(),
+				Type:      api.PipelineRunFinishedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -369,7 +369,7 @@ func init() {
 		eventType: api.PipelineRunQueuedEventTypeV0_1_1.String(),
 		expectedEvent: &api.PipelineRunQueuedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.PipelineRunQueuedEventTypeV0_1_1.String(),
+				Type:      api.PipelineRunQueuedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -386,7 +386,7 @@ func init() {
 		eventType: api.PipelineRunStartedEventTypeV0_1_1.String(),
 		expectedEvent: &api.PipelineRunStartedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.PipelineRunStartedEventTypeV0_1_1.String(),
+				Type:      api.PipelineRunStartedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -403,7 +403,7 @@ func init() {
 		eventType: api.RepositoryCreatedEventTypeV0_1_1.String(),
 		expectedEvent: &api.RepositoryCreatedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.RepositoryCreatedEventTypeV0_1_1.String(),
+				Type:      api.RepositoryCreatedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -420,7 +420,7 @@ func init() {
 		eventType: api.RepositoryDeletedEventTypeV0_1_1.String(),
 		expectedEvent: &api.RepositoryDeletedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.RepositoryDeletedEventTypeV0_1_1.String(),
+				Type:      api.RepositoryDeletedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -437,7 +437,7 @@ func init() {
 		eventType: api.RepositoryModifiedEventTypeV0_1_1.String(),
 		expectedEvent: &api.RepositoryModifiedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.RepositoryModifiedEventTypeV0_1_1.String(),
+				Type:      api.RepositoryModifiedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -454,7 +454,7 @@ func init() {
 		eventType: api.ServiceDeployedEventTypeV0_1_1.String(),
 		expectedEvent: &api.ServiceDeployedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.ServiceDeployedEventTypeV0_1_1.String(),
+				Type:      api.ServiceDeployedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -471,7 +471,7 @@ func init() {
 		eventType: api.ServicePublishedEventTypeV0_1_1.String(),
 		expectedEvent: &api.ServicePublishedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.ServicePublishedEventTypeV0_1_1.String(),
+				Type:      api.ServicePublishedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -488,7 +488,7 @@ func init() {
 		eventType: api.ServiceRemovedEventTypeV0_1_1.String(),
 		expectedEvent: &api.ServiceRemovedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.ServiceRemovedEventTypeV0_1_1.String(),
+				Type:      api.ServiceRemovedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -505,7 +505,7 @@ func init() {
 		eventType: api.ServiceRolledbackEventTypeV0_1_1.String(),
 		expectedEvent: &api.ServiceRolledbackEventV0_1_1{
 			Context: api.Context{
-				Type:      api.ServiceRolledbackEventTypeV0_1_1.String(),
+				Type:      api.ServiceRolledbackEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -522,7 +522,7 @@ func init() {
 		eventType: api.ServiceUpgradedEventTypeV0_1_1.String(),
 		expectedEvent: &api.ServiceUpgradedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.ServiceUpgradedEventTypeV0_1_1.String(),
+				Type:      api.ServiceUpgradedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -539,7 +539,7 @@ func init() {
 		eventType: api.TaskRunFinishedEventTypeV0_1_1.String(),
 		expectedEvent: &api.TaskRunFinishedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.TaskRunFinishedEventTypeV0_1_1.String(),
+				Type:      api.TaskRunFinishedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -556,7 +556,7 @@ func init() {
 		eventType: api.TaskRunStartedEventTypeV0_1_1.String(),
 		expectedEvent: &api.TaskRunStartedEventV0_1_1{
 			Context: api.Context{
-				Type:      api.TaskRunStartedEventTypeV0_1_1.String(),
+				Type:      api.TaskRunStartedEventTypeV0_1_1,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -573,7 +573,7 @@ func init() {
 		eventType: api.TestCaseRunFinishedEventTypeV0_1_0.String(),
 		expectedEvent: &api.TestCaseRunFinishedEventV0_1_0{
 			Context: api.Context{
-				Type:      api.TestCaseRunFinishedEventTypeV0_1_0.String(),
+				Type:      api.TestCaseRunFinishedEventTypeV0_1_0,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -590,7 +590,7 @@ func init() {
 		eventType: api.TestCaseRunQueuedEventTypeV0_1_0.String(),
 		expectedEvent: &api.TestCaseRunQueuedEventV0_1_0{
 			Context: api.Context{
-				Type:      api.TestCaseRunQueuedEventTypeV0_1_0.String(),
+				Type:      api.TestCaseRunQueuedEventTypeV0_1_0,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -607,7 +607,7 @@ func init() {
 		eventType: api.TestCaseRunStartedEventTypeV0_1_0.String(),
 		expectedEvent: &api.TestCaseRunStartedEventV0_1_0{
 			Context: api.Context{
-				Type:      api.TestCaseRunStartedEventTypeV0_1_0.String(),
+				Type:      api.TestCaseRunStartedEventTypeV0_1_0,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -624,7 +624,7 @@ func init() {
 		eventType: api.TestOutputPublishedEventTypeV0_1_0.String(),
 		expectedEvent: &api.TestOutputPublishedEventV0_1_0{
 			Context: api.Context{
-				Type:      api.TestOutputPublishedEventTypeV0_1_0.String(),
+				Type:      api.TestOutputPublishedEventTypeV0_1_0,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -641,7 +641,7 @@ func init() {
 		eventType: api.TestSuiteRunFinishedEventTypeV0_1_0.String(),
 		expectedEvent: &api.TestSuiteRunFinishedEventV0_1_0{
 			Context: api.Context{
-				Type:      api.TestSuiteRunFinishedEventTypeV0_1_0.String(),
+				Type:      api.TestSuiteRunFinishedEventTypeV0_1_0,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -658,7 +658,7 @@ func init() {
 		eventType: api.TestSuiteRunQueuedEventTypeV0_1_0.String(),
 		expectedEvent: &api.TestSuiteRunQueuedEventV0_1_0{
 			Context: api.Context{
-				Type:      api.TestSuiteRunQueuedEventTypeV0_1_0.String(),
+				Type:      api.TestSuiteRunQueuedEventTypeV0_1_0,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,
@@ -675,7 +675,7 @@ func init() {
 		eventType: api.TestSuiteRunStartedEventTypeV0_1_0.String(),
 		expectedEvent: &api.TestSuiteRunStartedEventV0_1_0{
 			Context: api.Context{
-				Type:      api.TestSuiteRunStartedEventTypeV0_1_0.String(),
+				Type:      api.TestSuiteRunStartedEventTypeV0_1_0,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
 				Version:   api.CDEventsSpecVersion,

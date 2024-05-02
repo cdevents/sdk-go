@@ -159,11 +159,11 @@ func (e *ServiceRolledbackEventV0_1_1) SetSubjectEnvironment(environment *Refere
 }
 
 // New creates a new ServiceRolledbackEventV0_1_1
-func NewServiceRolledbackEventV0_1_1() (*ServiceRolledbackEventV0_1_1, error) {
+func NewServiceRolledbackEventV0_1_1(specVersion string) (*ServiceRolledbackEventV0_1_1, error) {
 	e := &ServiceRolledbackEventV0_1_1{
 		Context: Context{
-			Type:    ServiceRolledbackEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    ServiceRolledbackEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: ServiceRolledbackSubject{
 			SubjectBase: SubjectBase{

@@ -23,6 +23,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"regexp"
+	"strings"
 	"time"
 
 	"golang.org/x/mod/semver"
@@ -42,6 +43,23 @@ var (
 	// set-pup at init time
 	CDEventsByUnversionedTypes map[string]CDEvent
 )
+
+type BaseContextReader interface {
+
+	// GetVersion returns the CDEvents spec version
+	GetVersion() string
+
+	// GetType returns the CDEvents event type as string
+	GetType() CDEventType
+}
+
+func (t Context) GetVersion() string {
+	return t.Version
+}
+
+func (t Context) GetType() CDEventType {
+	return t.Type
+}
 
 type Context struct {
 	// Spec: https://cdevents.dev/docs/spec/#version
@@ -71,7 +89,7 @@ type Context struct {
 	// types should be prefixed with dev.cdevents.
 	// One occurrence may have multiple events associated, as long as they have
 	// different event types
-	Type string `json:"type" jsonschema:"required,minLength=1" validate:"event-type"`
+	Type CDEventType `json:"type" jsonschema:"required,minLength=1" validate:"event-type"`
 
 	// Spec: https://cdevents.dev/docs/spec/#timestamp
 	// Description: Description: defines the time of the occurrence. When the
@@ -141,6 +159,23 @@ func (t CDEventType) IsCompatible(other CDEventType) bool {
 		semver.Major("v"+t.Version) == semver.Major("v"+other.Version)
 }
 
+func (t *CDEventType) UnmarshalJSON(data []byte) error {
+	// Ignore null, like in the main JSON package.
+	if string(data) == "null" || string(data) == `""` {
+		return nil
+	}
+	cdeventType, err := CDEventTypeFromString(strings.Trim(string(data), "\""))
+	if err != nil {
+		return err
+	}
+	*t = *cdeventType
+	return nil
+}
+
+func (t CDEventType) MarshalJSON() ([]byte, error) {
+	return json.Marshal(t.String())
+}
+
 func CDEventTypeFromString(cdeventType string) (*CDEventType, error) {
 	parts := CDEventsTypeCRegex.FindStringSubmatch(cdeventType)
 	if len(parts) != 4 {
@@ -155,11 +190,8 @@ func CDEventTypeFromString(cdeventType string) (*CDEventType, error) {
 
 type CDEventReader interface {
 
-	// The CDEventType "dev.cdevents.*"
-	GetType() CDEventType
-
-	// The CDEvents specification version implemented
-	GetVersion() string
+	// Event type and spec version readers
+	BaseContextReader
 
 	// The event ID, unique for this event within the event producer (source)
 	GetId() string

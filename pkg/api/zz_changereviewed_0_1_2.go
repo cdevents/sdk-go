@@ -153,11 +153,11 @@ func (e *ChangeReviewedEventV0_1_2) SetSubjectRepository(repository *Reference) 
 }
 
 // New creates a new ChangeReviewedEventV0_1_2
-func NewChangeReviewedEventV0_1_2() (*ChangeReviewedEventV0_1_2, error) {
+func NewChangeReviewedEventV0_1_2(specVersion string) (*ChangeReviewedEventV0_1_2, error) {
 	e := &ChangeReviewedEventV0_1_2{
 		Context: Context{
-			Type:    ChangeReviewedEventTypeV0_1_2.String(),
-			Version: CDEventsSpecVersion,
+			Type:    ChangeReviewedEventTypeV0_1_2,
+			Version: specVersion,
 		},
 		Subject: ChangeReviewedSubject{
 			SubjectBase: SubjectBase{

@@ -165,11 +165,11 @@ func (e *TaskRunStartedEventV0_1_1) SetSubjectUrl(url string) {
 }
 
 // New creates a new TaskRunStartedEventV0_1_1
-func NewTaskRunStartedEventV0_1_1() (*TaskRunStartedEventV0_1_1, error) {
+func NewTaskRunStartedEventV0_1_1(specVersion string) (*TaskRunStartedEventV0_1_1, error) {
 	e := &TaskRunStartedEventV0_1_1{
 		Context: Context{
-			Type:    TaskRunStartedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    TaskRunStartedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: TaskRunStartedSubject{
 			SubjectBase: SubjectBase{

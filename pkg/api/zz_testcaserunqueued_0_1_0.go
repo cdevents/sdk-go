@@ -171,11 +171,11 @@ func (e *TestCaseRunQueuedEventV0_1_0) SetSubjectTrigger(trigger *TestCaseRunQue
 }
 
 // New creates a new TestCaseRunQueuedEventV0_1_0
-func NewTestCaseRunQueuedEventV0_1_0() (*TestCaseRunQueuedEventV0_1_0, error) {
+func NewTestCaseRunQueuedEventV0_1_0(specVersion string) (*TestCaseRunQueuedEventV0_1_0, error) {
 	e := &TestCaseRunQueuedEventV0_1_0{
 		Context: Context{
-			Type:    TestCaseRunQueuedEventTypeV0_1_0.String(),
-			Version: CDEventsSpecVersion,
+			Type:    TestCaseRunQueuedEventTypeV0_1_0,
+			Version: specVersion,
 		},
 		Subject: TestCaseRunQueuedSubject{
 			SubjectBase: SubjectBase{

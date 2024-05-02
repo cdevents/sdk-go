@@ -278,7 +278,7 @@ func TestInvalidEvent(t *testing.T) {
 	// invalid event type
 	eventInvalidType := &api.FooSubjectBarPredicateEvent{
 		Context: api.Context{
-			Type:    "not-a-valid-type",
+			Type:    api.CDEventType{Subject: "not-a-valid-type"},
 			Version: api.CDEventsSpecVersion,
 		},
 		Subject: api.FooSubjectBarPredicateSubject{
@@ -475,11 +475,8 @@ func testEventWithVersion(eventVersion string, specVersion string) *api.FooSubje
 	event.SetSubjectObjectField(&api.FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
 	err := event.SetCustomData("application/json", testDataJsonUnmarshalled)
 	panicOnError(err)
-	etype, err := api.ParseType(event.Context.Type)
-	panicOnError(err)
-	etype.Version = eventVersion
+	event.Context.Type.Version = eventVersion
 	event.Context.Version = specVersion
-	event.Context.Type = etype.String()
 	return event
 }
 
@@ -522,7 +519,7 @@ func TestNewFromJsonBytes(t *testing.T) {
 	}, {
 		testFile:    "unknown_type",
 		description: "The event has a valid structure but unknown type",
-		wantError:   "unknown event type dev.cdevents.foosubject.gazumped",
+		wantError:   "unknown event type dev.cdevents.foosubject.gazumped.0.1.0",
 	}, {
 		testFile:    "unparsable_context",
 		description: "The context cannot be parsed, mandatory field is missing",

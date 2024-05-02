@@ -153,11 +153,11 @@ func (e *BranchDeletedEventV0_1_2) SetSubjectRepository(repository *Reference) {
 }
 
 // New creates a new BranchDeletedEventV0_1_2
-func NewBranchDeletedEventV0_1_2() (*BranchDeletedEventV0_1_2, error) {
+func NewBranchDeletedEventV0_1_2(specVersion string) (*BranchDeletedEventV0_1_2, error) {
 	e := &BranchDeletedEventV0_1_2{
 		Context: Context{
-			Type:    BranchDeletedEventTypeV0_1_2.String(),
-			Version: CDEventsSpecVersion,
+			Type:    BranchDeletedEventTypeV0_1_2,
+			Version: specVersion,
 		},
 		Subject: BranchDeletedSubject{
 			SubjectBase: SubjectBase{
