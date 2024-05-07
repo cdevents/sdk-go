@@ -260,3 +260,16 @@ type TestSuiteRunStartedEvent = api.TestSuiteRunStartedEventV0_1_0
 func NewTestSuiteRunStartedEvent() (*TestSuiteRunStartedEvent, error) {
 	return api.NewTestSuiteRunStartedEventV0_1_0(specVersion)
 }
+
+// NewFromJsonBytes builds a new CDEventReader from a JSON string as []bytes
+// This works by unmarshalling the context first, extracting the event type and using
+// that to unmarshal the rest of the event into the correct object.
+// It assumes the context can be unmarshalled in a `Context` object.
+func NewFromJsonBytes(event []byte) (api.CDEvent, error) {
+	return api.NewFromJsonBytesContext[api.Context](event, CDEventsByUnversionedTypes)
+}
+
+// Build a new CDEventReader from a JSON string
+func NewFromJsonString(event string) (api.CDEvent, error) {
+	return NewFromJsonBytes([]byte(event))
+}

@@ -22,7 +22,7 @@ package api_test
 
 import (
 	"github.com/cdevents/sdk-go/pkg/api"
-	specv03 "github.com/cdevents/sdk-go/pkg/api/v0.3"
+	specv03 "github.com/cdevents/sdk-go/pkg/api/v03"
 )
 
 func init() {

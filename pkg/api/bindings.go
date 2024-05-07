@@ -57,14 +57,12 @@ func panicOnError(err error) {
 // but it's not yet in the spec
 
 // ParseType returns a CDEventType if eventType is a valid type
+// Since the list of valid events is spec specific, we only validate
+// in spec specific code whether this event type exists
 func ParseType(eventType string) (*CDEventType, error) {
 	t, err := CDEventTypeFromString(eventType)
 	if err != nil {
 		return nil, err
-	}
-	_, ok := CDEventsByUnversionedTypes[t.UnversionedString()]
-	if !ok {
-		return nil, fmt.Errorf("unknown event type %s", t.UnversionedString())
 	}
 	if !semver.IsValid("v" + t.Version) {
 		return nil, fmt.Errorf("invalid version format %s", t.Version)
@@ -155,16 +153,11 @@ func Validate(event CDEventReader) error {
 	return nil
 }
 
-// Build a new CDEventReader from a JSON string
-func NewFromJsonString(event string) (CDEvent, error) {
-	return NewFromJsonBytes([]byte(event))
-}
-
 // NewFromJsonBytesContext[ContextType] builds a new CDEventReader from a JSON string as []bytes
 // This works by unmarshalling the context first, extracting the event type and using
 // that to unmarshal the rest of the event into the correct object.
 // `ContextType` defines the type of Context that can be used to unmarshal the event.
-func NewFromJsonBytesContext[ContextType BaseContextReader](event []byte) (CDEvent, error) {
+func NewFromJsonBytesContext[ContextType BaseContextReader](event []byte, cdeventsMap map[string]CDEvent) (CDEvent, error) {
 	eventAux := &struct {
 		Context ContextType `json:"context"`
 	}{}
@@ -173,7 +166,7 @@ func NewFromJsonBytesContext[ContextType BaseContextReader](event []byte) (CDEve
 		return nil, err
 	}
 	eventType := eventAux.Context.GetType()
-	receiver, ok := CDEventsByUnversionedTypes[eventType.UnversionedString()]
+	receiver, ok := cdeventsMap[eventType.UnversionedString()]
 	if !ok {
 		// This should not happen as unmarshalling and validate checks if the type is known to the SDK
 		return nil, fmt.Errorf("unknown event type %s", eventAux.Context.GetType())
@@ -191,12 +184,4 @@ func NewFromJsonBytesContext[ContextType BaseContextReader](event []byte) (CDEve
 		return nil, err
 	}
 	return receiver, nil
-}
-
-// NewFromJsonBytes builds a new CDEventReader from a JSON string as []bytes
-// This works by unmarshalling the context first, extracting the event type and using
-// that to unmarshal the rest of the event into the correct object.
-// It assumes the context can be unmarshalled in a `Context` object.
-func NewFromJsonBytes(event []byte) (CDEvent, error) {
-	return NewFromJsonBytesContext[Context](event)
 }

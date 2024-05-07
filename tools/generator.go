@@ -156,7 +156,7 @@ func main() {
 	// Generate SDK test files
 	test_schema_folder := filepath.Join(PROJECT_ROOT, TEST_SCHEMA_FOLDER, SCHEMA_FOLDER)
 	log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEST_TEMPLATES, test_schema_folder, TEST_GEN_CODE_FOLDER)
-	err = generate(TEST_TEMPLATES, test_schema_folder, TEST_GEN_CODE_FOLDER, TEST_OUTPUT_PREFIX, "", GO_TYPES_TEST_NAMES)
+	err = generate(TEST_TEMPLATES, test_schema_folder, TEST_GEN_CODE_FOLDER, TEST_OUTPUT_PREFIX, "v99.0.0", GO_TYPES_TEST_NAMES)
 	if err != nil {
 		log.Fatalf("%s", err.Error())
 	}
@@ -185,25 +185,25 @@ func generate(templatesFolder, schemaFolder, genFolder, prefix, specVersion stri
 		return err
 	}
 
-	// Process the types template
-	outputFileName := filepath.Join(genFolder, "zz_"+prefix+strings.TrimSuffix(typesTemplateFileName, filepath.Ext(typesTemplateFileName)))
-	err = executeTemplate(allTemplates, typesTemplateFileName, outputFileName, allData.Slice)
+	// Process the spec template. Create the target folder is it doesn't exist
+	specFileFolder := filepath.Join(genFolder, allData.SpecVersionName)
+	err = os.MkdirAll(specFileFolder, os.ModePerm)
 	if err != nil {
 		return err
 	}
 
-	// Process the spec template. Create the target folder is it doesn't exist
-	if shortSpecVersion != "" {
-		specFileFolder := filepath.Join(genFolder, shortSpecVersion)
-		err = os.MkdirAll(specFileFolder, os.ModePerm)
-		if err != nil {
-			return err
-		}
-		specFileName := filepath.Join(genFolder, shortSpecVersion, strings.TrimSuffix(specTemplateFileName, filepath.Ext(specTemplateFileName)))
-		err = executeTemplate(allTemplates, specTemplateFileName, specFileName, allData)
-		if err != nil {
-			return err
-		}
+	// Spec types (types.go)
+	outputFileName := filepath.Join(genFolder, allData.SpecVersionName, strings.TrimSuffix(typesTemplateFileName, filepath.Ext(typesTemplateFileName)))
+	err = executeTemplate(allTemplates, typesTemplateFileName, outputFileName, allData)
+	if err != nil {
+		return err
+	}
+
+	// Spec aliases (docs.go)
+	specFileName := filepath.Join(genFolder, allData.SpecVersionName, strings.TrimSuffix(specTemplateFileName, filepath.Ext(specTemplateFileName)))
+	err = executeTemplate(allTemplates, specTemplateFileName, specFileName, allData)
+	if err != nil {
+		return err
 	}
 
 	// Process example test files - only for real data

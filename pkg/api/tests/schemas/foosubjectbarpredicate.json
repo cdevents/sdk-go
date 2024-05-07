@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://cdevents.dev/0.2.0/schema/foosubject-barpredicate-event",
+	"$id": "https://cdevents.dev/99.0.0/schema/foosubject-barpredicate-event",
 	"properties": {
 	  "context": {
 		"properties": {

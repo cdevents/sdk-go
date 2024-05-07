@@ -25,7 +25,7 @@ import (
 	"time"
 
 	"github.com/cdevents/sdk-go/pkg/api"
-	cdevents "github.com/cdevents/sdk-go/pkg/api"
+	cdevents "github.com/cdevents/sdk-go/pkg/api/v03"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"

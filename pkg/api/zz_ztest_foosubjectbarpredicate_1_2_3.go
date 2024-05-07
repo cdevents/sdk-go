@@ -28,8 +28,8 @@ import (
 var foosubjectbarpredicateschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.2.0/schema/foosubject-barpredicate-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.foosubject.barpredicate.1.2.3"],"default":"dev.cdevents.foosubject.barpredicate.1.2.3"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["fooSubject"],"default":"fooSubject"},"content":{"properties":{"plainField":{"type":"string","minLength":1},"referenceField":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"artifactId":{"type":"string"},"objectField":{"properties":{"required":{"type":"string","minLength":1},"optional":{"type":"string","format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["required"]}},"additionalProperties":false,"type":"object","required":["plainField","referenceField"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
-	// FooSubjectBarPredicate event v1.2.3
-	FooSubjectBarPredicateEventV1_2_3 CDEventType = CDEventType{
+	// FooSubjectBarPredicate event type v1.2.3
+	FooSubjectBarPredicateEventTypeV1_2_3 CDEventType = CDEventType{
 		Subject:   "foosubject",
 		Predicate: "barpredicate",
 		Version:   "1.2.3",
@@ -51,15 +51,11 @@ type FooSubjectBarPredicateSubject struct {
 	Content FooSubjectBarPredicateSubjectContent `json:"content"`
 }
 
-func (sc FooSubjectBarPredicateSubject) GetEventType() CDEventType {
-	return FooSubjectBarPredicateEventV1_2_3
-}
-
 func (sc FooSubjectBarPredicateSubject) GetSubjectType() SubjectType {
 	return "fooSubject"
 }
 
-type FooSubjectBarPredicateEvent struct {
+type FooSubjectBarPredicateEventV1_2_3 struct {
 	Context Context                       `json:"context"`
 	Subject FooSubjectBarPredicateSubject `json:"subject"`
 	CDEventCustomData
@@ -67,61 +63,61 @@ type FooSubjectBarPredicateEvent struct {
 
 // CDEventsReader implementation
 
-func (e FooSubjectBarPredicateEvent) GetType() CDEventType {
-	return FooSubjectBarPredicateEventV1_2_3
+func (e FooSubjectBarPredicateEventV1_2_3) GetType() CDEventType {
+	return FooSubjectBarPredicateEventTypeV1_2_3
 }
 
-func (e FooSubjectBarPredicateEvent) GetVersion() string {
+func (e FooSubjectBarPredicateEventV1_2_3) GetVersion() string {
 	return CDEventsSpecVersion
 }
 
-func (e FooSubjectBarPredicateEvent) GetId() string {
+func (e FooSubjectBarPredicateEventV1_2_3) GetId() string {
 	return e.Context.Id
 }
 
-func (e FooSubjectBarPredicateEvent) GetSource() string {
+func (e FooSubjectBarPredicateEventV1_2_3) GetSource() string {
 	return e.Context.Source
 }
 
-func (e FooSubjectBarPredicateEvent) GetTimestamp() time.Time {
+func (e FooSubjectBarPredicateEventV1_2_3) GetTimestamp() time.Time {
 	return e.Context.Timestamp
 }
 
-func (e FooSubjectBarPredicateEvent) GetSubjectId() string {
+func (e FooSubjectBarPredicateEventV1_2_3) GetSubjectId() string {
 	return e.Subject.Id
 }
 
-func (e FooSubjectBarPredicateEvent) GetSubjectSource() string {
+func (e FooSubjectBarPredicateEventV1_2_3) GetSubjectSource() string {
 	return e.Subject.Source
 }
 
-func (e FooSubjectBarPredicateEvent) GetSubject() Subject {
+func (e FooSubjectBarPredicateEventV1_2_3) GetSubject() Subject {
 	return e.Subject
 }
 
-func (e FooSubjectBarPredicateEvent) GetCustomData() (interface{}, error) {
+func (e FooSubjectBarPredicateEventV1_2_3) GetCustomData() (interface{}, error) {
 	return GetCustomData(e.CustomDataContentType, e.CustomData)
 }
 
-func (e FooSubjectBarPredicateEvent) GetCustomDataAs(receiver interface{}) error {
+func (e FooSubjectBarPredicateEventV1_2_3) GetCustomDataAs(receiver interface{}) error {
 	return GetCustomDataAs(e, receiver)
 }
 
-func (e FooSubjectBarPredicateEvent) GetCustomDataRaw() ([]byte, error) {
+func (e FooSubjectBarPredicateEventV1_2_3) GetCustomDataRaw() ([]byte, error) {
 	return GetCustomDataRaw(e.CustomDataContentType, e.CustomData)
 }
 
-func (e FooSubjectBarPredicateEvent) GetCustomDataContentType() string {
+func (e FooSubjectBarPredicateEventV1_2_3) GetCustomDataContentType() string {
 	return e.CustomDataContentType
 }
 
 // CDEventsWriter implementation
 
-func (e *FooSubjectBarPredicateEvent) SetId(id string) {
+func (e *FooSubjectBarPredicateEventV1_2_3) SetId(id string) {
 	e.Context.Id = id
 }
 
-func (e *FooSubjectBarPredicateEvent) SetSource(source string) {
+func (e *FooSubjectBarPredicateEventV1_2_3) SetSource(source string) {
 	e.Context.Source = source
 	// Default the subject source to the event source
 	if e.Subject.Source == "" {
@@ -129,19 +125,19 @@ func (e *FooSubjectBarPredicateEvent) SetSource(source string) {
 	}
 }
 
-func (e *FooSubjectBarPredicateEvent) SetTimestamp(timestamp time.Time) {
+func (e *FooSubjectBarPredicateEventV1_2_3) SetTimestamp(timestamp time.Time) {
 	e.Context.Timestamp = timestamp
 }
 
-func (e *FooSubjectBarPredicateEvent) SetSubjectId(subjectId string) {
+func (e *FooSubjectBarPredicateEventV1_2_3) SetSubjectId(subjectId string) {
 	e.Subject.Id = subjectId
 }
 
-func (e *FooSubjectBarPredicateEvent) SetSubjectSource(subjectSource string) {
+func (e *FooSubjectBarPredicateEventV1_2_3) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *FooSubjectBarPredicateEvent) SetCustomData(contentType string, data interface{}) error {
+func (e *FooSubjectBarPredicateEventV1_2_3) SetCustomData(contentType string, data interface{}) error {
 	err := CheckCustomData(contentType, data)
 	if err != nil {
 		return err
@@ -151,35 +147,35 @@ func (e *FooSubjectBarPredicateEvent) SetCustomData(contentType string, data int
 	return nil
 }
 
-func (e FooSubjectBarPredicateEvent) GetSchema() (string, string) {
+func (e FooSubjectBarPredicateEventV1_2_3) GetSchema() (string, string) {
 	eType := e.GetType()
 	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), foosubjectbarpredicateschema
 }
 
 // Set subject custom fields
 
-func (e *FooSubjectBarPredicateEvent) SetSubjectArtifactId(artifactId string) {
+func (e *FooSubjectBarPredicateEventV1_2_3) SetSubjectArtifactId(artifactId string) {
 	e.Subject.Content.ArtifactId = artifactId
 }
 
-func (e *FooSubjectBarPredicateEvent) SetSubjectObjectField(objectField *FooSubjectBarPredicateSubjectContentObjectField) {
+func (e *FooSubjectBarPredicateEventV1_2_3) SetSubjectObjectField(objectField *FooSubjectBarPredicateSubjectContentObjectField) {
 	e.Subject.Content.ObjectField = objectField
 }
 
-func (e *FooSubjectBarPredicateEvent) SetSubjectPlainField(plainField string) {
+func (e *FooSubjectBarPredicateEventV1_2_3) SetSubjectPlainField(plainField string) {
 	e.Subject.Content.PlainField = plainField
 }
 
-func (e *FooSubjectBarPredicateEvent) SetSubjectReferenceField(referenceField *Reference) {
+func (e *FooSubjectBarPredicateEventV1_2_3) SetSubjectReferenceField(referenceField *Reference) {
 	e.Subject.Content.ReferenceField = referenceField
 }
 
-// New creates a new FooSubjectBarPredicateEvent
-func NewFooSubjectBarPredicateEvent() (*FooSubjectBarPredicateEvent, error) {
-	e := &FooSubjectBarPredicateEvent{
+// New creates a new FooSubjectBarPredicateEventV1_2_3
+func NewFooSubjectBarPredicateEventV1_2_3(specVersion string) (*FooSubjectBarPredicateEventV1_2_3, error) {
+	e := &FooSubjectBarPredicateEventV1_2_3{
 		Context: Context{
-			Type:    FooSubjectBarPredicateEventV1_2_3,
-			Version: CDEventsSpecVersion,
+			Type:    FooSubjectBarPredicateEventTypeV1_2_3,
+			Version: specVersion,
 		},
 		Subject: FooSubjectBarPredicateSubject{
 			SubjectBase: SubjectBase{

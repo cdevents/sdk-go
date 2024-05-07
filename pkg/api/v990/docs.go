@@ -19,20 +19,19 @@ SPDX-License-Identifier: Apache-2.0
 */
 
 // Package v03 contains method to create events that belong to the
-// CDEvents specification {{.SpecVersionShort}}.x
+// CDEvents specification v99.0.x
 
-package {{.SpecVersionName}}
+package v990
 
 import "github.com/cdevents/sdk-go/pkg/api"
 
-var specVersion = "{{.SpecVersion}}"
+var specVersion = "v99.0.0"
 
-{{- range $i, $data := .Slice }}
-type {{.Subject}}{{.Predicate}}Event = api.{{.Subject}}{{.Predicate}}EventV{{.VersionName}}
-func New{{.Subject}}{{.Predicate}}Event() (*{{.Subject}}{{.Predicate}}Event, error) {
-	return api.New{{.Subject}}{{.Predicate}}EventV{{.VersionName}}(specVersion)
+type FooSubjectBarPredicateEvent = api.FooSubjectBarPredicateEventV1_2_3
+
+func NewFooSubjectBarPredicateEvent() (*FooSubjectBarPredicateEvent, error) {
+	return api.NewFooSubjectBarPredicateEventV1_2_3(specVersion)
 }
-{{- end }}
 
 // NewFromJsonBytes builds a new CDEventReader from a JSON string as []bytes
 // This works by unmarshalling the context first, extracting the event type and using

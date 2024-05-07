@@ -24,6 +24,7 @@ import (
 	"time"
 
 	"github.com/cdevents/sdk-go/pkg/api"
+	testapi "github.com/cdevents/sdk-go/pkg/api/v03"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/uuid"
 )
@@ -378,7 +379,7 @@ func init() {
 	// Load event examples from the spec
 	examplesConsumed = make(map[string][]byte)
 
-	for _, event := range api.CDEventsTypes {
+	for _, event := range testapi.CDEventsTypes {
 		short := event.GetType().Short()
 		examplesConsumed[short], err = os.ReadFile(examplesFolder + string(os.PathSeparator) + short + ".json")
 		panicOnError(err)
@@ -404,7 +405,7 @@ func TestExamples(t *testing.T) {
 			if err != nil {
 				t.Errorf("produced event failed to validate: %v", err)
 			}
-			consumed, err := api.NewFromJsonBytes(exampleConsumed)
+			consumed, err := testapi.NewFromJsonBytes(exampleConsumed)
 			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did: %v", err)
 			}

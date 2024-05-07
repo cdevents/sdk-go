@@ -36,13 +36,7 @@ const (
 	CDEventsTypeRegex         = "^dev\\.cdevents\\.(?P<subject>[a-z]+)\\.(?P<predicate>[a-z]+)\\.(?P<version>.*)$"
 )
 
-var (
-	CDEventsTypeCRegex = regexp.MustCompile(CDEventsTypeRegex)
-
-	// CDEventsByUnversionedTypes maps non-versioned event types with events
-	// set-pup at init time
-	CDEventsByUnversionedTypes map[string]CDEvent
-)
+var CDEventsTypeCRegex = regexp.MustCompile(CDEventsTypeRegex)
 
 type BaseContextReader interface {
 

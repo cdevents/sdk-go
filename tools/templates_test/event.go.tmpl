@@ -28,8 +28,8 @@ import (
 var {{.SubjectLower}}{{.PredicateLower}}schema = `{{ .Schema }}`
 
 var (
-	// {{.Subject}}{{.Predicate}} event v{{.Version}}
-	{{.Subject}}{{.Predicate}}EventV{{.VersionName}} CDEventType = CDEventType{
+	// {{.Subject}}{{.Predicate}} event type v{{.Version}}
+	{{.Subject}}{{.Predicate}}EventTypeV{{.VersionName}} CDEventType = CDEventType{
 		Subject:   "{{.SubjectLower}}",
 		Predicate: "{{.PredicateLower}}",
 		Version:   "{{.Version}}",
@@ -47,15 +47,11 @@ type {{.Subject}}{{.Predicate}}Subject struct {
 	Content {{.Subject}}{{.Predicate}}SubjectContent `json:"content"`
 }
 
-func (sc {{.Subject}}{{.Predicate}}Subject) GetEventType() CDEventType {
-	return {{.Subject}}{{.Predicate}}EventV{{.VersionName}}
-}
-
 func (sc {{.Subject}}{{.Predicate}}Subject) GetSubjectType() SubjectType {
 	return "{{.SubjectType}}"
 }
 
-type {{.Subject}}{{.Predicate}}Event struct {
+type {{.Subject}}{{.Predicate}}EventV{{.VersionName}} struct {
 	Context Context                    `json:"context"`
 	Subject {{.Subject}}{{.Predicate}}Subject `json:"subject"`
 	CDEventCustomData
@@ -63,61 +59,61 @@ type {{.Subject}}{{.Predicate}}Event struct {
 
 // CDEventsReader implementation
 
-func (e {{.Subject}}{{.Predicate}}Event) GetType() CDEventType {
-	return {{.Subject}}{{.Predicate}}EventV{{.VersionName}}
+func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetType() CDEventType {
+	return {{.Subject}}{{.Predicate}}EventTypeV{{.VersionName}}
 }
 
-func (e {{.Subject}}{{.Predicate}}Event) GetVersion() string {
+func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetVersion() string {
 	return CDEventsSpecVersion
 }
 
-func (e {{.Subject}}{{.Predicate}}Event) GetId() string {
+func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetId() string {
 	return e.Context.Id
 }
 
-func (e {{.Subject}}{{.Predicate}}Event) GetSource() string {
+func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetSource() string {
 	return e.Context.Source
 }
 
-func (e {{.Subject}}{{.Predicate}}Event) GetTimestamp() time.Time {
+func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetTimestamp() time.Time {
 	return e.Context.Timestamp
 }
 
-func (e {{.Subject}}{{.Predicate}}Event) GetSubjectId() string {
+func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetSubjectId() string {
 	return e.Subject.Id
 }
 
-func (e {{.Subject}}{{.Predicate}}Event) GetSubjectSource() string {
+func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetSubjectSource() string {
 	return e.Subject.Source
 }
 
-func (e {{.Subject}}{{.Predicate}}Event) GetSubject() Subject {
+func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetSubject() Subject {
 	return e.Subject
 }
 
-func (e {{.Subject}}{{.Predicate}}Event) GetCustomData() (interface{}, error) {
+func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetCustomData() (interface{}, error) {
 	return GetCustomData(e.CustomDataContentType, e.CustomData)
 }
 
-func (e {{.Subject}}{{.Predicate}}Event) GetCustomDataAs(receiver interface{}) error {
+func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetCustomDataAs(receiver interface{}) error {
 	return GetCustomDataAs(e, receiver)
 }
 
-func (e {{.Subject}}{{.Predicate}}Event) GetCustomDataRaw() ([]byte, error) {
+func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetCustomDataRaw() ([]byte, error) {
 	return GetCustomDataRaw(e.CustomDataContentType, e.CustomData)
 }
 
-func (e {{.Subject}}{{.Predicate}}Event) GetCustomDataContentType() string {
+func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetCustomDataContentType() string {
 	return e.CustomDataContentType
 }
 
 // CDEventsWriter implementation
 
-func (e *{{.Subject}}{{.Predicate}}Event) SetId(id string) {
+func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetId(id string) {
 	e.Context.Id = id
 }
 
-func (e *{{.Subject}}{{.Predicate}}Event) SetSource(source string) {
+func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetSource(source string) {
 	e.Context.Source = source
 	// Default the subject source to the event source
 	if e.Subject.Source == "" {
@@ -125,19 +121,19 @@ func (e *{{.Subject}}{{.Predicate}}Event) SetSource(source string) {
 	}
 }
 
-func (e *{{.Subject}}{{.Predicate}}Event) SetTimestamp(timestamp time.Time) {
+func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetTimestamp(timestamp time.Time) {
 	e.Context.Timestamp = timestamp
 }
 
-func (e *{{.Subject}}{{.Predicate}}Event) SetSubjectId(subjectId string) {
+func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetSubjectId(subjectId string) {
 	e.Subject.Id = subjectId
 }
 
-func (e *{{.Subject}}{{.Predicate}}Event) SetSubjectSource(subjectSource string) {
+func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *{{.Subject}}{{.Predicate}}Event) SetCustomData(contentType string, data interface{}) error {
+func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetCustomData(contentType string, data interface{}) error {
 	err := CheckCustomData(contentType, data)
 	if err != nil {
 		return err
@@ -147,24 +143,24 @@ func (e *{{.Subject}}{{.Predicate}}Event) SetCustomData(contentType string, data
 	return nil
 }
 
-func (e {{.Subject}}{{.Predicate}}Event) GetSchema() (string, string) {
+func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetSchema() (string, string) {
 	eType := e.GetType()
 	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), {{.SubjectLower}}{{.PredicateLower}}schema
 }
 
 // Set subject custom fields
 {{ range $i, $field := .Contents }}
-func (e *{{$.Subject}}{{$.Predicate}}Event) SetSubject{{ .Name }}({{ .NameLower }} {{ .Type }}) {
+func (e *{{$.Subject}}{{$.Predicate}}EventV{{$.VersionName}}) SetSubject{{ .Name }}({{ .NameLower }} {{ .Type }}) {
 	e.Subject.Content.{{ .Name }} = {{ .NameLower }}
 }
 {{ end }}
 
-// New creates a new {{.Subject}}{{.Predicate}}Event
-func New{{.Subject}}{{.Predicate}}Event() (*{{.Subject}}{{.Predicate}}Event, error) {
-	e := &{{.Subject}}{{.Predicate}}Event{
+// New creates a new {{.Subject}}{{.Predicate}}EventV{{.VersionName}}
+func New{{.Subject}}{{.Predicate}}EventV{{.VersionName}}(specVersion string) (*{{.Subject}}{{.Predicate}}EventV{{.VersionName}}, error) {
+	e := &{{.Subject}}{{.Predicate}}EventV{{.VersionName}}{
 		Context: Context{
-			Type:    {{.Subject}}{{.Predicate}}EventV{{.VersionName}},
-			Version: CDEventsSpecVersion,
+			Type:    {{.Subject}}{{.Predicate}}EventTypeV{{.VersionName}},
+			Version: specVersion,
 		},
 		Subject: {{.Subject}}{{.Predicate}}Subject{
 			SubjectBase: SubjectBase{
