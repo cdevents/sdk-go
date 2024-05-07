@@ -487,9 +487,9 @@ func testEventWithVersion(eventVersion string, specVersion string) *testapi.FooS
 
 func TestNewFromJsonBytes(t *testing.T) {
 
-	minorVersion := testEventWithVersion("1.999.0", api.CDEventsSpecVersion)
-	patchVersion := testEventWithVersion("1.2.999", api.CDEventsSpecVersion)
-	pastPatchVersion := testEventWithVersion("1.2.0", api.CDEventsSpecVersion)
+	minorVersion := testEventWithVersion("1.999.0", testapi.SpecVersion)
+	patchVersion := testEventWithVersion("1.2.999", testapi.SpecVersion)
+	pastPatchVersion := testEventWithVersion("1.2.0", testapi.SpecVersion)
 	pastSpecVersion := testEventWithVersion("1.2.3", "0.1.0")
 
 	tests := []struct {

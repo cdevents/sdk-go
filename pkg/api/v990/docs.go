@@ -25,12 +25,12 @@ package v990
 
 import "github.com/cdevents/sdk-go/pkg/api"
 
-var specVersion = "v99.0.0"
+var SpecVersion = "99.0.0"
 
 type FooSubjectBarPredicateEvent = api.FooSubjectBarPredicateEventV1_2_3
 
 func NewFooSubjectBarPredicateEvent() (*FooSubjectBarPredicateEvent, error) {
-	return api.NewFooSubjectBarPredicateEventV1_2_3(specVersion)
+	return api.NewFooSubjectBarPredicateEventV1_2_3(SpecVersion)
 }
 
 // NewFromJsonBytes builds a new CDEventReader from a JSON string as []bytes

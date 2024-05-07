@@ -25,12 +25,12 @@ package {{.SpecVersionName}}
 
 import "github.com/cdevents/sdk-go/pkg/api"
 
-var specVersion = "{{.SpecVersion}}"
+var SpecVersion = "{{.SpecVersion}}"
 
 {{- range $i, $data := .Slice }}
 type {{.Subject}}{{.Predicate}}Event = api.{{.Subject}}{{.Predicate}}EventV{{.VersionName}}
 func New{{.Subject}}{{.Predicate}}Event() (*{{.Subject}}{{.Predicate}}Event, error) {
-	return api.New{{.Subject}}{{.Predicate}}EventV{{.VersionName}}(specVersion)
+	return api.New{{.Subject}}{{.Predicate}}EventV{{.VersionName}}(SpecVersion)
 }
 {{- end }}
 

@@ -42,7 +42,7 @@ var (
 	TEMPLATES            = "tools/templates/*.tmpl"
 	PROJECT_ROOT         = "./pkg/api"
 	SPEC_FOLDER_PREFIX   = "spec-"
-	SPEC_VERSIONS        = []string{"v0.3.0"}
+	SPEC_VERSIONS        = []string{"0.3.0"}
 	SCHEMA_FOLDER        = "schemas"
 	GEN_CODE_FOLDER      = "./pkg/api"
 	TEST_TEMPLATES       = "tools/templates_test/*.tmpl"
@@ -144,7 +144,7 @@ func main() {
 
 	// Generate SDK files
 	for _, version := range SPEC_VERSIONS {
-		shortVersion := semver.MajorMinor(version)
+		shortVersion := semver.MajorMinor("v"+version)
 		versioned_schema_folder := filepath.Join(PROJECT_ROOT, SPEC_FOLDER_PREFIX+shortVersion, SCHEMA_FOLDER)
 		log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEMPLATES, versioned_schema_folder, GEN_CODE_FOLDER)
 		err = generate(TEMPLATES, versioned_schema_folder, GEN_CODE_FOLDER, "", version, GO_TYPES_NAMES)
@@ -156,7 +156,7 @@ func main() {
 	// Generate SDK test files
 	test_schema_folder := filepath.Join(PROJECT_ROOT, TEST_SCHEMA_FOLDER, SCHEMA_FOLDER)
 	log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEST_TEMPLATES, test_schema_folder, TEST_GEN_CODE_FOLDER)
-	err = generate(TEST_TEMPLATES, test_schema_folder, TEST_GEN_CODE_FOLDER, TEST_OUTPUT_PREFIX, "v99.0.0", GO_TYPES_TEST_NAMES)
+	err = generate(TEST_TEMPLATES, test_schema_folder, TEST_GEN_CODE_FOLDER, TEST_OUTPUT_PREFIX, "99.0.0", GO_TYPES_TEST_NAMES)
 	if err != nil {
 		log.Fatalf("%s", err.Error())
 	}
@@ -165,7 +165,7 @@ func main() {
 func generate(templatesFolder, schemaFolder, genFolder, prefix, specVersion string, goTypes map[string]string) error {
 	// allData is used to accumulate data from all jsonschemas
 	// which is then used to run shared templates
-	shortSpecVersion := semver.MajorMinor(specVersion)
+	shortSpecVersion := semver.MajorMinor("v" + specVersion)
 	allData := AllData{
 		Slice:            make([]Data, 0),
 		SpecVersion:      specVersion,
