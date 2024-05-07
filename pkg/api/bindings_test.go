@@ -429,7 +429,7 @@ func TestParseType(t *testing.T) {
 	}, {
 		name:      "unknown subject",
 		eventType: "dev.cdevents.subject.barpredicate.0.1.2-draft",
-		want:      &api.CDEventType{
+		want: &api.CDEventType{
 			Subject:   "subject",
 			Predicate: "barpredicate",
 			Version:   "0.1.2-draft",
@@ -438,7 +438,7 @@ func TestParseType(t *testing.T) {
 	}, {
 		name:      "unknown predicate",
 		eventType: "dev.cdevents.foosubject.predicate.0.1.2-draft",
-		want:      &api.CDEventType{
+		want: &api.CDEventType{
 			Subject:   "foosubject",
 			Predicate: "predicate",
 			Version:   "0.1.2-draft",
