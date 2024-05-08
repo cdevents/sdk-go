@@ -24,6 +24,7 @@ import (
 	"flag"
 	"fmt"
 	"go/format"
+	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
@@ -33,6 +34,7 @@ import (
 
 	cdevents "github.com/cdevents/sdk-go/pkg/api"
 	jsonschema "github.com/santhosh-tekuri/jsonschema/v5"
+	_ "github.com/santhosh-tekuri/jsonschema/v5/httploader" // loads the HTTP loader
 	"golang.org/x/mod/semver"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -40,11 +42,15 @@ import (
 
 var (
 	TEMPLATES          = "tools/templates/*.tmpl"
-	PROJECT_ROOT       = "./pkg/api"
+	CODE               = "./pkg/api"
+	GEN_CODE           = "./pkg/api"
+	REPO_ROOT string
+	TEMPLATES_FOLDER string
+	CODE_FOLDER string
+	GEN_CODE_FOLDER string
 	SPEC_FOLDER_PREFIX = "spec-"
 	SPEC_VERSIONS      = []string{"0.3.0"}
 	SCHEMA_FOLDER      = "schemas"
-	GEN_CODE_FOLDER    = "./pkg/api"
 	TEST_SCHEMA_FOLDER = "tests"
 	TEST_OUTPUT_PREFIX = "ztest_"
 
@@ -72,6 +78,9 @@ var (
 
 	// Tool
 	capitalizer cases.Caser
+
+	// Flags
+	RESOURCES_PATH = flag.String("resources", "", "the path to the generator resources root folder")
 )
 
 const REFERENCE_TYPE = "Reference"
@@ -135,18 +144,33 @@ func GoTypeName(schemaName string, mappings map[string]string) string {
 }
 
 func main() {
+	var err error
+	var ex string
+
 	// Parse input parameters
 	log.SetFlags(0)
 	log.SetPrefix("generator: ")
 	flag.Parse()
 
-	var err error
+	if *RESOURCES_PATH == "" {
+		ex, err = os.Executable()
+		if err != nil {
+			panic(err)
+		}
+		toolPath := filepath.Clean(filepath.Dir(filepath.Join(ex, "..")))
+		RESOURCES_PATH = &toolPath
+	}
+
+	// Setup folder variables
+	TEMPLATES_FOLDER = filepath.Join(*RESOURCES_PATH, TEMPLATES)
+	CODE_FOLDER = filepath.Join(*RESOURCES_PATH, CODE)
+	GEN_CODE_FOLDER = filepath.Join(*RESOURCES_PATH, GEN_CODE)
 
 	// Generate SDK files
 	for _, version := range SPEC_VERSIONS {
 		shortVersion := semver.MajorMinor("v" + version)
-		versioned_schema_folder := filepath.Join(PROJECT_ROOT, SPEC_FOLDER_PREFIX+shortVersion, SCHEMA_FOLDER)
-		log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEMPLATES, versioned_schema_folder, GEN_CODE_FOLDER)
+		versioned_schema_folder := filepath.Join(CODE_FOLDER, SPEC_FOLDER_PREFIX+shortVersion, SCHEMA_FOLDER)
+		log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEMPLATES_FOLDER, versioned_schema_folder, GEN_CODE_FOLDER)
 		err = generate(versioned_schema_folder, GEN_CODE_FOLDER, "", version, GO_TYPES_NAMES, false)
 		if err != nil {
 			log.Fatalf("%s", err.Error())
@@ -154,8 +178,8 @@ func main() {
 	}
 
 	// Generate SDK test files
-	test_schema_folder := filepath.Join(PROJECT_ROOT, TEST_SCHEMA_FOLDER, SCHEMA_FOLDER)
-	log.Printf("Generating Test SDK files from templates: %s and schemas: %s into %s", TEMPLATES, test_schema_folder, GEN_CODE_FOLDER)
+	test_schema_folder := filepath.Join(CODE_FOLDER, TEST_SCHEMA_FOLDER, SCHEMA_FOLDER)
+	log.Printf("Generating Test SDK files from templates: %s and schemas: %s into %s", TEMPLATES_FOLDER, test_schema_folder, GEN_CODE_FOLDER)
 	err = generate(test_schema_folder, GEN_CODE_FOLDER, TEST_OUTPUT_PREFIX, "99.0.0", GO_TYPES_TEST_NAMES, true)
 	if err != nil {
 		log.Fatalf("%s", err.Error())
@@ -174,14 +198,14 @@ func generate(schemaFolder, genFolder, prefix, specVersion string, goTypes map[s
 		IsTestData:       isTestMode,
 	}
 
-	allTemplates, err := template.ParseGlob(TEMPLATES)
+	allTemplates, err := template.ParseGlob(TEMPLATES_FOLDER)
 	if err != nil {
 		return err
 	}
 
 	// Walk the jsonschemas folder, process each ".json" file
-	walkProcessor := getWalkProcessor(allTemplates, genFolder, goTypes, &allData, prefix, isTestMode)
-	err = filepath.Walk(schemaFolder, walkProcessor)
+	walkProcessor := getWalkProcessor(schemaFolder, allTemplates, genFolder, goTypes, &allData, prefix, isTestMode)
+	err = fs.WalkDir(os.DirFS(schemaFolder), ".", walkProcessor)
 	if err != nil {
 		return err
 	}
@@ -243,21 +267,26 @@ func executeTemplate(allTemplates *template.Template, templateName, outputFileNa
 	return os.WriteFile(outputFileName, src, 0644)
 }
 
-func getWalkProcessor(allTemplates *template.Template, genFolder string, goTypes map[string]string, allData *AllData, prefix string, isTestMode bool) filepath.WalkFunc {
-	return func(path string, info os.FileInfo, err error) error {
+func getWalkProcessor(rootDir string, allTemplates *template.Template, genFolder string, goTypes map[string]string, allData *AllData, prefix string, isTestMode bool) fs.WalkDirFunc {
+	return func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
-		// Nothing to do with folders
+		// Do not go into sub-folders
 		if info.IsDir() {
-			return nil
+			if info.Name() == "." {
+				return nil
+			}
+			return fs.SkipDir
 		}
 		if !strings.HasSuffix(info.Name(), ".json") {
 			// This should not happen, but ignore just in case
 			return nil
 		}
+		// Set the whole path
+		schemaPath := filepath.Join(rootDir, path)
 		// Load the jsonschema from the spec
-		sch, err := jsonschema.Compile(path)
+		sch, err := jsonschema.Compile(schemaPath)
 		if err != nil {
 			return err
 		}
@@ -270,7 +299,7 @@ func getWalkProcessor(allTemplates *template.Template, genFolder string, goTypes
 		data.Prefix = prefix
 		data.IsTestData = isTestMode
 		// Load the raw schema data
-		rawSchema, err := os.ReadFile(path)
+		rawSchema, err := os.ReadFile(schemaPath)
 		if err != nil {
 			return err
 		}
