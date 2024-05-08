@@ -28,7 +28,7 @@ import (
 	"time"
 )
 
-var {{.SubjectLower}}{{.PredicateLower}}schema = `{{ .Schema }}`
+var {{.SubjectLower}}{{.PredicateLower}}schema{{.VersionName}} = `{{ .Schema }}`
 
 var (
 	// {{.Subject}}{{.Predicate}} event type v{{.Version}}
@@ -148,7 +148,7 @@ func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetCustomData(content
 
 func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), {{.SubjectLower}}{{.PredicateLower}}schema
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), {{.SubjectLower}}{{.PredicateLower}}schema{{.VersionName}}
 }
 
 // Set subject custom fields

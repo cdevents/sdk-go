@@ -44,10 +44,10 @@ var (
 	TEMPLATES          = "tools/templates/*.tmpl"
 	CODE               = "./pkg/api"
 	GEN_CODE           = "./pkg/api"
-	REPO_ROOT string
-	TEMPLATES_FOLDER string
-	CODE_FOLDER string
-	GEN_CODE_FOLDER string
+	REPO_ROOT          string
+	TEMPLATES_FOLDER   string
+	CODE_FOLDER        string
+	GEN_CODE_FOLDER    string
 	SPEC_FOLDER_PREFIX = "spec-"
 	SPEC_VERSIONS      = []string{"0.3.0"}
 	SCHEMA_FOLDER      = "schemas"
