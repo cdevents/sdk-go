@@ -27,7 +27,7 @@ jobs:
     - name: Format check
       run: make fmt
     - name: golangci-lint
-      uses: golangci/golangci-lint-action@v5
+      uses: golangci/golangci-lint-action@v6
       with:
         version: v1.52
     - name: Check generated code
