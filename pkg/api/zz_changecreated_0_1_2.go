@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var changecreatedschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/change-created-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.change.created.0.1.2"],"default":"dev.cdevents.change.created.0.1.2"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["change"],"default":"change"},"content":{"properties":{"repository":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+var changecreatedschema0_1_2 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/change-created-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.change.created.0.1.2"],"default":"dev.cdevents.change.created.0.1.2"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["change"],"default":"change"},"content":{"properties":{"repository":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// ChangeCreated event type v0.1.2
@@ -143,7 +143,7 @@ func (e *ChangeCreatedEventV0_1_2) SetCustomData(contentType string, data interf
 
 func (e ChangeCreatedEventV0_1_2) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), changecreatedschema
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), changecreatedschema0_1_2
 }
 
 // Set subject custom fields
@@ -153,11 +153,11 @@ func (e *ChangeCreatedEventV0_1_2) SetSubjectRepository(repository *Reference) {
 }
 
 // New creates a new ChangeCreatedEventV0_1_2
-func NewChangeCreatedEventV0_1_2() (*ChangeCreatedEventV0_1_2, error) {
+func NewChangeCreatedEventV0_1_2(specVersion string) (*ChangeCreatedEventV0_1_2, error) {
 	e := &ChangeCreatedEventV0_1_2{
 		Context: Context{
-			Type:    ChangeCreatedEventTypeV0_1_2.String(),
-			Version: CDEventsSpecVersion,
+			Type:    ChangeCreatedEventTypeV0_1_2,
+			Version: specVersion,
 		},
 		Subject: ChangeCreatedSubject{
 			SubjectBase: SubjectBase{

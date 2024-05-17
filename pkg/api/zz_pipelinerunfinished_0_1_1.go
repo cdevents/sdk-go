@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var pipelinerunfinishedschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/pipeline-run-finished-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.pipelinerun.finished.0.1.1"],"default":"dev.cdevents.pipelinerun.finished.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["pipelineRun"],"default":"pipelineRun"},"content":{"properties":{"pipelineName":{"type":"string"},"url":{"type":"string"},"outcome":{"type":"string"},"errors":{"type":"string"}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+var pipelinerunfinishedschema0_1_1 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/pipeline-run-finished-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.pipelinerun.finished.0.1.1"],"default":"dev.cdevents.pipelinerun.finished.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["pipelineRun"],"default":"pipelineRun"},"content":{"properties":{"pipelineName":{"type":"string"},"url":{"type":"string"},"outcome":{"type":"string"},"errors":{"type":"string"}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// PipelineRunFinished event type v0.1.1
@@ -149,7 +149,7 @@ func (e *PipelineRunFinishedEventV0_1_1) SetCustomData(contentType string, data 
 
 func (e PipelineRunFinishedEventV0_1_1) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), pipelinerunfinishedschema
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), pipelinerunfinishedschema0_1_1
 }
 
 // Set subject custom fields
@@ -171,11 +171,11 @@ func (e *PipelineRunFinishedEventV0_1_1) SetSubjectUrl(url string) {
 }
 
 // New creates a new PipelineRunFinishedEventV0_1_1
-func NewPipelineRunFinishedEventV0_1_1() (*PipelineRunFinishedEventV0_1_1, error) {
+func NewPipelineRunFinishedEventV0_1_1(specVersion string) (*PipelineRunFinishedEventV0_1_1, error) {
 	e := &PipelineRunFinishedEventV0_1_1{
 		Context: Context{
-			Type:    PipelineRunFinishedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    PipelineRunFinishedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: PipelineRunFinishedSubject{
 			SubjectBase: SubjectBase{

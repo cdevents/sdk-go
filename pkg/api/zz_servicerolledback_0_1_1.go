@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var servicerolledbackschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/service-rolledback-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.service.rolledback.0.1.1"],"default":"dev.cdevents.service.rolledback.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["service"],"default":"service"},"content":{"properties":{"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"artifactId":{"type":"string","minLength":1}},"additionalProperties":false,"type":"object","required":["environment","artifactId"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+var servicerolledbackschema0_1_1 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/service-rolledback-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.service.rolledback.0.1.1"],"default":"dev.cdevents.service.rolledback.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["service"],"default":"service"},"content":{"properties":{"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"artifactId":{"type":"string","minLength":1}},"additionalProperties":false,"type":"object","required":["environment","artifactId"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// ServiceRolledback event type v0.1.1
@@ -145,7 +145,7 @@ func (e *ServiceRolledbackEventV0_1_1) SetCustomData(contentType string, data in
 
 func (e ServiceRolledbackEventV0_1_1) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), servicerolledbackschema
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), servicerolledbackschema0_1_1
 }
 
 // Set subject custom fields
@@ -159,11 +159,11 @@ func (e *ServiceRolledbackEventV0_1_1) SetSubjectEnvironment(environment *Refere
 }
 
 // New creates a new ServiceRolledbackEventV0_1_1
-func NewServiceRolledbackEventV0_1_1() (*ServiceRolledbackEventV0_1_1, error) {
+func NewServiceRolledbackEventV0_1_1(specVersion string) (*ServiceRolledbackEventV0_1_1, error) {
 	e := &ServiceRolledbackEventV0_1_1{
 		Context: Context{
-			Type:    ServiceRolledbackEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    ServiceRolledbackEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: ServiceRolledbackSubject{
 			SubjectBase: SubjectBase{

@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var artifactsignedschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/artifact-signed-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.artifact.signed.0.1.0"],"default":"dev.cdevents.artifact.signed.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["artifact"],"default":"artifact"},"content":{"properties":{"signature":{"type":"string","minLength":1}},"additionalProperties":false,"type":"object","required":["signature"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+var artifactsignedschema0_1_0 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/artifact-signed-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.artifact.signed.0.1.0"],"default":"dev.cdevents.artifact.signed.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["artifact"],"default":"artifact"},"content":{"properties":{"signature":{"type":"string","minLength":1}},"additionalProperties":false,"type":"object","required":["signature"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// ArtifactSigned event type v0.1.0
@@ -143,7 +143,7 @@ func (e *ArtifactSignedEventV0_1_0) SetCustomData(contentType string, data inter
 
 func (e ArtifactSignedEventV0_1_0) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), artifactsignedschema
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), artifactsignedschema0_1_0
 }
 
 // Set subject custom fields
@@ -153,11 +153,11 @@ func (e *ArtifactSignedEventV0_1_0) SetSubjectSignature(signature string) {
 }
 
 // New creates a new ArtifactSignedEventV0_1_0
-func NewArtifactSignedEventV0_1_0() (*ArtifactSignedEventV0_1_0, error) {
+func NewArtifactSignedEventV0_1_0(specVersion string) (*ArtifactSignedEventV0_1_0, error) {
 	e := &ArtifactSignedEventV0_1_0{
 		Context: Context{
-			Type:    ArtifactSignedEventTypeV0_1_0.String(),
-			Version: CDEventsSpecVersion,
+			Type:    ArtifactSignedEventTypeV0_1_0,
+			Version: specVersion,
 		},
 		Subject: ArtifactSignedSubject{
 			SubjectBase: SubjectBase{

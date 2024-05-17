@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var incidentresolvedschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/incident-resolved-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.incident.resolved.0.1.0"],"default":"dev.cdevents.incident.resolved.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["incident"],"default":"incident"},"content":{"properties":{"description":{"type":"string"},"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"service":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"artifactId":{"type":"string","minLength":1}},"additionalProperties":false,"type":"object","required":["environment"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+var incidentresolvedschema0_1_0 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/incident-resolved-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.incident.resolved.0.1.0"],"default":"dev.cdevents.incident.resolved.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["incident"],"default":"incident"},"content":{"properties":{"description":{"type":"string"},"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"service":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"artifactId":{"type":"string","minLength":1}},"additionalProperties":false,"type":"object","required":["environment"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// IncidentResolved event type v0.1.0
@@ -149,7 +149,7 @@ func (e *IncidentResolvedEventV0_1_0) SetCustomData(contentType string, data int
 
 func (e IncidentResolvedEventV0_1_0) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), incidentresolvedschema
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), incidentresolvedschema0_1_0
 }
 
 // Set subject custom fields
@@ -171,11 +171,11 @@ func (e *IncidentResolvedEventV0_1_0) SetSubjectService(service *Reference) {
 }
 
 // New creates a new IncidentResolvedEventV0_1_0
-func NewIncidentResolvedEventV0_1_0() (*IncidentResolvedEventV0_1_0, error) {
+func NewIncidentResolvedEventV0_1_0(specVersion string) (*IncidentResolvedEventV0_1_0, error) {
 	e := &IncidentResolvedEventV0_1_0{
 		Context: Context{
-			Type:    IncidentResolvedEventTypeV0_1_0.String(),
-			Version: CDEventsSpecVersion,
+			Type:    IncidentResolvedEventTypeV0_1_0,
+			Version: specVersion,
 		},
 		Subject: IncidentResolvedSubject{
 			SubjectBase: SubjectBase{

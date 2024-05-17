@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var testsuiterunfinishedschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/test-suite-finished-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1},"type":{"type":"string","enum":["dev.cdevents.testsuiterun.finished.0.1.0"],"default":"dev.cdevents.testsuiterun.finished.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string"},"type":{"type":"string","minLength":1,"enum":["testSuiteRun"],"default":"testSuiteRun"},"content":{"properties":{"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"testSuite":{"type":"object","additionalProperties":false,"required":["id"],"properties":{"id":{"type":"string","minLength":1},"version":{"type":"string"},"name":{"type":"string"},"uri":{"type":"string","format":"uri"}}},"outcome":{"type":"string","enum":["pass","fail","cancel","error"]},"severity":{"type":"string","enum":["low","medium","high","critical"]},"reason":{"type":"string"}},"additionalProperties":false,"type":"object","required":["outcome","environment"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+var testsuiterunfinishedschema0_1_0 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/test-suite-finished-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1},"type":{"type":"string","enum":["dev.cdevents.testsuiterun.finished.0.1.0"],"default":"dev.cdevents.testsuiterun.finished.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string"},"type":{"type":"string","minLength":1,"enum":["testSuiteRun"],"default":"testSuiteRun"},"content":{"properties":{"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"testSuite":{"type":"object","additionalProperties":false,"required":["id"],"properties":{"id":{"type":"string","minLength":1},"version":{"type":"string"},"name":{"type":"string"},"uri":{"type":"string","format":"uri"}}},"outcome":{"type":"string","enum":["pass","fail","cancel","error"]},"severity":{"type":"string","enum":["low","medium","high","critical"]},"reason":{"type":"string"}},"additionalProperties":false,"type":"object","required":["outcome","environment"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// TestSuiteRunFinished event type v0.1.0
@@ -151,7 +151,7 @@ func (e *TestSuiteRunFinishedEventV0_1_0) SetCustomData(contentType string, data
 
 func (e TestSuiteRunFinishedEventV0_1_0) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), testsuiterunfinishedschema
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), testsuiterunfinishedschema0_1_0
 }
 
 // Set subject custom fields
@@ -177,11 +177,11 @@ func (e *TestSuiteRunFinishedEventV0_1_0) SetSubjectTestSuite(testSuite *TestSui
 }
 
 // New creates a new TestSuiteRunFinishedEventV0_1_0
-func NewTestSuiteRunFinishedEventV0_1_0() (*TestSuiteRunFinishedEventV0_1_0, error) {
+func NewTestSuiteRunFinishedEventV0_1_0(specVersion string) (*TestSuiteRunFinishedEventV0_1_0, error) {
 	e := &TestSuiteRunFinishedEventV0_1_0{
 		Context: Context{
-			Type:    TestSuiteRunFinishedEventTypeV0_1_0.String(),
-			Version: CDEventsSpecVersion,
+			Type:    TestSuiteRunFinishedEventTypeV0_1_0,
+			Version: specVersion,
 		},
 		Subject: TestSuiteRunFinishedSubject{
 			SubjectBase: SubjectBase{

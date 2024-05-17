@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var repositorydeletedschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/repository-deleted-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.repository.deleted.0.1.1"],"default":"dev.cdevents.repository.deleted.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["repository"],"default":"repository"},"content":{"properties":{"name":{"type":"string"},"owner":{"type":"string"},"url":{"type":"string"},"viewUrl":{"type":"string"}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+var repositorydeletedschema0_1_1 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/repository-deleted-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.repository.deleted.0.1.1"],"default":"dev.cdevents.repository.deleted.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["repository"],"default":"repository"},"content":{"properties":{"name":{"type":"string"},"owner":{"type":"string"},"url":{"type":"string"},"viewUrl":{"type":"string"}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// RepositoryDeleted event type v0.1.1
@@ -149,7 +149,7 @@ func (e *RepositoryDeletedEventV0_1_1) SetCustomData(contentType string, data in
 
 func (e RepositoryDeletedEventV0_1_1) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), repositorydeletedschema
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), repositorydeletedschema0_1_1
 }
 
 // Set subject custom fields
@@ -171,11 +171,11 @@ func (e *RepositoryDeletedEventV0_1_1) SetSubjectViewUrl(viewUrl string) {
 }
 
 // New creates a new RepositoryDeletedEventV0_1_1
-func NewRepositoryDeletedEventV0_1_1() (*RepositoryDeletedEventV0_1_1, error) {
+func NewRepositoryDeletedEventV0_1_1(specVersion string) (*RepositoryDeletedEventV0_1_1, error) {
 	e := &RepositoryDeletedEventV0_1_1{
 		Context: Context{
-			Type:    RepositoryDeletedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    RepositoryDeletedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: RepositoryDeletedSubject{
 			SubjectBase: SubjectBase{

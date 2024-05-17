@@ -45,23 +45,23 @@ func init() {
 	testJsonString, err = json.Marshal(testObject)
 	panicOnError(err)
 
-	eventWithNonJsonCustomData, _ = api.NewArtifactPackagedEventV0_1_1()
+	eventWithNonJsonCustomData, _ = api.NewArtifactPackagedEventV0_1_1(testSpecVersion)
 	eventWithNonJsonCustomData.CustomDataContentType = "application/xml"
 	eventWithNonJsonCustomData.CustomData = []byte(testXmlString)
 
-	eventWithJsonCustomData, _ = api.NewArtifactPackagedEventV0_1_1()
+	eventWithJsonCustomData, _ = api.NewArtifactPackagedEventV0_1_1(testSpecVersion)
 	eventWithJsonCustomData.CustomDataContentType = "application/json"
 	eventWithJsonCustomData.CustomData = testJsonString
 
-	eventWithJsonImplicitCustomData, _ = api.NewArtifactPackagedEventV0_1_1()
+	eventWithJsonImplicitCustomData, _ = api.NewArtifactPackagedEventV0_1_1(testSpecVersion)
 	eventWithJsonImplicitCustomData.CustomDataContentType = ""
 	eventWithJsonImplicitCustomData.CustomData = testJsonString
 
-	eventWithInterfaceJsonCustomData, _ = api.NewArtifactPackagedEventV0_1_1()
+	eventWithInterfaceJsonCustomData, _ = api.NewArtifactPackagedEventV0_1_1(testSpecVersion)
 	eventWithInterfaceJsonCustomData.CustomDataContentType = "application/json"
 	eventWithInterfaceJsonCustomData.CustomData = testObject
 
-	eventWithInterfaceJsonImplicitCustomData, _ = api.NewArtifactPackagedEventV0_1_1()
+	eventWithInterfaceJsonImplicitCustomData, _ = api.NewArtifactPackagedEventV0_1_1(testSpecVersion)
 	eventWithInterfaceJsonImplicitCustomData.CustomDataContentType = ""
 	eventWithInterfaceJsonImplicitCustomData.CustomData = testObject
 }
@@ -192,7 +192,7 @@ func TestSetCustomData(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			e, _ := api.NewArtifactPackagedEventV0_1_1()
+			e, _ := api.NewArtifactPackagedEventV0_1_1(testSpecVersion)
 			err := e.SetCustomData(tc.contentType, tc.data)
 			if err != nil {
 				t.Fatalf("expected to set the custom data, but got %v", err)
@@ -206,7 +206,7 @@ func TestSetCustomData(t *testing.T) {
 }
 
 func TestSetCustomDataInvalid(t *testing.T) {
-	e, _ := api.NewArtifactPackagedEventV0_1_1()
+	e, _ := api.NewArtifactPackagedEventV0_1_1(testSpecVersion)
 	err := e.SetCustomData("application/xml", testType{TestData: "testValue"})
 	if err == nil {
 		t.Fatalf("did not expect this to work, but it did")
@@ -249,7 +249,7 @@ func TestGetCustomData(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			e, _ := api.NewArtifactPackagedEventV0_1_1()
+			e, _ := api.NewArtifactPackagedEventV0_1_1(testSpecVersion)
 			err := e.SetCustomData(tc.contentType, tc.data)
 			if err != nil {
 				t.Fatalf("expected to set the custom data, but got %v", err)
@@ -267,7 +267,7 @@ func TestGetCustomData(t *testing.T) {
 }
 
 func TestGetCustomDataInvalidJson(t *testing.T) {
-	e, _ := api.NewArtifactPackagedEventV0_1_1()
+	e, _ := api.NewArtifactPackagedEventV0_1_1(testSpecVersion)
 	data := testType{TestData: "testValue"}
 	dataBytes, err := json.Marshal(data)
 	if err != nil {
@@ -284,7 +284,7 @@ func TestGetCustomDataInvalidJson(t *testing.T) {
 }
 
 func TestGetCustomDataXmlNotBytes(t *testing.T) {
-	e, _ := api.NewArtifactPackagedEventV0_1_1()
+	e, _ := api.NewArtifactPackagedEventV0_1_1(testSpecVersion)
 	data := testType{TestData: "testValue"}
 	// Set using "application/json", else it won't be allowed
 	err := e.SetCustomData("application/json", data)
@@ -331,7 +331,7 @@ func TestGetCustomDataRaw(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			e, _ := api.NewArtifactPackagedEventV0_1_1()
+			e, _ := api.NewArtifactPackagedEventV0_1_1(testSpecVersion)
 			err := e.SetCustomData(tc.contentType, tc.data)
 			if err != nil {
 				t.Fatalf("expected to set the custom data, but got %v", err)
@@ -349,7 +349,7 @@ func TestGetCustomDataRaw(t *testing.T) {
 }
 
 func TestGetCustomDataRawXmlNotBytes(t *testing.T) {
-	e, _ := api.NewArtifactPackagedEventV0_1_1()
+	e, _ := api.NewArtifactPackagedEventV0_1_1(testSpecVersion)
 	data := testType{TestData: "testValue"}
 	// Set using "application/json", else it won't be allowed
 	err := e.SetCustomData("application/json", data)

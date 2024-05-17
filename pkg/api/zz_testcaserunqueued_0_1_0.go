@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var testcaserunqueuedschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/test-case-run-queued-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1},"type":{"type":"string","enum":["dev.cdevents.testcaserun.queued.0.1.0"],"default":"dev.cdevents.testcaserun.queued.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string"},"type":{"type":"string","minLength":1,"enum":["testCaseRun"],"default":"testCaseRun"},"content":{"properties":{"trigger":{"type":"object","properties":{"type":{"type":"string","enum":["manual","pipeline","event","schedule","other"]},"uri":{"type":"string","format":"uri"}}},"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"testSuiteRun":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string"}},"additionalProperties":false,"type":"object","required":["id"]},"testCase":{"type":"object","additionalProperties":false,"required":["id"],"properties":{"id":{"type":"string","minLength":1},"version":{"type":"string"},"name":{"type":"string"},"type":{"type":"string","enum":["performance","functional","unit","security","compliance","integration","e2e","other"]},"uri":{"type":"string","format":"uri"}}}},"additionalProperties":false,"type":"object","required":["environment"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+var testcaserunqueuedschema0_1_0 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/test-case-run-queued-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1},"type":{"type":"string","enum":["dev.cdevents.testcaserun.queued.0.1.0"],"default":"dev.cdevents.testcaserun.queued.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string"},"type":{"type":"string","minLength":1,"enum":["testCaseRun"],"default":"testCaseRun"},"content":{"properties":{"trigger":{"type":"object","properties":{"type":{"type":"string","enum":["manual","pipeline","event","schedule","other"]},"uri":{"type":"string","format":"uri"}}},"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"testSuiteRun":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string"}},"additionalProperties":false,"type":"object","required":["id"]},"testCase":{"type":"object","additionalProperties":false,"required":["id"],"properties":{"id":{"type":"string","minLength":1},"version":{"type":"string"},"name":{"type":"string"},"type":{"type":"string","enum":["performance","functional","unit","security","compliance","integration","e2e","other"]},"uri":{"type":"string","format":"uri"}}}},"additionalProperties":false,"type":"object","required":["environment"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// TestCaseRunQueued event type v0.1.0
@@ -149,7 +149,7 @@ func (e *TestCaseRunQueuedEventV0_1_0) SetCustomData(contentType string, data in
 
 func (e TestCaseRunQueuedEventV0_1_0) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), testcaserunqueuedschema
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), testcaserunqueuedschema0_1_0
 }
 
 // Set subject custom fields
@@ -171,11 +171,11 @@ func (e *TestCaseRunQueuedEventV0_1_0) SetSubjectTrigger(trigger *TestCaseRunQue
 }
 
 // New creates a new TestCaseRunQueuedEventV0_1_0
-func NewTestCaseRunQueuedEventV0_1_0() (*TestCaseRunQueuedEventV0_1_0, error) {
+func NewTestCaseRunQueuedEventV0_1_0(specVersion string) (*TestCaseRunQueuedEventV0_1_0, error) {
 	e := &TestCaseRunQueuedEventV0_1_0{
 		Context: Context{
-			Type:    TestCaseRunQueuedEventTypeV0_1_0.String(),
-			Version: CDEventsSpecVersion,
+			Type:    TestCaseRunQueuedEventTypeV0_1_0,
+			Version: specVersion,
 		},
 		Subject: TestCaseRunQueuedSubject{
 			SubjectBase: SubjectBase{

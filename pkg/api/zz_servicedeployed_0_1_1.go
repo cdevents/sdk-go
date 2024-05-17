@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var servicedeployedschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/service-deployed-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.service.deployed.0.1.1"],"default":"dev.cdevents.service.deployed.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["service"],"default":"service"},"content":{"properties":{"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"artifactId":{"type":"string","minLength":1}},"additionalProperties":false,"type":"object","required":["environment","artifactId"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+var servicedeployedschema0_1_1 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/service-deployed-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.service.deployed.0.1.1"],"default":"dev.cdevents.service.deployed.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["service"],"default":"service"},"content":{"properties":{"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"artifactId":{"type":"string","minLength":1}},"additionalProperties":false,"type":"object","required":["environment","artifactId"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// ServiceDeployed event type v0.1.1
@@ -145,7 +145,7 @@ func (e *ServiceDeployedEventV0_1_1) SetCustomData(contentType string, data inte
 
 func (e ServiceDeployedEventV0_1_1) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), servicedeployedschema
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), servicedeployedschema0_1_1
 }
 
 // Set subject custom fields
@@ -159,11 +159,11 @@ func (e *ServiceDeployedEventV0_1_1) SetSubjectEnvironment(environment *Referenc
 }
 
 // New creates a new ServiceDeployedEventV0_1_1
-func NewServiceDeployedEventV0_1_1() (*ServiceDeployedEventV0_1_1, error) {
+func NewServiceDeployedEventV0_1_1(specVersion string) (*ServiceDeployedEventV0_1_1, error) {
 	e := &ServiceDeployedEventV0_1_1{
 		Context: Context{
-			Type:    ServiceDeployedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    ServiceDeployedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: ServiceDeployedSubject{
 			SubjectBase: SubjectBase{

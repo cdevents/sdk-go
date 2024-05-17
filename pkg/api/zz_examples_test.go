@@ -20,241 +20,244 @@ SPDX-License-Identifier: Apache-2.0
 
 package api_test
 
-import "github.com/cdevents/sdk-go/pkg/api"
+import (
+	"github.com/cdevents/sdk-go/pkg/api"
+	specv03 "github.com/cdevents/sdk-go/pkg/api/v03"
+)
 
 func init() {
 	// Create events equal to examples in the spec
 	examplesProduced = make(map[string]api.CDEvent)
 	// ArtifactPackaged Event producer
-	newArtifactPackaged, _ := api.NewArtifactPackagedEventV0_1_1()
+	newArtifactPackaged, _ := specv03.NewArtifactPackagedEvent()
 	setContext(newArtifactPackaged, testSubjectId)
 	exampleArtifactPackagedEvent(newArtifactPackaged)
 	examplesProduced[newArtifactPackaged.GetType().Short()] = newArtifactPackaged
 
 	// ArtifactPublished Event producer
-	newArtifactPublished, _ := api.NewArtifactPublishedEventV0_1_1()
+	newArtifactPublished, _ := specv03.NewArtifactPublishedEvent()
 	setContext(newArtifactPublished, testSubjectId)
 	exampleArtifactPublishedEvent(newArtifactPublished)
 	examplesProduced[newArtifactPublished.GetType().Short()] = newArtifactPublished
 
 	// ArtifactSigned Event producer
-	newArtifactSigned, _ := api.NewArtifactSignedEventV0_1_0()
+	newArtifactSigned, _ := specv03.NewArtifactSignedEvent()
 	setContext(newArtifactSigned, testSubjectId)
 	exampleArtifactSignedEvent(newArtifactSigned)
 	examplesProduced[newArtifactSigned.GetType().Short()] = newArtifactSigned
 
 	// BranchCreated Event producer
-	newBranchCreated, _ := api.NewBranchCreatedEventV0_1_2()
+	newBranchCreated, _ := specv03.NewBranchCreatedEvent()
 	setContext(newBranchCreated, testSubjectId)
 	exampleBranchCreatedEvent(newBranchCreated)
 	examplesProduced[newBranchCreated.GetType().Short()] = newBranchCreated
 
 	// BranchDeleted Event producer
-	newBranchDeleted, _ := api.NewBranchDeletedEventV0_1_2()
+	newBranchDeleted, _ := specv03.NewBranchDeletedEvent()
 	setContext(newBranchDeleted, testSubjectId)
 	exampleBranchDeletedEvent(newBranchDeleted)
 	examplesProduced[newBranchDeleted.GetType().Short()] = newBranchDeleted
 
 	// BuildFinished Event producer
-	newBuildFinished, _ := api.NewBuildFinishedEventV0_1_1()
+	newBuildFinished, _ := specv03.NewBuildFinishedEvent()
 	setContext(newBuildFinished, testSubjectId)
 	exampleBuildFinishedEvent(newBuildFinished)
 	examplesProduced[newBuildFinished.GetType().Short()] = newBuildFinished
 
 	// BuildQueued Event producer
-	newBuildQueued, _ := api.NewBuildQueuedEventV0_1_1()
+	newBuildQueued, _ := specv03.NewBuildQueuedEvent()
 	setContext(newBuildQueued, testSubjectId)
 	exampleBuildQueuedEvent(newBuildQueued)
 	examplesProduced[newBuildQueued.GetType().Short()] = newBuildQueued
 
 	// BuildStarted Event producer
-	newBuildStarted, _ := api.NewBuildStartedEventV0_1_1()
+	newBuildStarted, _ := specv03.NewBuildStartedEvent()
 	setContext(newBuildStarted, testSubjectId)
 	exampleBuildStartedEvent(newBuildStarted)
 	examplesProduced[newBuildStarted.GetType().Short()] = newBuildStarted
 
 	// ChangeAbandoned Event producer
-	newChangeAbandoned, _ := api.NewChangeAbandonedEventV0_1_2()
+	newChangeAbandoned, _ := specv03.NewChangeAbandonedEvent()
 	setContext(newChangeAbandoned, testSubjectId)
 	exampleChangeAbandonedEvent(newChangeAbandoned)
 	examplesProduced[newChangeAbandoned.GetType().Short()] = newChangeAbandoned
 
 	// ChangeCreated Event producer
-	newChangeCreated, _ := api.NewChangeCreatedEventV0_1_2()
+	newChangeCreated, _ := specv03.NewChangeCreatedEvent()
 	setContext(newChangeCreated, testSubjectId)
 	exampleChangeCreatedEvent(newChangeCreated)
 	examplesProduced[newChangeCreated.GetType().Short()] = newChangeCreated
 
 	// ChangeMerged Event producer
-	newChangeMerged, _ := api.NewChangeMergedEventV0_1_2()
+	newChangeMerged, _ := specv03.NewChangeMergedEvent()
 	setContext(newChangeMerged, testSubjectId)
 	exampleChangeMergedEvent(newChangeMerged)
 	examplesProduced[newChangeMerged.GetType().Short()] = newChangeMerged
 
 	// ChangeReviewed Event producer
-	newChangeReviewed, _ := api.NewChangeReviewedEventV0_1_2()
+	newChangeReviewed, _ := specv03.NewChangeReviewedEvent()
 	setContext(newChangeReviewed, testSubjectId)
 	exampleChangeReviewedEvent(newChangeReviewed)
 	examplesProduced[newChangeReviewed.GetType().Short()] = newChangeReviewed
 
 	// ChangeUpdated Event producer
-	newChangeUpdated, _ := api.NewChangeUpdatedEventV0_1_2()
+	newChangeUpdated, _ := specv03.NewChangeUpdatedEvent()
 	setContext(newChangeUpdated, testSubjectId)
 	exampleChangeUpdatedEvent(newChangeUpdated)
 	examplesProduced[newChangeUpdated.GetType().Short()] = newChangeUpdated
 
 	// EnvironmentCreated Event producer
-	newEnvironmentCreated, _ := api.NewEnvironmentCreatedEventV0_1_1()
+	newEnvironmentCreated, _ := specv03.NewEnvironmentCreatedEvent()
 	setContext(newEnvironmentCreated, testSubjectId)
 	exampleEnvironmentCreatedEvent(newEnvironmentCreated)
 	examplesProduced[newEnvironmentCreated.GetType().Short()] = newEnvironmentCreated
 
 	// EnvironmentDeleted Event producer
-	newEnvironmentDeleted, _ := api.NewEnvironmentDeletedEventV0_1_1()
+	newEnvironmentDeleted, _ := specv03.NewEnvironmentDeletedEvent()
 	setContext(newEnvironmentDeleted, testSubjectId)
 	exampleEnvironmentDeletedEvent(newEnvironmentDeleted)
 	examplesProduced[newEnvironmentDeleted.GetType().Short()] = newEnvironmentDeleted
 
 	// EnvironmentModified Event producer
-	newEnvironmentModified, _ := api.NewEnvironmentModifiedEventV0_1_1()
+	newEnvironmentModified, _ := specv03.NewEnvironmentModifiedEvent()
 	setContext(newEnvironmentModified, testSubjectId)
 	exampleEnvironmentModifiedEvent(newEnvironmentModified)
 	examplesProduced[newEnvironmentModified.GetType().Short()] = newEnvironmentModified
 
 	// IncidentDetected Event producer
-	newIncidentDetected, _ := api.NewIncidentDetectedEventV0_1_0()
+	newIncidentDetected, _ := specv03.NewIncidentDetectedEvent()
 	setContext(newIncidentDetected, testSubjectId)
 	exampleIncidentDetectedEvent(newIncidentDetected)
 	examplesProduced[newIncidentDetected.GetType().Short()] = newIncidentDetected
 
 	// IncidentReported Event producer
-	newIncidentReported, _ := api.NewIncidentReportedEventV0_1_0()
+	newIncidentReported, _ := specv03.NewIncidentReportedEvent()
 	setContext(newIncidentReported, testSubjectId)
 	exampleIncidentReportedEvent(newIncidentReported)
 	examplesProduced[newIncidentReported.GetType().Short()] = newIncidentReported
 
 	// IncidentResolved Event producer
-	newIncidentResolved, _ := api.NewIncidentResolvedEventV0_1_0()
+	newIncidentResolved, _ := specv03.NewIncidentResolvedEvent()
 	setContext(newIncidentResolved, testSubjectId)
 	exampleIncidentResolvedEvent(newIncidentResolved)
 	examplesProduced[newIncidentResolved.GetType().Short()] = newIncidentResolved
 
 	// PipelineRunFinished Event producer
-	newPipelineRunFinished, _ := api.NewPipelineRunFinishedEventV0_1_1()
+	newPipelineRunFinished, _ := specv03.NewPipelineRunFinishedEvent()
 	setContext(newPipelineRunFinished, testSubjectId)
 	examplePipelineRunFinishedEvent(newPipelineRunFinished)
 	examplesProduced[newPipelineRunFinished.GetType().Short()] = newPipelineRunFinished
 
 	// PipelineRunQueued Event producer
-	newPipelineRunQueued, _ := api.NewPipelineRunQueuedEventV0_1_1()
+	newPipelineRunQueued, _ := specv03.NewPipelineRunQueuedEvent()
 	setContext(newPipelineRunQueued, testSubjectId)
 	examplePipelineRunQueuedEvent(newPipelineRunQueued)
 	examplesProduced[newPipelineRunQueued.GetType().Short()] = newPipelineRunQueued
 
 	// PipelineRunStarted Event producer
-	newPipelineRunStarted, _ := api.NewPipelineRunStartedEventV0_1_1()
+	newPipelineRunStarted, _ := specv03.NewPipelineRunStartedEvent()
 	setContext(newPipelineRunStarted, testSubjectId)
 	examplePipelineRunStartedEvent(newPipelineRunStarted)
 	examplesProduced[newPipelineRunStarted.GetType().Short()] = newPipelineRunStarted
 
 	// RepositoryCreated Event producer
-	newRepositoryCreated, _ := api.NewRepositoryCreatedEventV0_1_1()
+	newRepositoryCreated, _ := specv03.NewRepositoryCreatedEvent()
 	setContext(newRepositoryCreated, testSubjectId)
 	exampleRepositoryCreatedEvent(newRepositoryCreated)
 	examplesProduced[newRepositoryCreated.GetType().Short()] = newRepositoryCreated
 
 	// RepositoryDeleted Event producer
-	newRepositoryDeleted, _ := api.NewRepositoryDeletedEventV0_1_1()
+	newRepositoryDeleted, _ := specv03.NewRepositoryDeletedEvent()
 	setContext(newRepositoryDeleted, testSubjectId)
 	exampleRepositoryDeletedEvent(newRepositoryDeleted)
 	examplesProduced[newRepositoryDeleted.GetType().Short()] = newRepositoryDeleted
 
 	// RepositoryModified Event producer
-	newRepositoryModified, _ := api.NewRepositoryModifiedEventV0_1_1()
+	newRepositoryModified, _ := specv03.NewRepositoryModifiedEvent()
 	setContext(newRepositoryModified, testSubjectId)
 	exampleRepositoryModifiedEvent(newRepositoryModified)
 	examplesProduced[newRepositoryModified.GetType().Short()] = newRepositoryModified
 
 	// ServiceDeployed Event producer
-	newServiceDeployed, _ := api.NewServiceDeployedEventV0_1_1()
+	newServiceDeployed, _ := specv03.NewServiceDeployedEvent()
 	setContext(newServiceDeployed, testSubjectId)
 	exampleServiceDeployedEvent(newServiceDeployed)
 	examplesProduced[newServiceDeployed.GetType().Short()] = newServiceDeployed
 
 	// ServicePublished Event producer
-	newServicePublished, _ := api.NewServicePublishedEventV0_1_1()
+	newServicePublished, _ := specv03.NewServicePublishedEvent()
 	setContext(newServicePublished, testSubjectId)
 	exampleServicePublishedEvent(newServicePublished)
 	examplesProduced[newServicePublished.GetType().Short()] = newServicePublished
 
 	// ServiceRemoved Event producer
-	newServiceRemoved, _ := api.NewServiceRemovedEventV0_1_1()
+	newServiceRemoved, _ := specv03.NewServiceRemovedEvent()
 	setContext(newServiceRemoved, testSubjectId)
 	exampleServiceRemovedEvent(newServiceRemoved)
 	examplesProduced[newServiceRemoved.GetType().Short()] = newServiceRemoved
 
 	// ServiceRolledback Event producer
-	newServiceRolledback, _ := api.NewServiceRolledbackEventV0_1_1()
+	newServiceRolledback, _ := specv03.NewServiceRolledbackEvent()
 	setContext(newServiceRolledback, testSubjectId)
 	exampleServiceRolledbackEvent(newServiceRolledback)
 	examplesProduced[newServiceRolledback.GetType().Short()] = newServiceRolledback
 
 	// ServiceUpgraded Event producer
-	newServiceUpgraded, _ := api.NewServiceUpgradedEventV0_1_1()
+	newServiceUpgraded, _ := specv03.NewServiceUpgradedEvent()
 	setContext(newServiceUpgraded, testSubjectId)
 	exampleServiceUpgradedEvent(newServiceUpgraded)
 	examplesProduced[newServiceUpgraded.GetType().Short()] = newServiceUpgraded
 
 	// TaskRunFinished Event producer
-	newTaskRunFinished, _ := api.NewTaskRunFinishedEventV0_1_1()
+	newTaskRunFinished, _ := specv03.NewTaskRunFinishedEvent()
 	setContext(newTaskRunFinished, testSubjectId)
 	exampleTaskRunFinishedEvent(newTaskRunFinished)
 	examplesProduced[newTaskRunFinished.GetType().Short()] = newTaskRunFinished
 
 	// TaskRunStarted Event producer
-	newTaskRunStarted, _ := api.NewTaskRunStartedEventV0_1_1()
+	newTaskRunStarted, _ := specv03.NewTaskRunStartedEvent()
 	setContext(newTaskRunStarted, testSubjectId)
 	exampleTaskRunStartedEvent(newTaskRunStarted)
 	examplesProduced[newTaskRunStarted.GetType().Short()] = newTaskRunStarted
 
 	// TestCaseRunFinished Event producer
-	newTestCaseRunFinished, _ := api.NewTestCaseRunFinishedEventV0_1_0()
+	newTestCaseRunFinished, _ := specv03.NewTestCaseRunFinishedEvent()
 	setContext(newTestCaseRunFinished, testSubjectId)
 	exampleTestCaseRunFinishedEvent(newTestCaseRunFinished)
 	examplesProduced[newTestCaseRunFinished.GetType().Short()] = newTestCaseRunFinished
 
 	// TestCaseRunQueued Event producer
-	newTestCaseRunQueued, _ := api.NewTestCaseRunQueuedEventV0_1_0()
+	newTestCaseRunQueued, _ := specv03.NewTestCaseRunQueuedEvent()
 	setContext(newTestCaseRunQueued, testSubjectId)
 	exampleTestCaseRunQueuedEvent(newTestCaseRunQueued)
 	examplesProduced[newTestCaseRunQueued.GetType().Short()] = newTestCaseRunQueued
 
 	// TestCaseRunStarted Event producer
-	newTestCaseRunStarted, _ := api.NewTestCaseRunStartedEventV0_1_0()
+	newTestCaseRunStarted, _ := specv03.NewTestCaseRunStartedEvent()
 	setContext(newTestCaseRunStarted, testSubjectId)
 	exampleTestCaseRunStartedEvent(newTestCaseRunStarted)
 	examplesProduced[newTestCaseRunStarted.GetType().Short()] = newTestCaseRunStarted
 
 	// TestOutputPublished Event producer
-	newTestOutputPublished, _ := api.NewTestOutputPublishedEventV0_1_0()
+	newTestOutputPublished, _ := specv03.NewTestOutputPublishedEvent()
 	setContext(newTestOutputPublished, testSubjectId)
 	exampleTestOutputPublishedEvent(newTestOutputPublished)
 	examplesProduced[newTestOutputPublished.GetType().Short()] = newTestOutputPublished
 
 	// TestSuiteRunFinished Event producer
-	newTestSuiteRunFinished, _ := api.NewTestSuiteRunFinishedEventV0_1_0()
+	newTestSuiteRunFinished, _ := specv03.NewTestSuiteRunFinishedEvent()
 	setContext(newTestSuiteRunFinished, testSubjectId)
 	exampleTestSuiteRunFinishedEvent(newTestSuiteRunFinished)
 	examplesProduced[newTestSuiteRunFinished.GetType().Short()] = newTestSuiteRunFinished
 
 	// TestSuiteRunQueued Event producer
-	newTestSuiteRunQueued, _ := api.NewTestSuiteRunQueuedEventV0_1_0()
+	newTestSuiteRunQueued, _ := specv03.NewTestSuiteRunQueuedEvent()
 	setContext(newTestSuiteRunQueued, testSubjectId)
 	exampleTestSuiteRunQueuedEvent(newTestSuiteRunQueued)
 	examplesProduced[newTestSuiteRunQueued.GetType().Short()] = newTestSuiteRunQueued
 
 	// TestSuiteRunStarted Event producer
-	newTestSuiteRunStarted, _ := api.NewTestSuiteRunStartedEventV0_1_0()
+	newTestSuiteRunStarted, _ := specv03.NewTestSuiteRunStartedEvent()
 	setContext(newTestSuiteRunStarted, testSubjectId)
 	exampleTestSuiteRunStartedEvent(newTestSuiteRunStarted)
 	examplesProduced[newTestSuiteRunStarted.GetType().Short()] = newTestSuiteRunStarted

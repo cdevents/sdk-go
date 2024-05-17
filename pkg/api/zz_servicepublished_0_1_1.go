@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var servicepublishedschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/service-published-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.service.published.0.1.1"],"default":"dev.cdevents.service.published.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["service"],"default":"service"},"content":{"properties":{"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+var servicepublishedschema0_1_1 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/service-published-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.service.published.0.1.1"],"default":"dev.cdevents.service.published.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["service"],"default":"service"},"content":{"properties":{"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// ServicePublished event type v0.1.1
@@ -143,7 +143,7 @@ func (e *ServicePublishedEventV0_1_1) SetCustomData(contentType string, data int
 
 func (e ServicePublishedEventV0_1_1) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), servicepublishedschema
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), servicepublishedschema0_1_1
 }
 
 // Set subject custom fields
@@ -153,11 +153,11 @@ func (e *ServicePublishedEventV0_1_1) SetSubjectEnvironment(environment *Referen
 }
 
 // New creates a new ServicePublishedEventV0_1_1
-func NewServicePublishedEventV0_1_1() (*ServicePublishedEventV0_1_1, error) {
+func NewServicePublishedEventV0_1_1(specVersion string) (*ServicePublishedEventV0_1_1, error) {
 	e := &ServicePublishedEventV0_1_1{
 		Context: Context{
-			Type:    ServicePublishedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    ServicePublishedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: ServicePublishedSubject{
 			SubjectBase: SubjectBase{

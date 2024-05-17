@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var taskrunstartedschema = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/task-run-started-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.taskrun.started.0.1.1"],"default":"dev.cdevents.taskrun.started.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["taskRun"],"default":"taskRun"},"content":{"properties":{"taskName":{"type":"string"},"url":{"type":"string"},"pipelineRun":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+var taskrunstartedschema0_1_1 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/task-run-started-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.taskrun.started.0.1.1"],"default":"dev.cdevents.taskrun.started.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["taskRun"],"default":"taskRun"},"content":{"properties":{"taskName":{"type":"string"},"url":{"type":"string"},"pipelineRun":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
 
 var (
 	// TaskRunStarted event type v0.1.1
@@ -147,7 +147,7 @@ func (e *TaskRunStartedEventV0_1_1) SetCustomData(contentType string, data inter
 
 func (e TaskRunStartedEventV0_1_1) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), taskrunstartedschema
+	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), taskrunstartedschema0_1_1
 }
 
 // Set subject custom fields
@@ -165,11 +165,11 @@ func (e *TaskRunStartedEventV0_1_1) SetSubjectUrl(url string) {
 }
 
 // New creates a new TaskRunStartedEventV0_1_1
-func NewTaskRunStartedEventV0_1_1() (*TaskRunStartedEventV0_1_1, error) {
+func NewTaskRunStartedEventV0_1_1(specVersion string) (*TaskRunStartedEventV0_1_1, error) {
 	e := &TaskRunStartedEventV0_1_1{
 		Context: Context{
-			Type:    TaskRunStartedEventTypeV0_1_1.String(),
-			Version: CDEventsSpecVersion,
+			Type:    TaskRunStartedEventTypeV0_1_1,
+			Version: specVersion,
 		},
 		Subject: TaskRunStartedSubject{
 			SubjectBase: SubjectBase{
