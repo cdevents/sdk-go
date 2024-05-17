@@ -1,4 +1,4 @@
-name: CI
+name: Test and Coverage
 
 on:
   pull_request:
@@ -8,10 +8,13 @@ on:
     paths-ignore:
       - README.md
       - .gitignore
+  push:
+    branches:
+      - main
   merge_group:
 
 jobs:
-  lint:
+  coverage:
     runs-on: ubuntu-latest
     env:
       GOPATH: /home/runner/go
@@ -24,11 +27,9 @@ jobs:
       uses: actions/setup-go@v5
       with:
         go-version: 1.19
-    - name: Format check
-      run: make fmt
-    - name: golangci-lint
-      uses: golangci/golangci-lint-action@v6
+    - name: Generate coverage report
+      run: make test
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4
       with:
-        version: v1.52
-    - name: Check generated code
-      run: make generate
+        token: ${{ secrets.CODECOV_TOKEN }}
