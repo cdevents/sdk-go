@@ -20,12 +20,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import (
-	"fmt"
-	"time"
-)
-
-var testoutputpublishedschema0_1_0 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/test-output-published-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1},"type":{"type":"string","enum":["dev.cdevents.testoutput.published.0.1.0"],"default":"dev.cdevents.testoutput.published.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string"},"type":{"type":"string","minLength":1,"enum":["testOutput"],"default":"testOutput"},"content":{"properties":{"outputType":{"type":"string","enum":["report","video","image","log","other"]},"format":{"type":"string","example":"application/pdf"},"uri":{"type":"string","format":"uri"},"testCaseRun":{"type":"object","properties":{"id":{"type":"string","minLength":1},"source":{"type":"string"}},"additionalProperties":false,"required":["id"]}},"additionalProperties":false,"type":"object","required":["outputType","format"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+import "time"
 
 var (
 	// TestOutputPublished event type v0.1.0
@@ -36,7 +31,7 @@ var (
 	}
 )
 
-type TestOutputPublishedSubjectContent struct {
+type TestOutputPublishedSubjectContentV0_1_0 struct {
 	Format string `json:"format"`
 
 	OutputType string `json:"outputType"`
@@ -46,18 +41,18 @@ type TestOutputPublishedSubjectContent struct {
 	Uri string `json:"uri,omitempty"`
 }
 
-type TestOutputPublishedSubject struct {
+type TestOutputPublishedSubjectV0_1_0 struct {
 	SubjectBase
-	Content TestOutputPublishedSubjectContent `json:"content"`
+	Content TestOutputPublishedSubjectContentV0_1_0 `json:"content"`
 }
 
-func (sc TestOutputPublishedSubject) GetSubjectType() SubjectType {
+func (sc TestOutputPublishedSubjectV0_1_0) GetSubjectType() SubjectType {
 	return "testOutput"
 }
 
 type TestOutputPublishedEventV0_1_0 struct {
-	Context Context                    `json:"context"`
-	Subject TestOutputPublishedSubject `json:"subject"`
+	Context Context                          `json:"context"`
+	Subject TestOutputPublishedSubjectV0_1_0 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -149,7 +144,8 @@ func (e *TestOutputPublishedEventV0_1_0) SetCustomData(contentType string, data 
 
 func (e TestOutputPublishedEventV0_1_0) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), testoutputpublishedschema0_1_0
+	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
+	return id, schema
 }
 
 // Set subject custom fields
@@ -177,7 +173,7 @@ func NewTestOutputPublishedEventV0_1_0(specVersion string) (*TestOutputPublished
 			Type:    TestOutputPublishedEventTypeV0_1_0,
 			Version: specVersion,
 		},
-		Subject: TestOutputPublishedSubject{
+		Subject: TestOutputPublishedSubjectV0_1_0{
 			SubjectBase: SubjectBase{
 				Type: "testOutput",
 			},

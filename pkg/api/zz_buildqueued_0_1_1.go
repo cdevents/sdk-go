@@ -20,12 +20,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import (
-	"fmt"
-	"time"
-)
-
-var buildqueuedschema0_1_1 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/build-queued-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.build.queued.0.1.1"],"default":"dev.cdevents.build.queued.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["build"],"default":"build"},"content":{"properties":{},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+import "time"
 
 var (
 	// BuildQueued event type v0.1.1
@@ -36,21 +31,21 @@ var (
 	}
 )
 
-type BuildQueuedSubjectContent struct {
+type BuildQueuedSubjectContentV0_1_1 struct {
 }
 
-type BuildQueuedSubject struct {
+type BuildQueuedSubjectV0_1_1 struct {
 	SubjectBase
-	Content BuildQueuedSubjectContent `json:"content"`
+	Content BuildQueuedSubjectContentV0_1_1 `json:"content"`
 }
 
-func (sc BuildQueuedSubject) GetSubjectType() SubjectType {
+func (sc BuildQueuedSubjectV0_1_1) GetSubjectType() SubjectType {
 	return "build"
 }
 
 type BuildQueuedEventV0_1_1 struct {
-	Context Context            `json:"context"`
-	Subject BuildQueuedSubject `json:"subject"`
+	Context Context                  `json:"context"`
+	Subject BuildQueuedSubjectV0_1_1 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -142,7 +137,8 @@ func (e *BuildQueuedEventV0_1_1) SetCustomData(contentType string, data interfac
 
 func (e BuildQueuedEventV0_1_1) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), buildqueuedschema0_1_1
+	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
+	return id, schema
 }
 
 // Set subject custom fields
@@ -154,7 +150,7 @@ func NewBuildQueuedEventV0_1_1(specVersion string) (*BuildQueuedEventV0_1_1, err
 			Type:    BuildQueuedEventTypeV0_1_1,
 			Version: specVersion,
 		},
-		Subject: BuildQueuedSubject{
+		Subject: BuildQueuedSubjectV0_1_1{
 			SubjectBase: SubjectBase{
 				Type: "build",
 			},

@@ -20,12 +20,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import (
-	"fmt"
-	"time"
-)
-
-var pipelinerunqueuedschema0_1_1 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/pipeline-run-queued-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.pipelinerun.queued.0.1.1"],"default":"dev.cdevents.pipelinerun.queued.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["pipelineRun"],"default":"pipelineRun"},"content":{"properties":{"pipelineName":{"type":"string"},"url":{"type":"string"}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+import "time"
 
 var (
 	// PipelineRunQueued event type v0.1.1
@@ -36,24 +31,24 @@ var (
 	}
 )
 
-type PipelineRunQueuedSubjectContent struct {
+type PipelineRunQueuedSubjectContentV0_1_1 struct {
 	PipelineName string `json:"pipelineName,omitempty"`
 
 	Url string `json:"url,omitempty"`
 }
 
-type PipelineRunQueuedSubject struct {
+type PipelineRunQueuedSubjectV0_1_1 struct {
 	SubjectBase
-	Content PipelineRunQueuedSubjectContent `json:"content"`
+	Content PipelineRunQueuedSubjectContentV0_1_1 `json:"content"`
 }
 
-func (sc PipelineRunQueuedSubject) GetSubjectType() SubjectType {
+func (sc PipelineRunQueuedSubjectV0_1_1) GetSubjectType() SubjectType {
 	return "pipelineRun"
 }
 
 type PipelineRunQueuedEventV0_1_1 struct {
-	Context Context                  `json:"context"`
-	Subject PipelineRunQueuedSubject `json:"subject"`
+	Context Context                        `json:"context"`
+	Subject PipelineRunQueuedSubjectV0_1_1 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -145,7 +140,8 @@ func (e *PipelineRunQueuedEventV0_1_1) SetCustomData(contentType string, data in
 
 func (e PipelineRunQueuedEventV0_1_1) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), pipelinerunqueuedschema0_1_1
+	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
+	return id, schema
 }
 
 // Set subject custom fields
@@ -165,7 +161,7 @@ func NewPipelineRunQueuedEventV0_1_1(specVersion string) (*PipelineRunQueuedEven
 			Type:    PipelineRunQueuedEventTypeV0_1_1,
 			Version: specVersion,
 		},
-		Subject: PipelineRunQueuedSubject{
+		Subject: PipelineRunQueuedSubjectV0_1_1{
 			SubjectBase: SubjectBase{
 				Type: "pipelineRun",
 			},

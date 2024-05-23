@@ -30,10 +30,16 @@ import "github.com/cdevents/sdk-go/pkg/api"
 var SpecVersion = "99.0.0"
 
 type FooSubjectBarPredicateEvent = api.FooSubjectBarPredicateEventV1_2_3
+type FooSubjectBarPredicateSubject = api.FooSubjectBarPredicateSubjectV1_2_3
+
+// FooSubjectFooSubjectSubjectContentObjectFieldV1_2_3 holds the content of a ObjectField field in the content
+type FooSubjectBarPredicateSubjectContentObjectField = api.FooSubjectBarPredicateSubjectContentObjectFieldV1_2_3
 
 func NewFooSubjectBarPredicateEvent() (*FooSubjectBarPredicateEvent, error) {
 	return api.NewFooSubjectBarPredicateEventV1_2_3(SpecVersion)
 }
+
+var FooSubjectBarPredicateEventType = api.FooSubjectBarPredicateEventTypeV1_2_3
 
 // NewFromJsonBytes builds a new CDEventReader from a JSON string as []bytes
 // This works by unmarshalling the context first, extracting the event type and using

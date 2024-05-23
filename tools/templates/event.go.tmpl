@@ -23,12 +23,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import (
-	"fmt"
-	"time"
-)
-
-var {{.SubjectLower}}{{.PredicateLower}}schema{{.VersionName}} = `{{ .Schema }}`
+import "time"
 
 var (
 	// {{.Subject}}{{.Predicate}} event type v{{.Version}}
@@ -39,24 +34,24 @@ var (
 	}
 )
 
-type {{.Subject}}{{.Predicate}}SubjectContent  struct{
+type {{.Subject}}{{.Predicate}}SubjectContentV{{.VersionName}}  struct{
 {{ range $i, $field := .Contents }}
 	{{ .Name }} {{ .Type }} `json:"{{ .NameLower }}{{ if not .Required }},omitempty{{ end }}"{{ if eq .Name "ArtifactId" }} validate:"purl"{{ end }}`
 {{ end }}
 }
 
-type {{.Subject}}{{.Predicate}}Subject struct {
+type {{.Subject}}{{.Predicate}}SubjectV{{.VersionName}} struct {
 	SubjectBase
-	Content {{.Subject}}{{.Predicate}}SubjectContent `json:"content"`
+	Content {{.Subject}}{{.Predicate}}SubjectContentV{{.VersionName}} `json:"content"`
 }
 
-func (sc {{.Subject}}{{.Predicate}}Subject) GetSubjectType() SubjectType {
+func (sc {{.Subject}}{{.Predicate}}SubjectV{{.VersionName}}) GetSubjectType() SubjectType {
 	return "{{.SubjectType}}"
 }
 
 type {{.Subject}}{{.Predicate}}EventV{{.VersionName}} struct {
 	Context Context                    `json:"context"`
-	Subject {{.Subject}}{{.Predicate}}Subject `json:"subject"`
+	Subject {{.Subject}}{{.Predicate}}SubjectV{{.VersionName}} `json:"subject"`
 	CDEventCustomData
 }
 
@@ -148,7 +143,8 @@ func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetCustomData(content
 
 func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), {{.SubjectLower}}{{.PredicateLower}}schema{{.VersionName}}
+	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
+	return id, schema
 }
 
 // Set subject custom fields
@@ -165,7 +161,7 @@ func New{{.Subject}}{{.Predicate}}EventV{{.VersionName}}(specVersion string) (*{
 			Type:    {{.Subject}}{{.Predicate}}EventTypeV{{.VersionName}},
 			Version: specVersion,
 		},
-		Subject: {{.Subject}}{{.Predicate}}Subject{
+		Subject: {{.Subject}}{{.Predicate}}SubjectV{{.VersionName}}{
 			SubjectBase: SubjectBase{
 				Type: "{{.SubjectType}}",
 			},
@@ -186,8 +182,8 @@ func New{{.Subject}}{{.Predicate}}EventV{{.VersionName}}(specVersion string) (*{
 }
 
 {{ range $i, $type := .ContentTypes }}
-// {{$.Subject}}{{$.Predicate}}SubjectContent{{ .Name }} holds the content of a {{ .Name }} field in the content 
-type {{$.Subject}}{{$.Predicate}}SubjectContent{{ .Name }} struct{
+// {{$.Subject}}{{$.Predicate}}SubjectContent{{ .Name }}V{{$.VersionName}} holds the content of a {{ .Name }} field in the content
+type {{$.Subject}}{{$.Predicate}}SubjectContent{{ .Name }}V{{$.VersionName}} struct{
 {{ range $j, $field := .Fields }}
 	{{ .Name }} {{ .Type }} `json:"{{ .NameLower }}{{ if not .Required }},omitempty{{ end }}"`
 {{ end }}

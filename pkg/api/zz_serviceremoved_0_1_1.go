@@ -20,12 +20,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import (
-	"fmt"
-	"time"
-)
-
-var serviceremovedschema0_1_1 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/service-removed-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.service.removed.0.1.1"],"default":"dev.cdevents.service.removed.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["service"],"default":"service"},"content":{"properties":{"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+import "time"
 
 var (
 	// ServiceRemoved event type v0.1.1
@@ -36,22 +31,22 @@ var (
 	}
 )
 
-type ServiceRemovedSubjectContent struct {
+type ServiceRemovedSubjectContentV0_1_1 struct {
 	Environment *Reference `json:"environment,omitempty"`
 }
 
-type ServiceRemovedSubject struct {
+type ServiceRemovedSubjectV0_1_1 struct {
 	SubjectBase
-	Content ServiceRemovedSubjectContent `json:"content"`
+	Content ServiceRemovedSubjectContentV0_1_1 `json:"content"`
 }
 
-func (sc ServiceRemovedSubject) GetSubjectType() SubjectType {
+func (sc ServiceRemovedSubjectV0_1_1) GetSubjectType() SubjectType {
 	return "service"
 }
 
 type ServiceRemovedEventV0_1_1 struct {
-	Context Context               `json:"context"`
-	Subject ServiceRemovedSubject `json:"subject"`
+	Context Context                     `json:"context"`
+	Subject ServiceRemovedSubjectV0_1_1 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -143,7 +138,8 @@ func (e *ServiceRemovedEventV0_1_1) SetCustomData(contentType string, data inter
 
 func (e ServiceRemovedEventV0_1_1) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), serviceremovedschema0_1_1
+	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
+	return id, schema
 }
 
 // Set subject custom fields
@@ -159,7 +155,7 @@ func NewServiceRemovedEventV0_1_1(specVersion string) (*ServiceRemovedEventV0_1_
 			Type:    ServiceRemovedEventTypeV0_1_1,
 			Version: specVersion,
 		},
-		Subject: ServiceRemovedSubject{
+		Subject: ServiceRemovedSubjectV0_1_1{
 			SubjectBase: SubjectBase{
 				Type: "service",
 			},

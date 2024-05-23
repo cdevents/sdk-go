@@ -20,12 +20,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import (
-	"fmt"
-	"time"
-)
-
-var testcaserunqueuedschema0_1_0 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/test-case-run-queued-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1},"type":{"type":"string","enum":["dev.cdevents.testcaserun.queued.0.1.0"],"default":"dev.cdevents.testcaserun.queued.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string"},"type":{"type":"string","minLength":1,"enum":["testCaseRun"],"default":"testCaseRun"},"content":{"properties":{"trigger":{"type":"object","properties":{"type":{"type":"string","enum":["manual","pipeline","event","schedule","other"]},"uri":{"type":"string","format":"uri"}}},"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"testSuiteRun":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string"}},"additionalProperties":false,"type":"object","required":["id"]},"testCase":{"type":"object","additionalProperties":false,"required":["id"],"properties":{"id":{"type":"string","minLength":1},"version":{"type":"string"},"name":{"type":"string"},"type":{"type":"string","enum":["performance","functional","unit","security","compliance","integration","e2e","other"]},"uri":{"type":"string","format":"uri"}}}},"additionalProperties":false,"type":"object","required":["environment"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+import "time"
 
 var (
 	// TestCaseRunQueued event type v0.1.0
@@ -36,28 +31,28 @@ var (
 	}
 )
 
-type TestCaseRunQueuedSubjectContent struct {
+type TestCaseRunQueuedSubjectContentV0_1_0 struct {
 	Environment *Reference `json:"environment"`
 
-	TestCase *TestCaseRunQueuedSubjectContentTestCase `json:"testCase,omitempty"`
+	TestCase *TestCaseRunQueuedSubjectContentTestCaseV0_1_0 `json:"testCase,omitempty"`
 
 	TestSuiteRun *Reference `json:"testSuiteRun,omitempty"`
 
-	Trigger *TestCaseRunQueuedSubjectContentTrigger `json:"trigger,omitempty"`
+	Trigger *TestCaseRunQueuedSubjectContentTriggerV0_1_0 `json:"trigger,omitempty"`
 }
 
-type TestCaseRunQueuedSubject struct {
+type TestCaseRunQueuedSubjectV0_1_0 struct {
 	SubjectBase
-	Content TestCaseRunQueuedSubjectContent `json:"content"`
+	Content TestCaseRunQueuedSubjectContentV0_1_0 `json:"content"`
 }
 
-func (sc TestCaseRunQueuedSubject) GetSubjectType() SubjectType {
+func (sc TestCaseRunQueuedSubjectV0_1_0) GetSubjectType() SubjectType {
 	return "testCaseRun"
 }
 
 type TestCaseRunQueuedEventV0_1_0 struct {
-	Context Context                  `json:"context"`
-	Subject TestCaseRunQueuedSubject `json:"subject"`
+	Context Context                        `json:"context"`
+	Subject TestCaseRunQueuedSubjectV0_1_0 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -149,7 +144,8 @@ func (e *TestCaseRunQueuedEventV0_1_0) SetCustomData(contentType string, data in
 
 func (e TestCaseRunQueuedEventV0_1_0) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), testcaserunqueuedschema0_1_0
+	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
+	return id, schema
 }
 
 // Set subject custom fields
@@ -158,7 +154,7 @@ func (e *TestCaseRunQueuedEventV0_1_0) SetSubjectEnvironment(environment *Refere
 	e.Subject.Content.Environment = environment
 }
 
-func (e *TestCaseRunQueuedEventV0_1_0) SetSubjectTestCase(testCase *TestCaseRunQueuedSubjectContentTestCase) {
+func (e *TestCaseRunQueuedEventV0_1_0) SetSubjectTestCase(testCase *TestCaseRunQueuedSubjectContentTestCaseV0_1_0) {
 	e.Subject.Content.TestCase = testCase
 }
 
@@ -166,7 +162,7 @@ func (e *TestCaseRunQueuedEventV0_1_0) SetSubjectTestSuiteRun(testSuiteRun *Refe
 	e.Subject.Content.TestSuiteRun = testSuiteRun
 }
 
-func (e *TestCaseRunQueuedEventV0_1_0) SetSubjectTrigger(trigger *TestCaseRunQueuedSubjectContentTrigger) {
+func (e *TestCaseRunQueuedEventV0_1_0) SetSubjectTrigger(trigger *TestCaseRunQueuedSubjectContentTriggerV0_1_0) {
 	e.Subject.Content.Trigger = trigger
 }
 
@@ -177,7 +173,7 @@ func NewTestCaseRunQueuedEventV0_1_0(specVersion string) (*TestCaseRunQueuedEven
 			Type:    TestCaseRunQueuedEventTypeV0_1_0,
 			Version: specVersion,
 		},
-		Subject: TestCaseRunQueuedSubject{
+		Subject: TestCaseRunQueuedSubjectV0_1_0{
 			SubjectBase: SubjectBase{
 				Type: "testCaseRun",
 			},
@@ -190,8 +186,8 @@ func NewTestCaseRunQueuedEventV0_1_0(specVersion string) (*TestCaseRunQueuedEven
 	return e, nil
 }
 
-// TestCaseRunQueuedSubjectContentTestCase holds the content of a TestCase field in the content
-type TestCaseRunQueuedSubjectContentTestCase struct {
+// TestCaseRunQueuedSubjectContentTestCaseV0_1_0 holds the content of a TestCase field in the content
+type TestCaseRunQueuedSubjectContentTestCaseV0_1_0 struct {
 	Id string `json:"id"`
 
 	Name string `json:"name,omitempty"`
@@ -203,8 +199,8 @@ type TestCaseRunQueuedSubjectContentTestCase struct {
 	Version string `json:"version,omitempty"`
 }
 
-// TestCaseRunQueuedSubjectContentTrigger holds the content of a Trigger field in the content
-type TestCaseRunQueuedSubjectContentTrigger struct {
+// TestCaseRunQueuedSubjectContentTriggerV0_1_0 holds the content of a Trigger field in the content
+type TestCaseRunQueuedSubjectContentTriggerV0_1_0 struct {
 	Type string `json:"type,omitempty"`
 
 	Uri string `json:"uri,omitempty"`

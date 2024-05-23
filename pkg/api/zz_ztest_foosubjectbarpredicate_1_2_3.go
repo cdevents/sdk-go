@@ -22,12 +22,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import (
-	"fmt"
-	"time"
-)
-
-var foosubjectbarpredicateschema1_2_3 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/99.0.0/schema/foosubject-barpredicate-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.foosubject.barpredicate.1.2.3"],"default":"dev.cdevents.foosubject.barpredicate.1.2.3"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["fooSubject"],"default":"fooSubject"},"content":{"properties":{"plainField":{"type":"string","minLength":1},"referenceField":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"artifactId":{"type":"string"},"objectField":{"properties":{"required":{"type":"string","minLength":1},"optional":{"type":"string","format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["required"]}},"additionalProperties":false,"type":"object","required":["plainField","referenceField"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+import "time"
 
 var (
 	// FooSubjectBarPredicate event type v1.2.3
@@ -38,28 +33,28 @@ var (
 	}
 )
 
-type FooSubjectBarPredicateSubjectContent struct {
+type FooSubjectBarPredicateSubjectContentV1_2_3 struct {
 	ArtifactId string `json:"artifactId,omitempty" validate:"purl"`
 
-	ObjectField *FooSubjectBarPredicateSubjectContentObjectField `json:"objectField,omitempty"`
+	ObjectField *FooSubjectBarPredicateSubjectContentObjectFieldV1_2_3 `json:"objectField,omitempty"`
 
 	PlainField string `json:"plainField"`
 
 	ReferenceField *Reference `json:"referenceField"`
 }
 
-type FooSubjectBarPredicateSubject struct {
+type FooSubjectBarPredicateSubjectV1_2_3 struct {
 	SubjectBase
-	Content FooSubjectBarPredicateSubjectContent `json:"content"`
+	Content FooSubjectBarPredicateSubjectContentV1_2_3 `json:"content"`
 }
 
-func (sc FooSubjectBarPredicateSubject) GetSubjectType() SubjectType {
+func (sc FooSubjectBarPredicateSubjectV1_2_3) GetSubjectType() SubjectType {
 	return "fooSubject"
 }
 
 type FooSubjectBarPredicateEventV1_2_3 struct {
-	Context Context                       `json:"context"`
-	Subject FooSubjectBarPredicateSubject `json:"subject"`
+	Context Context                             `json:"context"`
+	Subject FooSubjectBarPredicateSubjectV1_2_3 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -151,7 +146,8 @@ func (e *FooSubjectBarPredicateEventV1_2_3) SetCustomData(contentType string, da
 
 func (e FooSubjectBarPredicateEventV1_2_3) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), foosubjectbarpredicateschema1_2_3
+	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
+	return id, schema
 }
 
 // Set subject custom fields
@@ -160,7 +156,7 @@ func (e *FooSubjectBarPredicateEventV1_2_3) SetSubjectArtifactId(artifactId stri
 	e.Subject.Content.ArtifactId = artifactId
 }
 
-func (e *FooSubjectBarPredicateEventV1_2_3) SetSubjectObjectField(objectField *FooSubjectBarPredicateSubjectContentObjectField) {
+func (e *FooSubjectBarPredicateEventV1_2_3) SetSubjectObjectField(objectField *FooSubjectBarPredicateSubjectContentObjectFieldV1_2_3) {
 	e.Subject.Content.ObjectField = objectField
 }
 
@@ -179,7 +175,7 @@ func NewFooSubjectBarPredicateEventV1_2_3(specVersion string) (*FooSubjectBarPre
 			Type:    FooSubjectBarPredicateEventTypeV1_2_3,
 			Version: specVersion,
 		},
-		Subject: FooSubjectBarPredicateSubject{
+		Subject: FooSubjectBarPredicateSubjectV1_2_3{
 			SubjectBase: SubjectBase{
 				Type: "fooSubject",
 			},
@@ -192,8 +188,8 @@ func NewFooSubjectBarPredicateEventV1_2_3(specVersion string) (*FooSubjectBarPre
 	return e, nil
 }
 
-// FooSubjectBarPredicateSubjectContentObjectField holds the content of a ObjectField field in the content
-type FooSubjectBarPredicateSubjectContentObjectField struct {
+// FooSubjectBarPredicateSubjectContentObjectFieldV1_2_3 holds the content of a ObjectField field in the content
+type FooSubjectBarPredicateSubjectContentObjectFieldV1_2_3 struct {
 	Optional string `json:"optional,omitempty"`
 
 	Required string `json:"required"`

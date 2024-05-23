@@ -20,12 +20,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import (
-	"fmt"
-	"time"
-)
-
-var incidentresolvedschema0_1_0 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/incident-resolved-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.incident.resolved.0.1.0"],"default":"dev.cdevents.incident.resolved.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["incident"],"default":"incident"},"content":{"properties":{"description":{"type":"string"},"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"service":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"artifactId":{"type":"string","minLength":1}},"additionalProperties":false,"type":"object","required":["environment"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+import "time"
 
 var (
 	// IncidentResolved event type v0.1.0
@@ -36,7 +31,7 @@ var (
 	}
 )
 
-type IncidentResolvedSubjectContent struct {
+type IncidentResolvedSubjectContentV0_1_0 struct {
 	ArtifactId string `json:"artifactId,omitempty" validate:"purl"`
 
 	Description string `json:"description,omitempty"`
@@ -46,18 +41,18 @@ type IncidentResolvedSubjectContent struct {
 	Service *Reference `json:"service,omitempty"`
 }
 
-type IncidentResolvedSubject struct {
+type IncidentResolvedSubjectV0_1_0 struct {
 	SubjectBase
-	Content IncidentResolvedSubjectContent `json:"content"`
+	Content IncidentResolvedSubjectContentV0_1_0 `json:"content"`
 }
 
-func (sc IncidentResolvedSubject) GetSubjectType() SubjectType {
+func (sc IncidentResolvedSubjectV0_1_0) GetSubjectType() SubjectType {
 	return "incident"
 }
 
 type IncidentResolvedEventV0_1_0 struct {
-	Context Context                 `json:"context"`
-	Subject IncidentResolvedSubject `json:"subject"`
+	Context Context                       `json:"context"`
+	Subject IncidentResolvedSubjectV0_1_0 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -149,7 +144,8 @@ func (e *IncidentResolvedEventV0_1_0) SetCustomData(contentType string, data int
 
 func (e IncidentResolvedEventV0_1_0) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), incidentresolvedschema0_1_0
+	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
+	return id, schema
 }
 
 // Set subject custom fields
@@ -177,7 +173,7 @@ func NewIncidentResolvedEventV0_1_0(specVersion string) (*IncidentResolvedEventV
 			Type:    IncidentResolvedEventTypeV0_1_0,
 			Version: specVersion,
 		},
-		Subject: IncidentResolvedSubject{
+		Subject: IncidentResolvedSubjectV0_1_0{
 			SubjectBase: SubjectBase{
 				Type: "incident",
 			},

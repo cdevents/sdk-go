@@ -18,7 +18,7 @@ limitations under the License.
 SPDX-License-Identifier: Apache-2.0
 */
 
-package api_test
+package v03_test
 
 import (
 	"github.com/cdevents/sdk-go/pkg/api"

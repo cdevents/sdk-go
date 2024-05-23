@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"regexp"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	"github.com/go-playground/validator/v10"
@@ -30,10 +31,23 @@ import (
 	"golang.org/x/mod/semver"
 )
 
+const SCHEMA_ID_REGEX = `^https://cdevents.dev/([0-9]\.[0-9])\.[0-9]/schema/([^ ]*)$`
+
 var (
 	// Validation helper as singleton
 	validate *validator.Validate
+	CDEventsSchemaIdRegex = regexp.MustCompile(SCHEMA_ID_REGEX)
 )
+
+// parts := CDEventsSchemaIdRegex.FindStringSubmatch(url)
+// 	if len(parts) != 3 {
+// 		return nil, fmt.Errorf("cannot parse schema Id %s", url)
+// 	}
+// 	schemaPath := filepath.Join("spec-v" + parts[1], "schemas", parts[2] + ".json")
+// 	schemaFile, err := os.Open(schemaPath)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to load schema %s from %s: %s", url, schemaPath, err)
+// 	}
 
 func init() {
 	// Register custom validators

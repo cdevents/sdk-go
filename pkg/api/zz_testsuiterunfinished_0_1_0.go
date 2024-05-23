@@ -20,12 +20,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import (
-	"fmt"
-	"time"
-)
-
-var testsuiterunfinishedschema0_1_0 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/test-suite-finished-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1},"type":{"type":"string","enum":["dev.cdevents.testsuiterun.finished.0.1.0"],"default":"dev.cdevents.testsuiterun.finished.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string"},"type":{"type":"string","minLength":1,"enum":["testSuiteRun"],"default":"testSuiteRun"},"content":{"properties":{"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"testSuite":{"type":"object","additionalProperties":false,"required":["id"],"properties":{"id":{"type":"string","minLength":1},"version":{"type":"string"},"name":{"type":"string"},"uri":{"type":"string","format":"uri"}}},"outcome":{"type":"string","enum":["pass","fail","cancel","error"]},"severity":{"type":"string","enum":["low","medium","high","critical"]},"reason":{"type":"string"}},"additionalProperties":false,"type":"object","required":["outcome","environment"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+import "time"
 
 var (
 	// TestSuiteRunFinished event type v0.1.0
@@ -36,7 +31,7 @@ var (
 	}
 )
 
-type TestSuiteRunFinishedSubjectContent struct {
+type TestSuiteRunFinishedSubjectContentV0_1_0 struct {
 	Environment *Reference `json:"environment"`
 
 	Outcome string `json:"outcome"`
@@ -45,21 +40,21 @@ type TestSuiteRunFinishedSubjectContent struct {
 
 	Severity string `json:"severity,omitempty"`
 
-	TestSuite *TestSuiteRunFinishedSubjectContentTestSuite `json:"testSuite,omitempty"`
+	TestSuite *TestSuiteRunFinishedSubjectContentTestSuiteV0_1_0 `json:"testSuite,omitempty"`
 }
 
-type TestSuiteRunFinishedSubject struct {
+type TestSuiteRunFinishedSubjectV0_1_0 struct {
 	SubjectBase
-	Content TestSuiteRunFinishedSubjectContent `json:"content"`
+	Content TestSuiteRunFinishedSubjectContentV0_1_0 `json:"content"`
 }
 
-func (sc TestSuiteRunFinishedSubject) GetSubjectType() SubjectType {
+func (sc TestSuiteRunFinishedSubjectV0_1_0) GetSubjectType() SubjectType {
 	return "testSuiteRun"
 }
 
 type TestSuiteRunFinishedEventV0_1_0 struct {
-	Context Context                     `json:"context"`
-	Subject TestSuiteRunFinishedSubject `json:"subject"`
+	Context Context                           `json:"context"`
+	Subject TestSuiteRunFinishedSubjectV0_1_0 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -151,7 +146,8 @@ func (e *TestSuiteRunFinishedEventV0_1_0) SetCustomData(contentType string, data
 
 func (e TestSuiteRunFinishedEventV0_1_0) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), testsuiterunfinishedschema0_1_0
+	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
+	return id, schema
 }
 
 // Set subject custom fields
@@ -172,7 +168,7 @@ func (e *TestSuiteRunFinishedEventV0_1_0) SetSubjectSeverity(severity string) {
 	e.Subject.Content.Severity = severity
 }
 
-func (e *TestSuiteRunFinishedEventV0_1_0) SetSubjectTestSuite(testSuite *TestSuiteRunFinishedSubjectContentTestSuite) {
+func (e *TestSuiteRunFinishedEventV0_1_0) SetSubjectTestSuite(testSuite *TestSuiteRunFinishedSubjectContentTestSuiteV0_1_0) {
 	e.Subject.Content.TestSuite = testSuite
 }
 
@@ -183,7 +179,7 @@ func NewTestSuiteRunFinishedEventV0_1_0(specVersion string) (*TestSuiteRunFinish
 			Type:    TestSuiteRunFinishedEventTypeV0_1_0,
 			Version: specVersion,
 		},
-		Subject: TestSuiteRunFinishedSubject{
+		Subject: TestSuiteRunFinishedSubjectV0_1_0{
 			SubjectBase: SubjectBase{
 				Type: "testSuiteRun",
 			},
@@ -196,8 +192,8 @@ func NewTestSuiteRunFinishedEventV0_1_0(specVersion string) (*TestSuiteRunFinish
 	return e, nil
 }
 
-// TestSuiteRunFinishedSubjectContentTestSuite holds the content of a TestSuite field in the content
-type TestSuiteRunFinishedSubjectContentTestSuite struct {
+// TestSuiteRunFinishedSubjectContentTestSuiteV0_1_0 holds the content of a TestSuite field in the content
+type TestSuiteRunFinishedSubjectContentTestSuiteV0_1_0 struct {
 	Id string `json:"id"`
 
 	Name string `json:"name,omitempty"`

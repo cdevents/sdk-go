@@ -20,12 +20,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import (
-	"fmt"
-	"time"
-)
-
-var servicepublishedschema0_1_1 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/service-published-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.service.published.0.1.1"],"default":"dev.cdevents.service.published.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["service"],"default":"service"},"content":{"properties":{"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+import "time"
 
 var (
 	// ServicePublished event type v0.1.1
@@ -36,22 +31,22 @@ var (
 	}
 )
 
-type ServicePublishedSubjectContent struct {
+type ServicePublishedSubjectContentV0_1_1 struct {
 	Environment *Reference `json:"environment,omitempty"`
 }
 
-type ServicePublishedSubject struct {
+type ServicePublishedSubjectV0_1_1 struct {
 	SubjectBase
-	Content ServicePublishedSubjectContent `json:"content"`
+	Content ServicePublishedSubjectContentV0_1_1 `json:"content"`
 }
 
-func (sc ServicePublishedSubject) GetSubjectType() SubjectType {
+func (sc ServicePublishedSubjectV0_1_1) GetSubjectType() SubjectType {
 	return "service"
 }
 
 type ServicePublishedEventV0_1_1 struct {
-	Context Context                 `json:"context"`
-	Subject ServicePublishedSubject `json:"subject"`
+	Context Context                       `json:"context"`
+	Subject ServicePublishedSubjectV0_1_1 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -143,7 +138,8 @@ func (e *ServicePublishedEventV0_1_1) SetCustomData(contentType string, data int
 
 func (e ServicePublishedEventV0_1_1) GetSchema() (string, string) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), servicepublishedschema0_1_1
+	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
+	return id, schema
 }
 
 // Set subject custom fields
@@ -159,7 +155,7 @@ func NewServicePublishedEventV0_1_1(specVersion string) (*ServicePublishedEventV
 			Type:    ServicePublishedEventTypeV0_1_1,
 			Version: specVersion,
 		},
-		Subject: ServicePublishedSubject{
+		Subject: ServicePublishedSubjectV0_1_1{
 			SubjectBase: SubjectBase{
 				Type: "service",
 			},

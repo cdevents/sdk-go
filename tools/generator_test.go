@@ -200,3 +200,122 @@ func TestExecuteTemplate_Error(t *testing.T) {
 		t.Fatal("expected error executing template, got nil")
 	}
 }
+
+// TestValidateStringEnumAnyOf tests the validation of the string enum anyOf case.
+func TestValidateStringEnumAnyOf(t *testing.T) {
+
+	tests := []struct {
+		name      string
+		schema    jsonschema.Schema
+		wantError string
+	}{{
+		name: "valid",
+		schema: jsonschema.Schema{
+			Location: "test_schema",
+			AnyOf: []*jsonschema.Schema{
+				{
+					Location: "test_schema#/properties/content/anyOf/0",
+					Types: []string{"string"},
+					Enum: []interface{}{"foo", "bar"},
+				},
+				{
+					Location: "test_schema#/properties/content/anyOf/1",
+					Types: []string{"string"},
+				},
+			},
+		},
+		wantError: "",
+	}, {
+		name: "enum missing",
+		schema: jsonschema.Schema{
+			Location: "test_schema",
+			AnyOf: []*jsonschema.Schema{
+				{
+					Location: "test_schema#/properties/content/anyOf/0",
+					Types: []string{"string"},
+				},
+				{
+					Location: "test_schema#/properties/content/anyOf/1",
+					Types: []string{"string"},
+				},
+			},
+		},
+		wantError: "one enum required when using anyOf for types test_schema: []",
+	}, {
+		name: "too many enums",
+		schema: jsonschema.Schema{
+			Location: "test_schema",
+			AnyOf: []*jsonschema.Schema{
+				{
+					Location: "test_schema#/properties/content/anyOf/0",
+					Types: []string{"string"},
+					Enum: []interface{}{"foo", "bar"},
+				},
+				{
+					Location: "test_schema#/properties/content/anyOf/1",
+					Types: []string{"string"},
+					Enum: []interface{}{"foo", "bar"},
+				},
+			},
+		},
+		wantError: "only one enum allowed when using anyOf for types test_schema#/properties/content/anyOf/1: [string]",
+	}, {
+		name: "too many types",
+		schema: jsonschema.Schema{
+			Location: "test_schema",
+			AnyOf: []*jsonschema.Schema{
+				{
+					Location: "test_schema#/properties/content/anyOf/0",
+					Types: []string{"string"},
+					Enum: []interface{}{"foo", "bar"},
+				},
+				{
+					Location: "test_schema#/properties/content/anyOf/1",
+					Types: []string{"string"},
+				},
+				{
+					Location: "test_schema#/properties/content/anyOf/2",
+					Types: []string{"string"},
+				},
+			},
+		},
+		wantError: "only two types allowed when using anyOf for content property in schema test_schema: []",
+	}, {
+		name: "wrong types",
+		schema: jsonschema.Schema{
+			Location: "test_schema",
+			AnyOf: []*jsonschema.Schema{
+				{
+					Location: "test_schema#/properties/content/anyOf/0",
+					Types: []string{"string"},
+					Enum: []interface{}{"foo", "bar"},
+				},
+				{
+					Location: "test_schema#/properties/content/anyOf/1",
+					Types: []string{"bool"},
+				},
+			},
+		},
+		wantError: "only string allowed when using anyOf for types test_schema#/properties/content/anyOf/1: [bool]",
+	}}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			err := validateStringEnumAnyOf(&tc.schema)
+			if err != nil {
+				if tc.wantError == "" {
+					t.Fatalf("didn't expected it to fail, but it did: %v", err)
+				} else {
+					// Check the error is what is expected
+					if d := cmp.Diff(tc.wantError, err.Error()); d != "" {
+						t.Errorf("args: diff(-want,+got):\n%s", d)
+					}
+				}
+			}
+			if err == nil {
+				if tc.wantError != "" {
+					t.Fatalf("expected an error, but go none")
+				}
+			}
+		})
+	}
+}
