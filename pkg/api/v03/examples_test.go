@@ -382,7 +382,7 @@ func init() {
 
 	for _, event := range apiv03.CDEventsTypes {
 		short := event.GetType().Short()
-		examplesConsumed[short], err = os.ReadFile(filepath.Join("..", examplesFolder, short + ".json"))
+		examplesConsumed[short], err = os.ReadFile(filepath.Join("..", examplesFolder, short+".json"))
 		panicOnError(err)
 	}
 }

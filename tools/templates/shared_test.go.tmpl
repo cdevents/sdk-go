@@ -47,9 +47,49 @@ var (
 	}
 	testDataXml  = []byte("<xml>testData</xml>")
 	testChangeId = "myChange123"
+
+	// V04+ Examples Data
+	testChainId = "4c8cb7dd-3448-41de-8768-eec704e2829b"
+	testLinks api.EmbeddedLinksArray
+	testContextId = "5328c37f-bb7e-4bb7-84ea-9f5f85e4a7ce"
+	testSchemaUri = "https://myorg.com/schema/custom"
 )
+
+func init() {
+	// Set up test links
+	tags := api.Tags{
+		"foo1": "bar",
+		"foo2": "bar",
+	}
+	reference := api.EventReference{
+		ContextId: testContextId,
+	}
+	elr := api.NewEmbeddedLinkRelation()
+	elr.SetTags(tags)
+	elr.SetLinkKind("TRIGGER")
+	elr.SetTarget(reference)
+	elp := api.NewEmbeddedLinkPath()
+	elp.SetTags(tags)
+	elp.SetFrom(reference)
+	ele := api.NewEmbeddedLinkEnd()
+	ele.SetTags(tags)
+	ele.SetFrom(reference)
+	testLinks = api.EmbeddedLinksArray{
+		elr, elp, ele,
+	}
+}
 
 func setContext(event api.CDEventWriter, subjectId string) {
 	event.SetSource(testSource)
 	event.SetSubjectId(subjectId)
+}
+
+func setContextV04(event api.CDEventWriterV04, chainId, schemaUri bool) {
+	if chainId {
+		event.SetChainId(testChainId)
+	}
+	if schemaUri {
+		event.SetSchemaUri(testSchemaUri)
+	}
+	event.SetLinks(testLinks)
 }

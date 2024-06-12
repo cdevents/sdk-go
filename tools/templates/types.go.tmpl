@@ -29,17 +29,17 @@ import (
 	"github.com/cdevents/sdk-go/pkg/api"
 )
 
-var CDEventsTypes = []api.CDEvent{
+var CDEventsTypes = []api.CDEvent{{if ne .SpecVersion "0.3.0"}}V04{{end}}{
 {{- range $i, $data := .Slice }}
 	&{{ .Subject }}{{ .Predicate }}Event{},
 {{- end }}
 }
 
-var CDEventsByUnversionedTypes map[string]api.CDEvent
+var CDEventsByUnversionedTypes map[string]api.CDEvent{{if ne .SpecVersion "0.3.0"}}V04{{end}}
 
 func init() {
 	// Set up CDEventsByUnversionedTypes for convenience
-	CDEventsByUnversionedTypes = make(map[string]api.CDEvent)
+	CDEventsByUnversionedTypes = make(map[string]api.CDEvent{{if ne .SpecVersion "0.3.0"}}V04{{end}})
 	for _, event := range CDEventsTypes {
 		CDEventsByUnversionedTypes[event.GetType().UnversionedString()] = event
 	}

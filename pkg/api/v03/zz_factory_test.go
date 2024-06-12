@@ -35,7 +35,7 @@ func init() {
 				Type:      apiv03.ArtifactPackagedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.ArtifactPackagedSubject{
 				SubjectBase: api.SubjectBase{
@@ -52,7 +52,7 @@ func init() {
 				Type:      apiv03.ArtifactPublishedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.ArtifactPublishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -69,7 +69,7 @@ func init() {
 				Type:      apiv03.ArtifactSignedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.ArtifactSignedSubject{
 				SubjectBase: api.SubjectBase{
@@ -86,7 +86,7 @@ func init() {
 				Type:      apiv03.BranchCreatedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.BranchCreatedSubject{
 				SubjectBase: api.SubjectBase{
@@ -103,7 +103,7 @@ func init() {
 				Type:      apiv03.BranchDeletedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.BranchDeletedSubject{
 				SubjectBase: api.SubjectBase{
@@ -120,7 +120,7 @@ func init() {
 				Type:      apiv03.BuildFinishedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.BuildFinishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -137,7 +137,7 @@ func init() {
 				Type:      apiv03.BuildQueuedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.BuildQueuedSubject{
 				SubjectBase: api.SubjectBase{
@@ -154,7 +154,7 @@ func init() {
 				Type:      apiv03.BuildStartedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.BuildStartedSubject{
 				SubjectBase: api.SubjectBase{
@@ -171,7 +171,7 @@ func init() {
 				Type:      apiv03.ChangeAbandonedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.ChangeAbandonedSubject{
 				SubjectBase: api.SubjectBase{
@@ -188,7 +188,7 @@ func init() {
 				Type:      apiv03.ChangeCreatedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.ChangeCreatedSubject{
 				SubjectBase: api.SubjectBase{
@@ -205,7 +205,7 @@ func init() {
 				Type:      apiv03.ChangeMergedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.ChangeMergedSubject{
 				SubjectBase: api.SubjectBase{
@@ -222,7 +222,7 @@ func init() {
 				Type:      apiv03.ChangeReviewedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.ChangeReviewedSubject{
 				SubjectBase: api.SubjectBase{
@@ -239,7 +239,7 @@ func init() {
 				Type:      apiv03.ChangeUpdatedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.ChangeUpdatedSubject{
 				SubjectBase: api.SubjectBase{
@@ -256,7 +256,7 @@ func init() {
 				Type:      apiv03.EnvironmentCreatedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.EnvironmentCreatedSubject{
 				SubjectBase: api.SubjectBase{
@@ -273,7 +273,7 @@ func init() {
 				Type:      apiv03.EnvironmentDeletedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.EnvironmentDeletedSubject{
 				SubjectBase: api.SubjectBase{
@@ -290,7 +290,7 @@ func init() {
 				Type:      apiv03.EnvironmentModifiedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.EnvironmentModifiedSubject{
 				SubjectBase: api.SubjectBase{
@@ -307,7 +307,7 @@ func init() {
 				Type:      apiv03.IncidentDetectedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.IncidentDetectedSubject{
 				SubjectBase: api.SubjectBase{
@@ -324,7 +324,7 @@ func init() {
 				Type:      apiv03.IncidentReportedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.IncidentReportedSubject{
 				SubjectBase: api.SubjectBase{
@@ -341,7 +341,7 @@ func init() {
 				Type:      apiv03.IncidentResolvedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.IncidentResolvedSubject{
 				SubjectBase: api.SubjectBase{
@@ -358,7 +358,7 @@ func init() {
 				Type:      apiv03.PipelineRunFinishedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.PipelineRunFinishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -375,7 +375,7 @@ func init() {
 				Type:      apiv03.PipelineRunQueuedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.PipelineRunQueuedSubject{
 				SubjectBase: api.SubjectBase{
@@ -392,7 +392,7 @@ func init() {
 				Type:      apiv03.PipelineRunStartedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.PipelineRunStartedSubject{
 				SubjectBase: api.SubjectBase{
@@ -409,7 +409,7 @@ func init() {
 				Type:      apiv03.RepositoryCreatedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.RepositoryCreatedSubject{
 				SubjectBase: api.SubjectBase{
@@ -426,7 +426,7 @@ func init() {
 				Type:      apiv03.RepositoryDeletedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.RepositoryDeletedSubject{
 				SubjectBase: api.SubjectBase{
@@ -443,7 +443,7 @@ func init() {
 				Type:      apiv03.RepositoryModifiedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.RepositoryModifiedSubject{
 				SubjectBase: api.SubjectBase{
@@ -460,7 +460,7 @@ func init() {
 				Type:      apiv03.ServiceDeployedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.ServiceDeployedSubject{
 				SubjectBase: api.SubjectBase{
@@ -477,7 +477,7 @@ func init() {
 				Type:      apiv03.ServicePublishedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.ServicePublishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -494,7 +494,7 @@ func init() {
 				Type:      apiv03.ServiceRemovedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.ServiceRemovedSubject{
 				SubjectBase: api.SubjectBase{
@@ -511,7 +511,7 @@ func init() {
 				Type:      apiv03.ServiceRolledbackEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.ServiceRolledbackSubject{
 				SubjectBase: api.SubjectBase{
@@ -528,7 +528,7 @@ func init() {
 				Type:      apiv03.ServiceUpgradedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.ServiceUpgradedSubject{
 				SubjectBase: api.SubjectBase{
@@ -545,7 +545,7 @@ func init() {
 				Type:      apiv03.TaskRunFinishedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.TaskRunFinishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -562,7 +562,7 @@ func init() {
 				Type:      apiv03.TaskRunStartedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.TaskRunStartedSubject{
 				SubjectBase: api.SubjectBase{
@@ -579,7 +579,7 @@ func init() {
 				Type:      apiv03.TestCaseRunFinishedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.TestCaseRunFinishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -596,7 +596,7 @@ func init() {
 				Type:      apiv03.TestCaseRunQueuedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.TestCaseRunQueuedSubject{
 				SubjectBase: api.SubjectBase{
@@ -613,7 +613,7 @@ func init() {
 				Type:      apiv03.TestCaseRunStartedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.TestCaseRunStartedSubject{
 				SubjectBase: api.SubjectBase{
@@ -630,7 +630,7 @@ func init() {
 				Type:      apiv03.TestOutputPublishedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.TestOutputPublishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -647,7 +647,7 @@ func init() {
 				Type:      apiv03.TestSuiteRunFinishedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.TestSuiteRunFinishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -664,7 +664,7 @@ func init() {
 				Type:      apiv03.TestSuiteRunQueuedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.TestSuiteRunQueuedSubject{
 				SubjectBase: api.SubjectBase{
@@ -681,7 +681,7 @@ func init() {
 				Type:      apiv03.TestSuiteRunStartedEventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "0.3.0",
 			},
 			Subject: apiv03.TestSuiteRunStartedSubject{
 				SubjectBase: api.SubjectBase{

@@ -30,12 +30,38 @@ import (
 
 func init() {
     // Create events equal to examples in the spec
-	examplesProduced = make(map[string]api.CDEvent)
+	examplesProduced = make(map[string]api.CDEvent{{if ne .SpecVersion "0.3.0"}}V04{{end}})
 
+    // Set up test links
+	tags := api.Tags{
+		"foo1": "bar",
+		"foo2": "bar",
+	}
+	reference := api.EventReference{
+		ContextId: testContextId,
+	}
+	elr := api.NewEmbeddedLinkRelation()
+	elr.SetTags(tags)
+	elr.SetLinkKind("TRIGGER")
+	elr.SetTarget(reference)
+	elp := api.NewEmbeddedLinkPath()
+	elp.SetTags(tags)
+	elp.SetFrom(reference)
+	ele := api.NewEmbeddedLinkEnd()
+	ele.SetTags(tags)
+	ele.SetFrom(reference)
+	testLinks = api.EmbeddedLinksArray{
+		elr, elp, ele,
+	}
+
+    // Create events for test
 {{- range $i, $data := .Slice }}
     // {{ .Subject }}{{ .Predicate }} Event producer
     new{{ .Subject }}{{ .Predicate }}, _ := spec{{ $.SpecVersionName }}.New{{ .Subject }}{{ .Predicate }}Event()
     setContext(new{{ .Subject }}{{ .Predicate }}, testSubjectId)
+{{- if gt $.SpecVersion "0.3.0"}}
+    setContextV04(new{{ .Subject }}{{ .Predicate }}, true, true)
+{{- end}}
     example{{ .Subject }}{{ .Predicate }}Event(new{{ .Subject }}{{ .Predicate }})
     examplesProduced[new{{ .Subject }}{{ .Predicate }}.GetType().Short()] = new{{ .Subject }}{{ .Predicate }}
 {{ end }}

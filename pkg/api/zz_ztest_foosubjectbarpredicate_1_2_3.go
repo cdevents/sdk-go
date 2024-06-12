@@ -22,7 +22,11 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import "time"
+import (
+	"time"
+
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// FooSubjectBarPredicate event type v1.2.3
@@ -53,7 +57,7 @@ func (sc FooSubjectBarPredicateSubjectV1_2_3) GetSubjectType() SubjectType {
 }
 
 type FooSubjectBarPredicateEventV1_2_3 struct {
-	Context Context                             `json:"context"`
+	Context ContextV04                          `json:"context"`
 	Subject FooSubjectBarPredicateSubjectV1_2_3 `json:"subject"`
 	CDEventCustomData
 }
@@ -108,6 +112,20 @@ func (e FooSubjectBarPredicateEventV1_2_3) GetCustomDataContentType() string {
 	return e.CustomDataContentType
 }
 
+// CDEventsReaderV04 implementation
+
+func (e FooSubjectBarPredicateEventV1_2_3) GetChainId() string {
+	return e.Context.ChainId
+}
+
+func (e FooSubjectBarPredicateEventV1_2_3) GetLinks() EmbeddedLinksArray {
+	return e.Context.Links
+}
+
+func (e FooSubjectBarPredicateEventV1_2_3) GetSchemaUri() string {
+	return e.Context.SchemaUri
+}
+
 // CDEventsWriter implementation
 
 func (e *FooSubjectBarPredicateEventV1_2_3) SetId(id string) {
@@ -144,10 +162,23 @@ func (e *FooSubjectBarPredicateEventV1_2_3) SetCustomData(contentType string, da
 	return nil
 }
 
-func (e FooSubjectBarPredicateEventV1_2_3) GetSchema() (string, string) {
+func (e FooSubjectBarPredicateEventV1_2_3) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
-	return id, schema
+	return TestCompiledSchemas.GetBySpecSubjectPredicate("99.0.0", eType.Subject, eType.Predicate)
+}
+
+// CDEventsWriterV04 implementation
+
+func (e *FooSubjectBarPredicateEventV1_2_3) SetChainId(chainId string) {
+	e.Context.ChainId = chainId
+}
+
+func (e *FooSubjectBarPredicateEventV1_2_3) SetLinks(links EmbeddedLinksArray) {
+	e.Context.Links = links
+}
+
+func (e *FooSubjectBarPredicateEventV1_2_3) SetSchemaUri(schema string) {
+	e.Context.SchemaUri = schema
 }
 
 // Set subject custom fields
@@ -171,9 +202,13 @@ func (e *FooSubjectBarPredicateEventV1_2_3) SetSubjectReferenceField(referenceFi
 // New creates a new FooSubjectBarPredicateEventV1_2_3
 func NewFooSubjectBarPredicateEventV1_2_3(specVersion string) (*FooSubjectBarPredicateEventV1_2_3, error) {
 	e := &FooSubjectBarPredicateEventV1_2_3{
-		Context: Context{
-			Type:    FooSubjectBarPredicateEventTypeV1_2_3,
-			Version: specVersion,
+		Context: ContextV04{
+			Context{
+				Type:    FooSubjectBarPredicateEventTypeV1_2_3,
+				Version: specVersion,
+			},
+			ContextLinks{},
+			ContextCustom{},
 		},
 		Subject: FooSubjectBarPredicateSubjectV1_2_3{
 			SubjectBase: SubjectBase{

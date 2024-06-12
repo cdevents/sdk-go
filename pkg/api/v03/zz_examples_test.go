@@ -28,6 +28,30 @@ import (
 func init() {
 	// Create events equal to examples in the spec
 	examplesProduced = make(map[string]api.CDEvent)
+
+	// Set up test links
+	tags := api.Tags{
+		"foo1": "bar",
+		"foo2": "bar",
+	}
+	reference := api.EventReference{
+		ContextId: testContextId,
+	}
+	elr := api.NewEmbeddedLinkRelation()
+	elr.SetTags(tags)
+	elr.SetLinkKind("TRIGGER")
+	elr.SetTarget(reference)
+	elp := api.NewEmbeddedLinkPath()
+	elp.SetTags(tags)
+	elp.SetFrom(reference)
+	ele := api.NewEmbeddedLinkEnd()
+	ele.SetTags(tags)
+	ele.SetFrom(reference)
+	testLinks = api.EmbeddedLinksArray{
+		elr, elp, ele,
+	}
+
+	// Create events for test
 	// ArtifactPackaged Event producer
 	newArtifactPackaged, _ := specv03.NewArtifactPackagedEvent()
 	setContext(newArtifactPackaged, testSubjectId)

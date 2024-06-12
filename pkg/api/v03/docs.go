@@ -413,7 +413,7 @@ var TestSuiteRunStartedEventType = api.TestSuiteRunStartedEventTypeV0_1_0
 // that to unmarshal the rest of the event into the correct object.
 // It assumes the context can be unmarshalled in a `Context` object.
 func NewFromJsonBytes(event []byte) (api.CDEvent, error) {
-	return api.NewFromJsonBytesContext[api.Context](event, CDEventsByUnversionedTypes)
+	return api.NewFromJsonBytesContext[api.CDEvent](event, CDEventsByUnversionedTypes)
 }
 
 // Build a new CDEventReader from a JSON string

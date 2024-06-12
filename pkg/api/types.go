@@ -26,6 +26,7 @@ import (
 	"strings"
 	"time"
 
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
 	"golang.org/x/mod/semver"
 )
 
@@ -34,9 +35,20 @@ const (
 	CDEventsSpecVersion       = "0.3.0"
 	CDEventsSchemaURLTemplate = "https://cdevents.dev/%s/schema/%s-%s-event"
 	CDEventsTypeRegex         = "^dev\\.cdevents\\.(?P<subject>[a-z]+)\\.(?P<predicate>[a-z]+)\\.(?P<version>.*)$"
+
+	LinkTypePath     LinkType = "PATH"
+	LinkTypeEnd      LinkType = "END"
+	LinkTypeRelation LinkType = "RELATION"
 )
 
-var CDEventsTypeCRegex = regexp.MustCompile(CDEventsTypeRegex)
+var (
+	CDEventsTypeCRegex = regexp.MustCompile(CDEventsTypeRegex)
+	LinkTypes          = map[LinkType]interface{}{
+		LinkTypePath:     "",
+		LinkTypeEnd:      "",
+		LinkTypeRelation: "",
+	}
+)
 
 type BaseContextReader interface {
 
@@ -83,15 +95,252 @@ type Context struct {
 	// types should be prefixed with dev.cdevents.
 	// One occurrence may have multiple events associated, as long as they have
 	// different event types
-	Type CDEventType `json:"type" jsonschema:"required,minLength=1" validate:"event-type"`
+	Type CDEventType `json:"type" jsonschema:"required,minLength=1" validate:"required,structonly"`
 
 	// Spec: https://cdevents.dev/docs/spec/#timestamp
-	// Description: Description: defines the time of the occurrence. When the
+	// Description: defines the time of the occurrence. When the
 	// time of the occurrence is not available, the time when the event was
 	// produced MAY be used. In case the transport layer should require a
 	// re-transmission of the event, the timestamp SHOULD NOT be updated, i.e.
 	// it should be the same for the same source + id combination.
 	Timestamp time.Time `json:"timestamp" jsonschema:"required"`
+}
+
+type Tags map[string]interface{}
+
+type LinkType string
+
+type EmbeddedLink interface {
+	// GetLinkType returns the content of the jsonschema "linkType"
+	GetLinkType() LinkType
+}
+
+type EmbeddedLinkWithTags interface {
+	EmbeddedLink
+
+	// GetTags returns the content of the jsonschema "tags" object field
+	// which defines no property and allows for additional ones
+	GetTags() Tags
+
+	// SetTags sets the content of the jsonschema "tags" object field
+	SetTags(tags Tags)
+}
+
+type EmbeddedLinkWithTagsAndSource interface {
+	EmbeddedLinkWithTags
+
+	// GetFrom returns the source of the link, in the "from" field
+	GetFrom() EventReference
+
+	// SetFrom sets the source of the link, in the "from" field
+	SetFrom(reference EventReference)
+}
+
+type EmbeddedLinkWithTagsAndRelation interface {
+	EmbeddedLinkWithTags
+
+	// GetTarget returns the target of the link, in the "target" field
+	GetTarget() EventReference
+
+	// SetTarget sets the target of the link, in the "target" field
+	SetTarget(reference EventReference)
+
+	// GetLinkKind returns the link kind, in the "linkKind" field
+	GetLinkKind() string
+
+	// SetLinkKind sets the kind of the link, in the "linkKind" field
+	SetLinkKind(kind string)
+}
+
+// EventReference contains the ID of a linked event
+type EventReference struct {
+	// ContextId is the ID of the linked event
+	ContextId string `json:"contextId" jsonschema:"required,minLength=1"`
+}
+
+// embeddedLinkPath is private so that NewEmbeddedLinkPath must be used
+// to create an object with correct defaults
+type embeddedLinkPath struct {
+	LinkType LinkType       `json:"linkType" jsonschema:"required,minLength=1" validate:"event-link-type"`
+	From     EventReference `json:"from" jsonschema:"required,minLength=1"`
+	Tags     Tags           `json:"tags"`
+}
+
+func (l embeddedLinkPath) GetLinkType() LinkType {
+	return l.LinkType
+}
+
+func (l embeddedLinkPath) GetTags() Tags {
+	return l.Tags
+}
+
+func (l embeddedLinkPath) GetFrom() EventReference {
+	return l.From
+}
+
+func (l *embeddedLinkPath) SetTags(tags Tags) {
+	l.Tags = tags
+}
+
+func (l *embeddedLinkPath) SetFrom(from EventReference) {
+	l.From = from
+}
+
+func NewEmbeddedLinkPath() EmbeddedLinkWithTagsAndSource {
+	return &embeddedLinkPath{
+		LinkType: LinkTypePath,
+	}
+}
+
+// embeddedLinkPath is private so that NewEmbeddedLinkPath must be used
+// to create an object with correct defaults
+type embeddedLinkEnd struct {
+	LinkType LinkType       `json:"linkType" jsonschema:"required,minLength=1" validate:"event-link-type"`
+	From     EventReference `json:"from" jsonschema:"required,minLength=1"`
+	Tags     Tags           `json:"tags"`
+}
+
+func (l embeddedLinkEnd) GetLinkType() LinkType {
+	return l.LinkType
+}
+
+func (l embeddedLinkEnd) GetTags() Tags {
+	return l.Tags
+}
+
+func (l embeddedLinkEnd) GetFrom() EventReference {
+	return l.From
+}
+
+func (l *embeddedLinkEnd) SetTags(tags Tags) {
+	l.Tags = tags
+}
+
+func (l *embeddedLinkEnd) SetFrom(from EventReference) {
+	l.From = from
+}
+
+func NewEmbeddedLinkEnd() EmbeddedLinkWithTagsAndSource {
+	return &embeddedLinkEnd{
+		LinkType: LinkTypeEnd,
+	}
+}
+
+// embeddedLinkPath is private so that NewEmbeddedLinkPath must be used
+// to create an object with correct defaults
+type embeddedLinkRelation struct {
+	LinkType LinkType       `json:"linkType" jsonschema:"required,minLength=1" validate:"event-link-type"`
+	LinkKind string         `json:"linkKind" jsonschema:"required,minLength=1"`
+	Target   EventReference `json:"target" jsonschema:"required,minLength=1"`
+	Tags     Tags           `json:"tags"`
+}
+
+func (l embeddedLinkRelation) GetLinkType() LinkType {
+	return l.LinkType
+}
+
+func (l embeddedLinkRelation) GetLinkKind() string {
+	return l.LinkKind
+}
+
+func (l embeddedLinkRelation) GetTags() Tags {
+	return l.Tags
+}
+
+func (l embeddedLinkRelation) GetTarget() EventReference {
+	return l.Target
+}
+
+func (l *embeddedLinkRelation) SetLinkKind(linkKind string) {
+	l.LinkKind = linkKind
+}
+
+func (l *embeddedLinkRelation) SetTags(tags Tags) {
+	l.Tags = tags
+}
+
+func (l *embeddedLinkRelation) SetTarget(target EventReference) {
+	l.Target = target
+}
+
+func NewEmbeddedLinkRelation() EmbeddedLinkWithTagsAndRelation {
+	return &embeddedLinkRelation{
+		LinkType: LinkTypeRelation,
+	}
+}
+
+type EmbeddedLinksArray []EmbeddedLinkWithTags
+
+func (ela *EmbeddedLinksArray) UnmarshalJSON(b []byte) error {
+	var rawEmbeddedLinks []*json.RawMessage
+	err := json.Unmarshal(b, &rawEmbeddedLinks)
+	if err != nil {
+		return err
+	}
+
+	m := &struct {
+		LinkType LinkType `json:"linkType"`
+	}{}
+	receiver := make([]EmbeddedLinkWithTags, len(rawEmbeddedLinks))
+	for index, rawEmbeddedLink := range rawEmbeddedLinks {
+		err = json.Unmarshal(*rawEmbeddedLink, &m)
+		if err != nil {
+			return err
+		}
+		if m.LinkType == LinkTypeEnd {
+			var e embeddedLinkEnd
+			err = json.Unmarshal(*rawEmbeddedLink, &e)
+			if err != nil {
+				return err
+			}
+			receiver[index] = &e
+		} else if m.LinkType == LinkTypePath {
+			var e embeddedLinkPath
+			err = json.Unmarshal(*rawEmbeddedLink, &e)
+			if err != nil {
+				return err
+			}
+			receiver[index] = &e
+		} else if m.LinkType == LinkTypeRelation {
+			var e embeddedLinkRelation
+			err = json.Unmarshal(*rawEmbeddedLink, &e)
+			if err != nil {
+				return err
+			}
+			receiver[index] = &e
+		} else {
+			return fmt.Errorf("unsupported link type %s found", m.LinkType)
+		}
+	}
+	*ela = receiver
+	return nil
+}
+
+type ContextLinks struct {
+	// Spec: https://cdevents.dev/docs/spec/#chain_id
+	// Description: Identifier for a chain as defined in the links spec
+	// https://github.com/cdevents/spec/blob/v0.4.1/links.md
+	ChainId string `json:"chainId,omitempty"`
+
+	// Spec: https://cdevents.dev/docs/spec/#links
+	// Description: Identifier for an event. Subsequent delivery attempts of the
+	// same event MAY share the same id. This attribute matches the syntax and
+	// semantics of the id attribute of CloudEvents:
+	// https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#id
+	Links EmbeddedLinksArray `json:"links,omitempty" validate:"dive"`
+}
+
+type ContextCustom struct {
+	// Spec: https://cdevents.dev/docs/spec/#schemauri
+	// Description: ink to a jsonschema schema that further refines
+	// the event schema as defined by CDEvents.
+	SchemaUri string `json:"schemaUri,omitempty"`
+}
+
+type ContextV04 struct {
+	Context
+	ContextLinks
+	ContextCustom
 }
 
 type Reference struct {
@@ -211,7 +460,7 @@ type CDEventReader interface {
 	GetSubject() Subject
 
 	// The URL and content of the schema file associated to the event type
-	GetSchema() (string, string)
+	GetSchema() (string, *jsonschema.Schema, error)
 
 	// The custom data attached to the event
 	// Depends on GetCustomDataContentType()
@@ -256,6 +505,32 @@ type CDEventWriter interface {
 	SetCustomData(contentType string, data interface{}) error
 }
 
+type CDEventReaderV04 interface {
+	CDEventReader
+
+	// The ChainId for the event
+	GetChainId() string
+
+	// The links array for the event
+	GetLinks() EmbeddedLinksArray
+
+	// The custom schema URI
+	GetSchemaUri() string
+}
+
+type CDEventWriterV04 interface {
+	CDEventWriter
+
+	// The ChainId for the event
+	SetChainId(chainId string)
+
+	// The links array for the event
+	SetLinks(links EmbeddedLinksArray)
+
+	// The custom schema URI
+	SetSchemaUri(schema string)
+}
+
 type CDEventCustomDataEncoding string
 
 func (t CDEventCustomDataEncoding) String() string {
@@ -298,6 +573,11 @@ type CDEventCustomData struct {
 type CDEvent interface {
 	CDEventReader
 	CDEventWriter
+}
+
+type CDEventV04 interface {
+	CDEventReaderV04
+	CDEventWriterV04
 }
 
 // Used to implement type specific GetCustomDataRaw()

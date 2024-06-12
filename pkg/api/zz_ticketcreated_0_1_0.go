@@ -20,7 +20,11 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import "time"
+import (
+	"time"
+
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// TicketCreated event type v0.1.0
@@ -61,7 +65,7 @@ func (sc TicketCreatedSubjectV0_1_0) GetSubjectType() SubjectType {
 }
 
 type TicketCreatedEventV0_1_0 struct {
-	Context Context                    `json:"context"`
+	Context ContextV04                 `json:"context"`
 	Subject TicketCreatedSubjectV0_1_0 `json:"subject"`
 	CDEventCustomData
 }
@@ -116,6 +120,20 @@ func (e TicketCreatedEventV0_1_0) GetCustomDataContentType() string {
 	return e.CustomDataContentType
 }
 
+// CDEventsReaderV04 implementation
+
+func (e TicketCreatedEventV0_1_0) GetChainId() string {
+	return e.Context.ChainId
+}
+
+func (e TicketCreatedEventV0_1_0) GetLinks() EmbeddedLinksArray {
+	return e.Context.Links
+}
+
+func (e TicketCreatedEventV0_1_0) GetSchemaUri() string {
+	return e.Context.SchemaUri
+}
+
 // CDEventsWriter implementation
 
 func (e *TicketCreatedEventV0_1_0) SetId(id string) {
@@ -152,10 +170,23 @@ func (e *TicketCreatedEventV0_1_0) SetCustomData(contentType string, data interf
 	return nil
 }
 
-func (e TicketCreatedEventV0_1_0) GetSchema() (string, string) {
+func (e TicketCreatedEventV0_1_0) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
-	return id, schema
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.4.1", eType.Subject, eType.Predicate)
+}
+
+// CDEventsWriterV04 implementation
+
+func (e *TicketCreatedEventV0_1_0) SetChainId(chainId string) {
+	e.Context.ChainId = chainId
+}
+
+func (e *TicketCreatedEventV0_1_0) SetLinks(links EmbeddedLinksArray) {
+	e.Context.Links = links
+}
+
+func (e *TicketCreatedEventV0_1_0) SetSchemaUri(schema string) {
+	e.Context.SchemaUri = schema
 }
 
 // Set subject custom fields
@@ -199,9 +230,13 @@ func (e *TicketCreatedEventV0_1_0) SetSubjectUri(uri string) {
 // New creates a new TicketCreatedEventV0_1_0
 func NewTicketCreatedEventV0_1_0(specVersion string) (*TicketCreatedEventV0_1_0, error) {
 	e := &TicketCreatedEventV0_1_0{
-		Context: Context{
-			Type:    TicketCreatedEventTypeV0_1_0,
-			Version: specVersion,
+		Context: ContextV04{
+			Context{
+				Type:    TicketCreatedEventTypeV0_1_0,
+				Version: specVersion,
+			},
+			ContextLinks{},
+			ContextCustom{},
 		},
 		Subject: TicketCreatedSubjectV0_1_0{
 			SubjectBase: SubjectBase{

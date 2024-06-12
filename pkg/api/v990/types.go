@@ -28,15 +28,15 @@ import (
 	"github.com/cdevents/sdk-go/pkg/api"
 )
 
-var CDEventsTypes = []api.CDEvent{
+var CDEventsTypes = []api.CDEventV04{
 	&FooSubjectBarPredicateEvent{},
 }
 
-var CDEventsByUnversionedTypes map[string]api.CDEvent
+var CDEventsByUnversionedTypes map[string]api.CDEventV04
 
 func init() {
 	// Set up CDEventsByUnversionedTypes for convenience
-	CDEventsByUnversionedTypes = make(map[string]api.CDEvent)
+	CDEventsByUnversionedTypes = make(map[string]api.CDEventV04)
 	for _, event := range CDEventsTypes {
 		CDEventsByUnversionedTypes[event.GetType().UnversionedString()] = event
 	}

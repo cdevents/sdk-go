@@ -475,11 +475,11 @@ var TicketUpdatedEventType = api.TicketUpdatedEventTypeV0_1_0
 // This works by unmarshalling the context first, extracting the event type and using
 // that to unmarshal the rest of the event into the correct object.
 // It assumes the context can be unmarshalled in a `Context` object.
-func NewFromJsonBytes(event []byte) (api.CDEvent, error) {
-	return api.NewFromJsonBytesContext[api.Context](event, CDEventsByUnversionedTypes)
+func NewFromJsonBytes(event []byte) (api.CDEventV04, error) {
+	return api.NewFromJsonBytesContext[api.CDEventV04](event, CDEventsByUnversionedTypes)
 }
 
 // Build a new CDEventReader from a JSON string
-func NewFromJsonString(event string) (api.CDEvent, error) {
+func NewFromJsonString(event string) (api.CDEventV04, error) {
 	return NewFromJsonBytes([]byte(event))
 }

@@ -26,7 +26,7 @@ jobs:
     - name: Setup Go
       uses: actions/setup-go@v5
       with:
-        go-version: 1.19
+        go-version: 1.21
     - name: Generate coverage report
       run: make test
     - name: Upload coverage reports to Codecov

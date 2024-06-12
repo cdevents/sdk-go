@@ -31,11 +31,13 @@ func init() {
 		name:      "artifact deleted",
 		eventType: apiv04.ArtifactDeletedEventType.String(),
 		expectedEvent: &apiv04.ArtifactDeletedEvent{
-			Context: api.Context{
-				Type:      apiv04.ArtifactDeletedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.ArtifactDeletedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.ArtifactDeletedSubject{
 				SubjectBase: api.SubjectBase{
@@ -48,11 +50,13 @@ func init() {
 		name:      "artifact downloaded",
 		eventType: apiv04.ArtifactDownloadedEventType.String(),
 		expectedEvent: &apiv04.ArtifactDownloadedEvent{
-			Context: api.Context{
-				Type:      apiv04.ArtifactDownloadedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.ArtifactDownloadedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.ArtifactDownloadedSubject{
 				SubjectBase: api.SubjectBase{
@@ -65,11 +69,13 @@ func init() {
 		name:      "artifact packaged",
 		eventType: apiv04.ArtifactPackagedEventType.String(),
 		expectedEvent: &apiv04.ArtifactPackagedEvent{
-			Context: api.Context{
-				Type:      apiv04.ArtifactPackagedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.ArtifactPackagedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.ArtifactPackagedSubject{
 				SubjectBase: api.SubjectBase{
@@ -82,11 +88,13 @@ func init() {
 		name:      "artifact published",
 		eventType: apiv04.ArtifactPublishedEventType.String(),
 		expectedEvent: &apiv04.ArtifactPublishedEvent{
-			Context: api.Context{
-				Type:      apiv04.ArtifactPublishedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.ArtifactPublishedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.ArtifactPublishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -99,11 +107,13 @@ func init() {
 		name:      "artifact signed",
 		eventType: apiv04.ArtifactSignedEventType.String(),
 		expectedEvent: &apiv04.ArtifactSignedEvent{
-			Context: api.Context{
-				Type:      apiv04.ArtifactSignedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.ArtifactSignedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.ArtifactSignedSubject{
 				SubjectBase: api.SubjectBase{
@@ -116,11 +126,13 @@ func init() {
 		name:      "branch created",
 		eventType: apiv04.BranchCreatedEventType.String(),
 		expectedEvent: &apiv04.BranchCreatedEvent{
-			Context: api.Context{
-				Type:      apiv04.BranchCreatedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.BranchCreatedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.BranchCreatedSubject{
 				SubjectBase: api.SubjectBase{
@@ -133,11 +145,13 @@ func init() {
 		name:      "branch deleted",
 		eventType: apiv04.BranchDeletedEventType.String(),
 		expectedEvent: &apiv04.BranchDeletedEvent{
-			Context: api.Context{
-				Type:      apiv04.BranchDeletedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.BranchDeletedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.BranchDeletedSubject{
 				SubjectBase: api.SubjectBase{
@@ -150,11 +164,13 @@ func init() {
 		name:      "build finished",
 		eventType: apiv04.BuildFinishedEventType.String(),
 		expectedEvent: &apiv04.BuildFinishedEvent{
-			Context: api.Context{
-				Type:      apiv04.BuildFinishedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.BuildFinishedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.BuildFinishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -167,11 +183,13 @@ func init() {
 		name:      "build queued",
 		eventType: apiv04.BuildQueuedEventType.String(),
 		expectedEvent: &apiv04.BuildQueuedEvent{
-			Context: api.Context{
-				Type:      apiv04.BuildQueuedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.BuildQueuedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.BuildQueuedSubject{
 				SubjectBase: api.SubjectBase{
@@ -184,11 +202,13 @@ func init() {
 		name:      "build started",
 		eventType: apiv04.BuildStartedEventType.String(),
 		expectedEvent: &apiv04.BuildStartedEvent{
-			Context: api.Context{
-				Type:      apiv04.BuildStartedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.BuildStartedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.BuildStartedSubject{
 				SubjectBase: api.SubjectBase{
@@ -201,11 +221,13 @@ func init() {
 		name:      "change abandoned",
 		eventType: apiv04.ChangeAbandonedEventType.String(),
 		expectedEvent: &apiv04.ChangeAbandonedEvent{
-			Context: api.Context{
-				Type:      apiv04.ChangeAbandonedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.ChangeAbandonedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.ChangeAbandonedSubject{
 				SubjectBase: api.SubjectBase{
@@ -218,11 +240,13 @@ func init() {
 		name:      "change created",
 		eventType: apiv04.ChangeCreatedEventType.String(),
 		expectedEvent: &apiv04.ChangeCreatedEvent{
-			Context: api.Context{
-				Type:      apiv04.ChangeCreatedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.ChangeCreatedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.ChangeCreatedSubject{
 				SubjectBase: api.SubjectBase{
@@ -235,11 +259,13 @@ func init() {
 		name:      "change merged",
 		eventType: apiv04.ChangeMergedEventType.String(),
 		expectedEvent: &apiv04.ChangeMergedEvent{
-			Context: api.Context{
-				Type:      apiv04.ChangeMergedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.ChangeMergedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.ChangeMergedSubject{
 				SubjectBase: api.SubjectBase{
@@ -252,11 +278,13 @@ func init() {
 		name:      "change reviewed",
 		eventType: apiv04.ChangeReviewedEventType.String(),
 		expectedEvent: &apiv04.ChangeReviewedEvent{
-			Context: api.Context{
-				Type:      apiv04.ChangeReviewedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.ChangeReviewedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.ChangeReviewedSubject{
 				SubjectBase: api.SubjectBase{
@@ -269,11 +297,13 @@ func init() {
 		name:      "change updated",
 		eventType: apiv04.ChangeUpdatedEventType.String(),
 		expectedEvent: &apiv04.ChangeUpdatedEvent{
-			Context: api.Context{
-				Type:      apiv04.ChangeUpdatedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.ChangeUpdatedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.ChangeUpdatedSubject{
 				SubjectBase: api.SubjectBase{
@@ -286,11 +316,13 @@ func init() {
 		name:      "environment created",
 		eventType: apiv04.EnvironmentCreatedEventType.String(),
 		expectedEvent: &apiv04.EnvironmentCreatedEvent{
-			Context: api.Context{
-				Type:      apiv04.EnvironmentCreatedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.EnvironmentCreatedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.EnvironmentCreatedSubject{
 				SubjectBase: api.SubjectBase{
@@ -303,11 +335,13 @@ func init() {
 		name:      "environment deleted",
 		eventType: apiv04.EnvironmentDeletedEventType.String(),
 		expectedEvent: &apiv04.EnvironmentDeletedEvent{
-			Context: api.Context{
-				Type:      apiv04.EnvironmentDeletedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.EnvironmentDeletedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.EnvironmentDeletedSubject{
 				SubjectBase: api.SubjectBase{
@@ -320,11 +354,13 @@ func init() {
 		name:      "environment modified",
 		eventType: apiv04.EnvironmentModifiedEventType.String(),
 		expectedEvent: &apiv04.EnvironmentModifiedEvent{
-			Context: api.Context{
-				Type:      apiv04.EnvironmentModifiedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.EnvironmentModifiedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.EnvironmentModifiedSubject{
 				SubjectBase: api.SubjectBase{
@@ -337,11 +373,13 @@ func init() {
 		name:      "incident detected",
 		eventType: apiv04.IncidentDetectedEventType.String(),
 		expectedEvent: &apiv04.IncidentDetectedEvent{
-			Context: api.Context{
-				Type:      apiv04.IncidentDetectedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.IncidentDetectedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.IncidentDetectedSubject{
 				SubjectBase: api.SubjectBase{
@@ -354,11 +392,13 @@ func init() {
 		name:      "incident reported",
 		eventType: apiv04.IncidentReportedEventType.String(),
 		expectedEvent: &apiv04.IncidentReportedEvent{
-			Context: api.Context{
-				Type:      apiv04.IncidentReportedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.IncidentReportedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.IncidentReportedSubject{
 				SubjectBase: api.SubjectBase{
@@ -371,11 +411,13 @@ func init() {
 		name:      "incident resolved",
 		eventType: apiv04.IncidentResolvedEventType.String(),
 		expectedEvent: &apiv04.IncidentResolvedEvent{
-			Context: api.Context{
-				Type:      apiv04.IncidentResolvedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.IncidentResolvedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.IncidentResolvedSubject{
 				SubjectBase: api.SubjectBase{
@@ -388,11 +430,13 @@ func init() {
 		name:      "pipelinerun finished",
 		eventType: apiv04.PipelineRunFinishedEventType.String(),
 		expectedEvent: &apiv04.PipelineRunFinishedEvent{
-			Context: api.Context{
-				Type:      apiv04.PipelineRunFinishedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.PipelineRunFinishedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.PipelineRunFinishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -405,11 +449,13 @@ func init() {
 		name:      "pipelinerun queued",
 		eventType: apiv04.PipelineRunQueuedEventType.String(),
 		expectedEvent: &apiv04.PipelineRunQueuedEvent{
-			Context: api.Context{
-				Type:      apiv04.PipelineRunQueuedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.PipelineRunQueuedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.PipelineRunQueuedSubject{
 				SubjectBase: api.SubjectBase{
@@ -422,11 +468,13 @@ func init() {
 		name:      "pipelinerun started",
 		eventType: apiv04.PipelineRunStartedEventType.String(),
 		expectedEvent: &apiv04.PipelineRunStartedEvent{
-			Context: api.Context{
-				Type:      apiv04.PipelineRunStartedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.PipelineRunStartedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.PipelineRunStartedSubject{
 				SubjectBase: api.SubjectBase{
@@ -439,11 +487,13 @@ func init() {
 		name:      "repository created",
 		eventType: apiv04.RepositoryCreatedEventType.String(),
 		expectedEvent: &apiv04.RepositoryCreatedEvent{
-			Context: api.Context{
-				Type:      apiv04.RepositoryCreatedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.RepositoryCreatedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.RepositoryCreatedSubject{
 				SubjectBase: api.SubjectBase{
@@ -456,11 +506,13 @@ func init() {
 		name:      "repository deleted",
 		eventType: apiv04.RepositoryDeletedEventType.String(),
 		expectedEvent: &apiv04.RepositoryDeletedEvent{
-			Context: api.Context{
-				Type:      apiv04.RepositoryDeletedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.RepositoryDeletedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.RepositoryDeletedSubject{
 				SubjectBase: api.SubjectBase{
@@ -473,11 +525,13 @@ func init() {
 		name:      "repository modified",
 		eventType: apiv04.RepositoryModifiedEventType.String(),
 		expectedEvent: &apiv04.RepositoryModifiedEvent{
-			Context: api.Context{
-				Type:      apiv04.RepositoryModifiedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.RepositoryModifiedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.RepositoryModifiedSubject{
 				SubjectBase: api.SubjectBase{
@@ -490,11 +544,13 @@ func init() {
 		name:      "service deployed",
 		eventType: apiv04.ServiceDeployedEventType.String(),
 		expectedEvent: &apiv04.ServiceDeployedEvent{
-			Context: api.Context{
-				Type:      apiv04.ServiceDeployedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.ServiceDeployedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.ServiceDeployedSubject{
 				SubjectBase: api.SubjectBase{
@@ -507,11 +563,13 @@ func init() {
 		name:      "service published",
 		eventType: apiv04.ServicePublishedEventType.String(),
 		expectedEvent: &apiv04.ServicePublishedEvent{
-			Context: api.Context{
-				Type:      apiv04.ServicePublishedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.ServicePublishedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.ServicePublishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -524,11 +582,13 @@ func init() {
 		name:      "service removed",
 		eventType: apiv04.ServiceRemovedEventType.String(),
 		expectedEvent: &apiv04.ServiceRemovedEvent{
-			Context: api.Context{
-				Type:      apiv04.ServiceRemovedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.ServiceRemovedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.ServiceRemovedSubject{
 				SubjectBase: api.SubjectBase{
@@ -541,11 +601,13 @@ func init() {
 		name:      "service rolledback",
 		eventType: apiv04.ServiceRolledbackEventType.String(),
 		expectedEvent: &apiv04.ServiceRolledbackEvent{
-			Context: api.Context{
-				Type:      apiv04.ServiceRolledbackEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.ServiceRolledbackEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.ServiceRolledbackSubject{
 				SubjectBase: api.SubjectBase{
@@ -558,11 +620,13 @@ func init() {
 		name:      "service upgraded",
 		eventType: apiv04.ServiceUpgradedEventType.String(),
 		expectedEvent: &apiv04.ServiceUpgradedEvent{
-			Context: api.Context{
-				Type:      apiv04.ServiceUpgradedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.ServiceUpgradedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.ServiceUpgradedSubject{
 				SubjectBase: api.SubjectBase{
@@ -575,11 +639,13 @@ func init() {
 		name:      "taskrun finished",
 		eventType: apiv04.TaskRunFinishedEventType.String(),
 		expectedEvent: &apiv04.TaskRunFinishedEvent{
-			Context: api.Context{
-				Type:      apiv04.TaskRunFinishedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.TaskRunFinishedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.TaskRunFinishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -592,11 +658,13 @@ func init() {
 		name:      "taskrun started",
 		eventType: apiv04.TaskRunStartedEventType.String(),
 		expectedEvent: &apiv04.TaskRunStartedEvent{
-			Context: api.Context{
-				Type:      apiv04.TaskRunStartedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.TaskRunStartedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.TaskRunStartedSubject{
 				SubjectBase: api.SubjectBase{
@@ -609,11 +677,13 @@ func init() {
 		name:      "testcaserun finished",
 		eventType: apiv04.TestCaseRunFinishedEventType.String(),
 		expectedEvent: &apiv04.TestCaseRunFinishedEvent{
-			Context: api.Context{
-				Type:      apiv04.TestCaseRunFinishedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.TestCaseRunFinishedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.TestCaseRunFinishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -626,11 +696,13 @@ func init() {
 		name:      "testcaserun queued",
 		eventType: apiv04.TestCaseRunQueuedEventType.String(),
 		expectedEvent: &apiv04.TestCaseRunQueuedEvent{
-			Context: api.Context{
-				Type:      apiv04.TestCaseRunQueuedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.TestCaseRunQueuedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.TestCaseRunQueuedSubject{
 				SubjectBase: api.SubjectBase{
@@ -643,11 +715,13 @@ func init() {
 		name:      "testcaserun skipped",
 		eventType: apiv04.TestCaseRunSkippedEventType.String(),
 		expectedEvent: &apiv04.TestCaseRunSkippedEvent{
-			Context: api.Context{
-				Type:      apiv04.TestCaseRunSkippedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.TestCaseRunSkippedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.TestCaseRunSkippedSubject{
 				SubjectBase: api.SubjectBase{
@@ -660,11 +734,13 @@ func init() {
 		name:      "testcaserun started",
 		eventType: apiv04.TestCaseRunStartedEventType.String(),
 		expectedEvent: &apiv04.TestCaseRunStartedEvent{
-			Context: api.Context{
-				Type:      apiv04.TestCaseRunStartedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.TestCaseRunStartedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.TestCaseRunStartedSubject{
 				SubjectBase: api.SubjectBase{
@@ -677,11 +753,13 @@ func init() {
 		name:      "testoutput published",
 		eventType: apiv04.TestOutputPublishedEventType.String(),
 		expectedEvent: &apiv04.TestOutputPublishedEvent{
-			Context: api.Context{
-				Type:      apiv04.TestOutputPublishedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.TestOutputPublishedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.TestOutputPublishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -694,11 +772,13 @@ func init() {
 		name:      "testsuiterun finished",
 		eventType: apiv04.TestSuiteRunFinishedEventType.String(),
 		expectedEvent: &apiv04.TestSuiteRunFinishedEvent{
-			Context: api.Context{
-				Type:      apiv04.TestSuiteRunFinishedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.TestSuiteRunFinishedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.TestSuiteRunFinishedSubject{
 				SubjectBase: api.SubjectBase{
@@ -711,11 +791,13 @@ func init() {
 		name:      "testsuiterun queued",
 		eventType: apiv04.TestSuiteRunQueuedEventType.String(),
 		expectedEvent: &apiv04.TestSuiteRunQueuedEvent{
-			Context: api.Context{
-				Type:      apiv04.TestSuiteRunQueuedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.TestSuiteRunQueuedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.TestSuiteRunQueuedSubject{
 				SubjectBase: api.SubjectBase{
@@ -728,11 +810,13 @@ func init() {
 		name:      "testsuiterun started",
 		eventType: apiv04.TestSuiteRunStartedEventType.String(),
 		expectedEvent: &apiv04.TestSuiteRunStartedEvent{
-			Context: api.Context{
-				Type:      apiv04.TestSuiteRunStartedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.TestSuiteRunStartedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.TestSuiteRunStartedSubject{
 				SubjectBase: api.SubjectBase{
@@ -745,11 +829,13 @@ func init() {
 		name:      "ticket closed",
 		eventType: apiv04.TicketClosedEventType.String(),
 		expectedEvent: &apiv04.TicketClosedEvent{
-			Context: api.Context{
-				Type:      apiv04.TicketClosedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.TicketClosedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.TicketClosedSubject{
 				SubjectBase: api.SubjectBase{
@@ -762,11 +848,13 @@ func init() {
 		name:      "ticket created",
 		eventType: apiv04.TicketCreatedEventType.String(),
 		expectedEvent: &apiv04.TicketCreatedEvent{
-			Context: api.Context{
-				Type:      apiv04.TicketCreatedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.TicketCreatedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.TicketCreatedSubject{
 				SubjectBase: api.SubjectBase{
@@ -779,11 +867,13 @@ func init() {
 		name:      "ticket updated",
 		eventType: apiv04.TicketUpdatedEventType.String(),
 		expectedEvent: &apiv04.TicketUpdatedEvent{
-			Context: api.Context{
-				Type:      apiv04.TicketUpdatedEventType,
-				Timestamp: timeNow(),
-				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.TicketUpdatedEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
 			},
 			Subject: apiv04.TicketUpdatedSubject{
 				SubjectBase: api.SubjectBase{

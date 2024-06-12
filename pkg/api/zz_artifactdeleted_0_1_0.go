@@ -20,7 +20,11 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import "time"
+import (
+	"time"
+
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// ArtifactDeleted event type v0.1.0
@@ -45,7 +49,7 @@ func (sc ArtifactDeletedSubjectV0_1_0) GetSubjectType() SubjectType {
 }
 
 type ArtifactDeletedEventV0_1_0 struct {
-	Context Context                      `json:"context"`
+	Context ContextV04                   `json:"context"`
 	Subject ArtifactDeletedSubjectV0_1_0 `json:"subject"`
 	CDEventCustomData
 }
@@ -100,6 +104,20 @@ func (e ArtifactDeletedEventV0_1_0) GetCustomDataContentType() string {
 	return e.CustomDataContentType
 }
 
+// CDEventsReaderV04 implementation
+
+func (e ArtifactDeletedEventV0_1_0) GetChainId() string {
+	return e.Context.ChainId
+}
+
+func (e ArtifactDeletedEventV0_1_0) GetLinks() EmbeddedLinksArray {
+	return e.Context.Links
+}
+
+func (e ArtifactDeletedEventV0_1_0) GetSchemaUri() string {
+	return e.Context.SchemaUri
+}
+
 // CDEventsWriter implementation
 
 func (e *ArtifactDeletedEventV0_1_0) SetId(id string) {
@@ -136,10 +154,23 @@ func (e *ArtifactDeletedEventV0_1_0) SetCustomData(contentType string, data inte
 	return nil
 }
 
-func (e ArtifactDeletedEventV0_1_0) GetSchema() (string, string) {
+func (e ArtifactDeletedEventV0_1_0) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
-	return id, schema
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.4.1", eType.Subject, eType.Predicate)
+}
+
+// CDEventsWriterV04 implementation
+
+func (e *ArtifactDeletedEventV0_1_0) SetChainId(chainId string) {
+	e.Context.ChainId = chainId
+}
+
+func (e *ArtifactDeletedEventV0_1_0) SetLinks(links EmbeddedLinksArray) {
+	e.Context.Links = links
+}
+
+func (e *ArtifactDeletedEventV0_1_0) SetSchemaUri(schema string) {
+	e.Context.SchemaUri = schema
 }
 
 // Set subject custom fields
@@ -151,9 +182,13 @@ func (e *ArtifactDeletedEventV0_1_0) SetSubjectUser(user string) {
 // New creates a new ArtifactDeletedEventV0_1_0
 func NewArtifactDeletedEventV0_1_0(specVersion string) (*ArtifactDeletedEventV0_1_0, error) {
 	e := &ArtifactDeletedEventV0_1_0{
-		Context: Context{
-			Type:    ArtifactDeletedEventTypeV0_1_0,
-			Version: specVersion,
+		Context: ContextV04{
+			Context{
+				Type:    ArtifactDeletedEventTypeV0_1_0,
+				Version: specVersion,
+			},
+			ContextLinks{},
+			ContextCustom{},
 		},
 		Subject: ArtifactDeletedSubjectV0_1_0{
 			SubjectBase: SubjectBase{

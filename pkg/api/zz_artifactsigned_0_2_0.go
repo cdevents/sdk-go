@@ -20,7 +20,11 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import "time"
+import (
+	"time"
+
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// ArtifactSigned event type v0.2.0
@@ -45,7 +49,7 @@ func (sc ArtifactSignedSubjectV0_2_0) GetSubjectType() SubjectType {
 }
 
 type ArtifactSignedEventV0_2_0 struct {
-	Context Context                     `json:"context"`
+	Context ContextV04                  `json:"context"`
 	Subject ArtifactSignedSubjectV0_2_0 `json:"subject"`
 	CDEventCustomData
 }
@@ -100,6 +104,20 @@ func (e ArtifactSignedEventV0_2_0) GetCustomDataContentType() string {
 	return e.CustomDataContentType
 }
 
+// CDEventsReaderV04 implementation
+
+func (e ArtifactSignedEventV0_2_0) GetChainId() string {
+	return e.Context.ChainId
+}
+
+func (e ArtifactSignedEventV0_2_0) GetLinks() EmbeddedLinksArray {
+	return e.Context.Links
+}
+
+func (e ArtifactSignedEventV0_2_0) GetSchemaUri() string {
+	return e.Context.SchemaUri
+}
+
 // CDEventsWriter implementation
 
 func (e *ArtifactSignedEventV0_2_0) SetId(id string) {
@@ -136,10 +154,23 @@ func (e *ArtifactSignedEventV0_2_0) SetCustomData(contentType string, data inter
 	return nil
 }
 
-func (e ArtifactSignedEventV0_2_0) GetSchema() (string, string) {
+func (e ArtifactSignedEventV0_2_0) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
-	return id, schema
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.4.1", eType.Subject, eType.Predicate)
+}
+
+// CDEventsWriterV04 implementation
+
+func (e *ArtifactSignedEventV0_2_0) SetChainId(chainId string) {
+	e.Context.ChainId = chainId
+}
+
+func (e *ArtifactSignedEventV0_2_0) SetLinks(links EmbeddedLinksArray) {
+	e.Context.Links = links
+}
+
+func (e *ArtifactSignedEventV0_2_0) SetSchemaUri(schema string) {
+	e.Context.SchemaUri = schema
 }
 
 // Set subject custom fields
@@ -151,9 +182,13 @@ func (e *ArtifactSignedEventV0_2_0) SetSubjectSignature(signature string) {
 // New creates a new ArtifactSignedEventV0_2_0
 func NewArtifactSignedEventV0_2_0(specVersion string) (*ArtifactSignedEventV0_2_0, error) {
 	e := &ArtifactSignedEventV0_2_0{
-		Context: Context{
-			Type:    ArtifactSignedEventTypeV0_2_0,
-			Version: specVersion,
+		Context: ContextV04{
+			Context{
+				Type:    ArtifactSignedEventTypeV0_2_0,
+				Version: specVersion,
+			},
+			ContextLinks{},
+			ContextCustom{},
 		},
 		Subject: ArtifactSignedSubjectV0_2_0{
 			SubjectBase: SubjectBase{

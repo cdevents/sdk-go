@@ -20,7 +20,11 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import "time"
+import (
+	"time"
+
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// PipelineRunFinished event type v0.2.0
@@ -51,7 +55,7 @@ func (sc PipelineRunFinishedSubjectV0_2_0) GetSubjectType() SubjectType {
 }
 
 type PipelineRunFinishedEventV0_2_0 struct {
-	Context Context                          `json:"context"`
+	Context ContextV04                       `json:"context"`
 	Subject PipelineRunFinishedSubjectV0_2_0 `json:"subject"`
 	CDEventCustomData
 }
@@ -106,6 +110,20 @@ func (e PipelineRunFinishedEventV0_2_0) GetCustomDataContentType() string {
 	return e.CustomDataContentType
 }
 
+// CDEventsReaderV04 implementation
+
+func (e PipelineRunFinishedEventV0_2_0) GetChainId() string {
+	return e.Context.ChainId
+}
+
+func (e PipelineRunFinishedEventV0_2_0) GetLinks() EmbeddedLinksArray {
+	return e.Context.Links
+}
+
+func (e PipelineRunFinishedEventV0_2_0) GetSchemaUri() string {
+	return e.Context.SchemaUri
+}
+
 // CDEventsWriter implementation
 
 func (e *PipelineRunFinishedEventV0_2_0) SetId(id string) {
@@ -142,10 +160,23 @@ func (e *PipelineRunFinishedEventV0_2_0) SetCustomData(contentType string, data 
 	return nil
 }
 
-func (e PipelineRunFinishedEventV0_2_0) GetSchema() (string, string) {
+func (e PipelineRunFinishedEventV0_2_0) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
-	return id, schema
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.4.1", eType.Subject, eType.Predicate)
+}
+
+// CDEventsWriterV04 implementation
+
+func (e *PipelineRunFinishedEventV0_2_0) SetChainId(chainId string) {
+	e.Context.ChainId = chainId
+}
+
+func (e *PipelineRunFinishedEventV0_2_0) SetLinks(links EmbeddedLinksArray) {
+	e.Context.Links = links
+}
+
+func (e *PipelineRunFinishedEventV0_2_0) SetSchemaUri(schema string) {
+	e.Context.SchemaUri = schema
 }
 
 // Set subject custom fields
@@ -169,9 +200,13 @@ func (e *PipelineRunFinishedEventV0_2_0) SetSubjectUrl(url string) {
 // New creates a new PipelineRunFinishedEventV0_2_0
 func NewPipelineRunFinishedEventV0_2_0(specVersion string) (*PipelineRunFinishedEventV0_2_0, error) {
 	e := &PipelineRunFinishedEventV0_2_0{
-		Context: Context{
-			Type:    PipelineRunFinishedEventTypeV0_2_0,
-			Version: specVersion,
+		Context: ContextV04{
+			Context{
+				Type:    PipelineRunFinishedEventTypeV0_2_0,
+				Version: specVersion,
+			},
+			ContextLinks{},
+			ContextCustom{},
 		},
 		Subject: PipelineRunFinishedSubjectV0_2_0{
 			SubjectBase: SubjectBase{

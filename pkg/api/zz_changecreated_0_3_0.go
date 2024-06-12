@@ -20,7 +20,11 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import "time"
+import (
+	"time"
+
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// ChangeCreated event type v0.3.0
@@ -47,7 +51,7 @@ func (sc ChangeCreatedSubjectV0_3_0) GetSubjectType() SubjectType {
 }
 
 type ChangeCreatedEventV0_3_0 struct {
-	Context Context                    `json:"context"`
+	Context ContextV04                 `json:"context"`
 	Subject ChangeCreatedSubjectV0_3_0 `json:"subject"`
 	CDEventCustomData
 }
@@ -102,6 +106,20 @@ func (e ChangeCreatedEventV0_3_0) GetCustomDataContentType() string {
 	return e.CustomDataContentType
 }
 
+// CDEventsReaderV04 implementation
+
+func (e ChangeCreatedEventV0_3_0) GetChainId() string {
+	return e.Context.ChainId
+}
+
+func (e ChangeCreatedEventV0_3_0) GetLinks() EmbeddedLinksArray {
+	return e.Context.Links
+}
+
+func (e ChangeCreatedEventV0_3_0) GetSchemaUri() string {
+	return e.Context.SchemaUri
+}
+
 // CDEventsWriter implementation
 
 func (e *ChangeCreatedEventV0_3_0) SetId(id string) {
@@ -138,10 +156,23 @@ func (e *ChangeCreatedEventV0_3_0) SetCustomData(contentType string, data interf
 	return nil
 }
 
-func (e ChangeCreatedEventV0_3_0) GetSchema() (string, string) {
+func (e ChangeCreatedEventV0_3_0) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
-	return id, schema
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.4.1", eType.Subject, eType.Predicate)
+}
+
+// CDEventsWriterV04 implementation
+
+func (e *ChangeCreatedEventV0_3_0) SetChainId(chainId string) {
+	e.Context.ChainId = chainId
+}
+
+func (e *ChangeCreatedEventV0_3_0) SetLinks(links EmbeddedLinksArray) {
+	e.Context.Links = links
+}
+
+func (e *ChangeCreatedEventV0_3_0) SetSchemaUri(schema string) {
+	e.Context.SchemaUri = schema
 }
 
 // Set subject custom fields
@@ -157,9 +188,13 @@ func (e *ChangeCreatedEventV0_3_0) SetSubjectRepository(repository *Reference) {
 // New creates a new ChangeCreatedEventV0_3_0
 func NewChangeCreatedEventV0_3_0(specVersion string) (*ChangeCreatedEventV0_3_0, error) {
 	e := &ChangeCreatedEventV0_3_0{
-		Context: Context{
-			Type:    ChangeCreatedEventTypeV0_3_0,
-			Version: specVersion,
+		Context: ContextV04{
+			Context{
+				Type:    ChangeCreatedEventTypeV0_3_0,
+				Version: specVersion,
+			},
+			ContextLinks{},
+			ContextCustom{},
 		},
 		Subject: ChangeCreatedSubjectV0_3_0{
 			SubjectBase: SubjectBase{

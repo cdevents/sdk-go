@@ -20,7 +20,11 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import "time"
+import (
+	"time"
+
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// ServicePublished event type v0.2.0
@@ -45,7 +49,7 @@ func (sc ServicePublishedSubjectV0_2_0) GetSubjectType() SubjectType {
 }
 
 type ServicePublishedEventV0_2_0 struct {
-	Context Context                       `json:"context"`
+	Context ContextV04                    `json:"context"`
 	Subject ServicePublishedSubjectV0_2_0 `json:"subject"`
 	CDEventCustomData
 }
@@ -100,6 +104,20 @@ func (e ServicePublishedEventV0_2_0) GetCustomDataContentType() string {
 	return e.CustomDataContentType
 }
 
+// CDEventsReaderV04 implementation
+
+func (e ServicePublishedEventV0_2_0) GetChainId() string {
+	return e.Context.ChainId
+}
+
+func (e ServicePublishedEventV0_2_0) GetLinks() EmbeddedLinksArray {
+	return e.Context.Links
+}
+
+func (e ServicePublishedEventV0_2_0) GetSchemaUri() string {
+	return e.Context.SchemaUri
+}
+
 // CDEventsWriter implementation
 
 func (e *ServicePublishedEventV0_2_0) SetId(id string) {
@@ -136,10 +154,23 @@ func (e *ServicePublishedEventV0_2_0) SetCustomData(contentType string, data int
 	return nil
 }
 
-func (e ServicePublishedEventV0_2_0) GetSchema() (string, string) {
+func (e ServicePublishedEventV0_2_0) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
-	return id, schema
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.4.1", eType.Subject, eType.Predicate)
+}
+
+// CDEventsWriterV04 implementation
+
+func (e *ServicePublishedEventV0_2_0) SetChainId(chainId string) {
+	e.Context.ChainId = chainId
+}
+
+func (e *ServicePublishedEventV0_2_0) SetLinks(links EmbeddedLinksArray) {
+	e.Context.Links = links
+}
+
+func (e *ServicePublishedEventV0_2_0) SetSchemaUri(schema string) {
+	e.Context.SchemaUri = schema
 }
 
 // Set subject custom fields
@@ -151,9 +182,13 @@ func (e *ServicePublishedEventV0_2_0) SetSubjectEnvironment(environment *Referen
 // New creates a new ServicePublishedEventV0_2_0
 func NewServicePublishedEventV0_2_0(specVersion string) (*ServicePublishedEventV0_2_0, error) {
 	e := &ServicePublishedEventV0_2_0{
-		Context: Context{
-			Type:    ServicePublishedEventTypeV0_2_0,
-			Version: specVersion,
+		Context: ContextV04{
+			Context{
+				Type:    ServicePublishedEventTypeV0_2_0,
+				Version: specVersion,
+			},
+			ContextLinks{},
+			ContextCustom{},
 		},
 		Subject: ServicePublishedSubjectV0_2_0{
 			SubjectBase: SubjectBase{

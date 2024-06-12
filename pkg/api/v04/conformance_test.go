@@ -90,10 +90,25 @@ var (
 	testTestSuiteSeverity       = "critical"
 	testTestSuiteTriggerQueued  = &apiv04.TestSuiteRunQueuedSubjectContentTrigger{Type: "pipeline"}
 	testTestSuiteTriggerStarted = &apiv04.TestSuiteRunStartedSubjectContentTrigger{Type: "pipeline"}
-	testSubjectUser				= "testUser"
+	testSubjectUser             = "mybot-myapp"
+	testSbomUri                 = "https://sbom.repo/myorg/234fd47e07d1004f0aed9c.sbom"
+	testChangeDescription       = "This PR address a bug from a recent PR"
+	testTicketId                = "ticket-123"
+	testTicketSource            = "/ticketing/system"
+	testTicketAssignees         = []string{"Bob"}
+	testTicketCreator           = "Alice"
+	testTicketGroup             = "security"
+	testTicketLabels            = []string{"bug"}
+	testTicketMilestone         = "123"
+	testTicketPriority          = "high"
+	testTicketResolution        = "completed"
+	testTicketSummary           = "New CVE-123 detected"
+	testTicketType              = "task"
+	testTicketUpdatedBy         = "Bob"
+	testTicketUri               = "https://example.issues.com/ticket123"
 
 	examplesConsumed map[string][]byte
-	examplesProduced map[string]api.CDEvent
+	examplesProduced map[string]api.CDEventV04
 	err              error
 )
 
@@ -115,11 +130,18 @@ func exampleArtifactPackagedEvent(e *apiv04.ArtifactPackagedEvent) {
 	// Set example specific fields
 	setContext(e, testArtifactSubjectId)
 	e.SetSubjectChange(&api.Reference{Id: testChangeId, Source: testChangeSource})
+	e.SetSubjectSbom(&api.ArtifactPackagedSubjectContentSbomV0_2_0{
+		Uri: testSbomUri,
+	})
 }
 
 func exampleArtifactPublishedEvent(e *apiv04.ArtifactPublishedEvent) {
 	// Set example specific fields
 	setContext(e, testArtifactSubjectId)
+	e.SetSubjectUser(testSubjectUser)
+	e.SetSubjectSbom(&api.ArtifactPublishedSubjectContentSbomV0_2_0{
+		Uri: testSbomUri,
+	})
 }
 
 func exampleArtifactSignedEvent(e *apiv04.ArtifactSignedEvent) {
@@ -132,10 +154,14 @@ func exampleArtifactDeletedEvent(e *apiv04.ArtifactDeletedEvent) {
 	// Set example specific fields
 	setContext(e, testArtifactSubjectId)
 	e.SetSubjectUser(testSubjectUser)
+	e.SetChainId("")
 }
 
 func exampleArtifactDownloadedEvent(e *apiv04.ArtifactDownloadedEvent) {
 	// Set example specific fields
+	setContext(e, testArtifactSubjectId)
+	e.SetSubjectUser(testSubjectUser)
+	e.SetChainId("")
 }
 
 func exampleBranchCreatedEvent(e *apiv04.BranchCreatedEvent) {
@@ -169,6 +195,7 @@ func exampleChangeAbandonedEvent(e *apiv04.ChangeAbandonedEvent) {
 func exampleChangeCreatedEvent(e *apiv04.ChangeCreatedEvent) {
 	// Set example specific fields
 	e.SetSubjectRepository(testRepoReference)
+	e.SetSubjectDescription(testChangeDescription)
 }
 
 func exampleChangeMergedEvent(e *apiv04.ChangeMergedEvent) {
@@ -320,6 +347,23 @@ func exampleTaskRunFinishedEvent(e *apiv04.TaskRunFinishedEvent) {
 
 func exampleTestCaseRunSkippedEvent(e *apiv04.TestCaseRunSkippedEvent) {
 	// Set example specific fields
+	e.SetSubjectId("myTestCaseRun123")
+	e.SetSubjectEnvironment(&api.Reference{
+		Id:     "dev",
+		Source: "testkube-dev-123",
+	})
+	e.SetSubjectReason("Not running in this environment")
+	e.SetSubjectTestCase(&api.TestCaseRunSkippedSubjectContentTestCaseV0_1_0{
+		Id:      "92834723894",
+		Name:    "Login Test",
+		Type:    "integration",
+		Version: "1.0",
+	})
+	e.SetSubjectTestSuiteRun(&api.Reference{
+		Id:     "test-suite-111",
+		Source: "testkube-dev-123",
+	})
+	e.SetChainId("")
 }
 
 func exampleTaskRunStartedEvent(e *apiv04.TaskRunStartedEvent) {
@@ -392,14 +436,56 @@ func exampleTestOutputPublishedEvent(e *apiv04.TestOutputPublishedEvent) {
 
 func exampleTicketClosedEvent(e *apiv04.TicketClosedEvent) {
 	// Set example specific fields
+	e.SetSubjectId(testTicketId)
+	e.SetSource(testTicketSource)
+	e.SetSubjectSource(testTicketSource)
+	e.SetSubjectAssignees(testTicketAssignees)
+	e.SetSubjectCreator(testTicketCreator)
+	e.SetSubjectGroup(testTicketGroup)
+	e.SetSubjectLabels(testTicketLabels)
+	e.SetSubjectMilestone(testTicketMilestone)
+	e.SetSubjectPriority(testTicketPriority)
+	e.SetSubjectResolution(testTicketResolution)
+	e.SetSubjectSummary(testTicketSummary)
+	e.SetSubjectTicketType(testTicketType)
+	e.SetSubjectUpdatedBy(testTicketUpdatedBy)
+	e.SetSubjectUri(testTicketUri)
+	e.SetChainId("")
 }
 
 func exampleTicketCreatedEvent(e *apiv04.TicketCreatedEvent) {
 	// Set example specific fields
+	e.SetSubjectId(testTicketId)
+	e.SetSource(testTicketSource)
+	e.SetSubjectSource(testTicketSource)
+	e.SetSubjectAssignees(testTicketAssignees)
+	e.SetSubjectCreator(testTicketCreator)
+	e.SetSubjectGroup(testTicketGroup)
+	e.SetSubjectLabels(testTicketLabels)
+	e.SetSubjectMilestone(testTicketMilestone)
+	e.SetSubjectPriority(testTicketPriority)
+	e.SetSubjectSummary(testTicketSummary)
+	e.SetSubjectTicketType(testTicketType)
+	e.SetSubjectUri(testTicketUri)
+	e.SetChainId("")
 }
 
 func exampleTicketUpdatedEvent(e *apiv04.TicketUpdatedEvent) {
 	// Set example specific fields
+	e.SetSubjectId(testTicketId)
+	e.SetSource(testTicketSource)
+	e.SetSubjectSource(testTicketSource)
+	e.SetSubjectAssignees(testTicketAssignees)
+	e.SetSubjectCreator(testTicketCreator)
+	e.SetSubjectGroup(testTicketGroup)
+	e.SetSubjectLabels(testTicketLabels)
+	e.SetSubjectMilestone(testTicketMilestone)
+	e.SetSubjectPriority(testTicketPriority)
+	e.SetSubjectSummary(testTicketSummary)
+	e.SetSubjectTicketType(testTicketType)
+	e.SetSubjectUpdatedBy(testTicketUpdatedBy)
+	e.SetSubjectUri(testTicketUri)
+	e.SetChainId("")
 }
 
 func init() {
@@ -409,7 +495,7 @@ func init() {
 
 	for _, event := range apiv04.CDEventsTypes {
 		short := event.GetType().Short()
-		examplesConsumed[short], err = os.ReadFile(filepath.Join("..", examplesFolder, short + ".json"))
+		examplesConsumed[short], err = os.ReadFile(filepath.Join("..", examplesFolder, short+".json"))
 		panicOnError(err)
 	}
 }
@@ -449,6 +535,16 @@ func TestExamples(t *testing.T) {
 			}
 			// Check the subject
 			if d := cmp.Diff(consumed.GetSubject(), produced.GetSubject()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			// Check v04+ attributes
+			if d := cmp.Diff(consumed.GetChainId(), produced.GetChainId()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			if d := cmp.Diff(consumed.GetSchemaUri(), produced.GetSchemaUri()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			if d := cmp.Diff(consumed.GetLinks(), produced.GetLinks()); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
 		})

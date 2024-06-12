@@ -22,7 +22,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	api "github.com/cdevents/sdk-go/pkg/api/v990"
+	api "github.com/cdevents/sdk-go/pkg/api"
+	testapi "github.com/cdevents/sdk-go/pkg/api/v990"
 	"github.com/google/go-cmp/cmp"
 )
 
@@ -33,11 +34,11 @@ const (
 var (
 	testObject                               = testType{TestData: "testValue"}
 	testJsonString                           []byte
-	eventWithNonJsonCustomData               *api.FooSubjectBarPredicateEventV1_2_3
-	eventWithInterfaceJsonCustomData         *api.FooSubjectBarPredicateEventV1_2_3
-	eventWithInterfaceJsonImplicitCustomData *api.FooSubjectBarPredicateEventV1_2_3
-	eventWithJsonCustomData                  *api.FooSubjectBarPredicateEventV1_2_3
-	eventWithJsonImplicitCustomData          *api.FooSubjectBarPredicateEventV1_2_3
+	eventWithNonJsonCustomData               *testapi.FooSubjectBarPredicateEvent
+	eventWithInterfaceJsonCustomData         *testapi.FooSubjectBarPredicateEvent
+	eventWithInterfaceJsonImplicitCustomData *testapi.FooSubjectBarPredicateEvent
+	eventWithJsonCustomData                  *testapi.FooSubjectBarPredicateEvent
+	eventWithJsonImplicitCustomData          *testapi.FooSubjectBarPredicateEvent
 )
 
 func init() {
@@ -45,23 +46,23 @@ func init() {
 	testJsonString, err = json.Marshal(testObject)
 	panicOnError(err)
 
-	eventWithNonJsonCustomData, _ = api.NewFooSubjectBarPredicateEventV1_2_3(api.SpecVersion)
+	eventWithNonJsonCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
 	eventWithNonJsonCustomData.CustomDataContentType = "application/xml"
 	eventWithNonJsonCustomData.CustomData = []byte(testXmlString)
 
-	eventWithJsonCustomData, _ = api.NewFooSubjectBarPredicateEventV1_2_3(api.SpecVersion)
+	eventWithJsonCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
 	eventWithJsonCustomData.CustomDataContentType = "application/json"
 	eventWithJsonCustomData.CustomData = testJsonString
 
-	eventWithJsonImplicitCustomData, _ = api.NewFooSubjectBarPredicateEventV1_2_3(api.SpecVersion)
+	eventWithJsonImplicitCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
 	eventWithJsonImplicitCustomData.CustomDataContentType = ""
 	eventWithJsonImplicitCustomData.CustomData = testJsonString
 
-	eventWithInterfaceJsonCustomData, _ = api.NewFooSubjectBarPredicateEventV1_2_3(api.SpecVersion)
+	eventWithInterfaceJsonCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
 	eventWithInterfaceJsonCustomData.CustomDataContentType = "application/json"
 	eventWithInterfaceJsonCustomData.CustomData = testObject
 
-	eventWithInterfaceJsonImplicitCustomData, _ = api.NewFooSubjectBarPredicateEventV1_2_3(api.SpecVersion)
+	eventWithInterfaceJsonImplicitCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
 	eventWithInterfaceJsonImplicitCustomData.CustomDataContentType = ""
 	eventWithInterfaceJsonImplicitCustomData.CustomData = testObject
 }
@@ -192,7 +193,7 @@ func TestSetCustomData(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			e, _ := api.NewFooSubjectBarPredicateEventV1_2_3(api.SpecVersion)
+			e, _ := testapi.NewFooSubjectBarPredicateEvent()
 			err := e.SetCustomData(tc.contentType, tc.data)
 			if err != nil {
 				t.Fatalf("expected to set the custom data, but got %v", err)
@@ -206,7 +207,7 @@ func TestSetCustomData(t *testing.T) {
 }
 
 func TestSetCustomDataInvalid(t *testing.T) {
-	e, _ := api.NewFooSubjectBarPredicateEventV1_2_3(api.SpecVersion)
+	e, _ := testapi.NewFooSubjectBarPredicateEvent()
 	err := e.SetCustomData("application/xml", testType{TestData: "testValue"})
 	if err == nil {
 		t.Fatalf("did not expect this to work, but it did")
@@ -249,7 +250,7 @@ func TestGetCustomData(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			e, _ := api.NewFooSubjectBarPredicateEventV1_2_3(api.SpecVersion)
+			e, _ := testapi.NewFooSubjectBarPredicateEvent()
 			err := e.SetCustomData(tc.contentType, tc.data)
 			if err != nil {
 				t.Fatalf("expected to set the custom data, but got %v", err)
@@ -267,7 +268,7 @@ func TestGetCustomData(t *testing.T) {
 }
 
 func TestGetCustomDataInvalidJson(t *testing.T) {
-	e, _ := api.NewFooSubjectBarPredicateEventV1_2_3(api.SpecVersion)
+	e, _ := testapi.NewFooSubjectBarPredicateEvent()
 	data := testType{TestData: "testValue"}
 	dataBytes, err := json.Marshal(data)
 	if err != nil {
@@ -284,7 +285,7 @@ func TestGetCustomDataInvalidJson(t *testing.T) {
 }
 
 func TestGetCustomDataXmlNotBytes(t *testing.T) {
-	e, _ := api.NewFooSubjectBarPredicateEventV1_2_3(api.SpecVersion)
+	e, _ := testapi.NewFooSubjectBarPredicateEvent()
 	data := testType{TestData: "testValue"}
 	// Set using "application/json", else it won't be allowed
 	err := e.SetCustomData("application/json", data)
@@ -331,7 +332,7 @@ func TestGetCustomDataRaw(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			e, _ := api.NewFooSubjectBarPredicateEventV1_2_3(api.SpecVersion)
+			e, _ := testapi.NewFooSubjectBarPredicateEvent()
 			err := e.SetCustomData(tc.contentType, tc.data)
 			if err != nil {
 				t.Fatalf("expected to set the custom data, but got %v", err)
@@ -349,7 +350,7 @@ func TestGetCustomDataRaw(t *testing.T) {
 }
 
 func TestGetCustomDataRawXmlNotBytes(t *testing.T) {
-	e, _ := api.NewFooSubjectBarPredicateEventV1_2_3(api.SpecVersion)
+	e, _ := testapi.NewFooSubjectBarPredicateEvent()
 	data := testType{TestData: "testValue"}
 	// Set using "application/json", else it won't be allowed
 	err := e.SetCustomData("application/json", data)

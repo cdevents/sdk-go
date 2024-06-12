@@ -64,7 +64,7 @@ var (
 	testContentType = "application/json"
 	timeNow         = time.Now
 	uuidNewRandom   = uuid.NewRandom
-	testSpecVersion = "0.3.0"
+	testSpecVersion = "0.4.1"
 )
 
 func TestNewCDEvent(t *testing.T) {

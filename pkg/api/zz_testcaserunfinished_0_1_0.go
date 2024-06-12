@@ -20,7 +20,11 @@ SPDX-License-Identifier: Apache-2.0
 
 package api
 
-import "time"
+import (
+	"time"
+
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// TestCaseRunFinished event type v0.1.0
@@ -146,10 +150,9 @@ func (e *TestCaseRunFinishedEventV0_1_0) SetCustomData(contentType string, data 
 	return nil
 }
 
-func (e TestCaseRunFinishedEventV0_1_0) GetSchema() (string, string) {
+func (e TestCaseRunFinishedEventV0_1_0) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	id, schema, _ := GetSchemaBySpecSubjectPredicate(CDEventsSpecVersion, eType.Subject, eType.Predicate)
-	return id, schema
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate)
 }
 
 // Set subject custom fields

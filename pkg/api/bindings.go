@@ -27,7 +27,6 @@ import (
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	"github.com/go-playground/validator/v10"
 	purl "github.com/package-url/packageurl-go"
-	jsonschema "github.com/santhosh-tekuri/jsonschema/v5"
 	"golang.org/x/mod/semver"
 )
 
@@ -35,28 +34,19 @@ const SCHEMA_ID_REGEX = `^https://cdevents.dev/([0-9]\.[0-9])\.[0-9]/schema/([^ 
 
 var (
 	// Validation helper as singleton
-	validate *validator.Validate
+	validate              *validator.Validate
 	CDEventsSchemaIdRegex = regexp.MustCompile(SCHEMA_ID_REGEX)
 )
-
-// parts := CDEventsSchemaIdRegex.FindStringSubmatch(url)
-// 	if len(parts) != 3 {
-// 		return nil, fmt.Errorf("cannot parse schema Id %s", url)
-// 	}
-// 	schemaPath := filepath.Join("spec-v" + parts[1], "schemas", parts[2] + ".json")
-// 	schemaFile, err := os.Open(schemaPath)
-// 	if err != nil {
-// 		return nil, fmt.Errorf("failed to load schema %s from %s: %s", url, schemaPath, err)
-// 	}
 
 func init() {
 	// Register custom validators
 	validate = validator.New()
-	err := validate.RegisterValidation("event-type", ValidateEventType)
-	panicOnError(err)
-	err = validate.RegisterValidation("uri-reference", ValidateUriReference)
+	validate.RegisterStructValidation(ValidateEventType, CDEventType{})
+	err := validate.RegisterValidation("uri-reference", ValidateUriReference)
 	panicOnError(err)
 	err = validate.RegisterValidation("purl", ValidatePurl)
+	panicOnError(err)
+	err = validate.RegisterValidation("event-link-type", ValidateLinkType)
 	panicOnError(err)
 }
 
@@ -84,9 +74,11 @@ func ParseType(eventType string) (*CDEventType, error) {
 	return t, nil
 }
 
-func ValidateEventType(fl validator.FieldLevel) bool {
-	_, err := ParseType(fl.Field().String())
-	return err == nil
+func ValidateEventType(sl validator.StructLevel) {
+	_, err := ParseType(sl.Current().Interface().(CDEventType).String())
+	if err != nil {
+		sl.ReportError(sl.Current().Interface(), "Type", "", "", "")
+	}
 }
 
 func ValidateUriReference(fl validator.FieldLevel) bool {
@@ -97,6 +89,12 @@ func ValidateUriReference(fl validator.FieldLevel) bool {
 func ValidatePurl(fl validator.FieldLevel) bool {
 	_, err := purl.FromString(fl.Field().String())
 	return err == nil
+}
+
+func ValidateLinkType(fl validator.FieldLevel) bool {
+	lt := LinkType(fl.Field().String())
+	_, ok := LinkTypes[lt]
+	return ok
 }
 
 // AsCloudEvent renders a CDEvent as a CloudEvent
@@ -141,10 +139,9 @@ func AsJsonString(event CDEventReader) (string, error) {
 
 // Validate checks the CDEvent against the JSON schema and validate constraints
 func Validate(event CDEventReader) error {
-	url, schema := event.GetSchema()
-	sch, err := jsonschema.CompileString(url, schema)
+	_, sch, err := event.GetSchema()
 	if err != nil {
-		return fmt.Errorf("cannot compile jsonschema %s, %s", url, err)
+		return err
 	}
 	var v interface{}
 	jsonString, err := AsJsonString(event)
@@ -171,19 +168,20 @@ func Validate(event CDEventReader) error {
 // This works by unmarshalling the context first, extracting the event type and using
 // that to unmarshal the rest of the event into the correct object.
 // `ContextType` defines the type of Context that can be used to unmarshal the event.
-func NewFromJsonBytesContext[ContextType BaseContextReader](event []byte, cdeventsMap map[string]CDEvent) (CDEvent, error) {
+func NewFromJsonBytesContext[CDEventType CDEvent](event []byte, cdeventsMap map[string]CDEventType) (CDEventType, error) {
 	eventAux := &struct {
-		Context ContextType `json:"context"`
+		Context Context `json:"context"`
 	}{}
+	var nilReturn CDEventType
 	err := json.Unmarshal(event, eventAux)
 	if err != nil {
-		return nil, err
+		return nilReturn, err
 	}
 	eventType := eventAux.Context.GetType()
 	receiver, ok := cdeventsMap[eventType.UnversionedString()]
 	if !ok {
 		// This should not happen as unmarshalling and validate checks if the type is known to the SDK
-		return nil, fmt.Errorf("unknown event type %s", eventAux.Context.GetType())
+		return nilReturn, fmt.Errorf("unknown event type %s", eventAux.Context.GetType())
 	}
 	// Check if the receiver is compatible. It must have the same subject and predicate
 	// and share the same major version.
@@ -191,11 +189,11 @@ func NewFromJsonBytesContext[ContextType BaseContextReader](event []byte, cdeven
 	// greater than the SDK one, some fields may be lost, as newer versions may add new
 	// fields to the event specification.
 	if !eventType.IsCompatible(receiver.GetType()) {
-		return nil, fmt.Errorf("sdk event version %s not compatible with %s", receiver.GetType().Version, eventType.Version)
+		return nilReturn, fmt.Errorf("sdk event version %s not compatible with %s", receiver.GetType().Version, eventType.Version)
 	}
 	err = json.Unmarshal(event, receiver)
 	if err != nil {
-		return nil, err
+		return nilReturn, err
 	}
 	return receiver, nil
 }
