@@ -21,11 +21,10 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
-	"fmt"
 	"time"
-)
 
-var testsuiterunqueuedschema0_1_0 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/test-suite-run-queued-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1},"type":{"type":"string","enum":["dev.cdevents.testsuiterun.queued.0.1.0"],"default":"dev.cdevents.testsuiterun.queued.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string"},"type":{"type":"string","minLength":1,"enum":["testSuiteRun"],"default":"testSuiteRun"},"content":{"properties":{"trigger":{"type":"object","properties":{"type":{"type":"string","enum":["manual","pipeline","event","schedule","other"]},"uri":{"type":"string","format":"uri"}}},"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"testSuite":{"type":"object","additionalProperties":false,"required":["id"],"properties":{"id":{"type":"string","minLength":1},"version":{"type":"string"},"name":{"type":"string"},"url":{"type":"string","format":"uri"}}}},"additionalProperties":false,"type":"object","required":["environment"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// TestSuiteRunQueued event type v0.1.0
@@ -36,26 +35,26 @@ var (
 	}
 )
 
-type TestSuiteRunQueuedSubjectContent struct {
+type TestSuiteRunQueuedSubjectContentV0_1_0 struct {
 	Environment *Reference `json:"environment"`
 
-	TestSuite *TestSuiteRunQueuedSubjectContentTestSuite `json:"testSuite,omitempty"`
+	TestSuite *TestSuiteRunQueuedSubjectContentTestSuiteV0_1_0 `json:"testSuite,omitempty"`
 
-	Trigger *TestSuiteRunQueuedSubjectContentTrigger `json:"trigger,omitempty"`
+	Trigger *TestSuiteRunQueuedSubjectContentTriggerV0_1_0 `json:"trigger,omitempty"`
 }
 
-type TestSuiteRunQueuedSubject struct {
+type TestSuiteRunQueuedSubjectV0_1_0 struct {
 	SubjectBase
-	Content TestSuiteRunQueuedSubjectContent `json:"content"`
+	Content TestSuiteRunQueuedSubjectContentV0_1_0 `json:"content"`
 }
 
-func (sc TestSuiteRunQueuedSubject) GetSubjectType() SubjectType {
+func (sc TestSuiteRunQueuedSubjectV0_1_0) GetSubjectType() SubjectType {
 	return "testSuiteRun"
 }
 
 type TestSuiteRunQueuedEventV0_1_0 struct {
-	Context Context                   `json:"context"`
-	Subject TestSuiteRunQueuedSubject `json:"subject"`
+	Context Context                         `json:"context"`
+	Subject TestSuiteRunQueuedSubjectV0_1_0 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -145,9 +144,9 @@ func (e *TestSuiteRunQueuedEventV0_1_0) SetCustomData(contentType string, data i
 	return nil
 }
 
-func (e TestSuiteRunQueuedEventV0_1_0) GetSchema() (string, string) {
+func (e TestSuiteRunQueuedEventV0_1_0) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), testsuiterunqueuedschema0_1_0
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate)
 }
 
 // Set subject custom fields
@@ -156,11 +155,11 @@ func (e *TestSuiteRunQueuedEventV0_1_0) SetSubjectEnvironment(environment *Refer
 	e.Subject.Content.Environment = environment
 }
 
-func (e *TestSuiteRunQueuedEventV0_1_0) SetSubjectTestSuite(testSuite *TestSuiteRunQueuedSubjectContentTestSuite) {
+func (e *TestSuiteRunQueuedEventV0_1_0) SetSubjectTestSuite(testSuite *TestSuiteRunQueuedSubjectContentTestSuiteV0_1_0) {
 	e.Subject.Content.TestSuite = testSuite
 }
 
-func (e *TestSuiteRunQueuedEventV0_1_0) SetSubjectTrigger(trigger *TestSuiteRunQueuedSubjectContentTrigger) {
+func (e *TestSuiteRunQueuedEventV0_1_0) SetSubjectTrigger(trigger *TestSuiteRunQueuedSubjectContentTriggerV0_1_0) {
 	e.Subject.Content.Trigger = trigger
 }
 
@@ -171,7 +170,7 @@ func NewTestSuiteRunQueuedEventV0_1_0(specVersion string) (*TestSuiteRunQueuedEv
 			Type:    TestSuiteRunQueuedEventTypeV0_1_0,
 			Version: specVersion,
 		},
-		Subject: TestSuiteRunQueuedSubject{
+		Subject: TestSuiteRunQueuedSubjectV0_1_0{
 			SubjectBase: SubjectBase{
 				Type: "testSuiteRun",
 			},
@@ -184,8 +183,8 @@ func NewTestSuiteRunQueuedEventV0_1_0(specVersion string) (*TestSuiteRunQueuedEv
 	return e, nil
 }
 
-// TestSuiteRunQueuedSubjectContentTestSuite holds the content of a TestSuite field in the content
-type TestSuiteRunQueuedSubjectContentTestSuite struct {
+// TestSuiteRunQueuedSubjectContentTestSuiteV0_1_0 holds the content of a TestSuite field in the content
+type TestSuiteRunQueuedSubjectContentTestSuiteV0_1_0 struct {
 	Id string `json:"id"`
 
 	Name string `json:"name,omitempty"`
@@ -195,8 +194,8 @@ type TestSuiteRunQueuedSubjectContentTestSuite struct {
 	Version string `json:"version,omitempty"`
 }
 
-// TestSuiteRunQueuedSubjectContentTrigger holds the content of a Trigger field in the content
-type TestSuiteRunQueuedSubjectContentTrigger struct {
+// TestSuiteRunQueuedSubjectContentTriggerV0_1_0 holds the content of a Trigger field in the content
+type TestSuiteRunQueuedSubjectContentTriggerV0_1_0 struct {
 	Type string `json:"type,omitempty"`
 
 	Uri string `json:"uri,omitempty"`

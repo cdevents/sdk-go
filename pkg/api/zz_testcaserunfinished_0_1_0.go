@@ -21,11 +21,10 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
-	"fmt"
 	"time"
-)
 
-var testcaserunfinishedschema0_1_0 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/test-case-run-finished-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1},"type":{"type":"string","enum":["dev.cdevents.testcaserun.finished.0.1.0"],"default":"dev.cdevents.testcaserun.finished.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string"},"type":{"type":"string","minLength":1,"enum":["testCaseRun"],"default":"testCaseRun"},"content":{"properties":{"outcome":{"type":"string","enum":["pass","fail","cancel","error"]},"severity":{"type":"string","enum":["low","medium","high","critical"]},"reason":{"type":"string"},"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"testSuiteRun":{"type":"object","properties":{"id":{"type":"string","minLength":1},"source":{"type":"string"}},"additionalProperties":false,"required":["id"]},"testCase":{"type":"object","additionalProperties":false,"required":["id"],"properties":{"id":{"type":"string","minLength":1},"version":{"type":"string"},"name":{"type":"string"},"type":{"type":"string","enum":["performance","functional","unit","security","compliance","integration","e2e","other"]},"uri":{"type":"string","format":"uri"}}}},"additionalProperties":false,"type":"object","required":["outcome","environment"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// TestCaseRunFinished event type v0.1.0
@@ -36,7 +35,7 @@ var (
 	}
 )
 
-type TestCaseRunFinishedSubjectContent struct {
+type TestCaseRunFinishedSubjectContentV0_1_0 struct {
 	Environment *Reference `json:"environment"`
 
 	Outcome string `json:"outcome"`
@@ -45,23 +44,23 @@ type TestCaseRunFinishedSubjectContent struct {
 
 	Severity string `json:"severity,omitempty"`
 
-	TestCase *TestCaseRunFinishedSubjectContentTestCase `json:"testCase,omitempty"`
+	TestCase *TestCaseRunFinishedSubjectContentTestCaseV0_1_0 `json:"testCase,omitempty"`
 
 	TestSuiteRun *Reference `json:"testSuiteRun,omitempty"`
 }
 
-type TestCaseRunFinishedSubject struct {
+type TestCaseRunFinishedSubjectV0_1_0 struct {
 	SubjectBase
-	Content TestCaseRunFinishedSubjectContent `json:"content"`
+	Content TestCaseRunFinishedSubjectContentV0_1_0 `json:"content"`
 }
 
-func (sc TestCaseRunFinishedSubject) GetSubjectType() SubjectType {
+func (sc TestCaseRunFinishedSubjectV0_1_0) GetSubjectType() SubjectType {
 	return "testCaseRun"
 }
 
 type TestCaseRunFinishedEventV0_1_0 struct {
-	Context Context                    `json:"context"`
-	Subject TestCaseRunFinishedSubject `json:"subject"`
+	Context Context                          `json:"context"`
+	Subject TestCaseRunFinishedSubjectV0_1_0 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -151,9 +150,9 @@ func (e *TestCaseRunFinishedEventV0_1_0) SetCustomData(contentType string, data 
 	return nil
 }
 
-func (e TestCaseRunFinishedEventV0_1_0) GetSchema() (string, string) {
+func (e TestCaseRunFinishedEventV0_1_0) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), testcaserunfinishedschema0_1_0
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate)
 }
 
 // Set subject custom fields
@@ -174,7 +173,7 @@ func (e *TestCaseRunFinishedEventV0_1_0) SetSubjectSeverity(severity string) {
 	e.Subject.Content.Severity = severity
 }
 
-func (e *TestCaseRunFinishedEventV0_1_0) SetSubjectTestCase(testCase *TestCaseRunFinishedSubjectContentTestCase) {
+func (e *TestCaseRunFinishedEventV0_1_0) SetSubjectTestCase(testCase *TestCaseRunFinishedSubjectContentTestCaseV0_1_0) {
 	e.Subject.Content.TestCase = testCase
 }
 
@@ -189,7 +188,7 @@ func NewTestCaseRunFinishedEventV0_1_0(specVersion string) (*TestCaseRunFinished
 			Type:    TestCaseRunFinishedEventTypeV0_1_0,
 			Version: specVersion,
 		},
-		Subject: TestCaseRunFinishedSubject{
+		Subject: TestCaseRunFinishedSubjectV0_1_0{
 			SubjectBase: SubjectBase{
 				Type: "testCaseRun",
 			},
@@ -202,8 +201,8 @@ func NewTestCaseRunFinishedEventV0_1_0(specVersion string) (*TestCaseRunFinished
 	return e, nil
 }
 
-// TestCaseRunFinishedSubjectContentTestCase holds the content of a TestCase field in the content
-type TestCaseRunFinishedSubjectContentTestCase struct {
+// TestCaseRunFinishedSubjectContentTestCaseV0_1_0 holds the content of a TestCase field in the content
+type TestCaseRunFinishedSubjectContentTestCaseV0_1_0 struct {
 	Id string `json:"id"`
 
 	Name string `json:"name,omitempty"`

@@ -21,11 +21,10 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
-	"fmt"
 	"time"
-)
 
-var artifactsignedschema0_1_0 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/artifact-signed-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.artifact.signed.0.1.0"],"default":"dev.cdevents.artifact.signed.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["artifact"],"default":"artifact"},"content":{"properties":{"signature":{"type":"string","minLength":1}},"additionalProperties":false,"type":"object","required":["signature"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// ArtifactSigned event type v0.1.0
@@ -36,22 +35,22 @@ var (
 	}
 )
 
-type ArtifactSignedSubjectContent struct {
+type ArtifactSignedSubjectContentV0_1_0 struct {
 	Signature string `json:"signature"`
 }
 
-type ArtifactSignedSubject struct {
+type ArtifactSignedSubjectV0_1_0 struct {
 	SubjectBase
-	Content ArtifactSignedSubjectContent `json:"content"`
+	Content ArtifactSignedSubjectContentV0_1_0 `json:"content"`
 }
 
-func (sc ArtifactSignedSubject) GetSubjectType() SubjectType {
+func (sc ArtifactSignedSubjectV0_1_0) GetSubjectType() SubjectType {
 	return "artifact"
 }
 
 type ArtifactSignedEventV0_1_0 struct {
-	Context Context               `json:"context"`
-	Subject ArtifactSignedSubject `json:"subject"`
+	Context Context                     `json:"context"`
+	Subject ArtifactSignedSubjectV0_1_0 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -141,9 +140,9 @@ func (e *ArtifactSignedEventV0_1_0) SetCustomData(contentType string, data inter
 	return nil
 }
 
-func (e ArtifactSignedEventV0_1_0) GetSchema() (string, string) {
+func (e ArtifactSignedEventV0_1_0) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), artifactsignedschema0_1_0
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate)
 }
 
 // Set subject custom fields
@@ -159,7 +158,7 @@ func NewArtifactSignedEventV0_1_0(specVersion string) (*ArtifactSignedEventV0_1_
 			Type:    ArtifactSignedEventTypeV0_1_0,
 			Version: specVersion,
 		},
-		Subject: ArtifactSignedSubject{
+		Subject: ArtifactSignedSubjectV0_1_0{
 			SubjectBase: SubjectBase{
 				Type: "artifact",
 			},

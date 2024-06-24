@@ -27,18 +27,20 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/santhosh-tekuri/jsonschema/v5"
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+	"golang.org/x/mod/semver"
 )
 
-const testSchemaJson = "../pkg/api/tests/schemas/foosubjectbarpredicate.json"
+const testSchemaJson = "../pkg/api/tests-v99.1/schemas/foosubjectbarpredicate.json"
+const specVersion = "0.4.1"
 
 var (
 	testSchema      *jsonschema.Schema
 	testSubject     = "FooSubject"
 	testSubjectType = "fooSubject"
 	testPredicate   = "BarPredicate"
-	testVersion     = "1.2.3"
-	testVersionName = "1_2_3"
+	testVersion     = "2.2.3"
+	testVersionName = "2_2_3"
 )
 
 func panicOnError(err error) {
@@ -49,7 +51,23 @@ func panicOnError(err error) {
 
 func init() {
 	var err error
-	testSchema, err = jsonschema.Compile(testSchemaJson)
+	pathLoader := PathLoader{}
+	loader := jsonschema.SchemeURLLoader{
+		"file":  jsonschema.FileLoader{},
+		"http":  pathLoader,
+		"https": pathLoader,
+	}
+	compiler = *jsonschema.NewCompiler()
+	compiler.UseLoader(loader)
+	schemas = Schemas{
+		IsTestData: false,
+		Data:       make(map[string][]byte),
+	}
+	shortVersion := semver.MajorMinor("v" + specVersion)
+	schema_folder := filepath.Join("../pkg/api", SPEC_FOLDER_PREFIX+shortVersion, SCHEMA_FOLDERS[0]) // links
+	err = loadSchemas(schema_folder, &schemas)
+	panicOnError(err)
+	testSchema, err = compiler.Compile(testSchemaJson)
 	panicOnError(err)
 }
 
@@ -80,7 +98,7 @@ func TestDataFromSchema(t *testing.T) {
 		}, {
 			Name:      "ObjectField",
 			NameLower: "objectField",
-			Type:      "*FooSubjectBarPredicateSubjectContentObjectField",
+			Type:      "*FooSubjectBarPredicateSubjectContentObjectFieldV2_2_3",
 		}},
 		ContentTypes: []ContentType{{
 			Name: "ObjectField",
@@ -198,5 +216,136 @@ func TestExecuteTemplate_Error(t *testing.T) {
 	err = executeTemplate(allTemplates, "template.txt", outputFileName, struct{ Name string }{"World"})
 	if err == nil {
 		t.Fatal("expected error executing template, got nil")
+	}
+}
+
+// TestValidateStringEnumAnyOf tests the validation of the string enum anyOf case.
+func TestValidateStringEnumAnyOf(t *testing.T) {
+
+	var boolType jsonschema.Types = 4
+	var stringType jsonschema.Types = 32
+	tests := []struct {
+		name      string
+		schema    jsonschema.Schema
+		wantError string
+	}{{
+		name: "valid",
+		schema: jsonschema.Schema{
+			Location: "test_schema",
+			AnyOf: []*jsonschema.Schema{
+				{
+					Location: "test_schema#/properties/content/anyOf/0",
+					Types:    &stringType, // []string{"string"},
+					Enum: &jsonschema.Enum{
+						Values: []interface{}{"foo", "bar"},
+					},
+				},
+				{
+					Location: "test_schema#/properties/content/anyOf/1",
+					Types:    &stringType, // []string{"string"},
+				},
+			},
+		},
+		wantError: "",
+	}, {
+		name: "enum missing",
+		schema: jsonschema.Schema{
+			Location: "test_schema",
+			AnyOf: []*jsonschema.Schema{
+				{
+					Location: "test_schema#/properties/content/anyOf/0",
+					Types:    &stringType, // []string{"string"},
+				},
+				{
+					Location: "test_schema#/properties/content/anyOf/1",
+					Types:    &stringType, // []string{"string"},
+				},
+			},
+		},
+		wantError: "one enum required when using anyOf for types test_schema: <nil>",
+	}, {
+		name: "too many enums",
+		schema: jsonschema.Schema{
+			Location: "test_schema",
+			AnyOf: []*jsonschema.Schema{
+				{
+					Location: "test_schema#/properties/content/anyOf/0",
+					Types:    &stringType, // []string{"string"},
+					Enum: &jsonschema.Enum{
+						Values: []interface{}{"foo", "bar"},
+					},
+				},
+				{
+					Location: "test_schema#/properties/content/anyOf/1",
+					Types:    &stringType, // []string{"string"},
+					Enum: &jsonschema.Enum{
+						Values: []interface{}{"foo", "bar"},
+					},
+				},
+			},
+		},
+		wantError: "only one enum allowed when using anyOf for types test_schema#/properties/content/anyOf/1: [string]",
+	}, {
+		name: "too many types",
+		schema: jsonschema.Schema{
+			Location: "test_schema",
+			AnyOf: []*jsonschema.Schema{
+				{
+					Location: "test_schema#/properties/content/anyOf/0",
+					Types:    &stringType, // []string{"string"},
+					Enum: &jsonschema.Enum{
+						Values: []interface{}{"foo", "bar"},
+					},
+				},
+				{
+					Location: "test_schema#/properties/content/anyOf/1",
+					Types:    &stringType, // []string{"string"},
+				},
+				{
+					Location: "test_schema#/properties/content/anyOf/2",
+					Types:    &stringType, // []string{"string"},
+				},
+			},
+		},
+		wantError: "only two types allowed when using anyOf for content property in schema test_schema: <nil>",
+	}, {
+		name: "wrong types",
+		schema: jsonschema.Schema{
+			Location: "test_schema",
+			AnyOf: []*jsonschema.Schema{
+				{
+					Location: "test_schema#/properties/content/anyOf/0",
+					Types:    &stringType, // []string{"string"},
+					Enum: &jsonschema.Enum{
+						Values: []interface{}{"foo", "bar"},
+					},
+				},
+				{
+					Location: "test_schema#/properties/content/anyOf/1",
+					Types:    &boolType, // []string{"bool"},
+				},
+			},
+		},
+		wantError: "only string allowed when using anyOf for types test_schema#/properties/content/anyOf/1: [boolean]",
+	}}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			err := validateStringEnumAnyOf(&tc.schema)
+			if err != nil {
+				if tc.wantError == "" {
+					t.Fatalf("didn't expected it to fail, but it did: %v", err)
+				} else {
+					// Check the error is what is expected
+					if d := cmp.Diff(tc.wantError, err.Error()); d != "" {
+						t.Errorf("args: diff(-want,+got):\n%s", d)
+					}
+				}
+			}
+			if err == nil {
+				if tc.wantError != "" {
+					t.Fatalf("expected an error, but go none")
+				}
+			}
+		})
 	}
 }

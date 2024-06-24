@@ -31,21 +31,32 @@ import "github.com/cdevents/sdk-go/pkg/api"
 var SpecVersion = "{{.SpecVersion}}"
 
 {{- range $i, $data := .Slice }}
+{{ $subject := .Subject }}
+{{ $predicate := .Predicate }}
+{{ $versionName := .VersionName }}
 type {{.Subject}}{{.Predicate}}Event = api.{{.Subject}}{{.Predicate}}EventV{{.VersionName}}
+type {{.Subject}}{{.Predicate}}Subject = api.{{.Subject}}{{.Predicate}}SubjectV{{.VersionName}}
+{{ range $i, $type := .ContentTypes }}
+// {{$subject}}{{$subject}}SubjectContent{{ .Name }}V{{$versionName}} holds the content of a {{ .Name }} field in the content
+type {{$subject}}{{$predicate}}SubjectContent{{ .Name }} = api.{{$subject}}{{$predicate}}SubjectContent{{ .Name }}V{{$versionName}}
+{{ end }}
 func New{{.Subject}}{{.Predicate}}Event() (*{{.Subject}}{{.Predicate}}Event, error) {
 	return api.New{{.Subject}}{{.Predicate}}EventV{{.VersionName}}(SpecVersion)
 }
+
+var {{.Subject}}{{.Predicate}}EventType = api.{{.Subject}}{{.Predicate}}EventTypeV{{.VersionName}}
+
 {{- end }}
 
 // NewFromJsonBytes builds a new CDEventReader from a JSON string as []bytes
 // This works by unmarshalling the context first, extracting the event type and using
 // that to unmarshal the rest of the event into the correct object.
 // It assumes the context can be unmarshalled in a `Context` object.
-func NewFromJsonBytes(event []byte) (api.CDEvent, error) {
-	return api.NewFromJsonBytesContext[api.Context](event, CDEventsByUnversionedTypes)
+func NewFromJsonBytes(event []byte) (api.CDEvent{{if ne .SpecVersion "0.3.0"}}V04{{end}}, error) {
+	return api.NewFromJsonBytesContext[api.CDEvent{{if ne .SpecVersion "0.3.0"}}V04{{end}}](event, CDEventsByUnversionedTypes)
 }
 
 // Build a new CDEventReader from a JSON string
-func NewFromJsonString(event string) (api.CDEvent, error) {
+func NewFromJsonString(event string) (api.CDEvent{{if ne .SpecVersion "0.3.0"}}V04{{end}}, error) {
 	return NewFromJsonBytes([]byte(event))
 }

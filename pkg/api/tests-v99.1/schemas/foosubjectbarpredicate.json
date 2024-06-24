@@ -1,0 +1,155 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://cdevents.dev/99.1.0/schema/foosubject-barpredicate-event",
+	"properties": {
+	  "context": {
+		"properties": {
+		  "version": {
+			"type": "string",
+			"minLength": 1
+		  },
+		  "id": {
+			"type": "string",
+			"minLength": 1
+		  },
+		  "source": {
+			"type": "string",
+			"minLength": 1,
+			"format": "uri-reference"
+		  },
+		  "type": {
+			"type": "string",
+			"enum": [
+			  "dev.cdevents.foosubject.barpredicate.2.2.3"
+			],
+			"default": "dev.cdevents.foosubject.barpredicate.2.2.3"
+		  },
+		  "timestamp": {
+			"type": "string",
+			"format": "date-time"
+		  },
+		  "schemaUri": {
+			"type": "string",
+			"minLength": 1,
+			"format": "uri"
+		  },
+		  "chainId": {
+			"type": "string",
+			"minLength": 1
+		  },
+		  "links": {
+			"$ref": "https://cdevents.dev/0.4.1/schema/links/embeddedlinksarray"
+		  }
+		},
+		"additionalProperties": false,
+		"type": "object",
+		"required": [
+		  "version",
+		  "id",
+		  "source",
+		  "type",
+		  "timestamp"
+		]
+	  },
+	  "subject": {
+		"properties": {
+		  "id": {
+			"type": "string",
+			"minLength": 1
+		  },
+		  "source": {
+			"type": "string",
+			"minLength": 1,
+			"format": "uri-reference"
+		  },
+		  "type": {
+			"type": "string",
+			"minLength": 1,
+			"enum": [
+			  "fooSubject"
+			],
+			"default": "fooSubject"
+		  },
+		  "content": {
+			"properties": {
+			  "plainField": {
+				"type": "string",
+				"minLength": 1
+			  },
+			  "referenceField": {
+				"properties": {
+				  "id": {
+					"type": "string",
+					"minLength": 1
+				  },
+				  "source": {
+					"type": "string",
+					"minLength": 1,
+					"format": "uri-reference"
+				  }
+				},
+				"additionalProperties": false,
+				"type": "object",
+				"required": [
+				  "id"
+				]
+			  },
+			  "artifactId": {
+				"type": "string"
+			  },
+			  "objectField": {
+				"properties": {
+				  "required": {
+					"type": "string",
+					"minLength": 1
+				  },
+				  "optional": {
+					"type": "string",
+					"format": "uri-reference"
+				  }
+				},
+				"additionalProperties": false,
+				"type": "object",
+				"required": [
+				  "required"
+				]
+			  }
+			},
+			"additionalProperties": false,
+			"type": "object",
+			"required": [
+			  "plainField",
+			  "referenceField"
+			]
+		  }
+		},
+		"additionalProperties": false,
+		"type": "object",
+		"required": [
+		  "id",
+		  "type",
+		  "content"
+		]
+	  },
+	  "customData": {
+		"oneOf": [
+		  {
+			"type": "object"
+		  },
+		  {
+			"type": "string",
+			"contentEncoding": "base64"
+		  }
+		]
+	  },
+	  "customDataContentType": {
+		"type": "string"
+	  }
+	},
+	"additionalProperties": false,
+	"type": "object",
+	"required": [
+	  "context",
+	  "subject"
+	]
+}

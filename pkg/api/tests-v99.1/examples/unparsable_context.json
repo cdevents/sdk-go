@@ -1,0 +1,24 @@
+{
+	"context": {
+		"version": "0.1.0"&,
+		"source": "/event/source/123",
+		"type": "dev.cdevents.artifact.packaged.0.1.0",
+		"timestamp": "2023-03-20T14:27:05.315384Z"
+	},
+	"subject": {
+		"id": "mySubject123",
+		"source": "/event/source/123",
+		"contentRenamed": {
+			"change": {
+				"id": "myChange123"
+			}
+		}
+	},
+	"customData": {
+		"testValues": [
+			{"k1": "v1"},
+			{"k2": "v2"}
+		]
+	},
+	"customDataContentType": "application/json"
+}

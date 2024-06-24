@@ -21,11 +21,10 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
-	"fmt"
 	"time"
-)
 
-var servicerolledbackschema0_1_1 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/service-rolledback-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.service.rolledback.0.1.1"],"default":"dev.cdevents.service.rolledback.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["service"],"default":"service"},"content":{"properties":{"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"artifactId":{"type":"string","minLength":1}},"additionalProperties":false,"type":"object","required":["environment","artifactId"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// ServiceRolledback event type v0.1.1
@@ -36,24 +35,24 @@ var (
 	}
 )
 
-type ServiceRolledbackSubjectContent struct {
+type ServiceRolledbackSubjectContentV0_1_1 struct {
 	ArtifactId string `json:"artifactId" validate:"purl"`
 
 	Environment *Reference `json:"environment"`
 }
 
-type ServiceRolledbackSubject struct {
+type ServiceRolledbackSubjectV0_1_1 struct {
 	SubjectBase
-	Content ServiceRolledbackSubjectContent `json:"content"`
+	Content ServiceRolledbackSubjectContentV0_1_1 `json:"content"`
 }
 
-func (sc ServiceRolledbackSubject) GetSubjectType() SubjectType {
+func (sc ServiceRolledbackSubjectV0_1_1) GetSubjectType() SubjectType {
 	return "service"
 }
 
 type ServiceRolledbackEventV0_1_1 struct {
-	Context Context                  `json:"context"`
-	Subject ServiceRolledbackSubject `json:"subject"`
+	Context Context                        `json:"context"`
+	Subject ServiceRolledbackSubjectV0_1_1 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -143,9 +142,9 @@ func (e *ServiceRolledbackEventV0_1_1) SetCustomData(contentType string, data in
 	return nil
 }
 
-func (e ServiceRolledbackEventV0_1_1) GetSchema() (string, string) {
+func (e ServiceRolledbackEventV0_1_1) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), servicerolledbackschema0_1_1
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate)
 }
 
 // Set subject custom fields
@@ -165,7 +164,7 @@ func NewServiceRolledbackEventV0_1_1(specVersion string) (*ServiceRolledbackEven
 			Type:    ServiceRolledbackEventTypeV0_1_1,
 			Version: specVersion,
 		},
-		Subject: ServiceRolledbackSubject{
+		Subject: ServiceRolledbackSubjectV0_1_1{
 			SubjectBase: SubjectBase{
 				Type: "service",
 			},

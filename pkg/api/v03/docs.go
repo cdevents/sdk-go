@@ -28,245 +28,392 @@ import "github.com/cdevents/sdk-go/pkg/api"
 var SpecVersion = "0.3.0"
 
 type ArtifactPackagedEvent = api.ArtifactPackagedEventV0_1_1
+type ArtifactPackagedSubject = api.ArtifactPackagedSubjectV0_1_1
 
 func NewArtifactPackagedEvent() (*ArtifactPackagedEvent, error) {
 	return api.NewArtifactPackagedEventV0_1_1(SpecVersion)
 }
 
+var ArtifactPackagedEventType = api.ArtifactPackagedEventTypeV0_1_1
+
 type ArtifactPublishedEvent = api.ArtifactPublishedEventV0_1_1
+type ArtifactPublishedSubject = api.ArtifactPublishedSubjectV0_1_1
 
 func NewArtifactPublishedEvent() (*ArtifactPublishedEvent, error) {
 	return api.NewArtifactPublishedEventV0_1_1(SpecVersion)
 }
 
+var ArtifactPublishedEventType = api.ArtifactPublishedEventTypeV0_1_1
+
 type ArtifactSignedEvent = api.ArtifactSignedEventV0_1_0
+type ArtifactSignedSubject = api.ArtifactSignedSubjectV0_1_0
 
 func NewArtifactSignedEvent() (*ArtifactSignedEvent, error) {
 	return api.NewArtifactSignedEventV0_1_0(SpecVersion)
 }
 
+var ArtifactSignedEventType = api.ArtifactSignedEventTypeV0_1_0
+
 type BranchCreatedEvent = api.BranchCreatedEventV0_1_2
+type BranchCreatedSubject = api.BranchCreatedSubjectV0_1_2
 
 func NewBranchCreatedEvent() (*BranchCreatedEvent, error) {
 	return api.NewBranchCreatedEventV0_1_2(SpecVersion)
 }
 
+var BranchCreatedEventType = api.BranchCreatedEventTypeV0_1_2
+
 type BranchDeletedEvent = api.BranchDeletedEventV0_1_2
+type BranchDeletedSubject = api.BranchDeletedSubjectV0_1_2
 
 func NewBranchDeletedEvent() (*BranchDeletedEvent, error) {
 	return api.NewBranchDeletedEventV0_1_2(SpecVersion)
 }
 
+var BranchDeletedEventType = api.BranchDeletedEventTypeV0_1_2
+
 type BuildFinishedEvent = api.BuildFinishedEventV0_1_1
+type BuildFinishedSubject = api.BuildFinishedSubjectV0_1_1
 
 func NewBuildFinishedEvent() (*BuildFinishedEvent, error) {
 	return api.NewBuildFinishedEventV0_1_1(SpecVersion)
 }
 
+var BuildFinishedEventType = api.BuildFinishedEventTypeV0_1_1
+
 type BuildQueuedEvent = api.BuildQueuedEventV0_1_1
+type BuildQueuedSubject = api.BuildQueuedSubjectV0_1_1
 
 func NewBuildQueuedEvent() (*BuildQueuedEvent, error) {
 	return api.NewBuildQueuedEventV0_1_1(SpecVersion)
 }
 
+var BuildQueuedEventType = api.BuildQueuedEventTypeV0_1_1
+
 type BuildStartedEvent = api.BuildStartedEventV0_1_1
+type BuildStartedSubject = api.BuildStartedSubjectV0_1_1
 
 func NewBuildStartedEvent() (*BuildStartedEvent, error) {
 	return api.NewBuildStartedEventV0_1_1(SpecVersion)
 }
 
+var BuildStartedEventType = api.BuildStartedEventTypeV0_1_1
+
 type ChangeAbandonedEvent = api.ChangeAbandonedEventV0_1_2
+type ChangeAbandonedSubject = api.ChangeAbandonedSubjectV0_1_2
 
 func NewChangeAbandonedEvent() (*ChangeAbandonedEvent, error) {
 	return api.NewChangeAbandonedEventV0_1_2(SpecVersion)
 }
 
+var ChangeAbandonedEventType = api.ChangeAbandonedEventTypeV0_1_2
+
 type ChangeCreatedEvent = api.ChangeCreatedEventV0_1_2
+type ChangeCreatedSubject = api.ChangeCreatedSubjectV0_1_2
 
 func NewChangeCreatedEvent() (*ChangeCreatedEvent, error) {
 	return api.NewChangeCreatedEventV0_1_2(SpecVersion)
 }
 
+var ChangeCreatedEventType = api.ChangeCreatedEventTypeV0_1_2
+
 type ChangeMergedEvent = api.ChangeMergedEventV0_1_2
+type ChangeMergedSubject = api.ChangeMergedSubjectV0_1_2
 
 func NewChangeMergedEvent() (*ChangeMergedEvent, error) {
 	return api.NewChangeMergedEventV0_1_2(SpecVersion)
 }
 
+var ChangeMergedEventType = api.ChangeMergedEventTypeV0_1_2
+
 type ChangeReviewedEvent = api.ChangeReviewedEventV0_1_2
+type ChangeReviewedSubject = api.ChangeReviewedSubjectV0_1_2
 
 func NewChangeReviewedEvent() (*ChangeReviewedEvent, error) {
 	return api.NewChangeReviewedEventV0_1_2(SpecVersion)
 }
 
+var ChangeReviewedEventType = api.ChangeReviewedEventTypeV0_1_2
+
 type ChangeUpdatedEvent = api.ChangeUpdatedEventV0_1_2
+type ChangeUpdatedSubject = api.ChangeUpdatedSubjectV0_1_2
 
 func NewChangeUpdatedEvent() (*ChangeUpdatedEvent, error) {
 	return api.NewChangeUpdatedEventV0_1_2(SpecVersion)
 }
 
+var ChangeUpdatedEventType = api.ChangeUpdatedEventTypeV0_1_2
+
 type EnvironmentCreatedEvent = api.EnvironmentCreatedEventV0_1_1
+type EnvironmentCreatedSubject = api.EnvironmentCreatedSubjectV0_1_1
 
 func NewEnvironmentCreatedEvent() (*EnvironmentCreatedEvent, error) {
 	return api.NewEnvironmentCreatedEventV0_1_1(SpecVersion)
 }
 
+var EnvironmentCreatedEventType = api.EnvironmentCreatedEventTypeV0_1_1
+
 type EnvironmentDeletedEvent = api.EnvironmentDeletedEventV0_1_1
+type EnvironmentDeletedSubject = api.EnvironmentDeletedSubjectV0_1_1
 
 func NewEnvironmentDeletedEvent() (*EnvironmentDeletedEvent, error) {
 	return api.NewEnvironmentDeletedEventV0_1_1(SpecVersion)
 }
 
+var EnvironmentDeletedEventType = api.EnvironmentDeletedEventTypeV0_1_1
+
 type EnvironmentModifiedEvent = api.EnvironmentModifiedEventV0_1_1
+type EnvironmentModifiedSubject = api.EnvironmentModifiedSubjectV0_1_1
 
 func NewEnvironmentModifiedEvent() (*EnvironmentModifiedEvent, error) {
 	return api.NewEnvironmentModifiedEventV0_1_1(SpecVersion)
 }
 
+var EnvironmentModifiedEventType = api.EnvironmentModifiedEventTypeV0_1_1
+
 type IncidentDetectedEvent = api.IncidentDetectedEventV0_1_0
+type IncidentDetectedSubject = api.IncidentDetectedSubjectV0_1_0
 
 func NewIncidentDetectedEvent() (*IncidentDetectedEvent, error) {
 	return api.NewIncidentDetectedEventV0_1_0(SpecVersion)
 }
 
+var IncidentDetectedEventType = api.IncidentDetectedEventTypeV0_1_0
+
 type IncidentReportedEvent = api.IncidentReportedEventV0_1_0
+type IncidentReportedSubject = api.IncidentReportedSubjectV0_1_0
 
 func NewIncidentReportedEvent() (*IncidentReportedEvent, error) {
 	return api.NewIncidentReportedEventV0_1_0(SpecVersion)
 }
 
+var IncidentReportedEventType = api.IncidentReportedEventTypeV0_1_0
+
 type IncidentResolvedEvent = api.IncidentResolvedEventV0_1_0
+type IncidentResolvedSubject = api.IncidentResolvedSubjectV0_1_0
 
 func NewIncidentResolvedEvent() (*IncidentResolvedEvent, error) {
 	return api.NewIncidentResolvedEventV0_1_0(SpecVersion)
 }
 
+var IncidentResolvedEventType = api.IncidentResolvedEventTypeV0_1_0
+
 type PipelineRunFinishedEvent = api.PipelineRunFinishedEventV0_1_1
+type PipelineRunFinishedSubject = api.PipelineRunFinishedSubjectV0_1_1
 
 func NewPipelineRunFinishedEvent() (*PipelineRunFinishedEvent, error) {
 	return api.NewPipelineRunFinishedEventV0_1_1(SpecVersion)
 }
 
+var PipelineRunFinishedEventType = api.PipelineRunFinishedEventTypeV0_1_1
+
 type PipelineRunQueuedEvent = api.PipelineRunQueuedEventV0_1_1
+type PipelineRunQueuedSubject = api.PipelineRunQueuedSubjectV0_1_1
 
 func NewPipelineRunQueuedEvent() (*PipelineRunQueuedEvent, error) {
 	return api.NewPipelineRunQueuedEventV0_1_1(SpecVersion)
 }
 
+var PipelineRunQueuedEventType = api.PipelineRunQueuedEventTypeV0_1_1
+
 type PipelineRunStartedEvent = api.PipelineRunStartedEventV0_1_1
+type PipelineRunStartedSubject = api.PipelineRunStartedSubjectV0_1_1
 
 func NewPipelineRunStartedEvent() (*PipelineRunStartedEvent, error) {
 	return api.NewPipelineRunStartedEventV0_1_1(SpecVersion)
 }
 
+var PipelineRunStartedEventType = api.PipelineRunStartedEventTypeV0_1_1
+
 type RepositoryCreatedEvent = api.RepositoryCreatedEventV0_1_1
+type RepositoryCreatedSubject = api.RepositoryCreatedSubjectV0_1_1
 
 func NewRepositoryCreatedEvent() (*RepositoryCreatedEvent, error) {
 	return api.NewRepositoryCreatedEventV0_1_1(SpecVersion)
 }
 
+var RepositoryCreatedEventType = api.RepositoryCreatedEventTypeV0_1_1
+
 type RepositoryDeletedEvent = api.RepositoryDeletedEventV0_1_1
+type RepositoryDeletedSubject = api.RepositoryDeletedSubjectV0_1_1
 
 func NewRepositoryDeletedEvent() (*RepositoryDeletedEvent, error) {
 	return api.NewRepositoryDeletedEventV0_1_1(SpecVersion)
 }
 
+var RepositoryDeletedEventType = api.RepositoryDeletedEventTypeV0_1_1
+
 type RepositoryModifiedEvent = api.RepositoryModifiedEventV0_1_1
+type RepositoryModifiedSubject = api.RepositoryModifiedSubjectV0_1_1
 
 func NewRepositoryModifiedEvent() (*RepositoryModifiedEvent, error) {
 	return api.NewRepositoryModifiedEventV0_1_1(SpecVersion)
 }
 
+var RepositoryModifiedEventType = api.RepositoryModifiedEventTypeV0_1_1
+
 type ServiceDeployedEvent = api.ServiceDeployedEventV0_1_1
+type ServiceDeployedSubject = api.ServiceDeployedSubjectV0_1_1
 
 func NewServiceDeployedEvent() (*ServiceDeployedEvent, error) {
 	return api.NewServiceDeployedEventV0_1_1(SpecVersion)
 }
 
+var ServiceDeployedEventType = api.ServiceDeployedEventTypeV0_1_1
+
 type ServicePublishedEvent = api.ServicePublishedEventV0_1_1
+type ServicePublishedSubject = api.ServicePublishedSubjectV0_1_1
 
 func NewServicePublishedEvent() (*ServicePublishedEvent, error) {
 	return api.NewServicePublishedEventV0_1_1(SpecVersion)
 }
 
+var ServicePublishedEventType = api.ServicePublishedEventTypeV0_1_1
+
 type ServiceRemovedEvent = api.ServiceRemovedEventV0_1_1
+type ServiceRemovedSubject = api.ServiceRemovedSubjectV0_1_1
 
 func NewServiceRemovedEvent() (*ServiceRemovedEvent, error) {
 	return api.NewServiceRemovedEventV0_1_1(SpecVersion)
 }
 
+var ServiceRemovedEventType = api.ServiceRemovedEventTypeV0_1_1
+
 type ServiceRolledbackEvent = api.ServiceRolledbackEventV0_1_1
+type ServiceRolledbackSubject = api.ServiceRolledbackSubjectV0_1_1
 
 func NewServiceRolledbackEvent() (*ServiceRolledbackEvent, error) {
 	return api.NewServiceRolledbackEventV0_1_1(SpecVersion)
 }
 
+var ServiceRolledbackEventType = api.ServiceRolledbackEventTypeV0_1_1
+
 type ServiceUpgradedEvent = api.ServiceUpgradedEventV0_1_1
+type ServiceUpgradedSubject = api.ServiceUpgradedSubjectV0_1_1
 
 func NewServiceUpgradedEvent() (*ServiceUpgradedEvent, error) {
 	return api.NewServiceUpgradedEventV0_1_1(SpecVersion)
 }
 
+var ServiceUpgradedEventType = api.ServiceUpgradedEventTypeV0_1_1
+
 type TaskRunFinishedEvent = api.TaskRunFinishedEventV0_1_1
+type TaskRunFinishedSubject = api.TaskRunFinishedSubjectV0_1_1
 
 func NewTaskRunFinishedEvent() (*TaskRunFinishedEvent, error) {
 	return api.NewTaskRunFinishedEventV0_1_1(SpecVersion)
 }
 
+var TaskRunFinishedEventType = api.TaskRunFinishedEventTypeV0_1_1
+
 type TaskRunStartedEvent = api.TaskRunStartedEventV0_1_1
+type TaskRunStartedSubject = api.TaskRunStartedSubjectV0_1_1
 
 func NewTaskRunStartedEvent() (*TaskRunStartedEvent, error) {
 	return api.NewTaskRunStartedEventV0_1_1(SpecVersion)
 }
 
+var TaskRunStartedEventType = api.TaskRunStartedEventTypeV0_1_1
+
 type TestCaseRunFinishedEvent = api.TestCaseRunFinishedEventV0_1_0
+type TestCaseRunFinishedSubject = api.TestCaseRunFinishedSubjectV0_1_0
+
+// TestCaseRunTestCaseRunSubjectContentTestCaseV0_1_0 holds the content of a TestCase field in the content
+type TestCaseRunFinishedSubjectContentTestCase = api.TestCaseRunFinishedSubjectContentTestCaseV0_1_0
 
 func NewTestCaseRunFinishedEvent() (*TestCaseRunFinishedEvent, error) {
 	return api.NewTestCaseRunFinishedEventV0_1_0(SpecVersion)
 }
 
+var TestCaseRunFinishedEventType = api.TestCaseRunFinishedEventTypeV0_1_0
+
 type TestCaseRunQueuedEvent = api.TestCaseRunQueuedEventV0_1_0
+type TestCaseRunQueuedSubject = api.TestCaseRunQueuedSubjectV0_1_0
+
+// TestCaseRunTestCaseRunSubjectContentTestCaseV0_1_0 holds the content of a TestCase field in the content
+type TestCaseRunQueuedSubjectContentTestCase = api.TestCaseRunQueuedSubjectContentTestCaseV0_1_0
+
+// TestCaseRunTestCaseRunSubjectContentTriggerV0_1_0 holds the content of a Trigger field in the content
+type TestCaseRunQueuedSubjectContentTrigger = api.TestCaseRunQueuedSubjectContentTriggerV0_1_0
 
 func NewTestCaseRunQueuedEvent() (*TestCaseRunQueuedEvent, error) {
 	return api.NewTestCaseRunQueuedEventV0_1_0(SpecVersion)
 }
 
+var TestCaseRunQueuedEventType = api.TestCaseRunQueuedEventTypeV0_1_0
+
 type TestCaseRunStartedEvent = api.TestCaseRunStartedEventV0_1_0
+type TestCaseRunStartedSubject = api.TestCaseRunStartedSubjectV0_1_0
+
+// TestCaseRunTestCaseRunSubjectContentTestCaseV0_1_0 holds the content of a TestCase field in the content
+type TestCaseRunStartedSubjectContentTestCase = api.TestCaseRunStartedSubjectContentTestCaseV0_1_0
+
+// TestCaseRunTestCaseRunSubjectContentTriggerV0_1_0 holds the content of a Trigger field in the content
+type TestCaseRunStartedSubjectContentTrigger = api.TestCaseRunStartedSubjectContentTriggerV0_1_0
 
 func NewTestCaseRunStartedEvent() (*TestCaseRunStartedEvent, error) {
 	return api.NewTestCaseRunStartedEventV0_1_0(SpecVersion)
 }
 
+var TestCaseRunStartedEventType = api.TestCaseRunStartedEventTypeV0_1_0
+
 type TestOutputPublishedEvent = api.TestOutputPublishedEventV0_1_0
+type TestOutputPublishedSubject = api.TestOutputPublishedSubjectV0_1_0
 
 func NewTestOutputPublishedEvent() (*TestOutputPublishedEvent, error) {
 	return api.NewTestOutputPublishedEventV0_1_0(SpecVersion)
 }
 
+var TestOutputPublishedEventType = api.TestOutputPublishedEventTypeV0_1_0
+
 type TestSuiteRunFinishedEvent = api.TestSuiteRunFinishedEventV0_1_0
+type TestSuiteRunFinishedSubject = api.TestSuiteRunFinishedSubjectV0_1_0
+
+// TestSuiteRunTestSuiteRunSubjectContentTestSuiteV0_1_0 holds the content of a TestSuite field in the content
+type TestSuiteRunFinishedSubjectContentTestSuite = api.TestSuiteRunFinishedSubjectContentTestSuiteV0_1_0
 
 func NewTestSuiteRunFinishedEvent() (*TestSuiteRunFinishedEvent, error) {
 	return api.NewTestSuiteRunFinishedEventV0_1_0(SpecVersion)
 }
 
+var TestSuiteRunFinishedEventType = api.TestSuiteRunFinishedEventTypeV0_1_0
+
 type TestSuiteRunQueuedEvent = api.TestSuiteRunQueuedEventV0_1_0
+type TestSuiteRunQueuedSubject = api.TestSuiteRunQueuedSubjectV0_1_0
+
+// TestSuiteRunTestSuiteRunSubjectContentTestSuiteV0_1_0 holds the content of a TestSuite field in the content
+type TestSuiteRunQueuedSubjectContentTestSuite = api.TestSuiteRunQueuedSubjectContentTestSuiteV0_1_0
+
+// TestSuiteRunTestSuiteRunSubjectContentTriggerV0_1_0 holds the content of a Trigger field in the content
+type TestSuiteRunQueuedSubjectContentTrigger = api.TestSuiteRunQueuedSubjectContentTriggerV0_1_0
 
 func NewTestSuiteRunQueuedEvent() (*TestSuiteRunQueuedEvent, error) {
 	return api.NewTestSuiteRunQueuedEventV0_1_0(SpecVersion)
 }
 
+var TestSuiteRunQueuedEventType = api.TestSuiteRunQueuedEventTypeV0_1_0
+
 type TestSuiteRunStartedEvent = api.TestSuiteRunStartedEventV0_1_0
+type TestSuiteRunStartedSubject = api.TestSuiteRunStartedSubjectV0_1_0
+
+// TestSuiteRunTestSuiteRunSubjectContentTestSuiteV0_1_0 holds the content of a TestSuite field in the content
+type TestSuiteRunStartedSubjectContentTestSuite = api.TestSuiteRunStartedSubjectContentTestSuiteV0_1_0
+
+// TestSuiteRunTestSuiteRunSubjectContentTriggerV0_1_0 holds the content of a Trigger field in the content
+type TestSuiteRunStartedSubjectContentTrigger = api.TestSuiteRunStartedSubjectContentTriggerV0_1_0
 
 func NewTestSuiteRunStartedEvent() (*TestSuiteRunStartedEvent, error) {
 	return api.NewTestSuiteRunStartedEventV0_1_0(SpecVersion)
 }
+
+var TestSuiteRunStartedEventType = api.TestSuiteRunStartedEventTypeV0_1_0
 
 // NewFromJsonBytes builds a new CDEventReader from a JSON string as []bytes
 // This works by unmarshalling the context first, extracting the event type and using
 // that to unmarshal the rest of the event into the correct object.
 // It assumes the context can be unmarshalled in a `Context` object.
 func NewFromJsonBytes(event []byte) (api.CDEvent, error) {
-	return api.NewFromJsonBytesContext[api.Context](event, CDEventsByUnversionedTypes)
+	return api.NewFromJsonBytesContext[api.CDEvent](event, CDEventsByUnversionedTypes)
 }
 
 // Build a new CDEventReader from a JSON string

@@ -21,11 +21,10 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
-	"fmt"
 	"time"
-)
 
-var environmentmodifiedschema0_1_1 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/environment-modified-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.environment.modified.0.1.1"],"default":"dev.cdevents.environment.modified.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["environment"],"default":"environment"},"content":{"properties":{"name":{"type":"string"},"url":{"type":"string"}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// EnvironmentModified event type v0.1.1
@@ -36,24 +35,24 @@ var (
 	}
 )
 
-type EnvironmentModifiedSubjectContent struct {
+type EnvironmentModifiedSubjectContentV0_1_1 struct {
 	Name string `json:"name,omitempty"`
 
 	Url string `json:"url,omitempty"`
 }
 
-type EnvironmentModifiedSubject struct {
+type EnvironmentModifiedSubjectV0_1_1 struct {
 	SubjectBase
-	Content EnvironmentModifiedSubjectContent `json:"content"`
+	Content EnvironmentModifiedSubjectContentV0_1_1 `json:"content"`
 }
 
-func (sc EnvironmentModifiedSubject) GetSubjectType() SubjectType {
+func (sc EnvironmentModifiedSubjectV0_1_1) GetSubjectType() SubjectType {
 	return "environment"
 }
 
 type EnvironmentModifiedEventV0_1_1 struct {
-	Context Context                    `json:"context"`
-	Subject EnvironmentModifiedSubject `json:"subject"`
+	Context Context                          `json:"context"`
+	Subject EnvironmentModifiedSubjectV0_1_1 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -143,9 +142,9 @@ func (e *EnvironmentModifiedEventV0_1_1) SetCustomData(contentType string, data 
 	return nil
 }
 
-func (e EnvironmentModifiedEventV0_1_1) GetSchema() (string, string) {
+func (e EnvironmentModifiedEventV0_1_1) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), environmentmodifiedschema0_1_1
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate)
 }
 
 // Set subject custom fields
@@ -165,7 +164,7 @@ func NewEnvironmentModifiedEventV0_1_1(specVersion string) (*EnvironmentModified
 			Type:    EnvironmentModifiedEventTypeV0_1_1,
 			Version: specVersion,
 		},
-		Subject: EnvironmentModifiedSubject{
+		Subject: EnvironmentModifiedSubjectV0_1_1{
 			SubjectBase: SubjectBase{
 				Type: "environment",
 			},

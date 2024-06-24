@@ -21,11 +21,10 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
-	"fmt"
 	"time"
-)
 
-var changeabandonedschema0_1_2 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/change-abandoned-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.change.abandoned.0.1.2"],"default":"dev.cdevents.change.abandoned.0.1.2"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["change"],"default":"change"},"content":{"properties":{"repository":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// ChangeAbandoned event type v0.1.2
@@ -36,22 +35,22 @@ var (
 	}
 )
 
-type ChangeAbandonedSubjectContent struct {
+type ChangeAbandonedSubjectContentV0_1_2 struct {
 	Repository *Reference `json:"repository,omitempty"`
 }
 
-type ChangeAbandonedSubject struct {
+type ChangeAbandonedSubjectV0_1_2 struct {
 	SubjectBase
-	Content ChangeAbandonedSubjectContent `json:"content"`
+	Content ChangeAbandonedSubjectContentV0_1_2 `json:"content"`
 }
 
-func (sc ChangeAbandonedSubject) GetSubjectType() SubjectType {
+func (sc ChangeAbandonedSubjectV0_1_2) GetSubjectType() SubjectType {
 	return "change"
 }
 
 type ChangeAbandonedEventV0_1_2 struct {
-	Context Context                `json:"context"`
-	Subject ChangeAbandonedSubject `json:"subject"`
+	Context Context                      `json:"context"`
+	Subject ChangeAbandonedSubjectV0_1_2 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -141,9 +140,9 @@ func (e *ChangeAbandonedEventV0_1_2) SetCustomData(contentType string, data inte
 	return nil
 }
 
-func (e ChangeAbandonedEventV0_1_2) GetSchema() (string, string) {
+func (e ChangeAbandonedEventV0_1_2) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), changeabandonedschema0_1_2
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate)
 }
 
 // Set subject custom fields
@@ -159,7 +158,7 @@ func NewChangeAbandonedEventV0_1_2(specVersion string) (*ChangeAbandonedEventV0_
 			Type:    ChangeAbandonedEventTypeV0_1_2,
 			Version: specVersion,
 		},
-		Subject: ChangeAbandonedSubject{
+		Subject: ChangeAbandonedSubjectV0_1_2{
 			SubjectBase: SubjectBase{
 				Type: "change",
 			},

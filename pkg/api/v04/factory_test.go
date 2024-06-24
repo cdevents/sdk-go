@@ -16,7 +16,7 @@ limitations under the License.
 SPDX-License-Identifier: Apache-2.0
 */
 
-package api_test
+package v04_test
 
 import (
 	"encoding/json"
@@ -25,7 +25,7 @@ import (
 	"time"
 
 	"github.com/cdevents/sdk-go/pkg/api"
-	cdevents "github.com/cdevents/sdk-go/pkg/api/v03"
+	cdevents "github.com/cdevents/sdk-go/pkg/api/v04"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
@@ -64,7 +64,7 @@ var (
 	testContentType = "application/json"
 	timeNow         = time.Now
 	uuidNewRandom   = uuid.NewRandom
-	testSpecVersion = "0.3.0"
+	testSpecVersion = "0.4.1"
 )
 
 func TestNewCDEvent(t *testing.T) {

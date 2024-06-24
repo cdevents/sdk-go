@@ -21,9 +21,12 @@ limitations under the License.
 SPDX-License-Identifier: Apache-2.0
 */
 
-package api_test
+package {{.SpecVersionName}}_test
 
-import "github.com/cdevents/sdk-go/pkg/api"
+import (
+    "github.com/cdevents/sdk-go/pkg/api"
+    api{{.SpecVersionName}} "github.com/cdevents/sdk-go/pkg/api/{{.SpecVersionName}}"
+)
 
 func init() {
     tests = []testNewCDEventType{}
@@ -31,15 +34,25 @@ func init() {
 {{- range $i, $data := .Slice }}
     tests = append(tests, testNewCDEventType{
         name:          "{{ .SubjectLower }} {{ .PredicateLower }}",
-        eventType:     api.{{ .Subject }}{{ .Predicate }}EventTypeV{{.VersionName}}.String(),
-        expectedEvent: &api.{{ .Subject }}{{ .Predicate }}EventV{{.VersionName}}{
+        eventType:     api{{$.SpecVersionName}}.{{ .Subject }}{{ .Predicate }}EventType.String(),
+        expectedEvent: &api{{$.SpecVersionName}}.{{ .Subject }}{{ .Predicate }}Event{
+{{- if eq $.SpecVersion "0.3.0"}}
+		Context: api.Context{
+			Type:      api{{$.SpecVersionName}}.{{ .Subject }}{{ .Predicate }}EventType,
+			Timestamp: timeNow(),
+			Id:        testUUID(),
+			Version:   "{{ $.SpecVersion }}",
+{{- else}}
+		Context: api.ContextV04{
 			Context: api.Context{
-				Type:      api.{{ .Subject }}{{ .Predicate }}EventTypeV{{.VersionName}},
+				Type:      api{{$.SpecVersionName}}.{{ .Subject }}{{ .Predicate }}EventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
-				Version:   api.CDEventsSpecVersion,
+				Version:   "{{ $.SpecVersion }}",
 			},
-			Subject: api.{{ .Subject }}{{ .Predicate }}Subject{
+{{- end}}
+		},
+			Subject: api{{$.SpecVersionName}}.{{ .Subject }}{{ .Predicate }}Subject{
 				SubjectBase: api.SubjectBase{
 					Type: "{{ .SubjectType }}",
 				},

@@ -21,11 +21,10 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
-	"fmt"
 	"time"
-)
 
-var repositorydeletedschema0_1_1 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/repository-deleted-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.repository.deleted.0.1.1"],"default":"dev.cdevents.repository.deleted.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["repository"],"default":"repository"},"content":{"properties":{"name":{"type":"string"},"owner":{"type":"string"},"url":{"type":"string"},"viewUrl":{"type":"string"}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// RepositoryDeleted event type v0.1.1
@@ -36,7 +35,7 @@ var (
 	}
 )
 
-type RepositoryDeletedSubjectContent struct {
+type RepositoryDeletedSubjectContentV0_1_1 struct {
 	Name string `json:"name,omitempty"`
 
 	Owner string `json:"owner,omitempty"`
@@ -46,18 +45,18 @@ type RepositoryDeletedSubjectContent struct {
 	ViewUrl string `json:"viewUrl,omitempty"`
 }
 
-type RepositoryDeletedSubject struct {
+type RepositoryDeletedSubjectV0_1_1 struct {
 	SubjectBase
-	Content RepositoryDeletedSubjectContent `json:"content"`
+	Content RepositoryDeletedSubjectContentV0_1_1 `json:"content"`
 }
 
-func (sc RepositoryDeletedSubject) GetSubjectType() SubjectType {
+func (sc RepositoryDeletedSubjectV0_1_1) GetSubjectType() SubjectType {
 	return "repository"
 }
 
 type RepositoryDeletedEventV0_1_1 struct {
-	Context Context                  `json:"context"`
-	Subject RepositoryDeletedSubject `json:"subject"`
+	Context Context                        `json:"context"`
+	Subject RepositoryDeletedSubjectV0_1_1 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -147,9 +146,9 @@ func (e *RepositoryDeletedEventV0_1_1) SetCustomData(contentType string, data in
 	return nil
 }
 
-func (e RepositoryDeletedEventV0_1_1) GetSchema() (string, string) {
+func (e RepositoryDeletedEventV0_1_1) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), repositorydeletedschema0_1_1
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate)
 }
 
 // Set subject custom fields
@@ -177,7 +176,7 @@ func NewRepositoryDeletedEventV0_1_1(specVersion string) (*RepositoryDeletedEven
 			Type:    RepositoryDeletedEventTypeV0_1_1,
 			Version: specVersion,
 		},
-		Subject: RepositoryDeletedSubject{
+		Subject: RepositoryDeletedSubjectV0_1_1{
 			SubjectBase: SubjectBase{
 				Type: "repository",
 			},

@@ -21,11 +21,10 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
-	"fmt"
 	"time"
-)
 
-var environmentdeletedschema0_1_1 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/environment-deleted-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","enum":["dev.cdevents.environment.deleted.0.1.1"],"default":"dev.cdevents.environment.deleted.0.1.1"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"},"type":{"type":"string","minLength":1,"enum":["environment"],"default":"environment"},"content":{"properties":{"name":{"type":"string"}},"additionalProperties":false,"type":"object"}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// EnvironmentDeleted event type v0.1.1
@@ -36,22 +35,22 @@ var (
 	}
 )
 
-type EnvironmentDeletedSubjectContent struct {
+type EnvironmentDeletedSubjectContentV0_1_1 struct {
 	Name string `json:"name,omitempty"`
 }
 
-type EnvironmentDeletedSubject struct {
+type EnvironmentDeletedSubjectV0_1_1 struct {
 	SubjectBase
-	Content EnvironmentDeletedSubjectContent `json:"content"`
+	Content EnvironmentDeletedSubjectContentV0_1_1 `json:"content"`
 }
 
-func (sc EnvironmentDeletedSubject) GetSubjectType() SubjectType {
+func (sc EnvironmentDeletedSubjectV0_1_1) GetSubjectType() SubjectType {
 	return "environment"
 }
 
 type EnvironmentDeletedEventV0_1_1 struct {
-	Context Context                   `json:"context"`
-	Subject EnvironmentDeletedSubject `json:"subject"`
+	Context Context                         `json:"context"`
+	Subject EnvironmentDeletedSubjectV0_1_1 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -141,9 +140,9 @@ func (e *EnvironmentDeletedEventV0_1_1) SetCustomData(contentType string, data i
 	return nil
 }
 
-func (e EnvironmentDeletedEventV0_1_1) GetSchema() (string, string) {
+func (e EnvironmentDeletedEventV0_1_1) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), environmentdeletedschema0_1_1
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate)
 }
 
 // Set subject custom fields
@@ -159,7 +158,7 @@ func NewEnvironmentDeletedEventV0_1_1(specVersion string) (*EnvironmentDeletedEv
 			Type:    EnvironmentDeletedEventTypeV0_1_1,
 			Version: specVersion,
 		},
-		Subject: EnvironmentDeletedSubject{
+		Subject: EnvironmentDeletedSubjectV0_1_1{
 			SubjectBase: SubjectBase{
 				Type: "environment",
 			},

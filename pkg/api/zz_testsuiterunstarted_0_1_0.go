@@ -21,11 +21,10 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
-	"fmt"
 	"time"
-)
 
-var testsuiterunstartedschema0_1_0 = `{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://cdevents.dev/0.3.0/schema/test-suite-run-started-event","properties":{"context":{"properties":{"version":{"type":"string","minLength":1},"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1},"type":{"type":"string","enum":["dev.cdevents.testsuiterun.started.0.1.0"],"default":"dev.cdevents.testsuiterun.started.0.1.0"},"timestamp":{"type":"string","format":"date-time"}},"additionalProperties":false,"type":"object","required":["version","id","source","type","timestamp"]},"subject":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string"},"type":{"type":"string","minLength":1,"enum":["testSuiteRun"],"default":"testSuiteRun"},"content":{"properties":{"trigger":{"type":"object","properties":{"type":{"type":"string","enum":["manual","pipeline","event","schedule","other"]},"uri":{"type":"string","format":"uri"}}},"environment":{"properties":{"id":{"type":"string","minLength":1},"source":{"type":"string","minLength":1,"format":"uri-reference"}},"additionalProperties":false,"type":"object","required":["id"]},"testSuite":{"type":"object","additionalProperties":false,"required":["id"],"properties":{"id":{"type":"string","minLength":1},"version":{"type":"string"},"name":{"type":"string"},"uri":{"type":"string","format":"uri"}}}},"additionalProperties":false,"type":"object","required":["environment"]}},"additionalProperties":false,"type":"object","required":["id","type","content"]},"customData":{"oneOf":[{"type":"object"},{"type":"string","contentEncoding":"base64"}]},"customDataContentType":{"type":"string"}},"additionalProperties":false,"type":"object","required":["context","subject"]}`
+	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
+)
 
 var (
 	// TestSuiteRunStarted event type v0.1.0
@@ -36,26 +35,26 @@ var (
 	}
 )
 
-type TestSuiteRunStartedSubjectContent struct {
+type TestSuiteRunStartedSubjectContentV0_1_0 struct {
 	Environment *Reference `json:"environment"`
 
-	TestSuite *TestSuiteRunStartedSubjectContentTestSuite `json:"testSuite,omitempty"`
+	TestSuite *TestSuiteRunStartedSubjectContentTestSuiteV0_1_0 `json:"testSuite,omitempty"`
 
-	Trigger *TestSuiteRunStartedSubjectContentTrigger `json:"trigger,omitempty"`
+	Trigger *TestSuiteRunStartedSubjectContentTriggerV0_1_0 `json:"trigger,omitempty"`
 }
 
-type TestSuiteRunStartedSubject struct {
+type TestSuiteRunStartedSubjectV0_1_0 struct {
 	SubjectBase
-	Content TestSuiteRunStartedSubjectContent `json:"content"`
+	Content TestSuiteRunStartedSubjectContentV0_1_0 `json:"content"`
 }
 
-func (sc TestSuiteRunStartedSubject) GetSubjectType() SubjectType {
+func (sc TestSuiteRunStartedSubjectV0_1_0) GetSubjectType() SubjectType {
 	return "testSuiteRun"
 }
 
 type TestSuiteRunStartedEventV0_1_0 struct {
-	Context Context                    `json:"context"`
-	Subject TestSuiteRunStartedSubject `json:"subject"`
+	Context Context                          `json:"context"`
+	Subject TestSuiteRunStartedSubjectV0_1_0 `json:"subject"`
 	CDEventCustomData
 }
 
@@ -145,9 +144,9 @@ func (e *TestSuiteRunStartedEventV0_1_0) SetCustomData(contentType string, data 
 	return nil
 }
 
-func (e TestSuiteRunStartedEventV0_1_0) GetSchema() (string, string) {
+func (e TestSuiteRunStartedEventV0_1_0) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return fmt.Sprintf(CDEventsSchemaURLTemplate, CDEventsSpecVersion, eType.Subject, eType.Predicate), testsuiterunstartedschema0_1_0
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate)
 }
 
 // Set subject custom fields
@@ -156,11 +155,11 @@ func (e *TestSuiteRunStartedEventV0_1_0) SetSubjectEnvironment(environment *Refe
 	e.Subject.Content.Environment = environment
 }
 
-func (e *TestSuiteRunStartedEventV0_1_0) SetSubjectTestSuite(testSuite *TestSuiteRunStartedSubjectContentTestSuite) {
+func (e *TestSuiteRunStartedEventV0_1_0) SetSubjectTestSuite(testSuite *TestSuiteRunStartedSubjectContentTestSuiteV0_1_0) {
 	e.Subject.Content.TestSuite = testSuite
 }
 
-func (e *TestSuiteRunStartedEventV0_1_0) SetSubjectTrigger(trigger *TestSuiteRunStartedSubjectContentTrigger) {
+func (e *TestSuiteRunStartedEventV0_1_0) SetSubjectTrigger(trigger *TestSuiteRunStartedSubjectContentTriggerV0_1_0) {
 	e.Subject.Content.Trigger = trigger
 }
 
@@ -171,7 +170,7 @@ func NewTestSuiteRunStartedEventV0_1_0(specVersion string) (*TestSuiteRunStarted
 			Type:    TestSuiteRunStartedEventTypeV0_1_0,
 			Version: specVersion,
 		},
-		Subject: TestSuiteRunStartedSubject{
+		Subject: TestSuiteRunStartedSubjectV0_1_0{
 			SubjectBase: SubjectBase{
 				Type: "testSuiteRun",
 			},
@@ -184,8 +183,8 @@ func NewTestSuiteRunStartedEventV0_1_0(specVersion string) (*TestSuiteRunStarted
 	return e, nil
 }
 
-// TestSuiteRunStartedSubjectContentTestSuite holds the content of a TestSuite field in the content
-type TestSuiteRunStartedSubjectContentTestSuite struct {
+// TestSuiteRunStartedSubjectContentTestSuiteV0_1_0 holds the content of a TestSuite field in the content
+type TestSuiteRunStartedSubjectContentTestSuiteV0_1_0 struct {
 	Id string `json:"id"`
 
 	Name string `json:"name,omitempty"`
@@ -195,8 +194,8 @@ type TestSuiteRunStartedSubjectContentTestSuite struct {
 	Version string `json:"version,omitempty"`
 }
 
-// TestSuiteRunStartedSubjectContentTrigger holds the content of a Trigger field in the content
-type TestSuiteRunStartedSubjectContentTrigger struct {
+// TestSuiteRunStartedSubjectContentTriggerV0_1_0 holds the content of a Trigger field in the content
+type TestSuiteRunStartedSubjectContentTriggerV0_1_0 struct {
 	Type string `json:"type,omitempty"`
 
 	Uri string `json:"uri,omitempty"`
