@@ -69,7 +69,7 @@ func (e FooSubjectBarPredicateEventV1_2_3) GetType() CDEventType {
 }
 
 func (e FooSubjectBarPredicateEventV1_2_3) GetVersion() string {
-	return CDEventsSpecVersion
+	return e.Context.GetVersion()
 }
 
 func (e FooSubjectBarPredicateEventV1_2_3) GetId() string {
@@ -164,7 +164,7 @@ func (e *FooSubjectBarPredicateEventV1_2_3) SetCustomData(contentType string, da
 
 func (e FooSubjectBarPredicateEventV1_2_3) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return TestCompiledSchemas.GetBySpecSubjectPredicate("99.0.0", eType.Subject, eType.Predicate)
+	return TestCompiledSchemas.GetBySpecSubjectPredicate("99.0.0", eType.Subject, eType.Predicate, eType.Custom)
 }
 
 // CDEventsWriterV04 implementation
@@ -179,6 +179,10 @@ func (e *FooSubjectBarPredicateEventV1_2_3) SetLinks(links EmbeddedLinksArray) {
 
 func (e *FooSubjectBarPredicateEventV1_2_3) SetSchemaUri(schema string) {
 	e.Context.SchemaUri = schema
+}
+
+func (e FooSubjectBarPredicateEventV1_2_3) GetSubjectContent() interface{} {
+	return e.Subject.Content
 }
 
 // Set subject custom fields

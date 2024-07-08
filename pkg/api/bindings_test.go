@@ -346,7 +346,7 @@ func TestInvalidEvent(t *testing.T) {
 		Context: api.ContextV04{
 			Context: api.Context{
 				Type:    api.CDEventType{Subject: "not-a-valid-type"},
-				Version: api.CDEventsSpecVersion,
+				Version: testapi.SpecVersion,
 			},
 		},
 		Subject: testapi.FooSubjectBarPredicateSubject{

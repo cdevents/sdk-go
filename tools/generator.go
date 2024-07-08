@@ -138,6 +138,7 @@ type Data struct {
 	Schema         string
 	IsTestData     bool
 	SpecVersion    string
+	IsCustom       bool
 }
 
 type Schemas struct {
@@ -288,9 +289,21 @@ func main() {
 	// Generate SDK files
 	for _, version := range SPEC_VERSIONS {
 		shortVersion := semver.MajorMinor("v" + version)
-		versioned_schema_folder := filepath.Join(CODE_FOLDER, SPEC_FOLDER_PREFIX+shortVersion, SCHEMA_FOLDER)
-		log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEMPLATES_FOLDER, versioned_schema_folder, GEN_CODE_FOLDER)
-		err = generate(versioned_schema_folder, GEN_CODE_FOLDER, "", version, templates, GO_TYPES_NAMES, false)
+		// Setup folders where to look for schemas
+		folders := []string{}
+		versioned_folder := ""
+		for _, folder := range SCHEMA_FOLDERS[1:3] {
+			versioned_folder = filepath.Join(CODE_FOLDER, SPEC_FOLDER_PREFIX+shortVersion, folder)
+			fileInfo, err := os.Stat(versioned_folder)
+			if err == nil && fileInfo.IsDir() {
+				// If the path does exists, and it's a dir, include this in the generation
+				folders = append(folders, versioned_folder)
+			}
+		}
+
+		// Generate SDK files for all discovered folders
+		log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEMPLATES_FOLDER, folders, GEN_CODE_FOLDER)
+		err = generate(folders, GEN_CODE_FOLDER, "", version, templates, GO_TYPES_NAMES, false)
 		if err != nil {
 			log.Fatalf("%s", err.Error())
 		}
@@ -301,7 +314,7 @@ func main() {
 		shortVersion := semver.MajorMinor("v" + version)
 		versioned_test_schema_folder := filepath.Join(CODE_FOLDER, TEST_FOLDER_PREFIX+shortVersion, SCHEMA_FOLDER)
 		log.Printf("Generating Test SDK files from templates: %s and schemas: %s into %s", TEMPLATES_FOLDER, versioned_test_schema_folder, GEN_CODE_FOLDER)
-		err = generate(versioned_test_schema_folder, GEN_CODE_FOLDER, TEST_OUTPUT_PREFIX, version, templates, GO_TYPES_TEST_NAMES, true)
+		err = generate([]string{versioned_test_schema_folder}, GEN_CODE_FOLDER, TEST_OUTPUT_PREFIX, version, templates, GO_TYPES_TEST_NAMES, true)
 		if err != nil {
 			log.Fatalf("%s", err.Error())
 		}
@@ -322,7 +335,7 @@ func loadSchemas(schemaFolder string, schemas *Schemas) error {
 	return fs.WalkDir(os.DirFS(schemaFolder), ".", getSchemasWalkProcessor(schemaFolder, schemas))
 }
 
-func generate(schemaFolder, genFolder, prefix, specVersion string, templates *template.Template, goTypes map[string]string, isTestMode bool) error {
+func generate(schemaFolders []string, genFolder, prefix, specVersion string, templates *template.Template, goTypes map[string]string, isTestMode bool) error {
 	// allData is used to accumulate data from all jsonschemas
 	// which is then used to run shared templates
 	shortSpecVersion := semver.MajorMinor("v" + specVersion)
@@ -335,15 +348,17 @@ func generate(schemaFolder, genFolder, prefix, specVersion string, templates *te
 	}
 
 	// Walk the jsonschemas folder, process each ".json" file
-	walkProcessor := getWalkProcessor(schemaFolder, templates, genFolder, goTypes, &allData, prefix, isTestMode)
-	err := fs.WalkDir(os.DirFS(schemaFolder), ".", walkProcessor)
-	if err != nil {
-		return err
+	for _, schemaFolder := range schemaFolders {
+		walkProcessor := getWalkProcessor(schemaFolder, templates, genFolder, goTypes, &allData, prefix, isTestMode)
+		err := fs.WalkDir(os.DirFS(schemaFolder), ".", walkProcessor)
+		if err != nil {
+			return err
+		}
 	}
 
 	// Process the spec template. Create the target folder is it doesn't exist
 	specFileFolder := filepath.Join(genFolder, allData.SpecVersionName)
-	err = os.MkdirAll(specFileFolder, os.ModePerm)
+	err := os.MkdirAll(specFileFolder, os.ModePerm)
 	if err != nil {
 		return err
 	}
@@ -457,6 +472,10 @@ func getWalkProcessor(rootDir string, allTemplates *template.Template, genFolder
 			// This should not happen, but ignore just in case
 			return nil
 		}
+		if info.Name() == "conformance.json" {
+			// Skip conformance tests
+			return nil
+		}
 		// Set the whole path
 		schemaPath := filepath.Join(rootDir, path)
 		// Load the jsonschema from the spec
@@ -466,7 +485,7 @@ func getWalkProcessor(rootDir string, allTemplates *template.Template, genFolder
 		}
 
 		// Prepare the data
-		data, err := DataFromSchema(sch, goTypes)
+		data, err := DataFromSchema(sch, goTypes, allData.SpecVersion)
 		if err != nil {
 			return err
 		}
@@ -520,131 +539,148 @@ func validateStringEnumAnyOf(schema *jsonschema.Schema) error {
 	return nil
 }
 
-func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string) (*Data, error) {
+func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string, specVersion string) (*Data, error) {
 	// Parse the event type from the context
 	contextSchema, ok := schema.Properties["context"]
 	if !ok {
 		return nil, fmt.Errorf("no context property in schema %s", schema.Location)
 	}
-	eventTypeSchema, ok := contextSchema.Properties["type"]
-	if !ok {
-		return nil, fmt.Errorf("no type property in schema %s", eventTypeSchema.Location)
-	}
-	if len(eventTypeSchema.Enum.Values) == 0 {
-		return nil, fmt.Errorf("no value defined for type in schema %s", eventTypeSchema.Location)
-	}
-	eventTypeString, ok := eventTypeSchema.Enum.Values[0].(string)
-	if !ok {
-		return nil, fmt.Errorf("non-string value defined for type in schema %s", eventTypeSchema.Location)
-	}
-	if eventTypeString == "" {
-		return nil, fmt.Errorf("empty value defined for type in schema %s", eventTypeSchema.Location)
-	}
-	eventType, err := cdeventTypeFromString(string(eventTypeString))
-	if err != nil {
-		return nil, err
-	}
-
-	// Parse the subject type
-	subjectSchema, ok := schema.Properties["subject"]
-	if !ok {
-		return nil, fmt.Errorf("no subject property in schema %s", schema.Location)
-	}
-	subjectTypeSchema, ok := subjectSchema.Properties["type"]
-	if !ok {
-		return nil, fmt.Errorf("no type property in schema %s", subjectSchema.Location)
-	}
-	if len(subjectTypeSchema.Enum.Values) == 0 {
-		return nil, fmt.Errorf("no value defined for type in schema %s", subjectTypeSchema.Location)
-	}
-	subjectTypeString, ok := subjectTypeSchema.Enum.Values[0].(string)
-	if !ok {
-		return nil, fmt.Errorf("non-string value defined for type in schema %s", subjectTypeSchema.Location)
-	}
-
-	// Parse the subject content fields
+	isCustom := false
+	var eventType cdeventType
+	var subjectTypeString string
 	contentFields := []ContentField{}
 	contentTypes := []ContentType{}
-	contentSchema, ok := subjectSchema.Properties["content"]
-	if !ok {
-		return nil, fmt.Errorf("no content property in schema %s", subjectSchema.Location)
+
+	// Special logic for custom schema
+	if strings.HasSuffix(schema.ID, "schema/custom") {
+		isCustom = true
+		eventType = cdeventType{
+			Subject:   "custom",
+			Predicate: "type",
+			Version:   specVersion,
+		}
 	}
-	for name, propertySchema := range contentSchema.Properties {
-		contentField := ContentField{}
-		contentField.NameLower = name
-		contentField.Name = capitalizer.String(name)
-		contentField.Required = false
-		var contentFieldType string
-		for _, value := range contentSchema.Required {
-			if name == value {
-				contentField.Required = true
+
+	// We can get more data from non-custom schemas
+	if !isCustom {
+		var err error
+		eventTypeSchema, ok := contextSchema.Properties["type"]
+		if !ok {
+			return nil, fmt.Errorf("no type property in schema %s", eventTypeSchema.Location)
+		}
+		if eventTypeSchema.Enum != nil && len(eventTypeSchema.Enum.Values) == 0 {
+			return nil, fmt.Errorf("no value defined for type in schema %s", eventTypeSchema.Location)
+		}
+		eventTypeString, ok := eventTypeSchema.Enum.Values[0].(string)
+		if !ok {
+			return nil, fmt.Errorf("non-string value defined for type in schema %s", eventTypeSchema.Location)
+		}
+		if eventTypeString == "" {
+			return nil, fmt.Errorf("empty value defined for type in schema %s", eventTypeSchema.Location)
+		}
+		eventType, err = cdeventTypeFromString(string(eventTypeString))
+		if err != nil {
+			return nil, err
+		}
+		// Parse the subject type
+		subjectSchema, ok := schema.Properties["subject"]
+		if !ok {
+			return nil, fmt.Errorf("no subject property in schema %s", schema.Location)
+		}
+		subjectTypeSchema, ok := subjectSchema.Properties["type"]
+		if !ok {
+			return nil, fmt.Errorf("no type property in schema %s", subjectSchema.Location)
+		}
+		if len(subjectTypeSchema.Enum.Values) == 0 {
+			return nil, fmt.Errorf("no value defined for type in schema %s", subjectTypeSchema.Location)
+		}
+		subjectTypeString, ok = subjectTypeSchema.Enum.Values[0].(string)
+		if !ok {
+			return nil, fmt.Errorf("non-string value defined for type in schema %s", subjectTypeSchema.Location)
+		}
+
+		// Parse the subject content fields
+		contentSchema, ok := subjectSchema.Properties["content"]
+		if !ok {
+			return nil, fmt.Errorf("no content property in schema %s", subjectSchema.Location)
+		}
+		for name, propertySchema := range contentSchema.Properties {
+			contentField := ContentField{}
+			contentField.NameLower = name
+			contentField.Name = capitalizer.String(name)
+			contentField.Required = false
+			var contentFieldType string
+			for _, value := range contentSchema.Required {
+				if name == value {
+					contentField.Required = true
+				}
 			}
-		}
-		// Handles the case of "anyOf" with string + enum of strings
-		var types = []string{}
-		if propertySchema.Types != nil {
-			types = propertySchema.Types.ToStrings()
-		}
-		if len(types) == 0 {
-			if propertySchema.AnyOf != nil {
-				err = validateStringEnumAnyOf(propertySchema)
+			// Handles the case of "anyOf" with string + enum of strings
+			var types = []string{}
+			if propertySchema.Types != nil {
+				types = propertySchema.Types.ToStrings()
+			}
+			if len(types) == 0 {
+				if propertySchema.AnyOf != nil {
+					err := validateStringEnumAnyOf(propertySchema)
+					if err != nil {
+						return nil, err
+					}
+					contentFieldType = "anyOfStringEnum"
+				} else {
+					return nil, fmt.Errorf("one type required or anyOf two string types in schema %s: %v", propertySchema.Location, types)
+				}
+			} else {
+				contentFieldType = types[0]
+			}
+			if len(types) > 1 {
+				return nil, fmt.Errorf("only one type allowed for content property in schema %s: %v", propertySchema.Location, types)
+			}
+			if len(types) > 1 {
+				return nil, fmt.Errorf("only one type allowed for content property in schema %s: %v", propertySchema.Location, types)
+			}
+			switch contentFieldType {
+			case "object":
+				contentType, err := typesForSchema(name, propertySchema, mappings)
 				if err != nil {
 					return nil, err
 				}
-				contentFieldType = "anyOfStringEnum"
-			} else {
-				return nil, fmt.Errorf("one type required or anyOf two string types in schema %s: %v", propertySchema.Location, types)
-			}
-		} else {
-			contentFieldType = types[0]
-		}
-		if len(types) > 1 {
-			return nil, fmt.Errorf("only one type allowed for content property in schema %s: %v", propertySchema.Location, types)
-		}
-		if len(types) > 1 {
-			return nil, fmt.Errorf("only one type allowed for content property in schema %s: %v", propertySchema.Location, types)
-		}
-		switch contentFieldType {
-		case "object":
-			contentType, err := typesForSchema(name, propertySchema, mappings)
-			if err != nil {
-				return nil, err
-			}
-			namespacedType := GoTypeName(contentType.Name, mappings)
-			if contentType.Name != REFERENCE_TYPE {
-				// If this is not a "Reference" we need to define a new type
-				contentTypes = append(contentTypes, *contentType)
-				// If this is not a "Reference" we need to namespace the type name to the event
-				namespacedType = GoTypeName(eventType.Subject, mappings) +
-					GoTypeName(eventType.Predicate, mappings) + "SubjectContent" +
-					GoTypeName(contentType.Name, mappings) + "V" + strings.ReplaceAll(eventType.Version, ".", "_")
-			}
-			// We must use pointers here for "omitempty" to work when rendering to JSON
-			contentField.Type = "*" + namespacedType
-		case "string":
-			contentField.Type = "string"
-		case "array":
-			if propertySchema.Items2020 != nil &&
-				len(propertySchema.Items2020.Types.ToStrings()) == 1 &&
-				propertySchema.Items2020.Types.ToStrings()[0] == "string" {
-				contentField.Type = "[]string"
-			} else {
+				namespacedType := GoTypeName(contentType.Name, mappings)
+				if contentType.Name != REFERENCE_TYPE {
+					// If this is not a "Reference" we need to define a new type
+					contentTypes = append(contentTypes, *contentType)
+					// If this is not a "Reference" we need to namespace the type name to the event
+					namespacedType = GoTypeName(eventType.Subject, mappings) +
+						GoTypeName(eventType.Predicate, mappings) + "SubjectContent" +
+						GoTypeName(contentType.Name, mappings) + "V" + strings.ReplaceAll(eventType.Version, ".", "_")
+				}
+				// We must use pointers here for "omitempty" to work when rendering to JSON
+				contentField.Type = "*" + namespacedType
+			case "string":
+				contentField.Type = "string"
+			case "array":
+				if propertySchema.Items2020 != nil &&
+					len(propertySchema.Items2020.Types.ToStrings()) == 1 &&
+					propertySchema.Items2020.Types.ToStrings()[0] == "string" {
+					contentField.Type = "[]string"
+				} else {
+					return nil, fmt.Errorf("content property type %s not allowed in schema %s", contentField.Type, propertySchema.Location)
+				}
+			case "anyOfStringEnum":
+				contentField.Type = "string"
+			default:
 				return nil, fmt.Errorf("content property type %s not allowed in schema %s", contentField.Type, propertySchema.Location)
 			}
-		case "anyOfStringEnum":
-			contentField.Type = "string"
-		default:
-			return nil, fmt.Errorf("content property type %s not allowed in schema %s", contentField.Type, propertySchema.Location)
+			contentFields = append(contentFields, contentField)
 		}
-		contentFields = append(contentFields, contentField)
+		// Sort contents for deterministic code rendering
+		sort.Slice(contentFields, func(i, j int) bool {
+			return contentFields[i].Name < contentFields[j].Name
+		})
+		sort.Slice(contentTypes, func(i, j int) bool {
+			return contentTypes[i].Name < contentTypes[j].Name
+		})
 	}
-	// Sort contents for deterministic code rendering
-	sort.Slice(contentFields, func(i, j int) bool {
-		return contentFields[i].Name < contentFields[j].Name
-	})
-	sort.Slice(contentTypes, func(i, j int) bool {
-		return contentTypes[i].Name < contentTypes[j].Name
-	})
 	return &Data{
 		Subject:        GoTypeName(eventType.Subject, mappings),
 		Predicate:      GoTypeName(eventType.Predicate, mappings),
@@ -655,6 +691,7 @@ func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string) (*Dat
 		SubjectType:    subjectTypeString,
 		Contents:       contentFields,
 		ContentTypes:   contentTypes,
+		IsCustom:       isCustom,
 	}, nil
 }
 

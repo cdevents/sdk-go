@@ -471,6 +471,15 @@ func NewTicketUpdatedEvent() (*TicketUpdatedEvent, error) {
 
 var TicketUpdatedEventType = api.TicketUpdatedEventTypeV0_1_0
 
+type CustomTypeEvent = api.CustomTypeEventV0_4_1
+type CustomTypeSubject = api.CustomTypeSubjectV0_4_1
+
+func NewCustomTypeEvent() (*CustomTypeEvent, error) {
+	return api.NewCustomTypeEventV0_4_1(SpecVersion)
+}
+
+var CustomTypeEventType = api.CustomTypeEventTypeV0_4_1
+
 // NewFromJsonBytes builds a new CDEventReader from a JSON string as []bytes
 // This works by unmarshalling the context first, extracting the event type and using
 // that to unmarshal the rest of the event into the correct object.

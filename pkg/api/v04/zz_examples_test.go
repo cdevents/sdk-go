@@ -367,4 +367,11 @@ func init() {
 	exampleTicketUpdatedEvent(newTicketUpdated)
 	examplesProduced[newTicketUpdated.GetType().Short()] = newTicketUpdated
 
+	// CustomType Event producer
+	newCustomType, _ := specv04.NewCustomTypeEvent()
+	setContext(newCustomType, testSubjectId)
+	setContextV04(newCustomType, true, true)
+	exampleCustomTypeEvent(newCustomType)
+	examplesProduced[newCustomType.GetType().Short()] = newCustomType
+
 }

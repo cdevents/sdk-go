@@ -19,6 +19,7 @@ SPDX-License-Identifier: Apache-2.0
 package v04_test
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"testing"
@@ -30,7 +31,10 @@ import (
 	"github.com/google/uuid"
 )
 
-const examplesFolder = "spec-v0.4/conformance"
+const (
+	examplesFolder = "spec-v0.4/conformance"
+	customExample  = "spec-v0.4/custom/conformance.json"
+)
 
 var (
 	// Examples Data
@@ -106,6 +110,22 @@ var (
 	testTicketType              = "task"
 	testTicketUpdatedBy         = "Bob"
 	testTicketUri               = "https://example.issues.com/ticket123"
+	testCustomEventType         = api.CDEventType{
+		// dev.cdeventsx.mytool-resource.created.0.1.0
+		Subject:   "resource",
+		Predicate: "created",
+		Custom:    "mytool",
+		Version:   "0.1.0",
+	}
+	testCustomContentBytes = []byte(`{
+		"user": "mybot-myapp",
+		"description": "a useful resource",
+		"nested": {
+			"key": "value",
+			"list": ["data1", "data2"]
+		}
+    }`)
+	testCustomContent interface{}
 
 	examplesConsumed map[string][]byte
 	examplesProduced map[string]api.CDEventV04
@@ -124,6 +144,9 @@ func init() {
 	uuidNewRandom = func() (uuid.UUID, error) {
 		return u, nil
 	}
+
+	err = json.Unmarshal(testCustomContentBytes, &testCustomContent)
+	panicOnError(err)
 }
 
 func exampleArtifactPackagedEvent(e *apiv04.ArtifactPackagedEvent) {
@@ -488,6 +511,16 @@ func exampleTicketUpdatedEvent(e *apiv04.TicketUpdatedEvent) {
 	e.SetChainId("")
 }
 
+func exampleCustomTypeEvent(e *apiv04.CustomTypeEvent) {
+	// Set example specific fields
+	// Set the type to dev.cdeventsx.mytool-resource.created.0.1.0
+	e.SetEventType(testCustomEventType)
+	e.SetSubjectContent(testCustomContent)
+	e.SetSchemaUri("https://myorg.com/schema/mytool")
+	e.SetSubjectId("pkg:resource/name@234fd47e07d1004f0aed9c")
+	e.SetChainId("6ca3f9c5-1cef-4ce0-861c-2456a69cf137")
+}
+
 func init() {
 
 	// Load event examples from the spec
@@ -495,8 +528,13 @@ func init() {
 
 	for _, event := range apiv04.CDEventsTypes {
 		short := event.GetType().Short()
-		examplesConsumed[short], err = os.ReadFile(filepath.Join("..", examplesFolder, short+".json"))
-		panicOnError(err)
+		if short != "" {
+			examplesConsumed[short], err = os.ReadFile(filepath.Join("..", examplesFolder, short+".json"))
+			panicOnError(err)
+		} else {
+			// There is no type set for custom events, and the example is in a different folder
+			examplesConsumed[short], err = os.ReadFile(filepath.Join("..", customExample))
+		}
 	}
 }
 
@@ -535,6 +573,10 @@ func TestExamples(t *testing.T) {
 			}
 			// Check the subject
 			if d := cmp.Diff(consumed.GetSubject(), produced.GetSubject()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			// Coverage for GetSubjectContent
+			if d := cmp.Diff(consumed.GetSubjectContent(), produced.GetSubjectContent()); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
 			// Check v04+ attributes

@@ -63,7 +63,7 @@ func (e ServiceRolledbackEventV0_1_1) GetType() CDEventType {
 }
 
 func (e ServiceRolledbackEventV0_1_1) GetVersion() string {
-	return CDEventsSpecVersion
+	return e.Context.GetVersion()
 }
 
 func (e ServiceRolledbackEventV0_1_1) GetId() string {
@@ -144,7 +144,11 @@ func (e *ServiceRolledbackEventV0_1_1) SetCustomData(contentType string, data in
 
 func (e ServiceRolledbackEventV0_1_1) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate)
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate, eType.Custom)
+}
+
+func (e ServiceRolledbackEventV0_1_1) GetSubjectContent() interface{} {
+	return e.Subject.Content
 }
 
 // Set subject custom fields

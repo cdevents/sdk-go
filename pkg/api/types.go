@@ -31,10 +31,12 @@ import (
 )
 
 const (
-	EventTypeRoot             = "dev.cdevents"
-	CDEventsSpecVersion       = "0.3.0"
-	CDEventsSchemaURLTemplate = "https://cdevents.dev/%s/schema/%s-%s-event"
-	CDEventsTypeRegex         = "^dev\\.cdevents\\.(?P<subject>[a-z]+)\\.(?P<predicate>[a-z]+)\\.(?P<version>.*)$"
+	EventTypeRoot                   = "dev.cdevents"
+	CustomEventTypeRoot             = "dev.cdeventsx"
+	CDEventsSchemaURLTemplate       = "https://cdevents.dev/%s/schema/%s-%s-event"
+	CDEventsCustomSchemaURLTemplate = "https://cdevents.dev/%s/schema/custom"
+	CDEventsTypeRegex               = "^dev\\.cdevents\\.(?P<subject>[a-z]+)\\.(?P<predicate>[a-z]+)\\.(?P<version>.*)$"
+	CDEventsCustomTypeRegex         = "^dev\\.cdeventsx\\.(?P<tool>[a-z]+)-(?P<subject>[a-z]+)\\.(?P<predicate>[a-z]+)\\.(?P<version>.*)$"
 
 	LinkTypePath     LinkType = "PATH"
 	LinkTypeEnd      LinkType = "END"
@@ -42,8 +44,9 @@ const (
 )
 
 var (
-	CDEventsTypeCRegex = regexp.MustCompile(CDEventsTypeRegex)
-	LinkTypes          = map[LinkType]interface{}{
+	CDEventsTypeCRegex       = regexp.MustCompile(CDEventsTypeRegex)
+	CDEventsCustomTypeCRegex = regexp.MustCompile(CDEventsCustomTypeRegex)
+	LinkTypes                = map[LinkType]interface{}{
 		LinkTypePath:     "",
 		LinkTypeEnd:      "",
 		LinkTypeRelation: "",
@@ -380,18 +383,59 @@ type CDEventType struct {
 
 	// Version is a semantic version in the form <major>.<minor>.<patch>
 	Version string
+
+	// Custom holds the tool name in case of custom events
+	Custom string
+}
+
+func (t CDEventType) Root() string {
+	root := EventTypeRoot
+	if t.Custom != "" {
+		root = CustomEventTypeRoot
+	}
+	return root
+}
+
+// FQSubject returns the fully qualified subject, which includes
+// the tool name from t.Custom in case of custom events
+func (t CDEventType) FQSubject() string {
+	s := t.Subject
+	if s == "" {
+		s = "<undefined-subject>"
+	}
+	if t.Custom != "" {
+		s = t.Custom + "-" + s
+	}
+	return s
 }
 
 func (t CDEventType) String() string {
-	return EventTypeRoot + "." + t.Subject + "." + t.Predicate + "." + t.Version
+	predicate := t.Predicate
+	if predicate == "" {
+		predicate = "<undefined-predicate>"
+	}
+	version := t.Version
+	if version == "" {
+		version = "<undefined-version>"
+	}
+	return t.Root() + "." + t.FQSubject() + "." + predicate + "." + version
 }
 
 func (t CDEventType) UnversionedString() string {
-	return EventTypeRoot + "." + t.Subject + "." + t.Predicate
+	predicate := t.Predicate
+	if predicate == "" {
+		predicate = "<undefined-predicate>"
+	}
+	return t.Root() + "." + t.FQSubject() + "." + predicate
 }
 
 func (t CDEventType) Short() string {
-	return t.Subject + "_" + t.Predicate
+	s := t.FQSubject()
+	p := t.Predicate
+	if s == "" || p == "" {
+		return ""
+	}
+	return t.FQSubject() + "_" + t.Predicate
 }
 
 // Two CDEventTypes are compatible if the subject and predicates
@@ -420,15 +464,32 @@ func (t CDEventType) MarshalJSON() ([]byte, error) {
 }
 
 func CDEventTypeFromString(cdeventType string) (*CDEventType, error) {
+	names := CDEventsTypeCRegex.SubexpNames()
 	parts := CDEventsTypeCRegex.FindStringSubmatch(cdeventType)
 	if len(parts) != 4 {
-		return nil, fmt.Errorf("cannot parse event type %s", cdeventType)
+		names = CDEventsCustomTypeCRegex.SubexpNames()
+		parts = CDEventsCustomTypeCRegex.FindStringSubmatch(cdeventType)
+		if len(parts) != 5 {
+			return nil, fmt.Errorf("cannot parse event type %s", cdeventType)
+		}
 	}
-	return &CDEventType{
-		Subject:   parts[1],
-		Predicate: parts[2],
-		Version:   parts[3],
-	}, nil
+	returnType := CDEventType{}
+	for i, matchName := range names {
+		if i == 0 {
+			continue
+		}
+		switch matchName {
+		case "subject":
+			returnType.Subject = parts[i]
+		case "predicate":
+			returnType.Predicate = parts[i]
+		case "version":
+			returnType.Version = parts[i]
+		case "tool":
+			returnType.Custom = parts[i]
+		}
+	}
+	return &returnType, nil
 }
 
 type CDEventReader interface {
@@ -458,6 +519,11 @@ type CDEventReader interface {
 	// the generic Subject to obtain an event specific implementation of Subject
 	// for direct access to the content fields
 	GetSubject() Subject
+
+	// The event specific subject. It is possible to use a type assertion with
+	// the generic Subject to obtain an event specific implementation of Subject
+	// for direct access to the content fields
+	GetSubjectContent() interface{}
 
 	// The URL and content of the schema file associated to the event type
 	GetSchema() (string, *jsonschema.Schema, error)
@@ -529,6 +595,20 @@ type CDEventWriterV04 interface {
 
 	// The custom schema URI
 	SetSchemaUri(schema string)
+}
+
+type CustomCDEventReader interface {
+	CDEventReaderV04
+}
+
+type CustomCDEventWriter interface {
+	CDEventWriterV04
+
+	// CustomCDEvent can represent different event types
+	SetEventType(eventType CDEventType)
+
+	// CustomCDEvent types can have different subject fields
+	SetSubjectContent(subjectContent interface{})
 }
 
 type CDEventCustomDataEncoding string

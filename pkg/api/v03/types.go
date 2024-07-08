@@ -74,7 +74,8 @@ func init() {
 	// Set up CDEventsByUnversionedTypes for convenience
 	CDEventsByUnversionedTypes = make(map[string]api.CDEvent)
 	for _, event := range CDEventsTypes {
-		CDEventsByUnversionedTypes[event.GetType().UnversionedString()] = event
+		key := event.GetType().UnversionedString()
+		CDEventsByUnversionedTypes[key] = event
 	}
 }
 

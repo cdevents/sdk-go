@@ -119,7 +119,7 @@ func TestDataFromSchema(t *testing.T) {
 		"foosubject":   "FooSubject",
 		"barpredicate": "BarPredicate",
 	}
-	got, err := DataFromSchema(testSchema, mappings)
+	got, err := DataFromSchema(testSchema, mappings, "0.1.2")
 	if err != nil {
 		t.Fatalf(err.Error())
 	}

@@ -381,6 +381,16 @@ func TestCDEventTypeFromString(t *testing.T) {
 		},
 		wantError: false,
 	}, {
+		name:      "parses, custom",
+		eventType: "dev.cdeventsx.tool-a.b.123.a-da#@#",
+		want: &api.CDEventType{
+			Subject:   "a",
+			Predicate: "b",
+			Version:   "123.a-da#@#",
+			Custom:    "tool",
+		},
+		wantError: false,
+	}, {
 		name:      "missing version",
 		eventType: "dev.cdevents.a.b",
 		want:      nil,
@@ -393,6 +403,16 @@ func TestCDEventTypeFromString(t *testing.T) {
 	}, {
 		name:      "invalid character",
 		eventType: "dev.cdevents.a1.b2.version",
+		want:      nil,
+		wantError: true,
+	}, {
+		name:      "missing version, custom",
+		eventType: "dev.cdeventsx.tool-a.b",
+		want:      nil,
+		wantError: true,
+	}, {
+		name:      "missing tool, custom",
+		eventType: "dev.cdeventsx.a1.b2.version",
 		want:      nil,
 		wantError: true,
 	}}

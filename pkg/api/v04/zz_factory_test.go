@@ -882,4 +882,23 @@ func init() {
 			},
 		},
 	})
+	tests = append(tests, testNewCDEventType{
+		name:      "custom type",
+		eventType: apiv04.CustomTypeEventType.String(),
+		expectedEvent: &apiv04.CustomTypeEvent{
+			Context: api.ContextV04{
+				Context: api.Context{
+					Type:      apiv04.CustomTypeEventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+					Version:   "0.4.1",
+				},
+			},
+			Subject: apiv04.CustomTypeSubject{
+				SubjectBase: api.SubjectBase{
+					Type: "",
+				},
+			},
+		},
+	})
 }

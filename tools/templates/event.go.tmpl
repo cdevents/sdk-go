@@ -32,25 +32,34 @@ import (
 var (
 	// {{.Subject}}{{.Predicate}} event type v{{.Version}}
 	{{.Subject}}{{.Predicate}}EventTypeV{{.VersionName}} CDEventType = CDEventType{
+{{- if not .IsCustom }}
 		Subject:   "{{.SubjectLower}}",
 		Predicate: "{{.PredicateLower}}",
 		Version:   "{{.Version}}",
+{{- else -}}
+{{- end }}
 	}
 )
 
+{{- if not .IsCustom }}
 type {{.Subject}}{{.Predicate}}SubjectContentV{{.VersionName}}  struct{
 {{ range $i, $field := .Contents }}
 	{{ .Name }} {{ .Type }} `json:"{{ .NameLower }}{{ if not .Required }},omitempty{{ end }}"{{ if eq .Name "ArtifactId" }} validate:"purl"{{ end }}`
 {{ end }}
 }
+{{- end }}
 
 type {{.Subject}}{{.Predicate}}SubjectV{{.VersionName}} struct {
 	SubjectBase
-	Content {{.Subject}}{{.Predicate}}SubjectContentV{{.VersionName}} `json:"content"`
+	Content {{if .IsCustom }}interface{}{{ else }}{{.Subject}}{{.Predicate}}SubjectContentV{{.VersionName}}{{ end }} `json:"content"`
 }
 
 func (sc {{.Subject}}{{.Predicate}}SubjectV{{.VersionName}}) GetSubjectType() SubjectType {
+{{- if not .IsCustom }}
 	return "{{.SubjectType}}"
+{{- else }}
+	return sc.Type
+{{- end }}
 }
 
 type {{.Subject}}{{.Predicate}}EventV{{.VersionName}} struct {
@@ -70,7 +79,7 @@ func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetType() CDEventType 
 }
 
 func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetVersion() string {
-	return CDEventsSpecVersion
+	return e.Context.GetVersion()
 }
 
 func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetId() string {
@@ -167,7 +176,7 @@ func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetCustomData(content
 
 func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return 	{{if .IsTestData }}Test{{end}}CompiledSchemas.GetBySpecSubjectPredicate("{{.SpecVersion}}", eType.Subject, eType.Predicate)
+	return 	{{if .IsTestData }}Test{{end}}CompiledSchemas.GetBySpecSubjectPredicate("{{.SpecVersion}}", eType.Subject, eType.Predicate, eType.Custom)
 }
 
 {{- if ne .SpecVersion "0.3.0"}}
@@ -187,7 +196,27 @@ func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetSchemaUri(schema s
 {{- end}}
 
 
+func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetSubjectContent() interface{} {
+	return e.Subject.Content
+}
+
+{{- if .IsCustom }}
+// CustomCDEventWriter implementation
+
+func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetEventType(eventType CDEventType) {
+	e.Context.Type = eventType
+	e.Subject.Type = SubjectType(eventType.FQSubject())
+}
+
+// CustomCDEvent types can have different subject fields
+func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetSubjectContent(subjectContent interface{}) {
+	e.Subject.Content = subjectContent
+}
+{{- end }}
+
+{{- if gt (len .Contents) 0 }}
 // Set subject custom fields
+{{- end }}
 {{ range $i, $field := .Contents }}
 func (e *{{$.Subject}}{{$.Predicate}}EventV{{$.VersionName}}) SetSubject{{ .Name }}({{ .NameLower }} {{ .Type }}) {
 	e.Subject.Content.{{ .Name }} = {{ .NameLower }}
