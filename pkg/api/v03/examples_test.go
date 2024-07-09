@@ -424,6 +424,10 @@ func TestExamples(t *testing.T) {
 			if d := cmp.Diff(consumed.GetSubject(), produced.GetSubject()); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
+			// Coverage for GetSubjectContent
+			if d := cmp.Diff(consumed.GetSubjectContent(), produced.GetSubjectContent()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
 		})
 	}
 }

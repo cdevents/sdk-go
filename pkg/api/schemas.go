@@ -6812,7 +6812,8 @@ var (
     "context",
     "subject"
   ]
-}`,
+}
+`,
 		"https://cdevents.dev/0.4.1/schema/environment-created-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cdevents.dev/0.4.1/schema/environment-created-event",
@@ -11668,8 +11669,13 @@ func init() {
 		CompiledSchemas[url] = sch
 	}
 }
-func (db SchemaDB) GetBySpecSubjectPredicate(specVersion, subject, predicate string) (string, *jsonschema.Schema, error) {
-	id := fmt.Sprintf(CDEventsSchemaURLTemplate, specVersion, subject, predicate)
+func (db SchemaDB) GetBySpecSubjectPredicate(specVersion, subject, predicate, custom string) (string, *jsonschema.Schema, error) {
+	id := ""
+	if custom == "" && subject != "" && predicate != "" {
+		id = fmt.Sprintf(CDEventsSchemaURLTemplate, specVersion, subject, predicate)
+	} else {
+		id = fmt.Sprintf(CDEventsCustomSchemaURLTemplate, specVersion)
+	}
 	if schemaString, found := db[id]; found {
 		return id, schemaString, nil
 	}

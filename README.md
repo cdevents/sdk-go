@@ -77,6 +77,14 @@ func main() {
 
 See the [CloudEvents](https://github.com/cloudevents/sdk-go#send-your-first-cloudevent) docs as well.
 
+## Documentation
+
+More examples are available in the [docs](./docs) folder.
+Online API Reference:
+- [SDK Root](https://pkg.go.dev/github.com/cdevents/sdk-go/pkg/api)
+- [v03 Specific](https://pkg.go.dev/github.com/cdevents/sdk-go/pkg/api/v03)
+- [v04 Specific](https://pkg.go.dev/github.com/cdevents/sdk-go/pkg/api/v04)
+
 ## Contributing
 
 If you would like to contribute, see our [development](DEVELOPMENT.md) guide.

@@ -60,7 +60,7 @@ func (e BuildQueuedEventV0_2_0) GetType() CDEventType {
 }
 
 func (e BuildQueuedEventV0_2_0) GetVersion() string {
-	return CDEventsSpecVersion
+	return e.Context.GetVersion()
 }
 
 func (e BuildQueuedEventV0_2_0) GetId() string {
@@ -155,7 +155,7 @@ func (e *BuildQueuedEventV0_2_0) SetCustomData(contentType string, data interfac
 
 func (e BuildQueuedEventV0_2_0) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return CompiledSchemas.GetBySpecSubjectPredicate("0.4.1", eType.Subject, eType.Predicate)
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.4.1", eType.Subject, eType.Predicate, eType.Custom)
 }
 
 // CDEventsWriterV04 implementation
@@ -172,7 +172,9 @@ func (e *BuildQueuedEventV0_2_0) SetSchemaUri(schema string) {
 	e.Context.SchemaUri = schema
 }
 
-// Set subject custom fields
+func (e BuildQueuedEventV0_2_0) GetSubjectContent() interface{} {
+	return e.Subject.Content
+}
 
 // New creates a new BuildQueuedEventV0_2_0
 func NewBuildQueuedEventV0_2_0(specVersion string) (*BuildQueuedEventV0_2_0, error) {

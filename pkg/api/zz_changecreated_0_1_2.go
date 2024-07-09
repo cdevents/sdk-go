@@ -61,7 +61,7 @@ func (e ChangeCreatedEventV0_1_2) GetType() CDEventType {
 }
 
 func (e ChangeCreatedEventV0_1_2) GetVersion() string {
-	return CDEventsSpecVersion
+	return e.Context.GetVersion()
 }
 
 func (e ChangeCreatedEventV0_1_2) GetId() string {
@@ -142,7 +142,11 @@ func (e *ChangeCreatedEventV0_1_2) SetCustomData(contentType string, data interf
 
 func (e ChangeCreatedEventV0_1_2) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate)
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate, eType.Custom)
+}
+
+func (e ChangeCreatedEventV0_1_2) GetSubjectContent() interface{} {
+	return e.Subject.Content
 }
 
 // Set subject custom fields

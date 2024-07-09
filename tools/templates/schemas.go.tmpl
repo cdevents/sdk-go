@@ -68,8 +68,13 @@ func init() {
 }
 
 {{- if not .IsTestData}}
-func (db SchemaDB) GetBySpecSubjectPredicate(specVersion, subject, predicate string) (string, *jsonschema.Schema, error) {
-  id := fmt.Sprintf(CDEventsSchemaURLTemplate, specVersion, subject, predicate)
+func (db SchemaDB) GetBySpecSubjectPredicate(specVersion, subject, predicate, custom string) (string, *jsonschema.Schema, error) {
+  id := ""
+  if custom == "" && subject != "" && predicate != "" {
+    id = fmt.Sprintf(CDEventsSchemaURLTemplate, specVersion, subject, predicate)
+  } else {
+    id = fmt.Sprintf(CDEventsCustomSchemaURLTemplate, specVersion)
+  }
   if schemaString, found := db[id]; found {
     return id, schemaString, nil
   }

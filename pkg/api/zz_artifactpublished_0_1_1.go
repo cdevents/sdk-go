@@ -60,7 +60,7 @@ func (e ArtifactPublishedEventV0_1_1) GetType() CDEventType {
 }
 
 func (e ArtifactPublishedEventV0_1_1) GetVersion() string {
-	return CDEventsSpecVersion
+	return e.Context.GetVersion()
 }
 
 func (e ArtifactPublishedEventV0_1_1) GetId() string {
@@ -141,10 +141,12 @@ func (e *ArtifactPublishedEventV0_1_1) SetCustomData(contentType string, data in
 
 func (e ArtifactPublishedEventV0_1_1) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate)
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.3.0", eType.Subject, eType.Predicate, eType.Custom)
 }
 
-// Set subject custom fields
+func (e ArtifactPublishedEventV0_1_1) GetSubjectContent() interface{} {
+	return e.Subject.Content
+}
 
 // New creates a new ArtifactPublishedEventV0_1_1
 func NewArtifactPublishedEventV0_1_1(specVersion string) (*ArtifactPublishedEventV0_1_1, error) {

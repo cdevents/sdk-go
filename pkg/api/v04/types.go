@@ -72,6 +72,7 @@ var CDEventsTypes = []api.CDEventV04{
 	&TicketClosedEvent{},
 	&TicketCreatedEvent{},
 	&TicketUpdatedEvent{},
+	&CustomTypeEvent{},
 }
 
 var CDEventsByUnversionedTypes map[string]api.CDEventV04
@@ -80,7 +81,11 @@ func init() {
 	// Set up CDEventsByUnversionedTypes for convenience
 	CDEventsByUnversionedTypes = make(map[string]api.CDEventV04)
 	for _, event := range CDEventsTypes {
-		CDEventsByUnversionedTypes[event.GetType().UnversionedString()] = event
+		key := event.GetType().UnversionedString()
+		if event.GetType().Short() == "" {
+			key = api.CustomEventMapKey
+		}
+		CDEventsByUnversionedTypes[key] = event
 	}
 }
 
@@ -178,6 +183,8 @@ func NewCDEvent(eventType, specVersion string) (api.CDEvent, error) {
 		return NewTicketCreatedEvent()
 	case api.TicketUpdatedEventTypeV0_1_0.String():
 		return NewTicketUpdatedEvent()
+	case api.CustomTypeEventTypeV0_4_1.String():
+		return NewCustomTypeEvent()
 	default:
 		return nil, fmt.Errorf("event %v not supported", eventType)
 	}

@@ -30,7 +30,10 @@ import (
 	"golang.org/x/mod/semver"
 )
 
-const SCHEMA_ID_REGEX = `^https://cdevents.dev/([0-9]\.[0-9])\.[0-9]/schema/([^ ]*)$`
+const (
+	SCHEMA_ID_REGEX   = `^https://cdevents.dev/([0-9]\.[0-9])\.[0-9]/schema/([^ ]*)$`
+	CustomEventMapKey = "custom"
+)
 
 var (
 	// Validation helper as singleton
@@ -172,24 +175,29 @@ func NewFromJsonBytesContext[CDEventType CDEvent](event []byte, cdeventsMap map[
 	eventAux := &struct {
 		Context Context `json:"context"`
 	}{}
-	var nilReturn CDEventType
+	var nilReturn, receiver CDEventType
+	var ok bool
 	err := json.Unmarshal(event, eventAux)
 	if err != nil {
 		return nilReturn, err
 	}
 	eventType := eventAux.Context.GetType()
-	receiver, ok := cdeventsMap[eventType.UnversionedString()]
-	if !ok {
-		// This should not happen as unmarshalling and validate checks if the type is known to the SDK
-		return nilReturn, fmt.Errorf("unknown event type %s", eventAux.Context.GetType())
-	}
-	// Check if the receiver is compatible. It must have the same subject and predicate
-	// and share the same major version.
-	// If the minor version is different and the message received as a version that is
-	// greater than the SDK one, some fields may be lost, as newer versions may add new
-	// fields to the event specification.
-	if !eventType.IsCompatible(receiver.GetType()) {
-		return nilReturn, fmt.Errorf("sdk event version %s not compatible with %s", receiver.GetType().Version, eventType.Version)
+	if eventType.Custom != "" {
+		receiver = cdeventsMap[CustomEventMapKey] // Custom type receiver does not have a predefined type
+	} else {
+		receiver, ok = cdeventsMap[eventType.UnversionedString()]
+		if !ok {
+			// This should not happen as unmarshalling and validate checks if the type is known to the SDK
+			return nilReturn, fmt.Errorf("unknown event type %s", eventAux.Context.GetType())
+		}
+		// Check if the receiver is compatible. It must have the same subject and predicate
+		// and share the same major version.
+		// If the minor version is different and the message received as a version that is
+		// greater than the SDK one, some fields may be lost, as newer versions may add new
+		// fields to the event specification.
+		if !eventType.IsCompatible(receiver.GetType()) {
+			return nilReturn, fmt.Errorf("sdk event version %s not compatible with %s", receiver.GetType().Version, eventType.Version)
+		}
 	}
 	err = json.Unmarshal(event, receiver)
 	if err != nil {

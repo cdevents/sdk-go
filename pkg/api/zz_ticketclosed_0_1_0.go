@@ -81,7 +81,7 @@ func (e TicketClosedEventV0_1_0) GetType() CDEventType {
 }
 
 func (e TicketClosedEventV0_1_0) GetVersion() string {
-	return CDEventsSpecVersion
+	return e.Context.GetVersion()
 }
 
 func (e TicketClosedEventV0_1_0) GetId() string {
@@ -176,7 +176,7 @@ func (e *TicketClosedEventV0_1_0) SetCustomData(contentType string, data interfa
 
 func (e TicketClosedEventV0_1_0) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return CompiledSchemas.GetBySpecSubjectPredicate("0.4.1", eType.Subject, eType.Predicate)
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.4.1", eType.Subject, eType.Predicate, eType.Custom)
 }
 
 // CDEventsWriterV04 implementation
@@ -191,6 +191,10 @@ func (e *TicketClosedEventV0_1_0) SetLinks(links EmbeddedLinksArray) {
 
 func (e *TicketClosedEventV0_1_0) SetSchemaUri(schema string) {
 	e.Context.SchemaUri = schema
+}
+
+func (e TicketClosedEventV0_1_0) GetSubjectContent() interface{} {
+	return e.Subject.Content
 }
 
 // Set subject custom fields
