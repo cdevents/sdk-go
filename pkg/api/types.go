@@ -582,6 +582,9 @@ type CDEventReaderV04 interface {
 
 	// The custom schema URI
 	GetSchemaUri() string
+
+	// The compiled schemaUri for the event
+	GetCustomSchema() (*jsonschema.Schema, error)
 }
 
 type CDEventWriterV04 interface {

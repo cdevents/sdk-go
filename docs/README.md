@@ -2,6 +2,8 @@
 
 This folder contains example of how to use this SDK.
 
+> **Note** For simplicity, the code below does not include error handling. The go files in example folders includes it.
+
 ## Create a Custom CDEvent
 
 If a tool wants to emit events that are not supported by the CDEvents specification,
@@ -17,21 +19,24 @@ happens, but CDEvents does not define any quota related subject.
 
 ```golang
 type Quota struct {
-	User string `json:"user,omitempty"` // The use the quota applies ot
-	Limit string `json:"limit,omitempty"` // The limit enforced by the quota e.g. 100Gb
-	Current int `json:"current,omitempty"` // The current % of the quota used e.g. 90%
-	Threshold int `json:"threshold,omitempty"` // The threshold for warning event e.g. 85%
-	Level string `json:"level,omitempty"` // INFO: <threshold, WARNING: >threshold, <quota, CRITICAL: >quota
+    User string `json:"user,omitempty"` // The use the quota applies ot
+    Limit string `json:"limit,omitempty"` // The limit enforced by the quota e.g. 100Gb
+    Current int `json:"current,omitempty"` // The current % of the quota used e.g. 90%
+    Threshold int `json:"threshold,omitempty"` // The threshold for warning event e.g. 85%
+    Level string `json:"level,omitempty"` // INFO: <threshold, WARNING: >threshold, <quota, CRITICAL: >quota
 }
 ```
+
 For this scenario we will need a few imports:
 
 ```golang
 import (
 	"context"
-    "fmt"
+	"fmt"
 	"log"
+	"os"
 
+	examples "github.com/cdevents/sdk-go/docs/examples"
 	cdevents "github.com/cdevents/sdk-go/pkg/api"
 	cdeventsv04 "github.com/cdevents/sdk-go/pkg/api/v04"
 	cloudevents "github.com/cloudevents/sdk-go/v2"
@@ -63,9 +68,7 @@ quotaRule123 := Quota{
 
 // Create the base event
 event, err := cdeventsv04.NewCustomTypeEvent()
-if err != nil {
-    log.Fatalf("could not create a cdevent, %v", err)
-}
+examples.PanicOnError(err, "could not create a cdevent")
 event.SetEventType(eventType)
 
 // Set the required context fields
@@ -79,6 +82,15 @@ event.SetSubjectContent(quotaRule123)
 // to the event so that the receiver may validate custom fields like
 // the event type and subject content
 event.SetSchemaUri("https://myregistry.dev/schemas/cdevents/quota-exceeded/0_1_0")
+
+// The event schema needs to be loaded, so the SDK may validate
+// In this example, the schema is located in the same folder as
+// the go code
+customSchema, err := os.ReadFile("myregistry-quotaexceeded_schema.json")
+examples.PanicOnError(err, "cannot load schema file")
+
+err = cdevents.LoadJsonSchema(customSchemaUri, customSchema)
+examples.PanicOnError(err, "cannot load the custom schema file")
 ```
 
 To see the event, let's render it as JSON and log it:
@@ -86,10 +98,7 @@ To see the event, let's render it as JSON and log it:
 ```golang
 // Render the event as JSON
 eventJson, err := cdevents.AsJsonString(event)
-if err != nil {
-    log.Fatalf("failed to marshal the CDEvent, %v", err)
-}
-// Print the event
+examples.PanicOnError(err, "failed to marshal the CDEvent")
 fmt.Printf("%s", eventJson)
 ```
 
@@ -123,10 +132,11 @@ if result := c.Send(ctx, *ce); cloudevents.IsUndelivered(result) {
 }
 ```
 
-The whole code of is available under [`examples/custom.go`](./examples/custom.go):
+The whole code of is available under [`examples/custom`](./examples/custom/main.go):
 
 ```shell
-➜ go run custom.go | jq .
+➜ cd examples/custom
+➜ go run main.go | jq .
 {
   "context": {
     "version": "0.4.1",
@@ -149,4 +159,75 @@ The whole code of is available under [`examples/custom.go`](./examples/custom.go
     }
   }
 }
+```
+
+## Consume a CDEvent with a Custom Schema
+
+CDEvents producers may include a `schemaUri` in their events. The extra schema **must** comply with the CDEvents schema and may add additional rules on top.
+The `schemaUri` field includes the `$id` field of the custom schema and can be used for different purposes:
+* specify the format of the data included in the `customData` field
+* specify the format of the subject content of custom events
+* refine the format of one or more fields of a specific CDEvent
+
+In this examples, the custom schema is used to define the format of the `customData` for a `change.created` events, which corresponds to the following golang `struct`:
+
+```golang
+type ChangeData struct {
+	User     string `json:"user"`               // The user that created the PR
+	Assignee string `json:"assignee,omitempty"` // The user assigned to the PR (optional)
+	Head     string `json:"head"`               // The head commit (sha) of the PR
+	Base     string `json:"base"`               // The base commit (sha) for the PR
+}
+```
+
+The goal of this example is to consume (parse) an event with a custom schema and validate it. In the example we load the event from disk. In real life the event will be typically received over the network or extracted from a database.
+
+For this scenario we will need a few imports:
+
+```golang
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	examples "github.com/cdevents/sdk-go/docs/examples"
+	cdevents "github.com/cdevents/sdk-go/pkg/api"
+	cdevents04 "github.com/cdevents/sdk-go/pkg/api/v04"
+	cloudevents "github.com/cloudevents/sdk-go/v2"
+)
+```
+
+Before parsing an event with a custom schema, it's required to load the schema into the SDK. This avoids having to download and compile the schema every time a message is parsed.
+
+```golang
+// Load and register the custom schema
+customSchema, err := os.ReadFile("changecreated_schema.json")
+
+// Unmarshal the schema to extract the $id. The $id can also be hardcoded as a const
+eventAux := &struct {
+    Id string `json:"$id"`
+}{}
+err = json.Unmarshal(customSchema, eventAux)
+err = cdevents.LoadJsonSchema(eventAux.Id, customSchema)
+```
+
+Once the schema is loaded, it's possible to parse the event itself.
+In this case we know that the event is in the v0.4 version format, so we use the corresponding API.
+
+```golang
+// Load, unmarshal and validate the event
+eventBytes, err := os.ReadFile("changecreated.json")
+event, err := cdevents04.NewFromJsonBytes(eventBytes)
+
+err = cdevent.Validate(event)
+if err != nil {
+	log.Fatalf("cannot validate event %v: %v", event, err)
+}
+
+// Print the event
+eventJson, err := cdevents.AsJsonString(event)
+examples.PanicOnError(err, "failed to marshal the CDEvent")
+fmt.Printf("%s\n\n", eventJson)
 ```

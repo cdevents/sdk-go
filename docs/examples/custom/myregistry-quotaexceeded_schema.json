@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myregistry.dev/schemas/cdevents/quota-exceeded/0_1_0",
+  "properties": {
+    "context": {
+      "properties": {
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri-reference"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "dev.cdeventsx.myregistry-quota.exceeded.0.1.0"
+          ],
+          "default": "dev.cdeventsx.myregistry-quota.exceeded.0.1.0"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "schemaUri": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri",
+          "enum": [
+            "https://myregistry.dev/schemas/cdevents/quota-exceeded/0_1_0"
+          ],
+          "default": "https://myregistry.dev/schemas/cdevents/quota-exceeded/0_1_0"
+        },
+        "chainId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "links": {
+          "$ref": "https://cdevents.dev/0.4.1/schema/links/embeddedlinksarray"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "version",
+        "id",
+        "source",
+        "type",
+        "timestamp"
+      ]
+    },
+    "subject": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri-reference"
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "myregistry-quota"
+          ],
+          "default": "myregistry-quota"
+        },
+        "content": {
+          "properties": {
+            "user": {
+              "type": "string",
+              "minLength": 1
+            }, 
+            "limit": {
+              "type": "string",
+              "minLength": 1
+            },
+            "current": {
+              "type": "integer"
+            },
+            "threshold": {
+              "type": "integer"
+            },
+            "level": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "user",
+            "limit",
+            "current",
+            "threshold",
+            "level"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "content"
+      ]
+    },
+    "customData": {
+      "oneOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "string",
+          "contentEncoding": "base64"
+        }
+      ]
+    },
+    "customDataContentType": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "required": [
+    "context",
+    "subject"
+  ]
+}

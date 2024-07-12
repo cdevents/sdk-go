@@ -20,6 +20,7 @@ package api_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"testing"
 
@@ -50,10 +51,20 @@ var (
 	testChangeId = "myChange123"
 
 	// V04+ Examples Data
-	testLinks     api.EmbeddedLinksArray
-	testContextId = "5328c37f-bb7e-4bb7-84ea-9f5f85e4a7ce"
-	testChainId   = "4c8cb7dd-3448-41de-8768-eec704e2829b"
-	testSchemaUri = "https://myorg.com/schema/custom"
+	testLinks                    api.EmbeddedLinksArray
+	testContextId                = "5328c37f-bb7e-4bb7-84ea-9f5f85e4a7ce"
+	testChainId                  = "4c8cb7dd-3448-41de-8768-eec704e2829b"
+	testSchemaUri                = "https://myorg.com/schema/custom"
+	testCustomSchemaJsonTemplate = `{
+		"$schema": "https://json-schema.org/draft/2020-12/schema",
+		"$id": "%s",
+		"additionalProperties": true,
+		"type": "object"
+	}`
+	testCustomSchemaJson = fmt.Sprintf(testCustomSchemaJsonTemplate, testSchemaUri)
+	testCustomSchemas    = map[string][]byte{
+		testSchemaUri: []byte(testCustomSchemaJson),
+	}
 
 	eventJsonCustomData             *testapi.FooSubjectBarPredicateEvent
 	eventNonJsonCustomData          *testapi.FooSubjectBarPredicateEvent
@@ -152,6 +163,11 @@ func init() {
 	eventNonJsonCustomData.SetSubjectObjectField(&testapi.FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
 	err = eventNonJsonCustomData.SetCustomData("application/xml", testDataXml)
 	panicOnError(err)
+
+	for id, jsonBytes := range testCustomSchemas {
+		err = api.LoadJsonSchema(id, jsonBytes)
+		panicOnError(err)
+	}
 }
 
 // TestAsCloudEvent produces a CloudEvent from a CDEvent using `AsCloudEvent`

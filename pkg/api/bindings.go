@@ -164,6 +164,22 @@ func Validate(event CDEventReader) error {
 	if err != nil {
 		return err
 	}
+	// Check if there is a custom schema
+	v4event, ok := event.(CDEventReaderV04)
+	if ok {
+		schema, err := v4event.GetCustomSchema()
+		if err != nil {
+			return err
+		}
+		// If there is no schema defined, we're done
+		if schema == nil {
+			return nil
+		}
+		err = schema.Validate(v)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

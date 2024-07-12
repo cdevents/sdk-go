@@ -30,8 +30,13 @@ import (
 type SchemaDB map[string]*jsonschema.Schema
 
 var (
+	// Schema compiler, with schemas preloaded
+	compiler *jsonschema.Compiler
+
 	// All compiled schemas by Id
 	CompiledSchemas SchemaDB
+	// All compiled custom schemas by Id
+	CompiledCustomSchemas SchemaDB
 
 	// All schemas as string by Id
 	SchemasById = map[string]string{
@@ -11660,14 +11665,16 @@ var (
 )
 
 func init() {
-	compiler, err := newJsonSchemaCompiler()
+	var err error
+	compiler, err = newJsonSchemaCompiler()
 	panicOnError(err)
 	CompiledSchemas = make(map[string]*jsonschema.Schema)
-	for url, _ := range SchemasById {
+	for url := range SchemasById {
 		sch, err := compiler.Compile(url)
 		panicOnError(err)
 		CompiledSchemas[url] = sch
 	}
+	CompiledCustomSchemas = make(map[string]*jsonschema.Schema)
 }
 func (db SchemaDB) GetBySpecSubjectPredicate(specVersion, subject, predicate, custom string) (string, *jsonschema.Schema, error) {
 	id := ""
@@ -11695,4 +11702,24 @@ func newJsonSchemaCompiler() (*jsonschema.Compiler, error) {
 		}
 	}
 	return c, nil
+}
+
+// LoadJsonSchema compiles and loads a JSON schema in []byte format into the sdk
+// custom JSON schema databased. Returns an error if the schema cannot be compiled.
+// If the schemaId already exists, the previous schema definition is overwritten.
+func LoadJsonSchema(schemaId string, schema []byte) error {
+	var loaded map[string]interface{}
+	err := json.Unmarshal(schema, &loaded)
+	if err != nil {
+		return err
+	}
+	if err := compiler.AddResource(schemaId, loaded); err != nil {
+		return err
+	}
+	sch, err := compiler.Compile(schemaId)
+	if err != nil {
+		return err
+	}
+	CompiledCustomSchemas[schemaId] = sch
+	return nil
 }
