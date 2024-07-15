@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/cdevents/sdk-go/pkg/api"
@@ -43,6 +44,7 @@ var (
 	testSubjectId            = "mySubject123"
 	testValue                = "testValue"
 	testArtifactId           = "pkg:oci/myapp@sha256%3A0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93427"
+	testInvalidArtifactId    = "not-in-purl-format"
 	testDataJson             = testData{TestValues: []map[string]string{{"k1": "v1"}, {"k2": "v2"}}}
 	testDataJsonUnmarshalled = map[string]any{
 		"testValues": []any{map[string]any{"k1": string("v1")}, map[string]any{"k2": string("v2")}},
@@ -61,14 +63,39 @@ var (
 		"additionalProperties": true,
 		"type": "object"
 	}`
-	testCustomSchemaJson = fmt.Sprintf(testCustomSchemaJsonTemplate, testSchemaUri)
-	testCustomSchemas    = map[string][]byte{
-		testSchemaUri: []byte(testCustomSchemaJson),
+	testCustomSchemaJson                 = fmt.Sprintf(testCustomSchemaJsonTemplate, testSchemaUri)
+	testSchemaUriStricter                = "https://myorg.com/schema/stricter"
+	testCustomSchemaJsonStricterTemplate = `{
+		"$schema": "https://json-schema.org/draft/2020-12/schema",
+		"$id": "%s",
+		"additionalProperties": true,
+		"type": "object",
+		"properties": {
+			"customData": {
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+					"important": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"important"
+				]
+			}
+		}
+	}`
+	testCustomSchemaJsonStricterJson = fmt.Sprintf(testCustomSchemaJsonStricterTemplate, testSchemaUriStricter)
+	testCustomSchemas                = map[string][]byte{
+		testSchemaUri:         []byte(testCustomSchemaJson),
+		testSchemaUriStricter: []byte(testCustomSchemaJsonStricterJson),
 	}
 
 	eventJsonCustomData             *testapi.FooSubjectBarPredicateEvent
 	eventNonJsonCustomData          *testapi.FooSubjectBarPredicateEvent
 	eventJsonCustomDataUnmarshalled *testapi.FooSubjectBarPredicateEvent
+	eventJsonCustomDataCustomSchema *testapi.FooSubjectBarPredicateEvent
+	eventInvalidArtifactIdFormat    *testapi.FooSubjectBarPredicateEvent
 
 	eventJsonCustomDataFile         = "json_custom_data"
 	eventImplicitJsonCustomDataFile = "implicit_json_custom_data"
@@ -80,6 +107,21 @@ var (
 				Type: api.CDEventType{
 					Subject:   "invalid",
 					Predicate: "invalid",
+					Version:   "#not@semver", // Invalid version format
+				},
+				Version: "9.9.9",
+			},
+			api.ContextLinks{},
+			api.ContextCustom{},
+		},
+	}
+
+	eventUnknownType = &testapi.FooSubjectBarPredicateEvent{
+		Context: api.ContextV04{
+			api.Context{
+				Type: api.CDEventType{
+					Subject:   "invalid", // Unknown subject
+					Predicate: "invalid", // Unknown predicate
 					Version:   "1.2.3",
 				},
 				Version: "9.9.9",
@@ -134,6 +176,19 @@ func init() {
 		elr, elp, ele,
 	}
 
+	setContext(eventInvalidType, testSubjectId)
+	setContextV04(eventInvalidType, true, true)
+	eventInvalidType.SetSubjectArtifactId(testArtifactId)
+
+	setContext(eventUnknownType, testSubjectId)
+	setContextV04(eventUnknownType, true, true)
+	eventUnknownType.SetSubjectArtifactId(testArtifactId)
+
+	eventInvalidArtifactIdFormat, _ = testapi.NewFooSubjectBarPredicateEvent()
+	setContext(eventInvalidArtifactIdFormat, testSubjectId)
+	setContextV04(eventInvalidArtifactIdFormat, true, true)
+	eventInvalidArtifactIdFormat.SetSubjectArtifactId(testInvalidArtifactId)
+
 	eventJsonCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
 	setContext(eventJsonCustomData, testSubjectId)
 	setContextV04(eventJsonCustomData, true, true)
@@ -162,6 +217,17 @@ func init() {
 	eventNonJsonCustomData.SetSubjectArtifactId(testArtifactId)
 	eventNonJsonCustomData.SetSubjectObjectField(&testapi.FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
 	err = eventNonJsonCustomData.SetCustomData("application/xml", testDataXml)
+	panicOnError(err)
+
+	eventJsonCustomDataCustomSchema, _ = testapi.NewFooSubjectBarPredicateEvent()
+	setContext(eventJsonCustomDataCustomSchema, testSubjectId)
+	setContextV04(eventJsonCustomDataCustomSchema, true, true)
+	eventJsonCustomDataCustomSchema.SetSchemaUri(testSchemaUriStricter)
+	eventJsonCustomDataCustomSchema.SetSubjectReferenceField(&api.Reference{Id: testChangeId})
+	eventJsonCustomDataCustomSchema.SetSubjectPlainField(testValue)
+	eventJsonCustomDataCustomSchema.SetSubjectArtifactId(testArtifactId)
+	eventJsonCustomDataCustomSchema.SetSubjectObjectField(&testapi.FooSubjectBarPredicateSubjectContentObjectField{Required: testChangeId, Optional: testSource})
+	err = eventJsonCustomDataCustomSchema.SetCustomData("application/json", testDataJson)
 	panicOnError(err)
 
 	for id, jsonBytes := range testCustomSchemas {
@@ -247,18 +313,36 @@ func TestAsCloudEventInvalid(t *testing.T) {
 	tests := []struct {
 		name  string
 		event api.CDEventReader
+		error string
 	}{{
 		name:  "nil event",
 		event: nil,
+		error: "nil CDEvent cannot be rendered as CloudEvent",
 	}, {
 		name:  "event with invalid type",
 		event: eventInvalidType,
+		error: "cannot validate CDEvent Key: 'FooSubjectBarPredicateEventV2_2_3.Context.Context.Type.",
+	}, {
+		name:  "event with unknown type",
+		event: eventUnknownType,
+		error: "cannot validate CDEvent jsonschema validation failed with 'https://cdevents.dev/99.1.0/schema/foosubject-barpredicate-event#'",
+	}, {
+		name:  "event with invalid artifact id format",
+		event: eventInvalidArtifactIdFormat,
+		error: "cannot validate CDEvent Key: 'FooSubjectBarPredicateEventV2_2_3.Subject.Content.ArtifactId'",
+	}, {
+		name:  "does not match the custom schema",
+		event: eventJsonCustomDataCustomSchema,
+		error: "cannot validate CDEvent jsonschema validation failed with 'https://myorg.com/schema/stricter#",
 	}}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			_, err := api.AsCloudEvent(tc.event)
 			if err == nil {
 				t.Fatalf("expected it to fail, but it didn't")
+			}
+			if !strings.HasPrefix(err.Error(), tc.error) {
+				t.Errorf("error %s does not start with the expected prefix %s", err.Error(), tc.error)
 			}
 		})
 	}

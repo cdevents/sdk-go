@@ -154,14 +154,12 @@ func Validate(event CDEventReader) error {
 	if err := json.Unmarshal([]byte(jsonString), &v); err != nil {
 		return fmt.Errorf("cannot unmarshal event json: %v", err)
 	}
-	// Validate the "jsonschema" tags
-	err = sch.Validate(v)
-	if err != nil {
+	// Validate the "validate" tags
+	if err := validate.Struct(event); err != nil {
 		return err
 	}
-	// Validate the "validate" tags
-	err = validate.Struct(event)
-	if err != nil {
+	// Validate the "jsonschema" tags
+	if err := sch.Validate(v); err != nil {
 		return err
 	}
 	// Check if there is a custom schema

@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -613,12 +614,30 @@ func TestExamples(t *testing.T) {
 			if d := cmp.Diff(consumed.GetLinks(), produced.GetLinks()); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
+			// Coverage for GetCustomSchema
 			consumedSchema, err := consumed.GetCustomSchema()
 			if err != nil {
 				t.Errorf("failed to obtain the consumed event custom schema: %v", err)
 			}
 			if d := cmp.Diff(consumedSchema.ID, producedSchema.ID); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			// Check the case of no custom schema
+			produced.SetSchemaUri("")
+			producedSchema, err = produced.GetCustomSchema()
+			if producedSchema != nil || err != nil {
+				t.Errorf("expected nil schema and error when schema is not set, got schema %v, error %v", producedSchema, err)
+			}
+			// Check the case of custom schema missing from the DB
+			notFoundSchema := "https://this.is.not.found/in/the/db"
+			produced.SetSchemaUri(notFoundSchema)
+			producedSchema, err = produced.GetCustomSchema()
+			if err == nil {
+				t.Errorf("expected an error when schema is not found, got schema %v, error %v", producedSchema, err)
+			}
+			expectedError := fmt.Sprintf("schema with id %s could not be found", notFoundSchema)
+			if !strings.HasPrefix(err.Error(), expectedError) {
+				t.Errorf("error %s does not start with the expected prefix %s", err.Error(), expectedError)
 			}
 		})
 	}
