@@ -20,8 +20,10 @@ package v04_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -125,8 +127,21 @@ var (
 			"list": ["data1", "data2"]
 		}
     }`)
-	testCustomContent interface{}
-
+	testCustomContent            interface{}
+	testCustomSchemaId           = "https://myorg.com/schema/custom"
+	testCustomSchemaId2          = "https://myorg.com/schema/mytool"
+	testCustomSchemaJsonTemplate = `{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "%s",
+	"additionalProperties": true,
+	"type": "object"
+}`
+	testCustomSchemaJson  = fmt.Sprintf(testCustomSchemaJsonTemplate, testCustomSchemaId)
+	testCustomSchema2Json = fmt.Sprintf(testCustomSchemaJsonTemplate, testCustomSchemaId2)
+	testCustomSchemas     = map[string][]byte{
+		testCustomSchemaId:  []byte(testCustomSchemaJson),
+		testCustomSchemaId2: []byte(testCustomSchema2Json),
+	}
 	examplesConsumed map[string][]byte
 	examplesProduced map[string]api.CDEventV04
 	err              error
@@ -147,6 +162,25 @@ func init() {
 
 	err = json.Unmarshal(testCustomContentBytes, &testCustomContent)
 	panicOnError(err)
+
+	for id, jsonBytes := range testCustomSchemas {
+		err := api.LoadJsonSchema(id, jsonBytes)
+		panicOnError(err)
+	}
+
+	// Load event examples from the spec
+	examplesConsumed = make(map[string][]byte)
+
+	for _, event := range apiv04.CDEventsTypes {
+		short := event.GetType().Short()
+		if short != "" {
+			examplesConsumed[short], err = os.ReadFile(filepath.Join("..", examplesFolder, short+".json"))
+			panicOnError(err)
+		} else {
+			// There is no type set for custom events, and the example is in a different folder
+			examplesConsumed[short], err = os.ReadFile(filepath.Join("..", customExample))
+		}
+	}
 }
 
 func exampleArtifactPackagedEvent(e *apiv04.ArtifactPackagedEvent) {
@@ -516,26 +550,9 @@ func exampleCustomTypeEvent(e *apiv04.CustomTypeEvent) {
 	// Set the type to dev.cdeventsx.mytool-resource.created.0.1.0
 	e.SetEventType(testCustomEventType)
 	e.SetSubjectContent(testCustomContent)
-	e.SetSchemaUri("https://myorg.com/schema/mytool")
+	e.SetSchemaUri(testCustomSchemaId2)
 	e.SetSubjectId("pkg:resource/name@234fd47e07d1004f0aed9c")
 	e.SetChainId("6ca3f9c5-1cef-4ce0-861c-2456a69cf137")
-}
-
-func init() {
-
-	// Load event examples from the spec
-	examplesConsumed = make(map[string][]byte)
-
-	for _, event := range apiv04.CDEventsTypes {
-		short := event.GetType().Short()
-		if short != "" {
-			examplesConsumed[short], err = os.ReadFile(filepath.Join("..", examplesFolder, short+".json"))
-			panicOnError(err)
-		} else {
-			// There is no type set for custom events, and the example is in a different folder
-			examplesConsumed[short], err = os.ReadFile(filepath.Join("..", customExample))
-		}
-	}
 }
 
 // TestExamples verifies that the SDK can produce events like those
@@ -556,6 +573,14 @@ func TestExamples(t *testing.T) {
 			err := api.Validate(produced)
 			if err != nil {
 				t.Errorf("produced event failed to validate: %v", err)
+			}
+			// Check that the custom schema for the produced event what's excepted
+			producedSchema, err := produced.GetCustomSchema()
+			if err != nil {
+				t.Errorf("failed to obtain the produced event custom schema: %v", err)
+			}
+			if d := cmp.Diff(producedSchema.ID, produced.GetSchemaUri()); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
 			consumed, err := apiv04.NewFromJsonBytes(exampleConsumed)
 			if err != nil {
@@ -588,6 +613,31 @@ func TestExamples(t *testing.T) {
 			}
 			if d := cmp.Diff(consumed.GetLinks(), produced.GetLinks()); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			// Coverage for GetCustomSchema
+			consumedSchema, err := consumed.GetCustomSchema()
+			if err != nil {
+				t.Errorf("failed to obtain the consumed event custom schema: %v", err)
+			}
+			if d := cmp.Diff(consumedSchema.ID, producedSchema.ID); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+			// Check the case of no custom schema
+			produced.SetSchemaUri("")
+			producedSchema, err = produced.GetCustomSchema()
+			if producedSchema != nil || err != nil {
+				t.Errorf("expected nil schema and error when schema is not set, got schema %v, error %v", producedSchema, err)
+			}
+			// Check the case of custom schema missing from the DB
+			notFoundSchema := "https://this.is.not.found/in/the/db"
+			produced.SetSchemaUri(notFoundSchema)
+			producedSchema, err = produced.GetCustomSchema()
+			if err == nil {
+				t.Errorf("expected an error when schema is not found, got schema %v, error %v", producedSchema, err)
+			}
+			expectedError := fmt.Sprintf("schema with id %s could not be found", notFoundSchema)
+			if !strings.HasPrefix(err.Error(), expectedError) {
+				t.Errorf("error %s does not start with the expected prefix %s", err.Error(), expectedError)
 			}
 		})
 	}

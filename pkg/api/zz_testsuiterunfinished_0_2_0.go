@@ -21,6 +21,7 @@ SPDX-License-Identifier: Apache-2.0
 package api
 
 import (
+	"fmt"
 	"time"
 
 	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
@@ -124,6 +125,20 @@ func (e TestSuiteRunFinishedEventV0_2_0) GetLinks() EmbeddedLinksArray {
 
 func (e TestSuiteRunFinishedEventV0_2_0) GetSchemaUri() string {
 	return e.Context.SchemaUri
+}
+
+// GetCustomSchema looks up the SchemaUri, if any is defined. If none is defined, it returns nil.
+// If it's defined and cannot be found, it returns an error.
+func (e TestSuiteRunFinishedEventV0_2_0) GetCustomSchema() (*jsonschema.Schema, error) {
+	schemaUri := e.GetSchemaUri()
+	if schemaUri == "" {
+		return nil, nil
+	}
+	schema, found := CompiledCustomSchemas[schemaUri]
+	if !found {
+		return nil, fmt.Errorf("schema with id %s could not be found in the local registry", schemaUri)
+	}
+	return schema, nil
 }
 
 // CDEventsWriter implementation

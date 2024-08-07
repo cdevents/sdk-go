@@ -29,6 +29,9 @@ import (
 )
 
 var (
+	// Schema compiler, with schemas preloaded
+	testCompiler *jsonschema.Compiler
+
 	// All compiled schemas by Id
 	TestCompiledSchemas SchemaDB
 
@@ -336,17 +339,18 @@ var (
 )
 
 func init() {
-	compiler, err := newTestJsonSchemaCompiler()
+	var err error
+	testCompiler, err = newTestJsonSchemaCompiler()
 	panicOnError(err)
 	TestCompiledSchemas = make(map[string]*jsonschema.Schema)
 	// For tests load non-test schemas first to cover links and custom
-	for url, _ := range SchemasById {
-		sch, err := compiler.Compile(url)
+	for url := range SchemasById {
+		sch, err := testCompiler.Compile(url)
 		panicOnError(err)
 		TestCompiledSchemas[url] = sch
 	}
-	for url, _ := range TestSchemasById {
-		sch, err := compiler.Compile(url)
+	for url := range TestSchemasById {
+		sch, err := testCompiler.Compile(url)
 		panicOnError(err)
 		TestCompiledSchemas[url] = sch
 	}

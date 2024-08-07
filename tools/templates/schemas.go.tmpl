@@ -37,8 +37,16 @@ type SchemaDB map[string]*jsonschema.Schema
 {{- end}}
 
 var (
+    // Schema compiler, with schemas preloaded
+    {{if .IsTestData}}testC{{else}}c{{end}}ompiler *jsonschema.Compiler
+
     // All compiled schemas by Id
     {{if .IsTestData}}Test{{end}}CompiledSchemas SchemaDB
+
+    {{- if not .IsTestData}}
+    // All compiled custom schemas by Id
+    CompiledCustomSchemas SchemaDB
+    {{- end }}
 
     // All schemas as string by Id
     {{if .IsTestData}}Test{{end}}SchemasById = map[string]string{
@@ -49,22 +57,26 @@ var (
 )
 
 func init() {
-  compiler, err := new{{if .IsTestData}}Test{{end}}JsonSchemaCompiler()
+  var err error
+  {{if .IsTestData}}testC{{else}}c{{end}}ompiler, err = new{{if .IsTestData}}Test{{end}}JsonSchemaCompiler()
   panicOnError(err)
   {{if .IsTestData}}Test{{end}}CompiledSchemas = make(map[string]*jsonschema.Schema)
   {{- if .IsTestData}}
   // For tests load non-test schemas first to cover links and custom
-  for url, _ := range SchemasById {
-    sch, err := compiler.Compile(url)
+  for url := range SchemasById {
+    sch, err := {{if .IsTestData}}testC{{else}}c{{end}}ompiler.Compile(url)
     panicOnError(err)
     TestCompiledSchemas[url] = sch
   }
   {{- end}}
-  for url, _ := range {{if .IsTestData}}Test{{end}}SchemasById {
-    sch, err := compiler.Compile(url)
+  for url := range {{if .IsTestData}}Test{{end}}SchemasById {
+    sch, err := {{if .IsTestData}}testC{{else}}c{{end}}ompiler.Compile(url)
     panicOnError(err)
     {{if .IsTestData}}Test{{end}}CompiledSchemas[url] = sch
   }
+  {{- if not .IsTestData}}
+  CompiledCustomSchemas = make(map[string]*jsonschema.Schema)
+  {{- end }}
 }
 
 {{- if not .IsTestData}}
@@ -103,3 +115,25 @@ func new{{if .IsTestData}}Test{{end}}JsonSchemaCompiler() (*jsonschema.Compiler,
   }
   return c, nil
 }
+
+{{- if not .IsTestData}}
+// LoadJsonSchema compiles and loads a JSON schema in []byte format into the sdk
+// custom JSON schema databased. Returns an error if the schema cannot be compiled.
+// If the schemaId already exists, the previous schema definition is overwritten.
+func LoadJsonSchema(schemaId string, schema []byte) error {
+  var loaded map[string]interface{}
+  err := json.Unmarshal(schema, &loaded)
+  if err != nil {
+    return err
+  }
+  if err := {{if .IsTestData}}testC{{else}}c{{end}}ompiler.AddResource(schemaId, loaded); err != nil {
+    return err
+  }
+  sch, err := {{if .IsTestData}}testC{{else}}c{{end}}ompiler.Compile(schemaId)
+  if err != nil {
+    return err
+  }
+  CompiledCustomSchemas[schemaId] = sch
+  return nil
+}
+{{- end }}
