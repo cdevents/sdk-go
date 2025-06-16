@@ -1,5 +1,3 @@
-//go:build ignore
-
 /*
 Copyright 2025 The CDEvents Authors
 
