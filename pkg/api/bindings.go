@@ -16,6 +16,8 @@ limitations under the License.
 SPDX-License-Identifier: Apache-2.0
 */
 
+//go:generate go run ../../tools/generator.go --resources ../..
+
 package api
 
 import (
