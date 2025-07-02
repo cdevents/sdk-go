@@ -51,8 +51,8 @@ var (
 	// V04+ Examples Data
 	testChainId = "4c8cb7dd-3448-41de-8768-eec704e2829b"
 	testLinks api.EmbeddedLinksArray
-	testContextId = "5328c37f-bb7e-4bb7-84ea-9f5f85e4a7ce"
-	testSchemaUri = "https://myorg.com/schema/custom"
+	testContextID = "5328c37f-bb7e-4bb7-84ea-9f5f85e4a7ce"
+	testSchemaURI = "https://myorg.com/schema/custom"
 )
 
 func init() {
@@ -62,7 +62,7 @@ func init() {
 		"foo2": "bar",
 	}
 	reference := api.EventReference{
-		ContextId: testContextId,
+		ContextID: testContextID,
 	}
 	elr := api.NewEmbeddedLinkRelation()
 	elr.SetTags(tags)
@@ -79,17 +79,17 @@ func init() {
 	}
 }
 
-func setContext(event api.CDEventWriter, subjectId string) {
+func setContext(event api.CDEventWriter, subjectID string) {
 	event.SetSource(testSource)
-	event.SetSubjectId(subjectId)
+	event.SetSubjectId(subjectID)
 }
 
-func setContextV04(event api.CDEventWriterV04, chainId, schemaUri bool) {
-	if chainId {
-		event.SetChainId(testChainId)
+func setContextV04(event api.CDEventWriterV04, chainID, schemaURI bool) {
+	if chainID {
+		event.SetChainId(testChainID)
 	}
-	if schemaUri {
-		event.SetSchemaUri(testSchemaUri)
+	if schemaURI {
+		event.SetSchemaUri(testSchemaURI)
 	}
 	event.SetLinks(testLinks)
 }

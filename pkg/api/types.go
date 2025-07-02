@@ -83,7 +83,7 @@ type Context struct {
 	// same event MAY share the same id. This attribute matches the syntax and
 	// semantics of the id attribute of CloudEvents:
 	// https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#id
-	Id string `json:"id" jsonschema:"required,minLength=1"`
+	ID string `json:"id" jsonschema:"required,minLength=1"`
 
 	// Spec: https://cdevents.dev/docs/spec/#source
 	// Description: defines the context in which an event happened. The main
@@ -290,28 +290,29 @@ func (ela *EmbeddedLinksArray) UnmarshalJSON(b []byte) error {
 		if err != nil {
 			return err
 		}
-		if m.LinkType == LinkTypeEnd {
+		switch m.LinkType {
+		case LinkTypeEnd:
 			var e embeddedLinkEnd
 			err = json.Unmarshal(*rawEmbeddedLink, &e)
 			if err != nil {
 				return err
 			}
 			receiver[index] = &e
-		} else if m.LinkType == LinkTypePath {
+		case LinkTypePath:
 			var e embeddedLinkPath
 			err = json.Unmarshal(*rawEmbeddedLink, &e)
 			if err != nil {
 				return err
 			}
 			receiver[index] = &e
-		} else if m.LinkType == LinkTypeRelation {
+		case LinkTypeRelation:
 			var e embeddedLinkRelation
 			err = json.Unmarshal(*rawEmbeddedLink, &e)
 			if err != nil {
 				return err
 			}
 			receiver[index] = &e
-		} else {
+		default:
 			return fmt.Errorf("unsupported link type %s found", m.LinkType)
 		}
 	}
@@ -323,7 +324,7 @@ type ContextLinks struct {
 	// Spec: https://cdevents.dev/docs/spec/#chain_id
 	// Description: Identifier for a chain as defined in the links spec
 	// https://github.com/cdevents/spec/blob/v0.4.1/links.md
-	ChainId string `json:"chainId,omitempty"`
+	ChainID string `json:"chainId,omitempty"`
 
 	// Spec: https://cdevents.dev/docs/spec/#links
 	// Description: Identifier for an event. Subsequent delivery attempts of the
@@ -335,9 +336,9 @@ type ContextLinks struct {
 
 type ContextCustom struct {
 	// Spec: https://cdevents.dev/docs/spec/#schemauri
-	// Description: ink to a jsonschema schema that further refines
+	// Description: Link to a jsonschema schema that further refines
 	// the event schema as defined by CDEvents.
-	SchemaUri string `json:"schemaUri,omitempty"`
+	SchemaURI string `json:"schemaUri,omitempty"`
 }
 
 type ContextV04 struct {
@@ -350,7 +351,7 @@ type Reference struct {
 
 	// Spec: https://cdevents.dev/docs/spec/#format-of-subjects
 	// Description: Uniquely identifies the subject within the source
-	Id string `json:"id" jsonschema:"required,minLength=1"`
+	ID string `json:"id" jsonschema:"required,minLength=1"`
 
 	// Spec: https://cdevents.dev/docs/spec/#format-of-subjects
 	// Description: defines the context in which an event happened. The main
@@ -559,7 +560,7 @@ type CDEventWriter interface {
 
 	// The ID of the subject, unique within the event producer (source), it may
 	// by used in multiple events
-	SetSubjectId(subjectId string)
+	SetSubjectId(subjectID string)
 
 	// The source of the subject. Usually this matches the source of the event
 	// but it may also be different.
@@ -591,7 +592,7 @@ type CDEventWriterV04 interface {
 	CDEventWriter
 
 	// The ChainId for the event
-	SetChainId(chainId string)
+	SetChainId(chainID string)
 
 	// The links array for the event
 	SetLinks(links EmbeddedLinksArray)

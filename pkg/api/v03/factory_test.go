@@ -68,7 +68,7 @@ var (
 )
 
 func TestNewCDEvent(t *testing.T) {
-	testDataJsonBytes, err := json.Marshal(testDataJson)
+	testDataJSONBytes, err := json.Marshal(testDataJson)
 	if err != nil {
 		t.Fatalf("didn't expected it to fail, but it did: %v", err)
 	}
@@ -89,7 +89,7 @@ func TestNewCDEvent(t *testing.T) {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
 			// CustomData set and get
-			err = event.SetCustomData(testContentType, testDataJsonBytes)
+			err = event.SetCustomData(testContentType, testDataJSONBytes)
 			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did: %v", err)
 			}
@@ -97,7 +97,7 @@ func TestNewCDEvent(t *testing.T) {
 			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did: %v", err)
 			}
-			if d := cmp.Diff(testDataJsonBytes, customDataRawGot); d != "" {
+			if d := cmp.Diff(testDataJSONBytes, customDataRawGot); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
 			customDataGot, err := event.GetCustomData()
@@ -129,7 +129,6 @@ func TestNewCDEvent(t *testing.T) {
 }
 
 func TestNewCDEventFailed(t *testing.T) {
-
 	_, err := cdevents.NewCDEvent(api.CDEventType{Subject: "not supported"}.String(), testSpecVersion)
 	if err == nil {
 		t.Fatalf("expected it to fail, but it didn't")

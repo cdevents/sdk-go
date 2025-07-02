@@ -40,24 +40,24 @@ import (
 )
 
 var (
-	TEMPLATES          = "tools/templates/*.tmpl"
-	CODE               = "./pkg/api"
-	GEN_CODE           = "./pkg/api"
-	REPO_ROOT          string
-	TEMPLATES_FOLDER   string
-	CODE_FOLDER        string
-	GEN_CODE_FOLDER    string
-	SPEC_FOLDER_PREFIX = "spec-"
-	TEST_FOLDER_PREFIX = "tests-"
-	SPEC_VERSIONS      = []string{"0.3.0", "0.4.1"}
-	TEST_VERSIONS      = []string{"99.0.0", "99.1.0"}
-	SCHEMA_FOLDER      = "schemas"
-	LINKS_FOLDER       = filepath.Join(SCHEMA_FOLDER, "links")
-	SCHEMA_FOLDERS     = []string{LINKS_FOLDER, SCHEMA_FOLDER, CUSTOM_FOLDER}
-	CUSTOM_FOLDER      = "custom"
-	TEST_OUTPUT_PREFIX = "ztest_"
+	Templates        = "tools/templates/*.tmpl"
+	Code             = "./pkg/api"
+	GenCode          = "./pkg/api"
+	RepoRoot         string
+	TemplatesFolder  string
+	CodeFolder       string
+	GenCodeFolder    string
+	SpecFolderPrefix = "spec-"
+	TestFolderPrefix = "tests-"
+	SpecVersions     = []string{"0.3.0", "0.4.1"}
+	TestVersions     = []string{"99.0.0", "99.1.0"}
+	SchemaFolder     = "schemas"
+	LinksFolder      = filepath.Join(SchemaFolder, "links")
+	SchemaFolders    = []string{LinksFolder, SchemaFolder, CustomFolder}
+	CustomFolder     = "custom"
+	TestOutputPrefix = "ztest_"
 
-	GO_TYPES_NAMES = map[string]string{
+	GoTypesNames = map[string]string{
 		"taskrun":      "TaskRun",
 		"pipelinerun":  "PipelineRun",
 		"testcaserun":  "TestCaseRun",
@@ -65,12 +65,12 @@ var (
 		"testoutput":   "TestOutput",
 	}
 
-	GO_TYPES_TEST_NAMES = map[string]string{
+	GoTypesTestNames = map[string]string{
 		"foosubject":   "FooSubject",
 		"barpredicate": "BarPredicate",
 	}
 
-	JSON_SCHEMA_NAMES = map[string]string{
+	JSONSchemaNames = map[string]string{
 		"task-run":            "taskrun",
 		"pipeline-run":        "pipelinerun",
 		"test-case-run":       "testcaserun",
@@ -95,7 +95,7 @@ var (
 	capitalizer cases.Caser
 
 	// Flags
-	RESOURCES_PATH = flag.String("resources", "", "the path to the generator resources root folder")
+	ResourcesPath = flag.String("resources", "", "the path to the generator resources root folder")
 
 	// Schema DB and compiler
 	schemas     Schemas
@@ -107,7 +107,7 @@ var (
 	cdeventsTypeCRegex = regexp.MustCompile(cdeventsTypeRegex)
 )
 
-const REFERENCE_TYPE = "Reference"
+const ReferenceType = "Reference"
 
 // ContentField holds the name and type of each content field
 type ContentField struct {
@@ -177,9 +177,9 @@ func GoTypeName(schemaName string, mappings map[string]string) string {
 	name, ok := mappings[schemaName]
 	if !ok {
 		return capitalizer.String(schemaName)
-	} else {
-		return name
 	}
+
+	return name
 }
 
 type cdeventType struct {
@@ -224,22 +224,22 @@ func main() {
 	log.SetPrefix("generator: ")
 	flag.Parse()
 
-	if *RESOURCES_PATH == "" {
+	if *ResourcesPath == "" {
 		ex, err = os.Executable()
 		if err != nil {
 			panic(err)
 		}
 		toolPath := filepath.Clean(filepath.Dir(filepath.Join(ex, "..")))
-		RESOURCES_PATH = &toolPath
+		ResourcesPath = &toolPath
 	}
 
 	// Setup folder variables
-	TEMPLATES_FOLDER = filepath.Join(*RESOURCES_PATH, TEMPLATES)
-	CODE_FOLDER = filepath.Join(*RESOURCES_PATH, CODE)
-	GEN_CODE_FOLDER = filepath.Join(*RESOURCES_PATH, GEN_CODE)
+	TemplatesFolder = filepath.Join(*ResourcesPath, Templates)
+	CodeFolder = filepath.Join(*ResourcesPath, Code)
+	GenCodeFolder = filepath.Join(*ResourcesPath, GenCode)
 
 	// Load templates
-	templates, err := template.ParseGlob(TEMPLATES_FOLDER)
+	tmpl, err := template.ParseGlob(TemplatesFolder)
 	if err != nil {
 		log.Fatalf("%s", err.Error())
 	}
@@ -249,18 +249,18 @@ func main() {
 		IsTestData: false,
 		Data:       make(map[string][]byte),
 	}
-	for _, version := range SPEC_VERSIONS {
+	for _, version := range SpecVersions {
 		shortVersion := semver.MajorMinor("v" + version)
-		for _, folder := range SCHEMA_FOLDERS {
-			versioned_schema_folder := filepath.Join(CODE_FOLDER, SPEC_FOLDER_PREFIX+shortVersion, folder)
-			err = loadSchemas(versioned_schema_folder, &schemas)
+		for _, folder := range SchemaFolders {
+			versionedSchemaFolder := filepath.Join(CodeFolder, SpecFolderPrefix+shortVersion, folder)
+			err = loadSchemas(versionedSchemaFolder, &schemas)
 			if err != nil {
 				log.Fatalf("%s", err.Error())
 			}
 		}
 	}
-	outputFileName := filepath.Join(GEN_CODE_FOLDER, strings.TrimSuffix(schemaTemplateFileName, filepath.Ext(schemaTemplateFileName)))
-	err = executeTemplate(templates, schemaTemplateFileName, outputFileName, schemas)
+	outputFileName := filepath.Join(GenCodeFolder, strings.TrimSuffix(schemaTemplateFileName, filepath.Ext(schemaTemplateFileName)))
+	err = executeTemplate(tmpl, schemaTemplateFileName, outputFileName, schemas)
 	if err != nil {
 		log.Fatalf("%s", err.Error())
 	}
@@ -270,51 +270,51 @@ func main() {
 		IsTestData: true,
 		Data:       make(map[string][]byte),
 	}
-	for _, version := range TEST_VERSIONS {
+	for _, version := range TestVersions {
 		shortVersion := semver.MajorMinor("v" + version)
-		for _, folder := range SCHEMA_FOLDERS {
-			versioned_schema_folder := filepath.Join(CODE_FOLDER, TEST_FOLDER_PREFIX+shortVersion, folder)
-			err = loadSchemas(versioned_schema_folder, &testSchemas)
+		for _, folder := range SchemaFolders {
+			versionedSchemaFolder := filepath.Join(CodeFolder, TestFolderPrefix+shortVersion, folder)
+			err = loadSchemas(versionedSchemaFolder, &testSchemas)
 			if err != nil {
 				log.Fatalf("%s", err.Error())
 			}
 		}
 	}
-	testOutputFileName := filepath.Join(GEN_CODE_FOLDER, TEST_OUTPUT_PREFIX+strings.TrimSuffix(schemaTemplateFileName, filepath.Ext(schemaTemplateFileName)))
-	err = executeTemplate(templates, schemaTemplateFileName, testOutputFileName, testSchemas)
+	testOutputFileName := filepath.Join(GenCodeFolder, TestOutputPrefix+strings.TrimSuffix(schemaTemplateFileName, filepath.Ext(schemaTemplateFileName)))
+	err = executeTemplate(tmpl, schemaTemplateFileName, testOutputFileName, testSchemas)
 	if err != nil {
 		log.Fatalf("%s", err.Error())
 	}
 
 	// Generate SDK files
-	for _, version := range SPEC_VERSIONS {
+	for _, version := range SpecVersions {
 		shortVersion := semver.MajorMinor("v" + version)
 		// Setup folders where to look for schemas
 		folders := []string{}
-		versioned_folder := ""
-		for _, folder := range SCHEMA_FOLDERS[1:3] {
-			versioned_folder = filepath.Join(CODE_FOLDER, SPEC_FOLDER_PREFIX+shortVersion, folder)
-			fileInfo, err := os.Stat(versioned_folder)
+		versionedFolder := ""
+		for _, folder := range SchemaFolders[1:3] {
+			versionedFolder = filepath.Join(CodeFolder, SpecFolderPrefix+shortVersion, folder)
+			fileInfo, err := os.Stat(versionedFolder)
 			if err == nil && fileInfo.IsDir() {
 				// If the path does exists, and it's a dir, include this in the generation
-				folders = append(folders, versioned_folder)
+				folders = append(folders, versionedFolder)
 			}
 		}
 
 		// Generate SDK files for all discovered folders
-		log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TEMPLATES_FOLDER, folders, GEN_CODE_FOLDER)
-		err = generate(folders, GEN_CODE_FOLDER, "", version, templates, GO_TYPES_NAMES, false)
+		log.Printf("Generating SDK files from templates: %s and schemas: %s into %s", TemplatesFolder, folders, GenCodeFolder)
+		err = generate(folders, GenCodeFolder, "", version, tmpl, GoTypesNames, false)
 		if err != nil {
 			log.Fatalf("%s", err.Error())
 		}
 	}
 
 	// Generate SDK test files
-	for _, version := range TEST_VERSIONS {
+	for _, version := range TestVersions {
 		shortVersion := semver.MajorMinor("v" + version)
-		versioned_test_schema_folder := filepath.Join(CODE_FOLDER, TEST_FOLDER_PREFIX+shortVersion, SCHEMA_FOLDER)
-		log.Printf("Generating Test SDK files from templates: %s and schemas: %s into %s", TEMPLATES_FOLDER, versioned_test_schema_folder, GEN_CODE_FOLDER)
-		err = generate([]string{versioned_test_schema_folder}, GEN_CODE_FOLDER, TEST_OUTPUT_PREFIX, version, templates, GO_TYPES_TEST_NAMES, true)
+		versionedTestSchemaFolder := filepath.Join(CodeFolder, TestFolderPrefix+shortVersion, SchemaFolder)
+		log.Printf("Generating Test SDK files from templates: %s and schemas: %s into %s", TemplatesFolder, versionedTestSchemaFolder, GenCodeFolder)
+		err = generate([]string{versionedTestSchemaFolder}, GenCodeFolder, TestOutputPrefix, version, tmpl, GoTypesTestNames, true)
 		if err != nil {
 			log.Fatalf("%s", err.Error())
 		}
@@ -327,15 +327,14 @@ func loadSchemas(schemaFolder string, schemas *Schemas) error {
 		if os.IsNotExist(err) {
 			// Ignore non-existing folders
 			return nil
-		} else {
-			// Something else went wrong
-			return fmt.Errorf("error loading schemas from %s: %s", schemaFolder, err)
 		}
+		// Something else went wrong
+		return fmt.Errorf("error loading schemas from %s: %w", schemaFolder, err)
 	}
 	return fs.WalkDir(os.DirFS(schemaFolder), ".", getSchemasWalkProcessor(schemaFolder, schemas))
 }
 
-func generate(schemaFolders []string, genFolder, prefix, specVersion string, templates *template.Template, goTypes map[string]string, isTestMode bool) error {
+func generate(schemaFolders []string, genFolder, prefix, specVersion string, tmpl *template.Template, goTypes map[string]string, isTestMode bool) error {
 	// allData is used to accumulate data from all jsonschemas
 	// which is then used to run shared templates
 	shortSpecVersion := semver.MajorMinor("v" + specVersion)
@@ -343,13 +342,13 @@ func generate(schemaFolders []string, genFolder, prefix, specVersion string, tem
 		Slice:            make([]Data, 0),
 		SpecVersion:      specVersion,
 		SpecVersionShort: shortSpecVersion,
-		SpecVersionName:  strings.Replace(shortSpecVersion, ".", "", -1),
+		SpecVersionName:  strings.ReplaceAll(shortSpecVersion, ".", ""),
 		IsTestData:       isTestMode,
 	}
 
 	// Walk the jsonschemas folder, process each ".json" file
 	for _, schemaFolder := range schemaFolders {
-		walkProcessor := getWalkProcessor(schemaFolder, templates, genFolder, goTypes, &allData, prefix, isTestMode)
+		walkProcessor := getWalkProcessor(schemaFolder, tmpl, genFolder, goTypes, &allData, prefix, isTestMode)
 		err := fs.WalkDir(os.DirFS(schemaFolder), ".", walkProcessor)
 		if err != nil {
 			return err
@@ -365,14 +364,14 @@ func generate(schemaFolders []string, genFolder, prefix, specVersion string, tem
 
 	// Spec types (types.go)
 	outputFileName := filepath.Join(genFolder, allData.SpecVersionName, strings.TrimSuffix(typesTemplateFileName, filepath.Ext(typesTemplateFileName)))
-	err = executeTemplate(templates, typesTemplateFileName, outputFileName, allData)
+	err = executeTemplate(tmpl, typesTemplateFileName, outputFileName, allData)
 	if err != nil {
 		return err
 	}
 
 	// Spec aliases (docs.go)
 	specFileName := filepath.Join(genFolder, allData.SpecVersionName, strings.TrimSuffix(specTemplateFileName, filepath.Ext(specTemplateFileName)))
-	err = executeTemplate(templates, specTemplateFileName, specFileName, allData)
+	err = executeTemplate(tmpl, specTemplateFileName, specFileName, allData)
 	if err != nil {
 		return err
 	}
@@ -381,7 +380,7 @@ func generate(schemaFolders []string, genFolder, prefix, specVersion string, tem
 	if !isTestMode {
 		for _, examplesTestsTemplateFileName := range examplesTestsTemplateFileNames {
 			outputFileName := filepath.Join(genFolder, allData.SpecVersionName, "zz_"+prefix+strings.TrimSuffix(examplesTestsTemplateFileName, filepath.Ext(examplesTestsTemplateFileName)))
-			err = executeTemplate(templates, examplesTestsTemplateFileName, outputFileName, allData)
+			err = executeTemplate(tmpl, examplesTestsTemplateFileName, outputFileName, allData)
 			if err != nil {
 				return err
 			}
@@ -390,11 +389,11 @@ func generate(schemaFolders []string, genFolder, prefix, specVersion string, tem
 	return nil
 }
 
-func executeTemplate(templates *template.Template, templateName, outputFileName string, data interface{}) error {
+func executeTemplate(tmpl *template.Template, templateName, outputFileName string, data interface{}) error {
 	// Write the template output to a buffer
 	generated := new(bytes.Buffer)
 
-	err := templates.ExecuteTemplate(generated, templateName, data)
+	err := tmpl.ExecuteTemplate(generated, templateName, data)
 	if err != nil {
 		return err
 	}
@@ -410,7 +409,7 @@ func executeTemplate(templates *template.Template, templateName, outputFileName 
 	}
 
 	// Prepare the output file
-	return os.WriteFile(outputFileName, src, 0644)
+	return os.WriteFile(outputFileName, src, 0644) // nolint: gosec
 }
 
 func getSchemasWalkProcessor(rootDir string, schemas *Schemas) fs.WalkDirFunc {
@@ -433,25 +432,26 @@ func getSchemasWalkProcessor(rootDir string, schemas *Schemas) fs.WalkDirFunc {
 		schemaPath := filepath.Join(rootDir, path)
 		schemaBytes, err := os.ReadFile(schemaPath)
 		if err != nil {
-			return fmt.Errorf("cannot read schema file at %s: %v", schemaPath, err)
+			return fmt.Errorf("cannot read schema file at %s: %w", schemaPath, err)
 		}
 		schema := struct {
-			Id string `json:"$id"`
+			ID string `json:"$id"`
 		}{}
 		// Load the jsonschema from the spec
 		if err := json.Unmarshal(schemaBytes, &schema); err != nil {
-			return fmt.Errorf("cannot unmarshal schema file at %s: %v", schemaPath, err)
+			return fmt.Errorf("cannot unmarshal schema file at %s: %w", schemaPath, err)
 		}
 		// If no $id is defined ignore this file
-		if schema.Id == "" {
+		if schema.ID == "" {
 			return nil
 		}
-		var schemaId = schema.Id
+		var schemaID = schema.ID
 		// Rewrite a few irregular schema IDs
-		for original, fixed := range JSON_SCHEMA_NAMES {
-			schemaId = strings.Replace(schemaId, original, fixed, 1)
+		for original, fixed := range JSONSchemaNames {
+			schemaID = strings.Replace(schemaID, original, fixed, 1)
 		}
-		(*schemas).Data[schemaId] = schemaBytes
+		schemas.Data[schemaID] = schemaBytes
+
 		return nil
 	}
 }
@@ -578,7 +578,7 @@ func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string, specV
 		if eventTypeString == "" {
 			return nil, fmt.Errorf("empty value defined for type in schema %s", eventTypeSchema.Location)
 		}
-		eventType, err = cdeventTypeFromString(string(eventTypeString))
+		eventType, err = cdeventTypeFromString(eventTypeString)
 		if err != nil {
 			return nil, err
 		}
@@ -646,7 +646,7 @@ func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string, specV
 					return nil, err
 				}
 				namespacedType := GoTypeName(contentType.Name, mappings)
-				if contentType.Name != REFERENCE_TYPE {
+				if contentType.Name != ReferenceType {
 					// If this is not a "Reference" we need to define a new type
 					contentTypes = append(contentTypes, *contentType)
 					// If this is not a "Reference" we need to namespace the type name to the event
@@ -733,7 +733,7 @@ func typesForSchema(name string, property *jsonschema.Schema, mappings map[strin
 	}
 	// Check if this is a reference
 	if len(referenceFields) == 2 && len(otherNames) == 0 {
-		name = REFERENCE_TYPE
+		name = ReferenceType
 	}
 	// Sort fields for consistent generation
 	sort.Slice(fields, func(i, j int) bool {

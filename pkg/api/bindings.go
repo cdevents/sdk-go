@@ -108,7 +108,7 @@ func AsCloudEvent(event CDEventReader) (*cloudevents.Event, error) {
 	// Validate the event
 	err := Validate(event)
 	if err != nil {
-		return nil, fmt.Errorf("cannot validate CDEvent %v", err)
+		return nil, fmt.Errorf("cannot validate CDEvent %w", err)
 	}
 	ce := cloudevents.NewEvent()
 	ce.SetID(event.GetId())
@@ -149,10 +149,10 @@ func Validate(event CDEventReader) error {
 	var v interface{}
 	jsonString, err := AsJsonString(event)
 	if err != nil {
-		return fmt.Errorf("cannot render the event %s as json %s", event, err)
+		return fmt.Errorf("cannot render the event %s as json %w", event, err)
 	}
 	if err := json.Unmarshal([]byte(jsonString), &v); err != nil {
-		return fmt.Errorf("cannot unmarshal event json: %v", err)
+		return fmt.Errorf("cannot unmarshal event json: %w", err)
 	}
 	// Validate the "validate" tags
 	if err := validate.Struct(event); err != nil {

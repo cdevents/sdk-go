@@ -28,43 +28,43 @@ import (
 )
 
 const (
-	testXmlString = "<xml>testData</xml>"
+	testXMLString = "<xml>testData</xml>"
 )
 
 var (
 	testObject                               = testType{TestData: "testValue"}
-	testJsonString                           []byte
-	eventWithNonJsonCustomData               *testapi.FooSubjectBarPredicateEvent
-	eventWithInterfaceJsonCustomData         *testapi.FooSubjectBarPredicateEvent
-	eventWithInterfaceJsonImplicitCustomData *testapi.FooSubjectBarPredicateEvent
-	eventWithJsonCustomData                  *testapi.FooSubjectBarPredicateEvent
-	eventWithJsonImplicitCustomData          *testapi.FooSubjectBarPredicateEvent
+	testJSONString                           []byte
+	eventWithNonJSONCustomData               *testapi.FooSubjectBarPredicateEvent
+	eventWithInterfaceJSONCustomData         *testapi.FooSubjectBarPredicateEvent
+	eventWithInterfaceJSONImplicitCustomData *testapi.FooSubjectBarPredicateEvent
+	eventWithJSONCustomData                  *testapi.FooSubjectBarPredicateEvent
+	eventWithJSONImplicitCustomData          *testapi.FooSubjectBarPredicateEvent
 )
 
 func init() {
 	var err error
-	testJsonString, err = json.Marshal(testObject)
+	testJSONString, err = json.Marshal(testObject)
 	panicOnError(err)
 
-	eventWithNonJsonCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
-	eventWithNonJsonCustomData.CustomDataContentType = "application/xml"
-	eventWithNonJsonCustomData.CustomData = []byte(testXmlString)
+	eventWithNonJSONCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
+	eventWithNonJSONCustomData.CustomDataContentType = "application/xml"
+	eventWithNonJSONCustomData.CustomData = []byte(testXMLString)
 
-	eventWithJsonCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
-	eventWithJsonCustomData.CustomDataContentType = "application/json"
-	eventWithJsonCustomData.CustomData = testJsonString
+	eventWithJSONCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
+	eventWithJSONCustomData.CustomDataContentType = "application/json"
+	eventWithJSONCustomData.CustomData = testJSONString
 
-	eventWithJsonImplicitCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
-	eventWithJsonImplicitCustomData.CustomDataContentType = ""
-	eventWithJsonImplicitCustomData.CustomData = testJsonString
+	eventWithJSONImplicitCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
+	eventWithJSONImplicitCustomData.CustomDataContentType = ""
+	eventWithJSONImplicitCustomData.CustomData = testJSONString
 
-	eventWithInterfaceJsonCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
-	eventWithInterfaceJsonCustomData.CustomDataContentType = "application/json"
-	eventWithInterfaceJsonCustomData.CustomData = testObject
+	eventWithInterfaceJSONCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
+	eventWithInterfaceJSONCustomData.CustomDataContentType = "application/json"
+	eventWithInterfaceJSONCustomData.CustomData = testObject
 
-	eventWithInterfaceJsonImplicitCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
-	eventWithInterfaceJsonImplicitCustomData.CustomDataContentType = ""
-	eventWithInterfaceJsonImplicitCustomData.CustomData = testObject
+	eventWithInterfaceJSONImplicitCustomData, _ = testapi.NewFooSubjectBarPredicateEvent()
+	eventWithInterfaceJSONImplicitCustomData.CustomDataContentType = ""
+	eventWithInterfaceJSONImplicitCustomData.CustomData = testObject
 }
 
 type testType struct {
@@ -76,11 +76,10 @@ type testWrongType struct {
 }
 
 func TestGetCustomDataAsNonJson(t *testing.T) {
-
 	receiver := &testType{}
 	expectedError := "cannot unmarshal content-type application/xml"
 
-	err := api.GetCustomDataAs(eventWithNonJsonCustomData, receiver)
+	err := api.GetCustomDataAs(eventWithNonJSONCustomData, receiver)
 	if err == nil {
 		t.Fatalf("expected error, got nil")
 	}
@@ -91,7 +90,6 @@ func TestGetCustomDataAsNonJson(t *testing.T) {
 }
 
 func TestGetCustomDataAsJson(t *testing.T) {
-
 	receiver := &testType{}
 	expectedValue := "testValue"
 
@@ -100,16 +98,16 @@ func TestGetCustomDataAsJson(t *testing.T) {
 		event api.CDEvent
 	}{{
 		name:  "json bytes",
-		event: eventWithJsonCustomData,
+		event: eventWithJSONCustomData,
 	}, {
 		name:  "json bytes, implicit",
-		event: eventWithJsonImplicitCustomData,
+		event: eventWithJSONImplicitCustomData,
 	}, {
 		name:  "interface",
-		event: eventWithInterfaceJsonCustomData,
+		event: eventWithInterfaceJSONCustomData,
 	}, {
 		name:  "interface, implicit",
-		event: eventWithInterfaceJsonImplicitCustomData,
+		event: eventWithInterfaceJSONImplicitCustomData,
 	}}
 
 	for _, tc := range tests {
@@ -127,7 +125,6 @@ func TestGetCustomDataAsJson(t *testing.T) {
 }
 
 func TestGetCustomDataAsJsonInvalidReceiver(t *testing.T) {
-
 	receiver := &testWrongType{}
 	expectedReceiver := &testWrongType{}
 
@@ -136,16 +133,16 @@ func TestGetCustomDataAsJsonInvalidReceiver(t *testing.T) {
 		event api.CDEvent
 	}{{
 		name:  "json bytes",
-		event: eventWithJsonCustomData,
+		event: eventWithJSONCustomData,
 	}, {
 		name:  "json bytes, implicit",
-		event: eventWithJsonImplicitCustomData,
+		event: eventWithJSONImplicitCustomData,
 	}, {
 		name:  "interface",
-		event: eventWithInterfaceJsonCustomData,
+		event: eventWithInterfaceJSONCustomData,
 	}, {
 		name:  "interface, implicit",
-		event: eventWithInterfaceJsonImplicitCustomData,
+		event: eventWithInterfaceJSONImplicitCustomData,
 	}}
 
 	for _, tc := range tests {
@@ -163,7 +160,6 @@ func TestGetCustomDataAsJsonInvalidReceiver(t *testing.T) {
 }
 
 func TestSetCustomData(t *testing.T) {
-
 	tests := []struct {
 		name         string
 		contentType  string
@@ -172,13 +168,13 @@ func TestSetCustomData(t *testing.T) {
 	}{{
 		name:         "json, json bytes",
 		contentType:  "application/json",
-		data:         testJsonString,
-		expectedData: testJsonString,
+		data:         testJSONString,
+		expectedData: testJSONString,
 	}, {
 		name:         "xml, xml bytes",
 		contentType:  "application/xml",
-		data:         []byte(testXmlString),
-		expectedData: []byte(testXmlString),
+		data:         []byte(testXMLString),
+		expectedData: []byte(testXMLString),
 	}, {
 		name:         "json, interface",
 		contentType:  "application/json",
@@ -215,7 +211,6 @@ func TestSetCustomDataInvalid(t *testing.T) {
 }
 
 func TestGetCustomData(t *testing.T) {
-
 	tests := []struct {
 		name         string
 		contentType  string
@@ -224,13 +219,13 @@ func TestGetCustomData(t *testing.T) {
 	}{{
 		name:         "json, json bytes",
 		contentType:  "application/json",
-		data:         testJsonString,
+		data:         testJSONString,
 		expectedData: map[string]any{"testData": string("testValue")},
 	}, {
 		name:         "xml, xml bytes",
 		contentType:  "application/xml",
-		data:         []byte(testXmlString),
-		expectedData: []byte(testXmlString),
+		data:         []byte(testXMLString),
+		expectedData: []byte(testXMLString),
 	}, {
 		name:         "json, interface",
 		contentType:  "application/json",
@@ -239,7 +234,7 @@ func TestGetCustomData(t *testing.T) {
 	}, {
 		name:         "empty, json bytes",
 		contentType:  "",
-		data:         testJsonString,
+		data:         testJSONString,
 		expectedData: map[string]any{"testData": string("testValue")},
 	}, {
 		name:         "empty, interface",
@@ -302,7 +297,6 @@ func TestGetCustomDataXmlNotBytes(t *testing.T) {
 }
 
 func TestGetCustomDataRaw(t *testing.T) {
-
 	tests := []struct {
 		name         string
 		contentType  string
@@ -311,23 +305,23 @@ func TestGetCustomDataRaw(t *testing.T) {
 	}{{
 		name:         "json, json bytes",
 		contentType:  "application/json",
-		data:         testJsonString,
-		expectedData: testJsonString,
+		data:         testJSONString,
+		expectedData: testJSONString,
 	}, {
 		name:         "json, xml bytes (invalid)",
 		contentType:  "application/json",
-		data:         []byte(testXmlString),
-		expectedData: []byte(testXmlString),
+		data:         []byte(testXMLString),
+		expectedData: []byte(testXMLString),
 	}, {
 		name:         "xml, xml bytes",
 		contentType:  "application/xml",
-		data:         []byte(testXmlString),
-		expectedData: []byte(testXmlString),
+		data:         []byte(testXMLString),
+		expectedData: []byte(testXMLString),
 	}, {
 		name:         "json, interface",
 		contentType:  "application/json",
 		data:         testType{TestData: "testValue"},
-		expectedData: []byte(testJsonString),
+		expectedData: testJSONString,
 	}}
 
 	for _, tc := range tests {

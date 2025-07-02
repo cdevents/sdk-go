@@ -31,7 +31,7 @@ import (
 	"golang.org/x/mod/semver"
 )
 
-const testSchemaJson = "../pkg/api/tests-v99.1/schemas/foosubjectbarpredicate.json"
+const testSchemaJSON = "../pkg/api/tests-v99.1/schemas/foosubjectbarpredicate.json"
 const specVersion = "0.4.1"
 
 var (
@@ -64,15 +64,14 @@ func init() {
 		Data:       make(map[string][]byte),
 	}
 	shortVersion := semver.MajorMinor("v" + specVersion)
-	schema_folder := filepath.Join("../pkg/api", SPEC_FOLDER_PREFIX+shortVersion, SCHEMA_FOLDERS[0]) // links
-	err = loadSchemas(schema_folder, &schemas)
+	schemaFolder := filepath.Join("../pkg/api", SpecFolderPrefix+shortVersion, SchemaFolders[0]) // links
+	err = loadSchemas(schemaFolder, &schemas)
 	panicOnError(err)
-	testSchema, err = compiler.Compile(testSchemaJson)
+	testSchema, err = compiler.Compile(testSchemaJSON)
 	panicOnError(err)
 }
 
 func TestDataFromSchema(t *testing.T) {
-
 	want := &Data{
 		Subject:        testSubject,
 		Predicate:      testPredicate,
@@ -121,7 +120,7 @@ func TestDataFromSchema(t *testing.T) {
 	}
 	got, err := DataFromSchema(testSchema, mappings, "0.1.2")
 	if err != nil {
-		t.Fatalf(err.Error())
+		t.Fatal(err.Error())
 	}
 	less := func(a, b ContentField) bool { return a.Name < b.Name }
 	if d := cmp.Diff(want, got, cmpopts.SortSlices(less)); d != "" {
@@ -221,7 +220,6 @@ func TestExecuteTemplate_Error(t *testing.T) {
 
 // TestValidateStringEnumAnyOf tests the validation of the string enum anyOf case.
 func TestValidateStringEnumAnyOf(t *testing.T) {
-
 	var boolType jsonschema.Types = 4
 	var stringType jsonschema.Types = 32
 	tests := []struct {

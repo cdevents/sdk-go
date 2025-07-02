@@ -40,7 +40,7 @@ const (
 
 var (
 	// Examples Data
-	testArtifactSubjectId = "pkg:golang/mygit.com/myorg/myapp@234fd47e07d1004f0aed9c"
+	testArtifactSubjectID = "pkg:golang/mygit.com/myorg/myapp@234fd47e07d1004f0aed9c"
 	testChangeSource      = "my-git.example/an-org/a-repo"
 	testPipeline          = "myPipeline"
 	testSubjecturl        = "https://www.example.com/mySubject123"
@@ -51,20 +51,20 @@ var (
 	testTaskRunErrors     = "Something went wrong\nWith some more details"
 	testRepo              = "TestRepo"
 	testOwner             = "TestOrg"
-	testUrl               = "https://example.org/TestOrg/TestRepo"
-	testViewUrl           = "https://example.org/view/TestOrg/TestRepo"
-	testEnvironmentId     = "test123"
+	testURL               = "https://example.org/TestOrg/TestRepo"
+	testViewURL           = "https://example.org/view/TestOrg/TestRepo"
+	testEnvironmentID     = "test123"
 	testEnvironmentName   = "testEnv"
-	testEnvironmentUrl    = "https://example.org/testEnv"
+	testEnvironmentURL    = "https://example.org/testEnv"
 	testRepoReference     = &api.Reference{
 		Id: "TestRepo/TestOrg", Source: "https://example.org"}
-	testIncidentSubjectId    = "incident-123"
+	testIncidentSubjectID    = "incident-123"
 	testIncidentSource       = "/monitoring/prod1"
 	testEnvironmentReference = &api.Reference{
 		Id: "prod1", Source: "/iaas/geo1"}
 	testServiceReference = &api.Reference{
 		Id: "myApp", Source: "/clusterA/namespaceB"}
-	testTestRunId       = "myTestCaseRun123"
+	testTestRunID       = "myTestCaseRun123"
 	testSignature       = "MEYCIQCBT8U5ypDXWCjlNKfzTV4KH516/SK13NZSh8znnSMNkQIhAJ3XiQlc9PM1KyjITcZXHotdMB+J3NGua5T/yshmiPmp"
 	testTestEnvironment = &api.Reference{
 		Id: "dev", Source: "testkube-dev-123"}
@@ -79,12 +79,12 @@ var (
 	testTestTriggerStarted = &apiv04.TestCaseRunStartedSubjectContentTrigger{
 		Type: "schedule"}
 	testTestOutcome             = "pass"
-	testTestOutputSubjectId     = "testrunreport-12123"
+	testTestOutputSubjectID     = "testrunreport-12123"
 	testTestOutputSubjectSource = "/event/source/testrunreport-12123"
 	testTestOutputFormat        = "video/quicktime"
 	testTestOutputOutputType    = "video"
-	testTestCaseRun             = &api.Reference{Id: testTestRunId, Source: "testkube-dev-123"}
-	testTestSuiteRunId          = "myTestSuiteRun123"
+	testTestCaseRun             = &api.Reference{Id: testTestRunID, Source: "testkube-dev-123"}
+	testTestSuiteRunID          = "myTestSuiteRun123"
 	testTestSuiteStarted        = &apiv04.TestSuiteRunStartedSubjectContentTestSuite{
 		Id: "92834723894", Name: "Auth TestSuite", Version: "1.0"}
 	testTestSuiteQueued = &apiv04.TestSuiteRunQueuedSubjectContentTestSuite{
@@ -97,9 +97,9 @@ var (
 	testTestSuiteTriggerQueued  = &apiv04.TestSuiteRunQueuedSubjectContentTrigger{Type: "pipeline"}
 	testTestSuiteTriggerStarted = &apiv04.TestSuiteRunStartedSubjectContentTrigger{Type: "pipeline"}
 	testSubjectUser             = "mybot-myapp"
-	testSbomUri                 = "https://sbom.repo/myorg/234fd47e07d1004f0aed9c.sbom"
+	testSbomURI                 = "https://sbom.repo/myorg/234fd47e07d1004f0aed9c.sbom"
 	testChangeDescription       = "This PR address a bug from a recent PR"
-	testTicketId                = "ticket-123"
+	testTicketID                = "ticket-123"
 	testTicketSource            = "/ticketing/system"
 	testTicketAssignees         = []string{"Bob"}
 	testTicketCreator           = "Alice"
@@ -111,7 +111,7 @@ var (
 	testTicketSummary           = "New CVE-123 detected"
 	testTicketType              = "task"
 	testTicketUpdatedBy         = "Bob"
-	testTicketUri               = "https://example.issues.com/ticket123"
+	testTicketURI               = "https://example.issues.com/ticket123"
 	testCustomEventType         = api.CDEventType{
 		// dev.cdeventsx.mytool-resource.created.0.1.0
 		Subject:   "resource",
@@ -128,19 +128,19 @@ var (
 		}
     }`)
 	testCustomContent            interface{}
-	testCustomSchemaId           = "https://myorg.com/schema/custom"
-	testCustomSchemaId2          = "https://myorg.com/schema/mytool"
-	testCustomSchemaJsonTemplate = `{
+	testCustomSchemaID           = "https://myorg.com/schema/custom"
+	testCustomSchemaID2          = "https://myorg.com/schema/mytool"
+	testCustomSchemaJSONTemplate = `{
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "%s",
 	"additionalProperties": true,
 	"type": "object"
 }`
-	testCustomSchemaJson  = fmt.Sprintf(testCustomSchemaJsonTemplate, testCustomSchemaId)
-	testCustomSchema2Json = fmt.Sprintf(testCustomSchemaJsonTemplate, testCustomSchemaId2)
+	testCustomSchemaJSON  = fmt.Sprintf(testCustomSchemaJSONTemplate, testCustomSchemaID)
+	testCustomSchema2JSON = fmt.Sprintf(testCustomSchemaJSONTemplate, testCustomSchemaID2)
 	testCustomSchemas     = map[string][]byte{
-		testCustomSchemaId:  []byte(testCustomSchemaJson),
-		testCustomSchemaId2: []byte(testCustomSchema2Json),
+		testCustomSchemaID:  []byte(testCustomSchemaJSON),
+		testCustomSchemaID2: []byte(testCustomSchema2JSON),
 	}
 	examplesConsumed map[string][]byte
 	examplesProduced map[string]api.CDEventV04
@@ -185,38 +185,38 @@ func init() {
 
 func exampleArtifactPackagedEvent(e *apiv04.ArtifactPackagedEvent) {
 	// Set example specific fields
-	setContext(e, testArtifactSubjectId)
+	setContext(e, testArtifactSubjectID)
 	e.SetSubjectChange(&api.Reference{Id: testChangeId, Source: testChangeSource})
 	e.SetSubjectSbom(&api.ArtifactPackagedSubjectContentSbomV0_2_0{
-		Uri: testSbomUri,
+		Uri: testSbomURI,
 	})
 }
 
 func exampleArtifactPublishedEvent(e *apiv04.ArtifactPublishedEvent) {
 	// Set example specific fields
-	setContext(e, testArtifactSubjectId)
+	setContext(e, testArtifactSubjectID)
 	e.SetSubjectUser(testSubjectUser)
 	e.SetSubjectSbom(&api.ArtifactPublishedSubjectContentSbomV0_2_0{
-		Uri: testSbomUri,
+		Uri: testSbomURI,
 	})
 }
 
 func exampleArtifactSignedEvent(e *apiv04.ArtifactSignedEvent) {
 	// Set example specific fields
-	setContext(e, testArtifactSubjectId)
+	setContext(e, testArtifactSubjectID)
 	e.SetSubjectSignature(testSignature)
 }
 
 func exampleArtifactDeletedEvent(e *apiv04.ArtifactDeletedEvent) {
 	// Set example specific fields
-	setContext(e, testArtifactSubjectId)
+	setContext(e, testArtifactSubjectID)
 	e.SetSubjectUser(testSubjectUser)
 	e.SetChainId("")
 }
 
 func exampleArtifactDownloadedEvent(e *apiv04.ArtifactDownloadedEvent) {
 	// Set example specific fields
-	setContext(e, testArtifactSubjectId)
+	setContext(e, testArtifactSubjectID)
 	e.SetSubjectUser(testSubjectUser)
 	e.SetChainId("")
 }
@@ -236,11 +236,11 @@ func exampleBuildFinishedEvent(e *apiv04.BuildFinishedEvent) {
 	e.SetSubjectArtifactId(testArtifactId)
 }
 
-func exampleBuildQueuedEvent(e *apiv04.BuildQueuedEvent) {
+func exampleBuildQueuedEvent(_ *apiv04.BuildQueuedEvent) {
 	// Set example specific fields
 }
 
-func exampleBuildStartedEvent(e *apiv04.BuildStartedEvent) {
+func exampleBuildStartedEvent(_ *apiv04.BuildStartedEvent) {
 	// Set example specific fields
 }
 
@@ -273,7 +273,7 @@ func exampleChangeUpdatedEvent(e *apiv04.ChangeUpdatedEvent) {
 func exampleEnvironmentCreatedEvent(e *apiv04.EnvironmentCreatedEvent) {
 	// Set example specific fields
 	e.SetSubjectName(testEnvironmentName)
-	e.SetSubjectUrl(testEnvironmentUrl)
+	e.SetSubjectUrl(testEnvironmentURL)
 }
 
 func exampleEnvironmentDeletedEvent(e *apiv04.EnvironmentDeletedEvent) {
@@ -284,12 +284,12 @@ func exampleEnvironmentDeletedEvent(e *apiv04.EnvironmentDeletedEvent) {
 func exampleEnvironmentModifiedEvent(e *apiv04.EnvironmentModifiedEvent) {
 	// Set example specific fields
 	e.SetSubjectName(testEnvironmentName)
-	e.SetSubjectUrl(testEnvironmentUrl)
+	e.SetSubjectUrl(testEnvironmentURL)
 }
 
 func exampleIncidentDetectedEvent(e *apiv04.IncidentDetectedEvent) {
 	// Set example specific fields
-	e.SetSubjectId(testIncidentSubjectId)
+	e.SetSubjectId(testIncidentSubjectID)
 	e.SetSource(testIncidentSource)
 	e.SetSubjectSource(testIncidentSource)
 	e.SetSubjectArtifactId(testArtifactId)
@@ -300,7 +300,7 @@ func exampleIncidentDetectedEvent(e *apiv04.IncidentDetectedEvent) {
 
 func exampleIncidentReportedEvent(e *apiv04.IncidentReportedEvent) {
 	// Set example specific fields
-	e.SetSubjectId(testIncidentSubjectId)
+	e.SetSubjectId(testIncidentSubjectID)
 	e.SetSource(testIncidentSource)
 	e.SetSubjectSource(testIncidentSource)
 	e.SetSubjectArtifactId(testArtifactId)
@@ -312,7 +312,7 @@ func exampleIncidentReportedEvent(e *apiv04.IncidentReportedEvent) {
 
 func exampleIncidentResolvedEvent(e *apiv04.IncidentResolvedEvent) {
 	// Set example specific fields
-	e.SetSubjectId(testIncidentSubjectId)
+	e.SetSubjectId(testIncidentSubjectID)
 	e.SetSource(testIncidentSource)
 	e.SetSubjectSource(testIncidentSource)
 	e.SetSubjectArtifactId("pkg:oci/myapp@sha256%3A0b31b1c02ff458ad9b7b81cbdf8f028bd54699fa151f221d1e8de6817db93439")
@@ -345,51 +345,51 @@ func exampleRepositoryCreatedEvent(e *apiv04.RepositoryCreatedEvent) {
 	// Set example specific fields
 	e.SetSubjectName(testRepo)
 	e.SetSubjectOwner(testOwner)
-	e.SetSubjectUrl(testUrl)
-	e.SetSubjectViewUrl(testViewUrl)
+	e.SetSubjectUrl(testURL)
+	e.SetSubjectViewUrl(testViewURL)
 }
 
 func exampleRepositoryDeletedEvent(e *apiv04.RepositoryDeletedEvent) {
 	// Set example specific fields
 	e.SetSubjectName(testRepo)
 	e.SetSubjectOwner(testOwner)
-	e.SetSubjectUrl(testUrl)
-	e.SetSubjectViewUrl(testViewUrl)
+	e.SetSubjectUrl(testURL)
+	e.SetSubjectViewUrl(testViewURL)
 }
 
 func exampleRepositoryModifiedEvent(e *apiv04.RepositoryModifiedEvent) {
 	// Set example specific fields
 	e.SetSubjectName(testRepo)
 	e.SetSubjectOwner(testOwner)
-	e.SetSubjectUrl(testUrl)
-	e.SetSubjectViewUrl(testViewUrl)
+	e.SetSubjectUrl(testURL)
+	e.SetSubjectViewUrl(testViewURL)
 }
 
 func exampleServiceDeployedEvent(e *apiv04.ServiceDeployedEvent) {
 	// Set example specific fields
-	e.SetSubjectEnvironment(&api.Reference{Id: testEnvironmentId})
+	e.SetSubjectEnvironment(&api.Reference{Id: testEnvironmentID})
 	e.SetSubjectArtifactId(testArtifactId)
 }
 
 func exampleServicePublishedEvent(e *apiv04.ServicePublishedEvent) {
 	// Set example specific fields
-	e.SetSubjectEnvironment(&api.Reference{Id: testEnvironmentId})
+	e.SetSubjectEnvironment(&api.Reference{Id: testEnvironmentID})
 }
 
 func exampleServiceRemovedEvent(e *apiv04.ServiceRemovedEvent) {
 	// Set example specific fields
-	e.SetSubjectEnvironment(&api.Reference{Id: testEnvironmentId})
+	e.SetSubjectEnvironment(&api.Reference{Id: testEnvironmentID})
 }
 
 func exampleServiceRolledbackEvent(e *apiv04.ServiceRolledbackEvent) {
 	// Set example specific fields
-	e.SetSubjectEnvironment(&api.Reference{Id: testEnvironmentId})
+	e.SetSubjectEnvironment(&api.Reference{Id: testEnvironmentID})
 	e.SetSubjectArtifactId(testArtifactId)
 }
 
 func exampleServiceUpgradedEvent(e *apiv04.ServiceUpgradedEvent) {
 	// Set example specific fields
-	e.SetSubjectEnvironment(&api.Reference{Id: testEnvironmentId})
+	e.SetSubjectEnvironment(&api.Reference{Id: testEnvironmentID})
 	e.SetSubjectArtifactId(testArtifactId)
 }
 
@@ -432,8 +432,8 @@ func exampleTaskRunStartedEvent(e *apiv04.TaskRunStartedEvent) {
 
 func exampleTestCaseRunFinishedEvent(e *apiv04.TestCaseRunFinishedEvent) {
 	// Set example specific fields
-	e.SetSubjectId(testTestRunId)
-	e.SetSubjectId(testTestRunId)
+	e.SetSubjectId(testTestRunID)
+	e.SetSubjectId(testTestRunID)
 	e.SetSubjectEnvironment(testTestEnvironment)
 	e.SetSubjectTestCase(testTestCaseFinished)
 	e.SetSubjectOutcome(testTestOutcome)
@@ -441,8 +441,8 @@ func exampleTestCaseRunFinishedEvent(e *apiv04.TestCaseRunFinishedEvent) {
 
 func exampleTestCaseRunQueuedEvent(e *apiv04.TestCaseRunQueuedEvent) {
 	// Set example specific fields
-	e.SetSubjectId(testTestRunId)
-	e.SetSubjectId(testTestRunId)
+	e.SetSubjectId(testTestRunID)
+	e.SetSubjectId(testTestRunID)
 	e.SetSubjectEnvironment(testTestEnvironment)
 	e.SetSubjectTestCase(testTestCaseQueued)
 	e.SetSubjectTrigger(testTestTriggerQueued)
@@ -450,7 +450,7 @@ func exampleTestCaseRunQueuedEvent(e *apiv04.TestCaseRunQueuedEvent) {
 
 func exampleTestCaseRunStartedEvent(e *apiv04.TestCaseRunStartedEvent) {
 	// Set example specific fields
-	e.SetSubjectId(testTestRunId)
+	e.SetSubjectId(testTestRunID)
 	e.SetSubjectEnvironment(testTestEnvironment)
 	e.SetSubjectTestCase(testTestCaseStarted)
 	e.SetSubjectTrigger(testTestTriggerStarted)
@@ -458,7 +458,7 @@ func exampleTestCaseRunStartedEvent(e *apiv04.TestCaseRunStartedEvent) {
 
 func exampleTestSuiteRunFinishedEvent(e *apiv04.TestSuiteRunFinishedEvent) {
 	// Set example specific fields
-	e.SetSubjectId(testTestSuiteRunId)
+	e.SetSubjectId(testTestSuiteRunID)
 	e.SetSubjectEnvironment(testTestEnvironment)
 	e.SetSubjectTestSuite(testTestSuiteFinished)
 	e.SetSubjectOutcome(testTestSuiteOutcome)
@@ -468,7 +468,7 @@ func exampleTestSuiteRunFinishedEvent(e *apiv04.TestSuiteRunFinishedEvent) {
 
 func exampleTestSuiteRunStartedEvent(e *apiv04.TestSuiteRunStartedEvent) {
 	// Set example specific fields
-	e.SetSubjectId(testTestSuiteRunId)
+	e.SetSubjectId(testTestSuiteRunID)
 	e.SetSubjectEnvironment(testTestEnvironment)
 	e.SetSubjectTestSuite(testTestSuiteStarted)
 	e.SetSubjectTrigger(testTestSuiteTriggerStarted)
@@ -476,7 +476,7 @@ func exampleTestSuiteRunStartedEvent(e *apiv04.TestSuiteRunStartedEvent) {
 
 func exampleTestSuiteRunQueuedEvent(e *apiv04.TestSuiteRunQueuedEvent) {
 	// Set example specific fields
-	e.SetSubjectId(testTestSuiteRunId)
+	e.SetSubjectId(testTestSuiteRunID)
 	e.SetSubjectEnvironment(testTestEnvironment)
 	e.SetSubjectTestSuite(testTestSuiteQueued)
 	e.SetSubjectTrigger(testTestSuiteTriggerQueued)
@@ -484,7 +484,7 @@ func exampleTestSuiteRunQueuedEvent(e *apiv04.TestSuiteRunQueuedEvent) {
 
 func exampleTestOutputPublishedEvent(e *apiv04.TestOutputPublishedEvent) {
 	// Set example specific fields
-	e.SetSubjectId(testTestOutputSubjectId)
+	e.SetSubjectId(testTestOutputSubjectID)
 	e.SetSubjectSource(testTestOutputSubjectSource)
 	e.SetSubjectOutputType(testTestOutputOutputType)
 	e.SetSubjectFormat(testTestOutputFormat)
@@ -493,7 +493,7 @@ func exampleTestOutputPublishedEvent(e *apiv04.TestOutputPublishedEvent) {
 
 func exampleTicketClosedEvent(e *apiv04.TicketClosedEvent) {
 	// Set example specific fields
-	e.SetSubjectId(testTicketId)
+	e.SetSubjectId(testTicketID)
 	e.SetSource(testTicketSource)
 	e.SetSubjectSource(testTicketSource)
 	e.SetSubjectAssignees(testTicketAssignees)
@@ -506,13 +506,13 @@ func exampleTicketClosedEvent(e *apiv04.TicketClosedEvent) {
 	e.SetSubjectSummary(testTicketSummary)
 	e.SetSubjectTicketType(testTicketType)
 	e.SetSubjectUpdatedBy(testTicketUpdatedBy)
-	e.SetSubjectUri(testTicketUri)
+	e.SetSubjectUri(testTicketURI)
 	e.SetChainId("")
 }
 
 func exampleTicketCreatedEvent(e *apiv04.TicketCreatedEvent) {
 	// Set example specific fields
-	e.SetSubjectId(testTicketId)
+	e.SetSubjectId(testTicketID)
 	e.SetSource(testTicketSource)
 	e.SetSubjectSource(testTicketSource)
 	e.SetSubjectAssignees(testTicketAssignees)
@@ -523,13 +523,13 @@ func exampleTicketCreatedEvent(e *apiv04.TicketCreatedEvent) {
 	e.SetSubjectPriority(testTicketPriority)
 	e.SetSubjectSummary(testTicketSummary)
 	e.SetSubjectTicketType(testTicketType)
-	e.SetSubjectUri(testTicketUri)
+	e.SetSubjectUri(testTicketURI)
 	e.SetChainId("")
 }
 
 func exampleTicketUpdatedEvent(e *apiv04.TicketUpdatedEvent) {
 	// Set example specific fields
-	e.SetSubjectId(testTicketId)
+	e.SetSubjectId(testTicketID)
 	e.SetSource(testTicketSource)
 	e.SetSubjectSource(testTicketSource)
 	e.SetSubjectAssignees(testTicketAssignees)
@@ -541,7 +541,7 @@ func exampleTicketUpdatedEvent(e *apiv04.TicketUpdatedEvent) {
 	e.SetSubjectSummary(testTicketSummary)
 	e.SetSubjectTicketType(testTicketType)
 	e.SetSubjectUpdatedBy(testTicketUpdatedBy)
-	e.SetSubjectUri(testTicketUri)
+	e.SetSubjectUri(testTicketURI)
 	e.SetChainId("")
 }
 
@@ -550,7 +550,7 @@ func exampleCustomTypeEvent(e *apiv04.CustomTypeEvent) {
 	// Set the type to dev.cdeventsx.mytool-resource.created.0.1.0
 	e.SetEventType(testCustomEventType)
 	e.SetSubjectContent(testCustomContent)
-	e.SetSchemaUri(testCustomSchemaId2)
+	e.SetSchemaUri(testCustomSchemaID2)
 	e.SetSubjectId("pkg:resource/name@234fd47e07d1004f0aed9c")
 	e.SetChainId("6ca3f9c5-1cef-4ce0-861c-2456a69cf137")
 }
@@ -562,7 +562,6 @@ func exampleCustomTypeEvent(e *apiv04.CustomTypeEvent) {
 // - it parses the examples into a CDEvent and
 // - it verifies that produced and consumed CDEvent match
 func TestExamples(t *testing.T) {
-
 	for name, exampleConsumed := range examplesConsumed {
 		t.Run(name, func(t *testing.T) {
 			produced, ok := examplesProduced[name]

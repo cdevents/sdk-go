@@ -86,7 +86,7 @@ func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetVersion() string {
 }
 
 func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetId() string {
-	return e.Context.Id
+	return e.Context.ID
 }
 
 func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetSource() string {
@@ -98,7 +98,7 @@ func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetTimestamp() time.Ti
 }
 
 func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetSubjectId() string {
-	return e.Subject.Id
+	return e.Subject.ID
 }
 
 func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetSubjectSource() string {
@@ -129,7 +129,7 @@ func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetCustomDataContentTy
 // CDEventsReaderV04 implementation
 
 func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetChainId() string {
-	return e.Context.ChainId
+	return e.Context.ChainID
 }
 
 func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetLinks() EmbeddedLinksArray {
@@ -137,19 +137,19 @@ func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetLinks() EmbeddedLin
 }
 
 func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetSchemaUri() string {
-	return e.Context.SchemaUri
+	return e.Context.SchemaURI
 }
 
-// GetCustomSchema looks up the SchemaUri, if any is defined. If none is defined, it returns nil.
+// GetCustomSchema looks up the schemaURI, if any is defined. If none is defined, it returns nil.
 // If it's defined and cannot be found, it returns an error.
 func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetCustomSchema() (*jsonschema.Schema, error) {
-	schemaUri := e.GetSchemaUri()
-	if schemaUri == "" {
+	schemaURI := e.GetSchemaUri()
+	if schemaURI == "" {
 		return nil, nil
 	}
-	schema, found := CompiledCustomSchemas[schemaUri]
+	schema, found := CompiledCustomSchemas[schemaURI]
 	if ! found {
-		return nil, fmt.Errorf("schema with id %s could not be found in the local registry", schemaUri)
+		return nil, fmt.Errorf("schema with id %s could not be found in the local registry", schemaURI)
 	}
 	return schema, nil
 }
@@ -158,7 +158,7 @@ func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetCustomSchema() (*js
 // CDEventsWriter implementation
 
 func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetId(id string) {
-	e.Context.Id = id
+	e.Context.ID = id
 }
 
 func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetSource(source string) {
@@ -174,7 +174,7 @@ func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetTimestamp(timestam
 }
 
 func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetSubjectId(subjectId string) {
-	e.Subject.Id = subjectId
+	e.Subject.ID = subjectId
 }
 
 func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetSubjectSource(subjectSource string) {
@@ -208,7 +208,7 @@ func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetLinks(links Embedd
 }
 
 func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetSchemaUri(schema string) {
-	e.Context.SchemaUri = schema
+	e.Context.SchemaURI = schema
 }
 {{- end}}
 
