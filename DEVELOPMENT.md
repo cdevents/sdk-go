@@ -17,7 +17,7 @@ You must install these tools:
 1. [`git`](https://help.github.com/articles/set-up-git/): For source control
 
 1. [`go`](https://golang.org/doc/install): The language this SDK is built in.
-    > **Note** Golang [version v1.18](https://golang.org/dl/) or higher is required.
+    > **Note** Golang [version v1.23](https://golang.org/dl/) or higher is required.
 
 1. [`make`](https://www.gnu.org/software/make/): not stricly required but handy to run
    tests with a single command.
@@ -85,4 +85,3 @@ To run all targets, before creating a commit:
 ```shell
 make all
 ```
-
