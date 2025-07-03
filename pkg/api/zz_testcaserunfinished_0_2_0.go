@@ -76,7 +76,7 @@ func (e TestCaseRunFinishedEventV0_2_0) GetVersion() string {
 }
 
 func (e TestCaseRunFinishedEventV0_2_0) GetId() string {
-	return e.Context.Id
+	return e.Context.ID
 }
 
 func (e TestCaseRunFinishedEventV0_2_0) GetSource() string {
@@ -88,7 +88,7 @@ func (e TestCaseRunFinishedEventV0_2_0) GetTimestamp() time.Time {
 }
 
 func (e TestCaseRunFinishedEventV0_2_0) GetSubjectId() string {
-	return e.Subject.Id
+	return e.Subject.ID
 }
 
 func (e TestCaseRunFinishedEventV0_2_0) GetSubjectSource() string {
@@ -118,7 +118,7 @@ func (e TestCaseRunFinishedEventV0_2_0) GetCustomDataContentType() string {
 // CDEventsReaderV04 implementation
 
 func (e TestCaseRunFinishedEventV0_2_0) GetChainId() string {
-	return e.Context.ChainId
+	return e.Context.ChainID
 }
 
 func (e TestCaseRunFinishedEventV0_2_0) GetLinks() EmbeddedLinksArray {
@@ -126,19 +126,19 @@ func (e TestCaseRunFinishedEventV0_2_0) GetLinks() EmbeddedLinksArray {
 }
 
 func (e TestCaseRunFinishedEventV0_2_0) GetSchemaUri() string {
-	return e.Context.SchemaUri
+	return e.Context.SchemaURI
 }
 
-// GetCustomSchema looks up the SchemaUri, if any is defined. If none is defined, it returns nil.
+// GetCustomSchema looks up the schemaURI, if any is defined. If none is defined, it returns nil.
 // If it's defined and cannot be found, it returns an error.
 func (e TestCaseRunFinishedEventV0_2_0) GetCustomSchema() (*jsonschema.Schema, error) {
-	schemaUri := e.GetSchemaUri()
-	if schemaUri == "" {
+	schemaURI := e.GetSchemaUri()
+	if schemaURI == "" {
 		return nil, nil
 	}
-	schema, found := CompiledCustomSchemas[schemaUri]
+	schema, found := CompiledCustomSchemas[schemaURI]
 	if !found {
-		return nil, fmt.Errorf("schema with id %s could not be found in the local registry", schemaUri)
+		return nil, fmt.Errorf("schema with id %s could not be found in the local registry", schemaURI)
 	}
 	return schema, nil
 }
@@ -146,7 +146,7 @@ func (e TestCaseRunFinishedEventV0_2_0) GetCustomSchema() (*jsonschema.Schema, e
 // CDEventsWriter implementation
 
 func (e *TestCaseRunFinishedEventV0_2_0) SetId(id string) {
-	e.Context.Id = id
+	e.Context.ID = id
 }
 
 func (e *TestCaseRunFinishedEventV0_2_0) SetSource(source string) {
@@ -162,7 +162,7 @@ func (e *TestCaseRunFinishedEventV0_2_0) SetTimestamp(timestamp time.Time) {
 }
 
 func (e *TestCaseRunFinishedEventV0_2_0) SetSubjectId(subjectId string) {
-	e.Subject.Id = subjectId
+	e.Subject.ID = subjectId
 }
 
 func (e *TestCaseRunFinishedEventV0_2_0) SetSubjectSource(subjectSource string) {
@@ -187,7 +187,7 @@ func (e TestCaseRunFinishedEventV0_2_0) GetSchema() (string, *jsonschema.Schema,
 // CDEventsWriterV04 implementation
 
 func (e *TestCaseRunFinishedEventV0_2_0) SetChainId(chainId string) {
-	e.Context.ChainId = chainId
+	e.Context.ChainID = chainId
 }
 
 func (e *TestCaseRunFinishedEventV0_2_0) SetLinks(links EmbeddedLinksArray) {
@@ -195,7 +195,7 @@ func (e *TestCaseRunFinishedEventV0_2_0) SetLinks(links EmbeddedLinksArray) {
 }
 
 func (e *TestCaseRunFinishedEventV0_2_0) SetSchemaUri(schema string) {
-	e.Context.SchemaUri = schema
+	e.Context.SchemaURI = schema
 }
 
 func (e TestCaseRunFinishedEventV0_2_0) GetSubjectContent() interface{} {

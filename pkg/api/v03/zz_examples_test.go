@@ -35,7 +35,7 @@ func init() {
 		"foo2": "bar",
 	}
 	reference := api.EventReference{
-		ContextId: testContextId,
+		ContextID: testContextID,
 	}
 	elr := api.NewEmbeddedLinkRelation()
 	elr.SetTags(tags)

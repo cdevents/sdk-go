@@ -69,7 +69,7 @@ func (e TaskRunStartedEventV0_1_1) GetVersion() string {
 }
 
 func (e TaskRunStartedEventV0_1_1) GetId() string {
-	return e.Context.Id
+	return e.Context.ID
 }
 
 func (e TaskRunStartedEventV0_1_1) GetSource() string {
@@ -81,7 +81,7 @@ func (e TaskRunStartedEventV0_1_1) GetTimestamp() time.Time {
 }
 
 func (e TaskRunStartedEventV0_1_1) GetSubjectId() string {
-	return e.Subject.Id
+	return e.Subject.ID
 }
 
 func (e TaskRunStartedEventV0_1_1) GetSubjectSource() string {
@@ -111,7 +111,7 @@ func (e TaskRunStartedEventV0_1_1) GetCustomDataContentType() string {
 // CDEventsWriter implementation
 
 func (e *TaskRunStartedEventV0_1_1) SetId(id string) {
-	e.Context.Id = id
+	e.Context.ID = id
 }
 
 func (e *TaskRunStartedEventV0_1_1) SetSource(source string) {
@@ -127,7 +127,7 @@ func (e *TaskRunStartedEventV0_1_1) SetTimestamp(timestamp time.Time) {
 }
 
 func (e *TaskRunStartedEventV0_1_1) SetSubjectId(subjectId string) {
-	e.Subject.Id = subjectId
+	e.Subject.ID = subjectId
 }
 
 func (e *TaskRunStartedEventV0_1_1) SetSubjectSource(subjectSource string) {

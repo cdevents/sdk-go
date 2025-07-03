@@ -71,7 +71,7 @@ func (e TestOutputPublishedEventV0_1_0) GetVersion() string {
 }
 
 func (e TestOutputPublishedEventV0_1_0) GetId() string {
-	return e.Context.Id
+	return e.Context.ID
 }
 
 func (e TestOutputPublishedEventV0_1_0) GetSource() string {
@@ -83,7 +83,7 @@ func (e TestOutputPublishedEventV0_1_0) GetTimestamp() time.Time {
 }
 
 func (e TestOutputPublishedEventV0_1_0) GetSubjectId() string {
-	return e.Subject.Id
+	return e.Subject.ID
 }
 
 func (e TestOutputPublishedEventV0_1_0) GetSubjectSource() string {
@@ -113,7 +113,7 @@ func (e TestOutputPublishedEventV0_1_0) GetCustomDataContentType() string {
 // CDEventsWriter implementation
 
 func (e *TestOutputPublishedEventV0_1_0) SetId(id string) {
-	e.Context.Id = id
+	e.Context.ID = id
 }
 
 func (e *TestOutputPublishedEventV0_1_0) SetSource(source string) {
@@ -129,7 +129,7 @@ func (e *TestOutputPublishedEventV0_1_0) SetTimestamp(timestamp time.Time) {
 }
 
 func (e *TestOutputPublishedEventV0_1_0) SetSubjectId(subjectId string) {
-	e.Subject.Id = subjectId
+	e.Subject.ID = subjectId
 }
 
 func (e *TestOutputPublishedEventV0_1_0) SetSubjectSource(subjectSource string) {

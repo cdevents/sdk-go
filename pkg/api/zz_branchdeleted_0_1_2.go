@@ -65,7 +65,7 @@ func (e BranchDeletedEventV0_1_2) GetVersion() string {
 }
 
 func (e BranchDeletedEventV0_1_2) GetId() string {
-	return e.Context.Id
+	return e.Context.ID
 }
 
 func (e BranchDeletedEventV0_1_2) GetSource() string {
@@ -77,7 +77,7 @@ func (e BranchDeletedEventV0_1_2) GetTimestamp() time.Time {
 }
 
 func (e BranchDeletedEventV0_1_2) GetSubjectId() string {
-	return e.Subject.Id
+	return e.Subject.ID
 }
 
 func (e BranchDeletedEventV0_1_2) GetSubjectSource() string {
@@ -107,7 +107,7 @@ func (e BranchDeletedEventV0_1_2) GetCustomDataContentType() string {
 // CDEventsWriter implementation
 
 func (e *BranchDeletedEventV0_1_2) SetId(id string) {
-	e.Context.Id = id
+	e.Context.ID = id
 }
 
 func (e *BranchDeletedEventV0_1_2) SetSource(source string) {
@@ -123,7 +123,7 @@ func (e *BranchDeletedEventV0_1_2) SetTimestamp(timestamp time.Time) {
 }
 
 func (e *BranchDeletedEventV0_1_2) SetSubjectId(subjectId string) {
-	e.Subject.Id = subjectId
+	e.Subject.ID = subjectId
 }
 
 func (e *BranchDeletedEventV0_1_2) SetSubjectSource(subjectSource string) {

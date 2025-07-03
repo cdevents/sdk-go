@@ -200,7 +200,7 @@ func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetSchema() (string, *
 // CDEventsWriterV04 implementation
 
 func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetChainId(chainId string) {
-	e.Context.ChainId = chainId
+	e.Context.ChainID = chainId
 }
 
 func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetLinks(links EmbeddedLinksArray) {

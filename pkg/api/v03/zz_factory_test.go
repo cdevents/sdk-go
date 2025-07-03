@@ -34,7 +34,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.ArtifactPackagedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.ArtifactPackagedSubject{
@@ -51,7 +51,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.ArtifactPublishedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.ArtifactPublishedSubject{
@@ -68,7 +68,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.ArtifactSignedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.ArtifactSignedSubject{
@@ -85,7 +85,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.BranchCreatedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.BranchCreatedSubject{
@@ -102,7 +102,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.BranchDeletedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.BranchDeletedSubject{
@@ -119,7 +119,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.BuildFinishedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.BuildFinishedSubject{
@@ -136,7 +136,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.BuildQueuedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.BuildQueuedSubject{
@@ -153,7 +153,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.BuildStartedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.BuildStartedSubject{
@@ -170,7 +170,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.ChangeAbandonedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.ChangeAbandonedSubject{
@@ -187,7 +187,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.ChangeCreatedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.ChangeCreatedSubject{
@@ -204,7 +204,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.ChangeMergedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.ChangeMergedSubject{
@@ -221,7 +221,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.ChangeReviewedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.ChangeReviewedSubject{
@@ -238,7 +238,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.ChangeUpdatedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.ChangeUpdatedSubject{
@@ -255,7 +255,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.EnvironmentCreatedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.EnvironmentCreatedSubject{
@@ -272,7 +272,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.EnvironmentDeletedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.EnvironmentDeletedSubject{
@@ -289,7 +289,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.EnvironmentModifiedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.EnvironmentModifiedSubject{
@@ -306,7 +306,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.IncidentDetectedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.IncidentDetectedSubject{
@@ -323,7 +323,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.IncidentReportedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.IncidentReportedSubject{
@@ -340,7 +340,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.IncidentResolvedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.IncidentResolvedSubject{
@@ -357,7 +357,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.PipelineRunFinishedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.PipelineRunFinishedSubject{
@@ -374,7 +374,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.PipelineRunQueuedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.PipelineRunQueuedSubject{
@@ -391,7 +391,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.PipelineRunStartedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.PipelineRunStartedSubject{
@@ -408,7 +408,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.RepositoryCreatedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.RepositoryCreatedSubject{
@@ -425,7 +425,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.RepositoryDeletedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.RepositoryDeletedSubject{
@@ -442,7 +442,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.RepositoryModifiedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.RepositoryModifiedSubject{
@@ -459,7 +459,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.ServiceDeployedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.ServiceDeployedSubject{
@@ -476,7 +476,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.ServicePublishedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.ServicePublishedSubject{
@@ -493,7 +493,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.ServiceRemovedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.ServiceRemovedSubject{
@@ -510,7 +510,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.ServiceRolledbackEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.ServiceRolledbackSubject{
@@ -527,7 +527,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.ServiceUpgradedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.ServiceUpgradedSubject{
@@ -544,7 +544,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.TaskRunFinishedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.TaskRunFinishedSubject{
@@ -561,7 +561,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.TaskRunStartedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.TaskRunStartedSubject{
@@ -578,7 +578,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.TestCaseRunFinishedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.TestCaseRunFinishedSubject{
@@ -595,7 +595,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.TestCaseRunQueuedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.TestCaseRunQueuedSubject{
@@ -612,7 +612,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.TestCaseRunStartedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.TestCaseRunStartedSubject{
@@ -629,7 +629,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.TestOutputPublishedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.TestOutputPublishedSubject{
@@ -646,7 +646,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.TestSuiteRunFinishedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.TestSuiteRunFinishedSubject{
@@ -663,7 +663,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.TestSuiteRunQueuedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.TestSuiteRunQueuedSubject{
@@ -680,7 +680,7 @@ func init() {
 			Context: api.Context{
 				Type:      apiv03.TestSuiteRunStartedEventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "0.3.0",
 			},
 			Subject: apiv03.TestSuiteRunStartedSubject{

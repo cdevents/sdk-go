@@ -35,7 +35,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.ArtifactDeletedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -54,7 +54,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.ArtifactDownloadedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -73,7 +73,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.ArtifactPackagedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -92,7 +92,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.ArtifactPublishedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -111,7 +111,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.ArtifactSignedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -130,7 +130,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.BranchCreatedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -149,7 +149,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.BranchDeletedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -168,7 +168,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.BuildFinishedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -187,7 +187,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.BuildQueuedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -206,7 +206,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.BuildStartedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -225,7 +225,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.ChangeAbandonedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -244,7 +244,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.ChangeCreatedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -263,7 +263,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.ChangeMergedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -282,7 +282,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.ChangeReviewedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -301,7 +301,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.ChangeUpdatedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -320,7 +320,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.EnvironmentCreatedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -339,7 +339,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.EnvironmentDeletedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -358,7 +358,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.EnvironmentModifiedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -377,7 +377,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.IncidentDetectedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -396,7 +396,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.IncidentReportedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -415,7 +415,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.IncidentResolvedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -434,7 +434,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.PipelineRunFinishedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -453,7 +453,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.PipelineRunQueuedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -472,7 +472,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.PipelineRunStartedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -491,7 +491,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.RepositoryCreatedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -510,7 +510,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.RepositoryDeletedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -529,7 +529,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.RepositoryModifiedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -548,7 +548,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.ServiceDeployedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -567,7 +567,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.ServicePublishedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -586,7 +586,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.ServiceRemovedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -605,7 +605,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.ServiceRolledbackEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -624,7 +624,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.ServiceUpgradedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -643,7 +643,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.TaskRunFinishedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -662,7 +662,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.TaskRunStartedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -681,7 +681,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.TestCaseRunFinishedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -700,7 +700,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.TestCaseRunQueuedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -719,7 +719,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.TestCaseRunSkippedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -738,7 +738,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.TestCaseRunStartedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -757,7 +757,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.TestOutputPublishedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -776,7 +776,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.TestSuiteRunFinishedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -795,7 +795,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.TestSuiteRunQueuedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -814,7 +814,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.TestSuiteRunStartedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -833,7 +833,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.TicketClosedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -852,7 +852,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.TicketCreatedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -871,7 +871,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.TicketUpdatedEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},
@@ -890,7 +890,7 @@ func init() {
 				Context: api.Context{
 					Type:      apiv04.CustomTypeEventType,
 					Timestamp: timeNow(),
-					Id:        testUUID(),
+					ID:        testUUID(),
 					Version:   "0.4.1",
 				},
 			},

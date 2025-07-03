@@ -58,7 +58,7 @@ func (e CustomTypeEventV0_4_1) GetVersion() string {
 }
 
 func (e CustomTypeEventV0_4_1) GetId() string {
-	return e.Context.Id
+	return e.Context.ID
 }
 
 func (e CustomTypeEventV0_4_1) GetSource() string {
@@ -70,7 +70,7 @@ func (e CustomTypeEventV0_4_1) GetTimestamp() time.Time {
 }
 
 func (e CustomTypeEventV0_4_1) GetSubjectId() string {
-	return e.Subject.Id
+	return e.Subject.ID
 }
 
 func (e CustomTypeEventV0_4_1) GetSubjectSource() string {
@@ -100,7 +100,7 @@ func (e CustomTypeEventV0_4_1) GetCustomDataContentType() string {
 // CDEventsReaderV04 implementation
 
 func (e CustomTypeEventV0_4_1) GetChainId() string {
-	return e.Context.ChainId
+	return e.Context.ChainID
 }
 
 func (e CustomTypeEventV0_4_1) GetLinks() EmbeddedLinksArray {
@@ -108,19 +108,19 @@ func (e CustomTypeEventV0_4_1) GetLinks() EmbeddedLinksArray {
 }
 
 func (e CustomTypeEventV0_4_1) GetSchemaUri() string {
-	return e.Context.SchemaUri
+	return e.Context.SchemaURI
 }
 
-// GetCustomSchema looks up the SchemaUri, if any is defined. If none is defined, it returns nil.
+// GetCustomSchema looks up the schemaURI, if any is defined. If none is defined, it returns nil.
 // If it's defined and cannot be found, it returns an error.
 func (e CustomTypeEventV0_4_1) GetCustomSchema() (*jsonschema.Schema, error) {
-	schemaUri := e.GetSchemaUri()
-	if schemaUri == "" {
+	schemaURI := e.GetSchemaUri()
+	if schemaURI == "" {
 		return nil, nil
 	}
-	schema, found := CompiledCustomSchemas[schemaUri]
+	schema, found := CompiledCustomSchemas[schemaURI]
 	if !found {
-		return nil, fmt.Errorf("schema with id %s could not be found in the local registry", schemaUri)
+		return nil, fmt.Errorf("schema with id %s could not be found in the local registry", schemaURI)
 	}
 	return schema, nil
 }
@@ -128,7 +128,7 @@ func (e CustomTypeEventV0_4_1) GetCustomSchema() (*jsonschema.Schema, error) {
 // CDEventsWriter implementation
 
 func (e *CustomTypeEventV0_4_1) SetId(id string) {
-	e.Context.Id = id
+	e.Context.ID = id
 }
 
 func (e *CustomTypeEventV0_4_1) SetSource(source string) {
@@ -144,7 +144,7 @@ func (e *CustomTypeEventV0_4_1) SetTimestamp(timestamp time.Time) {
 }
 
 func (e *CustomTypeEventV0_4_1) SetSubjectId(subjectId string) {
-	e.Subject.Id = subjectId
+	e.Subject.ID = subjectId
 }
 
 func (e *CustomTypeEventV0_4_1) SetSubjectSource(subjectSource string) {
@@ -169,7 +169,7 @@ func (e CustomTypeEventV0_4_1) GetSchema() (string, *jsonschema.Schema, error) {
 // CDEventsWriterV04 implementation
 
 func (e *CustomTypeEventV0_4_1) SetChainId(chainId string) {
-	e.Context.ChainId = chainId
+	e.Context.ChainID = chainId
 }
 
 func (e *CustomTypeEventV0_4_1) SetLinks(links EmbeddedLinksArray) {
@@ -177,7 +177,7 @@ func (e *CustomTypeEventV0_4_1) SetLinks(links EmbeddedLinksArray) {
 }
 
 func (e *CustomTypeEventV0_4_1) SetSchemaUri(schema string) {
-	e.Context.SchemaUri = schema
+	e.Context.SchemaURI = schema
 }
 
 func (e CustomTypeEventV0_4_1) GetSubjectContent() interface{} {

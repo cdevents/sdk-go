@@ -97,7 +97,7 @@ To see the event, let's render it as JSON and log it:
 
 ```golang
 // Render the event as JSON
-eventJson, err := cdevents.AsJsonString(event)
+eventJson, err := cdevents.AsJSONString(event)
 examples.PanicOnError(err, "failed to marshal the CDEvent")
 fmt.Printf("%s", eventJson)
 ```
@@ -219,7 +219,7 @@ In this case we know that the event is in the v0.4 version format, so we use the
 ```golang
 // Load, unmarshal and validate the event
 eventBytes, err := os.ReadFile("changecreated.json")
-event, err := cdevents04.NewFromJsonBytes(eventBytes)
+event, err := cdevents04.NewFromJSONBytes(eventBytes)
 
 err = cdevent.Validate(event)
 if err != nil {
@@ -227,7 +227,7 @@ if err != nil {
 }
 
 // Print the event
-eventJson, err := cdevents.AsJsonString(event)
+eventJson, err := cdevents.AsJSONString(event)
 examples.PanicOnError(err, "failed to marshal the CDEvent")
 fmt.Printf("%s\n\n", eventJson)
 ```

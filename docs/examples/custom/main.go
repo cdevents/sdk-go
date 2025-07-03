@@ -12,7 +12,7 @@ import (
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 )
 
-const customSchemaUri = "https://myregistry.dev/schemas/cdevents/quota-exceeded/0_1_0"
+const customSchemaURI = "https://myregistry.dev/schemas/cdevents/quota-exceeded/0_1_0"
 
 type Quota struct {
 	User      string `json:"user"`      // The use the quota applies ot
@@ -54,18 +54,18 @@ func main() {
 
 	// Set the required subject fields
 	event.SetSubjectContent(quotaRule123)
-	event.SetSchemaUri(customSchemaUri)
+	event.SetSchemaUri(customSchemaURI)
 
 	// Print the event
-	eventJson, err := cdevents.AsJsonString(event)
+	eventJSON, err := cdevents.AsJSONString(event)
 	examples.PanicOnError(err, "failed to marshal the CDEvent")
-	fmt.Printf("%s", eventJson)
+	fmt.Printf("%s", eventJSON)
 
 	// To validate the event, we need to load its custom schema
 	customSchema, err := os.ReadFile("myregistry-quotaexceeded_schema.json")
 	examples.PanicOnError(err, "cannot load schema file")
 
-	err = cdevents.LoadJsonSchema(customSchemaUri, customSchema)
+	err = cdevents.LoadJsonSchema(customSchemaURI, customSchema)
 	examples.PanicOnError(err, "cannot load the custom schema file")
 
 	ce, err = cdevents.AsCloudEvent(event)

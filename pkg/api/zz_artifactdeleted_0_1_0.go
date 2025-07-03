@@ -66,7 +66,7 @@ func (e ArtifactDeletedEventV0_1_0) GetVersion() string {
 }
 
 func (e ArtifactDeletedEventV0_1_0) GetId() string {
-	return e.Context.Id
+	return e.Context.ID
 }
 
 func (e ArtifactDeletedEventV0_1_0) GetSource() string {
@@ -78,7 +78,7 @@ func (e ArtifactDeletedEventV0_1_0) GetTimestamp() time.Time {
 }
 
 func (e ArtifactDeletedEventV0_1_0) GetSubjectId() string {
-	return e.Subject.Id
+	return e.Subject.ID
 }
 
 func (e ArtifactDeletedEventV0_1_0) GetSubjectSource() string {
@@ -108,7 +108,7 @@ func (e ArtifactDeletedEventV0_1_0) GetCustomDataContentType() string {
 // CDEventsReaderV04 implementation
 
 func (e ArtifactDeletedEventV0_1_0) GetChainId() string {
-	return e.Context.ChainId
+	return e.Context.ChainID
 }
 
 func (e ArtifactDeletedEventV0_1_0) GetLinks() EmbeddedLinksArray {
@@ -116,19 +116,19 @@ func (e ArtifactDeletedEventV0_1_0) GetLinks() EmbeddedLinksArray {
 }
 
 func (e ArtifactDeletedEventV0_1_0) GetSchemaUri() string {
-	return e.Context.SchemaUri
+	return e.Context.SchemaURI
 }
 
-// GetCustomSchema looks up the SchemaUri, if any is defined. If none is defined, it returns nil.
+// GetCustomSchema looks up the schemaURI, if any is defined. If none is defined, it returns nil.
 // If it's defined and cannot be found, it returns an error.
 func (e ArtifactDeletedEventV0_1_0) GetCustomSchema() (*jsonschema.Schema, error) {
-	schemaUri := e.GetSchemaUri()
-	if schemaUri == "" {
+	schemaURI := e.GetSchemaUri()
+	if schemaURI == "" {
 		return nil, nil
 	}
-	schema, found := CompiledCustomSchemas[schemaUri]
+	schema, found := CompiledCustomSchemas[schemaURI]
 	if !found {
-		return nil, fmt.Errorf("schema with id %s could not be found in the local registry", schemaUri)
+		return nil, fmt.Errorf("schema with id %s could not be found in the local registry", schemaURI)
 	}
 	return schema, nil
 }
@@ -136,7 +136,7 @@ func (e ArtifactDeletedEventV0_1_0) GetCustomSchema() (*jsonschema.Schema, error
 // CDEventsWriter implementation
 
 func (e *ArtifactDeletedEventV0_1_0) SetId(id string) {
-	e.Context.Id = id
+	e.Context.ID = id
 }
 
 func (e *ArtifactDeletedEventV0_1_0) SetSource(source string) {
@@ -152,7 +152,7 @@ func (e *ArtifactDeletedEventV0_1_0) SetTimestamp(timestamp time.Time) {
 }
 
 func (e *ArtifactDeletedEventV0_1_0) SetSubjectId(subjectId string) {
-	e.Subject.Id = subjectId
+	e.Subject.ID = subjectId
 }
 
 func (e *ArtifactDeletedEventV0_1_0) SetSubjectSource(subjectSource string) {
@@ -177,7 +177,7 @@ func (e ArtifactDeletedEventV0_1_0) GetSchema() (string, *jsonschema.Schema, err
 // CDEventsWriterV04 implementation
 
 func (e *ArtifactDeletedEventV0_1_0) SetChainId(chainId string) {
-	e.Context.ChainId = chainId
+	e.Context.ChainID = chainId
 }
 
 func (e *ArtifactDeletedEventV0_1_0) SetLinks(links EmbeddedLinksArray) {
@@ -185,7 +185,7 @@ func (e *ArtifactDeletedEventV0_1_0) SetLinks(links EmbeddedLinksArray) {
 }
 
 func (e *ArtifactDeletedEventV0_1_0) SetSchemaUri(schema string) {
-	e.Context.SchemaUri = schema
+	e.Context.SchemaURI = schema
 }
 
 func (e ArtifactDeletedEventV0_1_0) GetSubjectContent() interface{} {

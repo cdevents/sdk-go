@@ -74,7 +74,7 @@ func (e FooSubjectBarPredicateEventV2_2_3) GetVersion() string {
 }
 
 func (e FooSubjectBarPredicateEventV2_2_3) GetId() string {
-	return e.Context.Id
+	return e.Context.ID
 }
 
 func (e FooSubjectBarPredicateEventV2_2_3) GetSource() string {
@@ -86,7 +86,7 @@ func (e FooSubjectBarPredicateEventV2_2_3) GetTimestamp() time.Time {
 }
 
 func (e FooSubjectBarPredicateEventV2_2_3) GetSubjectId() string {
-	return e.Subject.Id
+	return e.Subject.ID
 }
 
 func (e FooSubjectBarPredicateEventV2_2_3) GetSubjectSource() string {
@@ -116,7 +116,7 @@ func (e FooSubjectBarPredicateEventV2_2_3) GetCustomDataContentType() string {
 // CDEventsReaderV04 implementation
 
 func (e FooSubjectBarPredicateEventV2_2_3) GetChainId() string {
-	return e.Context.ChainId
+	return e.Context.ChainID
 }
 
 func (e FooSubjectBarPredicateEventV2_2_3) GetLinks() EmbeddedLinksArray {
@@ -124,19 +124,19 @@ func (e FooSubjectBarPredicateEventV2_2_3) GetLinks() EmbeddedLinksArray {
 }
 
 func (e FooSubjectBarPredicateEventV2_2_3) GetSchemaUri() string {
-	return e.Context.SchemaUri
+	return e.Context.SchemaURI
 }
 
-// GetCustomSchema looks up the SchemaUri, if any is defined. If none is defined, it returns nil.
+// GetCustomSchema looks up the schemaURI, if any is defined. If none is defined, it returns nil.
 // If it's defined and cannot be found, it returns an error.
 func (e FooSubjectBarPredicateEventV2_2_3) GetCustomSchema() (*jsonschema.Schema, error) {
-	schemaUri := e.GetSchemaUri()
-	if schemaUri == "" {
+	schemaURI := e.GetSchemaUri()
+	if schemaURI == "" {
 		return nil, nil
 	}
-	schema, found := CompiledCustomSchemas[schemaUri]
+	schema, found := CompiledCustomSchemas[schemaURI]
 	if !found {
-		return nil, fmt.Errorf("schema with id %s could not be found in the local registry", schemaUri)
+		return nil, fmt.Errorf("schema with id %s could not be found in the local registry", schemaURI)
 	}
 	return schema, nil
 }
@@ -144,7 +144,7 @@ func (e FooSubjectBarPredicateEventV2_2_3) GetCustomSchema() (*jsonschema.Schema
 // CDEventsWriter implementation
 
 func (e *FooSubjectBarPredicateEventV2_2_3) SetId(id string) {
-	e.Context.Id = id
+	e.Context.ID = id
 }
 
 func (e *FooSubjectBarPredicateEventV2_2_3) SetSource(source string) {
@@ -160,7 +160,7 @@ func (e *FooSubjectBarPredicateEventV2_2_3) SetTimestamp(timestamp time.Time) {
 }
 
 func (e *FooSubjectBarPredicateEventV2_2_3) SetSubjectId(subjectId string) {
-	e.Subject.Id = subjectId
+	e.Subject.ID = subjectId
 }
 
 func (e *FooSubjectBarPredicateEventV2_2_3) SetSubjectSource(subjectSource string) {
@@ -185,7 +185,7 @@ func (e FooSubjectBarPredicateEventV2_2_3) GetSchema() (string, *jsonschema.Sche
 // CDEventsWriterV04 implementation
 
 func (e *FooSubjectBarPredicateEventV2_2_3) SetChainId(chainId string) {
-	e.Context.ChainId = chainId
+	e.Context.ChainID = chainId
 }
 
 func (e *FooSubjectBarPredicateEventV2_2_3) SetLinks(links EmbeddedLinksArray) {
@@ -193,7 +193,7 @@ func (e *FooSubjectBarPredicateEventV2_2_3) SetLinks(links EmbeddedLinksArray) {
 }
 
 func (e *FooSubjectBarPredicateEventV2_2_3) SetSchemaUri(schema string) {
-	e.Context.SchemaUri = schema
+	e.Context.SchemaURI = schema
 }
 
 func (e FooSubjectBarPredicateEventV2_2_3) GetSubjectContent() interface{} {

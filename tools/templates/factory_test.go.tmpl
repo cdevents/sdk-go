@@ -40,14 +40,14 @@ func init() {
 		Context: api.Context{
 			Type:      api{{$.SpecVersionName}}.{{ .Subject }}{{ .Predicate }}EventType,
 			Timestamp: timeNow(),
-			Id:        testUUID(),
+			ID:        testUUID(),
 			Version:   "{{ $.SpecVersion }}",
 {{- else}}
 		Context: api.ContextV04{
 			Context: api.Context{
 				Type:      api{{$.SpecVersionName}}.{{ .Subject }}{{ .Predicate }}EventType,
 				Timestamp: timeNow(),
-				Id:        testUUID(),
+				ID:        testUUID(),
 				Version:   "{{ $.SpecVersion }}",
 			},
 {{- end}}

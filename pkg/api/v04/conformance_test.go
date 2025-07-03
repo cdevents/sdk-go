@@ -57,17 +57,17 @@ var (
 	testEnvironmentName   = "testEnv"
 	testEnvironmentURL    = "https://example.org/testEnv"
 	testRepoReference     = &api.Reference{
-		Id: "TestRepo/TestOrg", Source: "https://example.org"}
+		ID: "TestRepo/TestOrg", Source: "https://example.org"}
 	testIncidentSubjectID    = "incident-123"
 	testIncidentSource       = "/monitoring/prod1"
 	testEnvironmentReference = &api.Reference{
-		Id: "prod1", Source: "/iaas/geo1"}
+		ID: "prod1", Source: "/iaas/geo1"}
 	testServiceReference = &api.Reference{
-		Id: "myApp", Source: "/clusterA/namespaceB"}
+		ID: "myApp", Source: "/clusterA/namespaceB"}
 	testTestRunID       = "myTestCaseRun123"
 	testSignature       = "MEYCIQCBT8U5ypDXWCjlNKfzTV4KH516/SK13NZSh8znnSMNkQIhAJ3XiQlc9PM1KyjITcZXHotdMB+J3NGua5T/yshmiPmp"
 	testTestEnvironment = &api.Reference{
-		Id: "dev", Source: "testkube-dev-123"}
+		ID: "dev", Source: "testkube-dev-123"}
 	testTestCaseStarted = &apiv04.TestCaseRunStartedSubjectContentTestCase{
 		Id: "92834723894", Name: "Login Test", Type: "integration", Version: "1.0"}
 	testTestCaseFinished = &apiv04.TestCaseRunFinishedSubjectContentTestCase{
@@ -83,7 +83,7 @@ var (
 	testTestOutputSubjectSource = "/event/source/testrunreport-12123"
 	testTestOutputFormat        = "video/quicktime"
 	testTestOutputOutputType    = "video"
-	testTestCaseRun             = &api.Reference{Id: testTestRunID, Source: "testkube-dev-123"}
+	testTestCaseRun             = &api.Reference{ID: testTestRunID, Source: "testkube-dev-123"}
 	testTestSuiteRunID          = "myTestSuiteRun123"
 	testTestSuiteStarted        = &apiv04.TestSuiteRunStartedSubjectContentTestSuite{
 		Id: "92834723894", Name: "Auth TestSuite", Version: "1.0"}
@@ -186,7 +186,7 @@ func init() {
 func exampleArtifactPackagedEvent(e *apiv04.ArtifactPackagedEvent) {
 	// Set example specific fields
 	setContext(e, testArtifactSubjectID)
-	e.SetSubjectChange(&api.Reference{Id: testChangeId, Source: testChangeSource})
+	e.SetSubjectChange(&api.Reference{ID: testChangeId, Source: testChangeSource})
 	e.SetSubjectSbom(&api.ArtifactPackagedSubjectContentSbomV0_2_0{
 		Uri: testSbomURI,
 	})
@@ -367,29 +367,29 @@ func exampleRepositoryModifiedEvent(e *apiv04.RepositoryModifiedEvent) {
 
 func exampleServiceDeployedEvent(e *apiv04.ServiceDeployedEvent) {
 	// Set example specific fields
-	e.SetSubjectEnvironment(&api.Reference{Id: testEnvironmentID})
+	e.SetSubjectEnvironment(&api.Reference{ID: testEnvironmentID})
 	e.SetSubjectArtifactId(testArtifactId)
 }
 
 func exampleServicePublishedEvent(e *apiv04.ServicePublishedEvent) {
 	// Set example specific fields
-	e.SetSubjectEnvironment(&api.Reference{Id: testEnvironmentID})
+	e.SetSubjectEnvironment(&api.Reference{ID: testEnvironmentID})
 }
 
 func exampleServiceRemovedEvent(e *apiv04.ServiceRemovedEvent) {
 	// Set example specific fields
-	e.SetSubjectEnvironment(&api.Reference{Id: testEnvironmentID})
+	e.SetSubjectEnvironment(&api.Reference{ID: testEnvironmentID})
 }
 
 func exampleServiceRolledbackEvent(e *apiv04.ServiceRolledbackEvent) {
 	// Set example specific fields
-	e.SetSubjectEnvironment(&api.Reference{Id: testEnvironmentID})
+	e.SetSubjectEnvironment(&api.Reference{ID: testEnvironmentID})
 	e.SetSubjectArtifactId(testArtifactId)
 }
 
 func exampleServiceUpgradedEvent(e *apiv04.ServiceUpgradedEvent) {
 	// Set example specific fields
-	e.SetSubjectEnvironment(&api.Reference{Id: testEnvironmentID})
+	e.SetSubjectEnvironment(&api.Reference{ID: testEnvironmentID})
 	e.SetSubjectArtifactId(testArtifactId)
 }
 
@@ -397,7 +397,7 @@ func exampleTaskRunFinishedEvent(e *apiv04.TaskRunFinishedEvent) {
 	// Set example specific fields
 	e.SetSubjectTaskName(testTaskName)
 	e.SetSubjectUrl(testSubjecturl)
-	e.SetSubjectPipelineRun(&api.Reference{Id: testSubjectId})
+	e.SetSubjectPipelineRun(&api.Reference{ID: testSubjectId})
 	e.SetSubjectOutcome(testTaskOutcome)
 	e.SetSubjectErrors(testTaskRunErrors)
 }
@@ -406,7 +406,7 @@ func exampleTestCaseRunSkippedEvent(e *apiv04.TestCaseRunSkippedEvent) {
 	// Set example specific fields
 	e.SetSubjectId("myTestCaseRun123")
 	e.SetSubjectEnvironment(&api.Reference{
-		Id:     "dev",
+		ID:     "dev",
 		Source: "testkube-dev-123",
 	})
 	e.SetSubjectReason("Not running in this environment")
@@ -417,7 +417,7 @@ func exampleTestCaseRunSkippedEvent(e *apiv04.TestCaseRunSkippedEvent) {
 		Version: "1.0",
 	})
 	e.SetSubjectTestSuiteRun(&api.Reference{
-		Id:     "test-suite-111",
+		ID:     "test-suite-111",
 		Source: "testkube-dev-123",
 	})
 	e.SetChainId("")
@@ -427,7 +427,7 @@ func exampleTaskRunStartedEvent(e *apiv04.TaskRunStartedEvent) {
 	// Set example specific fields
 	e.SetSubjectTaskName(testTaskName)
 	e.SetSubjectUrl(testSubjecturl)
-	e.SetSubjectPipelineRun(&api.Reference{Id: testSubjectId})
+	e.SetSubjectPipelineRun(&api.Reference{ID: testSubjectId})
 }
 
 func exampleTestCaseRunFinishedEvent(e *apiv04.TestCaseRunFinishedEvent) {
@@ -581,7 +581,7 @@ func TestExamples(t *testing.T) {
 			if d := cmp.Diff(producedSchema.ID, produced.GetSchemaUri()); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
-			consumed, err := apiv04.NewFromJsonBytes(exampleConsumed)
+			consumed, err := apiv04.NewFromJSONBytes(exampleConsumed)
 			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did: %v", err)
 			}

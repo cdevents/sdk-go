@@ -31,21 +31,21 @@ import (
 )
 
 const (
-	SCHEMA_ID_REGEX   = `^https://cdevents.dev/([0-9]\.[0-9])\.[0-9]/schema/([^ ]*)$`
+	SchemaIDRegex     = `^https://cdevents.dev/([0-9]\.[0-9])\.[0-9]/schema/([^ ]*)$`
 	CustomEventMapKey = "custom"
 )
 
 var (
 	// Validation helper as singleton
 	validate              *validator.Validate
-	CDEventsSchemaIdRegex = regexp.MustCompile(SCHEMA_ID_REGEX)
+	CDEventsSchemaIDRegex = regexp.MustCompile(SchemaIDRegex)
 )
 
 func init() {
 	// Register custom validators
 	validate = validator.New()
 	validate.RegisterStructValidation(ValidateEventType, CDEventType{})
-	err := validate.RegisterValidation("uri-reference", ValidateUriReference)
+	err := validate.RegisterValidation("uri-reference", ValidateURIReference)
 	panicOnError(err)
 	err = validate.RegisterValidation("purl", ValidatePurl)
 	panicOnError(err)
@@ -84,7 +84,7 @@ func ValidateEventType(sl validator.StructLevel) {
 	}
 }
 
-func ValidateUriReference(fl validator.FieldLevel) bool {
+func ValidateURIReference(fl validator.FieldLevel) bool {
 	_, err := url.Parse(fl.Field().String())
 	return err == nil
 }
@@ -119,8 +119,8 @@ func AsCloudEvent(event CDEventReader) (*cloudevents.Event, error) {
 	return &ce, err
 }
 
-// AsJsonBytes renders a CDEvent as a JSON string
-func AsJsonBytes(event CDEventReader) ([]byte, error) {
+// AsJSONBytes renders a CDEvent as a JSON string
+func AsJSONBytes(event CDEventReader) ([]byte, error) {
 	if event == nil {
 		return nil, nil
 	}
@@ -131,9 +131,9 @@ func AsJsonBytes(event CDEventReader) ([]byte, error) {
 	return jsonBytes, nil
 }
 
-// AsJsonString renders a CDEvent as a JSON string
-func AsJsonString(event CDEventReader) (string, error) {
-	jsonBytes, err := AsJsonBytes(event)
+// AsJSONString renders a CDEvent as a JSON string
+func AsJSONString(event CDEventReader) (string, error) {
+	jsonBytes, err := AsJSONBytes(event)
 	if err != nil {
 		return "", err
 	}
@@ -147,7 +147,7 @@ func Validate(event CDEventReader) error {
 		return err
 	}
 	var v interface{}
-	jsonString, err := AsJsonString(event)
+	jsonString, err := AsJSONString(event)
 	if err != nil {
 		return fmt.Errorf("cannot render the event %s as json %w", event, err)
 	}
@@ -181,11 +181,11 @@ func Validate(event CDEventReader) error {
 	return nil
 }
 
-// NewFromJsonBytesContext[ContextType] builds a new CDEventReader from a JSON string as []bytes
+// NewFromJSONBytesContext[ContextType] builds a new CDEventReader from a JSON string as []bytes
 // This works by unmarshalling the context first, extracting the event type and using
 // that to unmarshal the rest of the event into the correct object.
 // `ContextType` defines the type of Context that can be used to unmarshal the event.
-func NewFromJsonBytesContext[CDEventType CDEvent](event []byte, cdeventsMap map[string]CDEventType) (CDEventType, error) {
+func NewFromJSONBytesContext[CDEventType CDEvent](event []byte, cdeventsMap map[string]CDEventType) (CDEventType, error) {
 	eventAux := &struct {
 		Context Context `json:"context"`
 	}{}

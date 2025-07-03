@@ -158,7 +158,7 @@ type EmbeddedLinkWithTagsAndRelation interface {
 // EventReference contains the ID of a linked event
 type EventReference struct {
 	// ContextId is the ID of the linked event
-	ContextId string `json:"contextId" jsonschema:"required,minLength=1"`
+	ContextID string `json:"contextId" jsonschema:"required,minLength=1"`
 }
 
 // embeddedLinkPath is private so that NewEmbeddedLinkPath must be used

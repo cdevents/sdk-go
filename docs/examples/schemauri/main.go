@@ -30,23 +30,23 @@ func main() {
 
 	// Unmarshal the schema to extract the $id. The $id can also be hardcoded as a const
 	eventAux := &struct {
-		Id string `json:"$id"`
+		ID string `json:"$id"`
 	}{}
 	err = json.Unmarshal(customSchema, eventAux)
 	examples.PanicOnError(err, "cannot get $id from schema file")
-	err = cdevents.LoadJsonSchema(eventAux.Id, customSchema)
+	err = cdevents.LoadJsonSchema(eventAux.ID, customSchema)
 	examples.PanicOnError(err, "cannot load the custom schema file")
 
 	// Load and unmarshal the event
 	eventBytes, err := os.ReadFile("changecreated.json")
 	examples.PanicOnError(err, "cannot load event file")
-	event, err := cdevents04.NewFromJsonBytes(eventBytes)
+	event, err := cdevents04.NewFromJSONBytes(eventBytes)
 	examples.PanicOnError(err, "failed to unmarshal the CDEvent")
 
 	// Print the event
-	eventJson, err := cdevents.AsJsonString(event)
+	eventJSON, err := cdevents.AsJSONString(event)
 	examples.PanicOnError(err, "failed to marshal the CDEvent")
-	fmt.Printf("%s\n\n", eventJson)
+	fmt.Printf("%s\n\n", eventJSON)
 
 	ce, err = cdevents.AsCloudEvent(event)
 	examples.PanicOnError(err, "failed to create cloudevent")
