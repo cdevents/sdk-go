@@ -10,7 +10,7 @@ linters:
     - importas
     - misspell
     - prealloc
-    - revive
+    # - revive # disabled due becasue ask to change some variables and functions that might break the api compatibility
     - staticcheck
     - tparallel
     - unconvert

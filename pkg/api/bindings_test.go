@@ -143,7 +143,7 @@ func setContext(event api.CDEventWriter, subjectId string) {
 	event.SetSubjectId(subjectId)
 }
 
-func setContextV04(event api.CDEventWriterV04, chainId, schemaUri bool) {
+func setContextV04(event api.CDEventWriterV04, chainId, schemaUri bool) { //nolint: unparam
 	if chainId {
 		event.SetChainId(testChainId)
 	}
@@ -239,7 +239,6 @@ func init() {
 // TestAsCloudEvent produces a CloudEvent from a CDEvent using `AsCloudEvent`
 // and then attempts to parse the CloudEvent payload back into a specific CDEvent
 func TestAsCloudEvent(t *testing.T) {
-
 	tests := []struct {
 		name  string
 		event api.CDEventReader
@@ -309,7 +308,6 @@ func TestAsCloudEvent(t *testing.T) {
 }
 
 func TestAsCloudEventInvalid(t *testing.T) {
-
 	tests := []struct {
 		name  string
 		event api.CDEventReader
@@ -353,7 +351,6 @@ func TestAsCloudEventInvalid(t *testing.T) {
 // rendered JSON depends on a number of factors, and is not deterministic
 // so we must compare events unmarshalled to an interface
 func TestAsJsonBytes(t *testing.T) {
-
 	tests := []struct {
 		name     string
 		event    api.CDEvent
@@ -393,7 +390,7 @@ func TestAsJsonBytes(t *testing.T) {
 			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did: %v", err)
 			}
-			err = json.Unmarshal([]byte(obtainedJsonString), &obtainedInteface)
+			err = json.Unmarshal(obtainedJsonString, &obtainedInteface)
 			if err != nil {
 				t.Fatalf("didn't expected it to fail, but it did: %v", err)
 			}
@@ -409,7 +406,6 @@ func TestAsJsonBytes(t *testing.T) {
 }
 
 func TestInvalidEvent(t *testing.T) {
-
 	// mandatory source missing
 	eventNoSource, _ := testapi.NewFooSubjectBarPredicateEvent()
 	eventNoSource.SetSubjectId(testSubjectId)
@@ -506,7 +502,6 @@ func TestAsJsonStringEmpty(t *testing.T) {
 }
 
 func TestNewFromJsonString(t *testing.T) {
-
 	tests := []struct {
 		name     string
 		event    api.CDEventV04
@@ -582,7 +577,6 @@ func TestNewFromJsonString(t *testing.T) {
 }
 
 func TestParseType(t *testing.T) {
-
 	tests := []struct {
 		name      string
 		eventType string
@@ -668,7 +662,6 @@ func testEventWithVersion(eventVersion string, specVersion string) *testapi.FooS
 }
 
 func TestNewFromJsonBytes(t *testing.T) {
-
 	minorVersion := testEventWithVersion("2.999.1", testapi.SpecVersion)
 	patchVersion := testEventWithVersion("2.2.999", testapi.SpecVersion)
 	pastPatchVersion := testEventWithVersion("2.2.0", testapi.SpecVersion)

@@ -290,28 +290,29 @@ func (ela *EmbeddedLinksArray) UnmarshalJSON(b []byte) error {
 		if err != nil {
 			return err
 		}
-		if m.LinkType == LinkTypeEnd {
+		switch m.LinkType {
+		case LinkTypeEnd:
 			var e embeddedLinkEnd
 			err = json.Unmarshal(*rawEmbeddedLink, &e)
 			if err != nil {
 				return err
 			}
 			receiver[index] = &e
-		} else if m.LinkType == LinkTypePath {
+		case LinkTypePath:
 			var e embeddedLinkPath
 			err = json.Unmarshal(*rawEmbeddedLink, &e)
 			if err != nil {
 				return err
 			}
 			receiver[index] = &e
-		} else if m.LinkType == LinkTypeRelation {
+		case LinkTypeRelation:
 			var e embeddedLinkRelation
 			err = json.Unmarshal(*rawEmbeddedLink, &e)
 			if err != nil {
 				return err
 			}
 			receiver[index] = &e
-		} else {
+		default:
 			return fmt.Errorf("unsupported link type %s found", m.LinkType)
 		}
 	}

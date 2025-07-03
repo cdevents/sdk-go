@@ -562,7 +562,6 @@ func exampleCustomTypeEvent(e *apiv04.CustomTypeEvent) {
 // - it parses the examples into a CDEvent and
 // - it verifies that produced and consumed CDEvent match
 func TestExamples(t *testing.T) {
-
 	for name, exampleConsumed := range examplesConsumed {
 		t.Run(name, func(t *testing.T) {
 			produced, ok := examplesProduced[name]

@@ -72,7 +72,6 @@ func init() {
 }
 
 func TestDataFromSchema(t *testing.T) {
-
 	want := &Data{
 		Subject:        testSubject,
 		Predicate:      testPredicate,
@@ -121,7 +120,7 @@ func TestDataFromSchema(t *testing.T) {
 	}
 	got, err := DataFromSchema(testSchema, mappings, "0.1.2")
 	if err != nil {
-		t.Fatalf(err.Error())
+		t.Fatal(err.Error())
 	}
 	less := func(a, b ContentField) bool { return a.Name < b.Name }
 	if d := cmp.Diff(want, got, cmpopts.SortSlices(less)); d != "" {
@@ -221,7 +220,6 @@ func TestExecuteTemplate_Error(t *testing.T) {
 
 // TestValidateStringEnumAnyOf tests the validation of the string enum anyOf case.
 func TestValidateStringEnumAnyOf(t *testing.T) {
-
 	var boolType jsonschema.Types = 4
 	var stringType jsonschema.Types = 32
 	tests := []struct {

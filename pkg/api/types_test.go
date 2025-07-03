@@ -76,7 +76,6 @@ type testWrongType struct {
 }
 
 func TestGetCustomDataAsNonJson(t *testing.T) {
-
 	receiver := &testType{}
 	expectedError := "cannot unmarshal content-type application/xml"
 
@@ -91,7 +90,6 @@ func TestGetCustomDataAsNonJson(t *testing.T) {
 }
 
 func TestGetCustomDataAsJson(t *testing.T) {
-
 	receiver := &testType{}
 	expectedValue := "testValue"
 
@@ -127,7 +125,6 @@ func TestGetCustomDataAsJson(t *testing.T) {
 }
 
 func TestGetCustomDataAsJsonInvalidReceiver(t *testing.T) {
-
 	receiver := &testWrongType{}
 	expectedReceiver := &testWrongType{}
 
@@ -163,7 +160,6 @@ func TestGetCustomDataAsJsonInvalidReceiver(t *testing.T) {
 }
 
 func TestSetCustomData(t *testing.T) {
-
 	tests := []struct {
 		name         string
 		contentType  string
@@ -215,7 +211,6 @@ func TestSetCustomDataInvalid(t *testing.T) {
 }
 
 func TestGetCustomData(t *testing.T) {
-
 	tests := []struct {
 		name         string
 		contentType  string
@@ -302,7 +297,6 @@ func TestGetCustomDataXmlNotBytes(t *testing.T) {
 }
 
 func TestGetCustomDataRaw(t *testing.T) {
-
 	tests := []struct {
 		name         string
 		contentType  string
@@ -327,7 +321,7 @@ func TestGetCustomDataRaw(t *testing.T) {
 		name:         "json, interface",
 		contentType:  "application/json",
 		data:         testType{TestData: "testValue"},
-		expectedData: []byte(testJsonString),
+		expectedData: testJsonString,
 	}}
 
 	for _, tc := range tests {

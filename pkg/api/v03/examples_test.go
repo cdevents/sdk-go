@@ -376,7 +376,6 @@ func exampleTestOutputPublishedEvent(e *apiv03.TestOutputPublishedEvent) {
 }
 
 func init() {
-
 	// Load event examples from the spec
 	examplesConsumed = make(map[string][]byte)
 
@@ -394,7 +393,6 @@ func init() {
 // - it parses the examples into a CDEvent and
 // - it verifies that produced and consumed CDEvent match
 func TestExamples(t *testing.T) {
-
 	for name, exampleConsumed := range examplesConsumed {
 		t.Run(name, func(t *testing.T) {
 			produced, ok := examplesProduced[name]
