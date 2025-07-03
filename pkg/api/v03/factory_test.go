@@ -81,7 +81,7 @@ func TestNewCDEvent(t *testing.T) {
 			}
 			if d := cmp.Diff(tc.expectedEvent, event,
 				cmpopts.IgnoreFields(api.Context{}, "Timestamp"),
-				cmpopts.IgnoreFields(api.Context{}, "Id")); d != "" {
+				cmpopts.IgnoreFields(api.Context{}, "ID")); d != "" {
 				t.Errorf("args: diff(-want,+got):\n%s", d)
 			}
 			// Check GetType

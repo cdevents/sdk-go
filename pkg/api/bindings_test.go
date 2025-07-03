@@ -731,7 +731,7 @@ func TestNewFromJSONBytes(t *testing.T) {
 					t.Fatalf("expected an error, but go none")
 				} else {
 					// Check the event is what is expected
-					if d := cmp.Diff(tc.wantEvent, obtained, cmpopts.IgnoreFields(api.Context{}, "Id", "Timestamp")); d != "" {
+					if d := cmp.Diff(tc.wantEvent, obtained, cmpopts.IgnoreFields(api.Context{}, "ID", "Timestamp")); d != "" {
 						t.Errorf("args: diff(-want,+got):\n%s", d)
 					}
 				}
