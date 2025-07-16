@@ -55,7 +55,7 @@ importfmt: get-fmt-deps
 	goimports -w $(GO_DEPENDENCIES)
 
 get-fmt-deps: ## Install test dependencies
-	$(GO) install golang.org/x/tools/cmd/goimports
+	$(GO) install golang.org/x/tools/cmd/goimports@latest
 
 .PHONY: lint
 lint: ## Lint the code
