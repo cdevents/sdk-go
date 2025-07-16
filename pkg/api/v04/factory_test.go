@@ -129,7 +129,6 @@ func TestNewCDEvent(t *testing.T) {
 }
 
 func TestNewCDEventFailed(t *testing.T) {
-
 	_, err := cdevents.NewCDEvent(api.CDEventType{Subject: "not supported"}.String(), testSpecVersion)
 	if err == nil {
 		t.Fatalf("expected it to fail, but it didn't")

@@ -329,7 +329,7 @@ func loadSchemas(schemaFolder string, schemas *Schemas) error {
 			return nil
 		} else {
 			// Something else went wrong
-			return fmt.Errorf("error loading schemas from %s: %s", schemaFolder, err)
+			return fmt.Errorf("error loading schemas from %s: %w", schemaFolder, err)
 		}
 	}
 	return fs.WalkDir(os.DirFS(schemaFolder), ".", getSchemasWalkProcessor(schemaFolder, schemas))
@@ -343,7 +343,7 @@ func generate(schemaFolders []string, genFolder, prefix, specVersion string, tem
 		Slice:            make([]Data, 0),
 		SpecVersion:      specVersion,
 		SpecVersionShort: shortSpecVersion,
-		SpecVersionName:  strings.Replace(shortSpecVersion, ".", "", -1),
+		SpecVersionName:  strings.ReplaceAll(shortSpecVersion, ".", ""),
 		IsTestData:       isTestMode,
 	}
 
@@ -410,7 +410,7 @@ func executeTemplate(templates *template.Template, templateName, outputFileName 
 	}
 
 	// Prepare the output file
-	return os.WriteFile(outputFileName, src, 0644)
+	return os.WriteFile(outputFileName, src, 0644) //nolint: gosec
 }
 
 func getSchemasWalkProcessor(rootDir string, schemas *Schemas) fs.WalkDirFunc {
@@ -433,14 +433,14 @@ func getSchemasWalkProcessor(rootDir string, schemas *Schemas) fs.WalkDirFunc {
 		schemaPath := filepath.Join(rootDir, path)
 		schemaBytes, err := os.ReadFile(schemaPath)
 		if err != nil {
-			return fmt.Errorf("cannot read schema file at %s: %v", schemaPath, err)
+			return fmt.Errorf("cannot read schema file at %s: %w", schemaPath, err)
 		}
 		schema := struct {
 			Id string `json:"$id"`
 		}{}
 		// Load the jsonschema from the spec
 		if err := json.Unmarshal(schemaBytes, &schema); err != nil {
-			return fmt.Errorf("cannot unmarshal schema file at %s: %v", schemaPath, err)
+			return fmt.Errorf("cannot unmarshal schema file at %s: %w", schemaPath, err)
 		}
 		// If no $id is defined ignore this file
 		if schema.Id == "" {
@@ -451,7 +451,7 @@ func getSchemasWalkProcessor(rootDir string, schemas *Schemas) fs.WalkDirFunc {
 		for original, fixed := range JSON_SCHEMA_NAMES {
 			schemaId = strings.Replace(schemaId, original, fixed, 1)
 		}
-		(*schemas).Data[schemaId] = schemaBytes
+		schemas.Data[schemaId] = schemaBytes
 		return nil
 	}
 }
@@ -578,7 +578,7 @@ func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string, specV
 		if eventTypeString == "" {
 			return nil, fmt.Errorf("empty value defined for type in schema %s", eventTypeSchema.Location)
 		}
-		eventType, err = cdeventTypeFromString(string(eventTypeString))
+		eventType, err = cdeventTypeFromString(eventTypeString)
 		if err != nil {
 			return nil, err
 		}

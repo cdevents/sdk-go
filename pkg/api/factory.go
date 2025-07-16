@@ -28,7 +28,7 @@ import (
 var timeNow = time.Now
 var uuidNewRandom = uuid.NewRandom
 
-func initCDEvent(e CDEvent) (CDEvent, error) {
+func initCDEvent(e CDEvent) (CDEvent, error) { //nolint: unparam
 	eventUUID, err := uuidNewRandom()
 	if err != nil {
 		return nil, err
