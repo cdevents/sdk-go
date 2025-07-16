@@ -1,6 +1,6 @@
 module github.com/cdevents/sdk-go
 
-go 1.21
+go 1.23.0
 
 require (
 	github.com/cloudevents/sdk-go/v2 v2.15.2
@@ -8,16 +8,15 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/package-url/packageurl-go v0.1.1
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.1
-	golang.org/x/text v0.14.0
+	golang.org/x/text v0.22.0
 )
 
 require (
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
-	golang.org/x/crypto v0.17.0 // indirect
-	golang.org/x/sys v0.21.0 // indirect
-	golang.org/x/tools v0.22.0 // indirect
+	golang.org/x/crypto v0.35.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
 )
 
 require (
