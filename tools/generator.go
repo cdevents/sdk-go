@@ -49,7 +49,7 @@ var (
 	GEN_CODE_FOLDER    string
 	SPEC_FOLDER_PREFIX = "spec-"
 	TEST_FOLDER_PREFIX = "tests-"
-	SPEC_VERSIONS      = []string{"0.3.0", "0.4.1"}
+	SPEC_VERSIONS      = []string{"0.3.0", "0.4.1", "0.5.0"}
 	TEST_VERSIONS      = []string{"99.0.0", "99.1.0"}
 	SCHEMA_FOLDER      = "schemas"
 	LINKS_FOLDER       = filepath.Join(SCHEMA_FOLDER, "links")
@@ -125,20 +125,21 @@ type ContentType struct {
 }
 
 type Data struct {
-	Subject        string
-	SubjectLower   string
-	Predicate      string
-	PredicateLower string
-	Version        string
-	VersionName    string
-	SubjectType    string
-	Contents       []ContentField
-	ContentTypes   []ContentType
-	Prefix         string
-	Schema         string
-	IsTestData     bool
-	SpecVersion    string
-	IsCustom       bool
+	Subject         string
+	SubjectLower    string
+	Predicate       string
+	PredicateLower  string
+	Version         string
+	VersionName     string
+	SubjectType     string
+	Contents        []ContentField
+	ContentTypes    []ContentType
+	Prefix          string
+	Schema          string
+	IsTestData      bool
+	SpecVersion     string
+	IsCustom        bool
+	UsesSpecVersion bool // true if schema uses specversion field (v0.5+), false if it uses version field (v0.4 and earlier)
 }
 
 type Schemas struct {
@@ -545,6 +546,11 @@ func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string, specV
 	if !ok {
 		return nil, fmt.Errorf("no context property in schema %s", schema.Location)
 	}
+
+	// Detect specversion field: v0.5+ uses "specversion" in context, v0.4 and earlier use "version"
+	_, hasSpecVersion := contextSchema.Properties["specversion"]
+	usesSpecVersion := hasSpecVersion
+
 	isCustom := false
 	var eventType cdeventType
 	var subjectTypeString string
@@ -588,15 +594,14 @@ func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string, specV
 			return nil, fmt.Errorf("no subject property in schema %s", schema.Location)
 		}
 		subjectTypeSchema, ok := subjectSchema.Properties["type"]
-		if !ok {
-			return nil, fmt.Errorf("no type property in schema %s", subjectSchema.Location)
-		}
-		if len(subjectTypeSchema.Enum.Values) == 0 {
-			return nil, fmt.Errorf("no value defined for type in schema %s", subjectTypeSchema.Location)
-		}
-		subjectTypeString, ok = subjectTypeSchema.Enum.Values[0].(string)
-		if !ok {
-			return nil, fmt.Errorf("non-string value defined for type in schema %s", subjectTypeSchema.Location)
+		if ok {
+			if len(subjectTypeSchema.Enum.Values) == 0 {
+				return nil, fmt.Errorf("no value defined for type in schema %s", subjectTypeSchema.Location)
+			}
+			subjectTypeString, ok = subjectTypeSchema.Enum.Values[0].(string)
+			if !ok {
+				return nil, fmt.Errorf("non-string value defined for type in schema %s", subjectTypeSchema.Location)
+			}
 		}
 
 		// Parse the subject content fields
@@ -682,16 +687,17 @@ func DataFromSchema(schema *jsonschema.Schema, mappings map[string]string, specV
 		})
 	}
 	return &Data{
-		Subject:        GoTypeName(eventType.Subject, mappings),
-		Predicate:      GoTypeName(eventType.Predicate, mappings),
-		SubjectLower:   eventType.Subject,
-		PredicateLower: eventType.Predicate,
-		Version:        eventType.Version,
-		VersionName:    strings.ReplaceAll(eventType.Version, ".", "_"),
-		SubjectType:    subjectTypeString,
-		Contents:       contentFields,
-		ContentTypes:   contentTypes,
-		IsCustom:       isCustom,
+		Subject:         GoTypeName(eventType.Subject, mappings),
+		Predicate:       GoTypeName(eventType.Predicate, mappings),
+		SubjectLower:    eventType.Subject,
+		PredicateLower:  eventType.Predicate,
+		Version:         eventType.Version,
+		VersionName:     strings.ReplaceAll(eventType.Version, ".", "_"),
+		SubjectType:     subjectTypeString,
+		Contents:        contentFields,
+		ContentTypes:    contentTypes,
+		IsCustom:        isCustom,
+		UsesSpecVersion: usesSpecVersion,
 	}, nil
 }
 

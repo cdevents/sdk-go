@@ -6,3 +6,7 @@
 	path = pkg/api/spec-v0.4
 	url = https://github.com/cdevents/spec
 	branch = spec-v0.4
+[submodule "pkg/api/spec-v0.5"]
+	path = pkg/api/spec-v0.5
+	url = https://github.com/cdevents/spec
+	branch = spec-v0.5

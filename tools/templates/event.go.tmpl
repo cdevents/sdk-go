@@ -53,20 +53,30 @@ type {{.Subject}}{{.Predicate}}SubjectContentV{{.VersionName}}  struct{
 {{- end }}
 
 type {{.Subject}}{{.Predicate}}SubjectV{{.VersionName}} struct {
+{{- if .UsesSpecVersion }}
+	SubjectBaseV05
+{{- else }}
 	SubjectBase
+{{- end }}
 	Content {{if .IsCustom }}interface{}{{ else }}{{.Subject}}{{.Predicate}}SubjectContentV{{.VersionName}}{{ end }} `json:"content"`
 }
 
 func (sc {{.Subject}}{{.Predicate}}SubjectV{{.VersionName}}) GetSubjectType() SubjectType {
-{{- if not .IsCustom }}
-	return "{{.SubjectType}}"
+{{- if .UsesSpecVersion }}
+	return ""
 {{- else }}
+	{{- if .IsCustom }}
 	return sc.Type
+	{{- else }}
+	return "{{.SubjectType}}"
+	{{- end }}
 {{- end }}
 }
 
 type {{.Subject}}{{.Predicate}}EventV{{.VersionName}} struct {
-{{- if eq .SpecVersion "0.3.0"}}
+{{- if .UsesSpecVersion}}
+	Context ContextV05                 `json:"context"`
+{{- else if eq .SpecVersion "0.3.0"}}
 	Context Context                    `json:"context"`
 {{- else}}
 	Context ContextV04                 `json:"context"`
@@ -222,7 +232,9 @@ func (e {{.Subject}}{{.Predicate}}EventV{{.VersionName}}) GetSubjectContent() in
 
 func (e *{{.Subject}}{{.Predicate}}EventV{{.VersionName}}) SetEventType(eventType CDEventType) {
 	e.Context.Type = eventType
+{{- if not .UsesSpecVersion }}
 	e.Subject.Type = SubjectType(eventType.FQSubject())
+{{- end }}
 }
 
 // CustomCDEvent types can have different subject fields
@@ -243,24 +255,40 @@ func (e *{{$.Subject}}{{$.Predicate}}EventV{{$.VersionName}}) SetSubject{{ .Name
 // New creates a new {{.Subject}}{{.Predicate}}EventV{{.VersionName}}
 func New{{.Subject}}{{.Predicate}}EventV{{.VersionName}}(specVersion string) (*{{.Subject}}{{.Predicate}}EventV{{.VersionName}}, error) {
 	e := &{{.Subject}}{{.Predicate}}EventV{{.VersionName}}{
-{{- if eq .SpecVersion "0.3.0"}}
+{{- if .UsesSpecVersion}}
+		Context: ContextV05{
+			SharedContext: SharedContext{
+				Type: {{.Subject}}{{.Predicate}}EventTypeV{{.VersionName}},
+			},
+			SpecVersion: specVersion,
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
+{{- else if eq .SpecVersion "0.3.0"}}
 		Context: Context{
-			Type:    {{.Subject}}{{.Predicate}}EventTypeV{{.VersionName}},
+			SharedContext: SharedContext{
+				Type: {{.Subject}}{{.Predicate}}EventTypeV{{.VersionName}},
+			},
 			Version: specVersion,
 {{- else}}
 		Context: ContextV04{
-			Context{
-				Type:    {{.Subject}}{{.Predicate}}EventTypeV{{.VersionName}},
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: {{.Subject}}{{.Predicate}}EventTypeV{{.VersionName}},
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 {{- end}}
 		},
 		Subject: {{.Subject}}{{.Predicate}}SubjectV{{.VersionName}}{
+{{- if .UsesSpecVersion }}
+			SubjectBaseV05: SubjectBaseV05{},
+{{- else }}
 			SubjectBase: SubjectBase{
 				Type: "{{.SubjectType}}",
 			},
+{{- end }}
 		},
 	}
 	{{if .IsTestData -}}

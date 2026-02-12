@@ -38,24 +38,42 @@ func init() {
         expectedEvent: &api{{$.SpecVersionName}}.{{ .Subject }}{{ .Predicate }}Event{
 {{- if eq $.SpecVersion "0.3.0"}}
 		Context: api.Context{
-			Type:      api{{$.SpecVersionName}}.{{ .Subject }}{{ .Predicate }}EventType,
-			Timestamp: timeNow(),
-			Id:        testUUID(),
-			Version:   "{{ $.SpecVersion }}",
-{{- else}}
-		Context: api.ContextV04{
-			Context: api.Context{
+			SharedContext: api.SharedContext{
 				Type:      api{{$.SpecVersionName}}.{{ .Subject }}{{ .Predicate }}EventType,
 				Timestamp: timeNow(),
 				Id:        testUUID(),
+			},
+			Version:   "{{ $.SpecVersion }}",
+		},
+{{- else if eq $.SpecVersion "0.4.1"}}
+		Context: api.ContextV04{
+			Context: api.Context{
+				SharedContext: api.SharedContext{
+					Type:      api{{$.SpecVersionName}}.{{ .Subject }}{{ .Predicate }}EventType,
+					Timestamp: timeNow(),
+					Id:        testUUID(),
+				},
 				Version:   "{{ $.SpecVersion }}",
 			},
-{{- end}}
 		},
+{{- else}}
+		Context: api.ContextV05{
+			SharedContext: api.SharedContext{
+				Type:      api{{$.SpecVersionName}}.{{ .Subject }}{{ .Predicate }}EventType,
+				Timestamp: timeNow(),
+				Id:        testUUID(),
+			},
+			SpecVersion: "{{ $.SpecVersion }}",
+		},
+{{- end}}
 			Subject: api{{$.SpecVersionName}}.{{ .Subject }}{{ .Predicate }}Subject{
+{{- if or (eq $.SpecVersion "0.3.0") (eq $.SpecVersion "0.4.1") }}
 				SubjectBase: api.SubjectBase{
 					Type: "{{ .SubjectType }}",
 				},
+{{- else }}
+				SubjectBaseV05: api.SubjectBaseV05{},
+{{- end }}
 			},
 		},
     })
