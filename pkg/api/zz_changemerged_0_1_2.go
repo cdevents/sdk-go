@@ -159,7 +159,9 @@ func (e *ChangeMergedEventV0_1_2) SetSubjectRepository(repository *Reference) {
 func NewChangeMergedEventV0_1_2(specVersion string) (*ChangeMergedEventV0_1_2, error) {
 	e := &ChangeMergedEventV0_1_2{
 		Context: Context{
-			Type:    ChangeMergedEventTypeV0_1_2,
+			SharedContext: SharedContext{
+				Type: ChangeMergedEventTypeV0_1_2,
+			},
 			Version: specVersion,
 		},
 		Subject: ChangeMergedSubjectV0_1_2{

@@ -159,7 +159,9 @@ func (e *ArtifactSignedEventV0_1_0) SetSubjectSignature(signature string) {
 func NewArtifactSignedEventV0_1_0(specVersion string) (*ArtifactSignedEventV0_1_0, error) {
 	e := &ArtifactSignedEventV0_1_0{
 		Context: Context{
-			Type:    ArtifactSignedEventTypeV0_1_0,
+			SharedContext: SharedContext{
+				Type: ArtifactSignedEventTypeV0_1_0,
+			},
 			Version: specVersion,
 		},
 		Subject: ArtifactSignedSubjectV0_1_0{

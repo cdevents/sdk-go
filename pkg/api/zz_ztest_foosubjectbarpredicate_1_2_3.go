@@ -222,12 +222,14 @@ func (e *FooSubjectBarPredicateEventV1_2_3) SetSubjectReferenceField(referenceFi
 func NewFooSubjectBarPredicateEventV1_2_3(specVersion string) (*FooSubjectBarPredicateEventV1_2_3, error) {
 	e := &FooSubjectBarPredicateEventV1_2_3{
 		Context: ContextV04{
-			Context{
-				Type:    FooSubjectBarPredicateEventTypeV1_2_3,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: FooSubjectBarPredicateEventTypeV1_2_3,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: FooSubjectBarPredicateSubjectV1_2_3{
 			SubjectBase: SubjectBase{

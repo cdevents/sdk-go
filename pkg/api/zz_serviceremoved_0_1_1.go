@@ -159,7 +159,9 @@ func (e *ServiceRemovedEventV0_1_1) SetSubjectEnvironment(environment *Reference
 func NewServiceRemovedEventV0_1_1(specVersion string) (*ServiceRemovedEventV0_1_1, error) {
 	e := &ServiceRemovedEventV0_1_1{
 		Context: Context{
-			Type:    ServiceRemovedEventTypeV0_1_1,
+			SharedContext: SharedContext{
+				Type: ServiceRemovedEventTypeV0_1_1,
+			},
 			Version: specVersion,
 		},
 		Subject: ServiceRemovedSubjectV0_1_1{

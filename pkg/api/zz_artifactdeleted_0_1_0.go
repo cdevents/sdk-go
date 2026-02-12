@@ -202,12 +202,14 @@ func (e *ArtifactDeletedEventV0_1_0) SetSubjectUser(user string) {
 func NewArtifactDeletedEventV0_1_0(specVersion string) (*ArtifactDeletedEventV0_1_0, error) {
 	e := &ArtifactDeletedEventV0_1_0{
 		Context: ContextV04{
-			Context{
-				Type:    ArtifactDeletedEventTypeV0_1_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: ArtifactDeletedEventTypeV0_1_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: ArtifactDeletedSubjectV0_1_0{
 			SubjectBase: SubjectBase{

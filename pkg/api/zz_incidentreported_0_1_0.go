@@ -183,7 +183,9 @@ func (e *IncidentReportedEventV0_1_0) SetSubjectTicketURI(ticketURI string) {
 func NewIncidentReportedEventV0_1_0(specVersion string) (*IncidentReportedEventV0_1_0, error) {
 	e := &IncidentReportedEventV0_1_0{
 		Context: Context{
-			Type:    IncidentReportedEventTypeV0_1_0,
+			SharedContext: SharedContext{
+				Type: IncidentReportedEventTypeV0_1_0,
+			},
 			Version: specVersion,
 		},
 		Subject: IncidentReportedSubjectV0_1_0{

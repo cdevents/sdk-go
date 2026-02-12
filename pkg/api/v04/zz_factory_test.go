@@ -33,10 +33,12 @@ func init() {
 		expectedEvent: &apiv04.ArtifactDeletedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.ArtifactDeletedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.ArtifactDeletedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.ArtifactDeletedSubject{
@@ -52,10 +54,12 @@ func init() {
 		expectedEvent: &apiv04.ArtifactDownloadedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.ArtifactDownloadedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.ArtifactDownloadedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.ArtifactDownloadedSubject{
@@ -71,10 +75,12 @@ func init() {
 		expectedEvent: &apiv04.ArtifactPackagedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.ArtifactPackagedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.ArtifactPackagedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.ArtifactPackagedSubject{
@@ -90,10 +96,12 @@ func init() {
 		expectedEvent: &apiv04.ArtifactPublishedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.ArtifactPublishedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.ArtifactPublishedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.ArtifactPublishedSubject{
@@ -109,10 +117,12 @@ func init() {
 		expectedEvent: &apiv04.ArtifactSignedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.ArtifactSignedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.ArtifactSignedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.ArtifactSignedSubject{
@@ -128,10 +138,12 @@ func init() {
 		expectedEvent: &apiv04.BranchCreatedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.BranchCreatedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.BranchCreatedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.BranchCreatedSubject{
@@ -147,10 +159,12 @@ func init() {
 		expectedEvent: &apiv04.BranchDeletedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.BranchDeletedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.BranchDeletedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.BranchDeletedSubject{
@@ -166,10 +180,12 @@ func init() {
 		expectedEvent: &apiv04.BuildFinishedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.BuildFinishedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.BuildFinishedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.BuildFinishedSubject{
@@ -185,10 +201,12 @@ func init() {
 		expectedEvent: &apiv04.BuildQueuedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.BuildQueuedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.BuildQueuedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.BuildQueuedSubject{
@@ -204,10 +222,12 @@ func init() {
 		expectedEvent: &apiv04.BuildStartedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.BuildStartedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.BuildStartedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.BuildStartedSubject{
@@ -223,10 +243,12 @@ func init() {
 		expectedEvent: &apiv04.ChangeAbandonedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.ChangeAbandonedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.ChangeAbandonedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.ChangeAbandonedSubject{
@@ -242,10 +264,12 @@ func init() {
 		expectedEvent: &apiv04.ChangeCreatedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.ChangeCreatedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.ChangeCreatedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.ChangeCreatedSubject{
@@ -261,10 +285,12 @@ func init() {
 		expectedEvent: &apiv04.ChangeMergedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.ChangeMergedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.ChangeMergedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.ChangeMergedSubject{
@@ -280,10 +306,12 @@ func init() {
 		expectedEvent: &apiv04.ChangeReviewedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.ChangeReviewedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.ChangeReviewedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.ChangeReviewedSubject{
@@ -299,10 +327,12 @@ func init() {
 		expectedEvent: &apiv04.ChangeUpdatedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.ChangeUpdatedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.ChangeUpdatedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.ChangeUpdatedSubject{
@@ -318,10 +348,12 @@ func init() {
 		expectedEvent: &apiv04.EnvironmentCreatedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.EnvironmentCreatedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.EnvironmentCreatedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.EnvironmentCreatedSubject{
@@ -337,10 +369,12 @@ func init() {
 		expectedEvent: &apiv04.EnvironmentDeletedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.EnvironmentDeletedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.EnvironmentDeletedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.EnvironmentDeletedSubject{
@@ -356,10 +390,12 @@ func init() {
 		expectedEvent: &apiv04.EnvironmentModifiedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.EnvironmentModifiedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.EnvironmentModifiedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.EnvironmentModifiedSubject{
@@ -375,10 +411,12 @@ func init() {
 		expectedEvent: &apiv04.IncidentDetectedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.IncidentDetectedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.IncidentDetectedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.IncidentDetectedSubject{
@@ -394,10 +432,12 @@ func init() {
 		expectedEvent: &apiv04.IncidentReportedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.IncidentReportedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.IncidentReportedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.IncidentReportedSubject{
@@ -413,10 +453,12 @@ func init() {
 		expectedEvent: &apiv04.IncidentResolvedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.IncidentResolvedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.IncidentResolvedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.IncidentResolvedSubject{
@@ -432,10 +474,12 @@ func init() {
 		expectedEvent: &apiv04.PipelineRunFinishedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.PipelineRunFinishedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.PipelineRunFinishedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.PipelineRunFinishedSubject{
@@ -451,10 +495,12 @@ func init() {
 		expectedEvent: &apiv04.PipelineRunQueuedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.PipelineRunQueuedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.PipelineRunQueuedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.PipelineRunQueuedSubject{
@@ -470,10 +516,12 @@ func init() {
 		expectedEvent: &apiv04.PipelineRunStartedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.PipelineRunStartedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.PipelineRunStartedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.PipelineRunStartedSubject{
@@ -489,10 +537,12 @@ func init() {
 		expectedEvent: &apiv04.RepositoryCreatedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.RepositoryCreatedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.RepositoryCreatedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.RepositoryCreatedSubject{
@@ -508,10 +558,12 @@ func init() {
 		expectedEvent: &apiv04.RepositoryDeletedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.RepositoryDeletedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.RepositoryDeletedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.RepositoryDeletedSubject{
@@ -527,10 +579,12 @@ func init() {
 		expectedEvent: &apiv04.RepositoryModifiedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.RepositoryModifiedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.RepositoryModifiedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.RepositoryModifiedSubject{
@@ -546,10 +600,12 @@ func init() {
 		expectedEvent: &apiv04.ServiceDeployedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.ServiceDeployedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.ServiceDeployedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.ServiceDeployedSubject{
@@ -565,10 +621,12 @@ func init() {
 		expectedEvent: &apiv04.ServicePublishedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.ServicePublishedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.ServicePublishedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.ServicePublishedSubject{
@@ -584,10 +642,12 @@ func init() {
 		expectedEvent: &apiv04.ServiceRemovedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.ServiceRemovedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.ServiceRemovedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.ServiceRemovedSubject{
@@ -603,10 +663,12 @@ func init() {
 		expectedEvent: &apiv04.ServiceRolledbackEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.ServiceRolledbackEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.ServiceRolledbackEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.ServiceRolledbackSubject{
@@ -622,10 +684,12 @@ func init() {
 		expectedEvent: &apiv04.ServiceUpgradedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.ServiceUpgradedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.ServiceUpgradedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.ServiceUpgradedSubject{
@@ -641,10 +705,12 @@ func init() {
 		expectedEvent: &apiv04.TaskRunFinishedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.TaskRunFinishedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.TaskRunFinishedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.TaskRunFinishedSubject{
@@ -660,10 +726,12 @@ func init() {
 		expectedEvent: &apiv04.TaskRunStartedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.TaskRunStartedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.TaskRunStartedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.TaskRunStartedSubject{
@@ -679,10 +747,12 @@ func init() {
 		expectedEvent: &apiv04.TestCaseRunFinishedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.TestCaseRunFinishedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.TestCaseRunFinishedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.TestCaseRunFinishedSubject{
@@ -698,10 +768,12 @@ func init() {
 		expectedEvent: &apiv04.TestCaseRunQueuedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.TestCaseRunQueuedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.TestCaseRunQueuedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.TestCaseRunQueuedSubject{
@@ -717,10 +789,12 @@ func init() {
 		expectedEvent: &apiv04.TestCaseRunSkippedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.TestCaseRunSkippedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.TestCaseRunSkippedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.TestCaseRunSkippedSubject{
@@ -736,10 +810,12 @@ func init() {
 		expectedEvent: &apiv04.TestCaseRunStartedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.TestCaseRunStartedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.TestCaseRunStartedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.TestCaseRunStartedSubject{
@@ -755,10 +831,12 @@ func init() {
 		expectedEvent: &apiv04.TestOutputPublishedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.TestOutputPublishedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.TestOutputPublishedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.TestOutputPublishedSubject{
@@ -774,10 +852,12 @@ func init() {
 		expectedEvent: &apiv04.TestSuiteRunFinishedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.TestSuiteRunFinishedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.TestSuiteRunFinishedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.TestSuiteRunFinishedSubject{
@@ -793,10 +873,12 @@ func init() {
 		expectedEvent: &apiv04.TestSuiteRunQueuedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.TestSuiteRunQueuedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.TestSuiteRunQueuedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.TestSuiteRunQueuedSubject{
@@ -812,10 +894,12 @@ func init() {
 		expectedEvent: &apiv04.TestSuiteRunStartedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.TestSuiteRunStartedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.TestSuiteRunStartedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.TestSuiteRunStartedSubject{
@@ -831,10 +915,12 @@ func init() {
 		expectedEvent: &apiv04.TicketClosedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.TicketClosedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.TicketClosedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.TicketClosedSubject{
@@ -850,10 +936,12 @@ func init() {
 		expectedEvent: &apiv04.TicketCreatedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.TicketCreatedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.TicketCreatedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.TicketCreatedSubject{
@@ -869,10 +957,12 @@ func init() {
 		expectedEvent: &apiv04.TicketUpdatedEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.TicketUpdatedEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.TicketUpdatedEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.TicketUpdatedSubject{
@@ -888,10 +978,12 @@ func init() {
 		expectedEvent: &apiv04.CustomTypeEvent{
 			Context: api.ContextV04{
 				Context: api.Context{
-					Type:      apiv04.CustomTypeEventType,
-					Timestamp: timeNow(),
-					Id:        testUUID(),
-					Version:   "0.4.1",
+					SharedContext: api.SharedContext{
+						Type:      apiv04.CustomTypeEventType,
+						Timestamp: timeNow(),
+						Id:        testUUID(),
+					},
+					Version: "0.4.1",
 				},
 			},
 			Subject: apiv04.CustomTypeSubject{

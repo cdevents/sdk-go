@@ -152,7 +152,9 @@ func (e BuildQueuedEventV0_1_1) GetSubjectContent() interface{} {
 func NewBuildQueuedEventV0_1_1(specVersion string) (*BuildQueuedEventV0_1_1, error) {
 	e := &BuildQueuedEventV0_1_1{
 		Context: Context{
-			Type:    BuildQueuedEventTypeV0_1_1,
+			SharedContext: SharedContext{
+				Type: BuildQueuedEventTypeV0_1_1,
+			},
 			Version: specVersion,
 		},
 		Subject: BuildQueuedSubjectV0_1_1{

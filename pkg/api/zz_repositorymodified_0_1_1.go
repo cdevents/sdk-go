@@ -177,7 +177,9 @@ func (e *RepositoryModifiedEventV0_1_1) SetSubjectViewUrl(viewUrl string) {
 func NewRepositoryModifiedEventV0_1_1(specVersion string) (*RepositoryModifiedEventV0_1_1, error) {
 	e := &RepositoryModifiedEventV0_1_1{
 		Context: Context{
-			Type:    RepositoryModifiedEventTypeV0_1_1,
+			SharedContext: SharedContext{
+				Type: RepositoryModifiedEventTypeV0_1_1,
+			},
 			Version: specVersion,
 		},
 		Subject: RepositoryModifiedSubjectV0_1_1{

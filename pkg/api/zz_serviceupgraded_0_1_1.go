@@ -165,7 +165,9 @@ func (e *ServiceUpgradedEventV0_1_1) SetSubjectEnvironment(environment *Referenc
 func NewServiceUpgradedEventV0_1_1(specVersion string) (*ServiceUpgradedEventV0_1_1, error) {
 	e := &ServiceUpgradedEventV0_1_1{
 		Context: Context{
-			Type:    ServiceUpgradedEventTypeV0_1_1,
+			SharedContext: SharedContext{
+				Type: ServiceUpgradedEventTypeV0_1_1,
+			},
 			Version: specVersion,
 		},
 		Subject: ServiceUpgradedSubjectV0_1_1{

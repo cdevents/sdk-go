@@ -152,7 +152,9 @@ func (e ArtifactPublishedEventV0_1_1) GetSubjectContent() interface{} {
 func NewArtifactPublishedEventV0_1_1(specVersion string) (*ArtifactPublishedEventV0_1_1, error) {
 	e := &ArtifactPublishedEventV0_1_1{
 		Context: Context{
-			Type:    ArtifactPublishedEventTypeV0_1_1,
+			SharedContext: SharedContext{
+				Type: ArtifactPublishedEventTypeV0_1_1,
+			},
 			Version: specVersion,
 		},
 		Subject: ArtifactPublishedSubjectV0_1_1{

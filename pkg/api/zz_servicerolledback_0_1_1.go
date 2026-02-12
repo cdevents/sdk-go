@@ -165,7 +165,9 @@ func (e *ServiceRolledbackEventV0_1_1) SetSubjectEnvironment(environment *Refere
 func NewServiceRolledbackEventV0_1_1(specVersion string) (*ServiceRolledbackEventV0_1_1, error) {
 	e := &ServiceRolledbackEventV0_1_1{
 		Context: Context{
-			Type:    ServiceRolledbackEventTypeV0_1_1,
+			SharedContext: SharedContext{
+				Type: ServiceRolledbackEventTypeV0_1_1,
+			},
 			Version: specVersion,
 		},
 		Subject: ServiceRolledbackSubjectV0_1_1{

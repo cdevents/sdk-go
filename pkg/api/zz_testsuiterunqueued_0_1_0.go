@@ -171,7 +171,9 @@ func (e *TestSuiteRunQueuedEventV0_1_0) SetSubjectTrigger(trigger *TestSuiteRunQ
 func NewTestSuiteRunQueuedEventV0_1_0(specVersion string) (*TestSuiteRunQueuedEventV0_1_0, error) {
 	e := &TestSuiteRunQueuedEventV0_1_0{
 		Context: Context{
-			Type:    TestSuiteRunQueuedEventTypeV0_1_0,
+			SharedContext: SharedContext{
+				Type: TestSuiteRunQueuedEventTypeV0_1_0,
+			},
 			Version: specVersion,
 		},
 		Subject: TestSuiteRunQueuedSubjectV0_1_0{

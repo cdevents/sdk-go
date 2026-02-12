@@ -189,7 +189,9 @@ func (e *TestCaseRunFinishedEventV0_1_0) SetSubjectTestSuiteRun(testSuiteRun *Re
 func NewTestCaseRunFinishedEventV0_1_0(specVersion string) (*TestCaseRunFinishedEventV0_1_0, error) {
 	e := &TestCaseRunFinishedEventV0_1_0{
 		Context: Context{
-			Type:    TestCaseRunFinishedEventTypeV0_1_0,
+			SharedContext: SharedContext{
+				Type: TestCaseRunFinishedEventTypeV0_1_0,
+			},
 			Version: specVersion,
 		},
 		Subject: TestCaseRunFinishedSubjectV0_1_0{

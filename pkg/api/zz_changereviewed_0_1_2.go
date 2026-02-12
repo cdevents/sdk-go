@@ -159,7 +159,9 @@ func (e *ChangeReviewedEventV0_1_2) SetSubjectRepository(repository *Reference) 
 func NewChangeReviewedEventV0_1_2(specVersion string) (*ChangeReviewedEventV0_1_2, error) {
 	e := &ChangeReviewedEventV0_1_2{
 		Context: Context{
-			Type:    ChangeReviewedEventTypeV0_1_2,
+			SharedContext: SharedContext{
+				Type: ChangeReviewedEventTypeV0_1_2,
+			},
 			Version: specVersion,
 		},
 		Subject: ChangeReviewedSubjectV0_1_2{
