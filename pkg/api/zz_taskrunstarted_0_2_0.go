@@ -214,12 +214,14 @@ func (e *TaskRunStartedEventV0_2_0) SetSubjectUrl(url string) {
 func NewTaskRunStartedEventV0_2_0(specVersion string) (*TaskRunStartedEventV0_2_0, error) {
 	e := &TaskRunStartedEventV0_2_0{
 		Context: ContextV04{
-			Context{
-				Type:    TaskRunStartedEventTypeV0_2_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: TaskRunStartedEventTypeV0_2_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: TaskRunStartedSubjectV0_2_0{
 			SubjectBase: SubjectBase{

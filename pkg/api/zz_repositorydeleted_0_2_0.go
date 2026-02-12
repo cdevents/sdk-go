@@ -220,12 +220,14 @@ func (e *RepositoryDeletedEventV0_2_0) SetSubjectViewUrl(viewUrl string) {
 func NewRepositoryDeletedEventV0_2_0(specVersion string) (*RepositoryDeletedEventV0_2_0, error) {
 	e := &RepositoryDeletedEventV0_2_0{
 		Context: ContextV04{
-			Context{
-				Type:    RepositoryDeletedEventTypeV0_2_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: RepositoryDeletedEventTypeV0_2_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: RepositoryDeletedSubjectV0_2_0{
 			SubjectBase: SubjectBase{

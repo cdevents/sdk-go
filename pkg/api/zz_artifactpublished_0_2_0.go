@@ -208,12 +208,14 @@ func (e *ArtifactPublishedEventV0_2_0) SetSubjectUser(user string) {
 func NewArtifactPublishedEventV0_2_0(specVersion string) (*ArtifactPublishedEventV0_2_0, error) {
 	e := &ArtifactPublishedEventV0_2_0{
 		Context: ContextV04{
-			Context{
-				Type:    ArtifactPublishedEventTypeV0_2_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: ArtifactPublishedEventTypeV0_2_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: ArtifactPublishedSubjectV0_2_0{
 			SubjectBase: SubjectBase{

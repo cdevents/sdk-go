@@ -202,12 +202,14 @@ func (e *ArtifactSignedEventV0_2_0) SetSubjectSignature(signature string) {
 func NewArtifactSignedEventV0_2_0(specVersion string) (*ArtifactSignedEventV0_2_0, error) {
 	e := &ArtifactSignedEventV0_2_0{
 		Context: ContextV04{
-			Context{
-				Type:    ArtifactSignedEventTypeV0_2_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: ArtifactSignedEventTypeV0_2_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: ArtifactSignedSubjectV0_2_0{
 			SubjectBase: SubjectBase{

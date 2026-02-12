@@ -220,12 +220,14 @@ func (e *PipelineRunFinishedEventV0_2_0) SetSubjectUrl(url string) {
 func NewPipelineRunFinishedEventV0_2_0(specVersion string) (*PipelineRunFinishedEventV0_2_0, error) {
 	e := &PipelineRunFinishedEventV0_2_0{
 		Context: ContextV04{
-			Context{
-				Type:    PipelineRunFinishedEventTypeV0_2_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: PipelineRunFinishedEventTypeV0_2_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: PipelineRunFinishedSubjectV0_2_0{
 			SubjectBase: SubjectBase{

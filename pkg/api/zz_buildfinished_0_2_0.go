@@ -202,12 +202,14 @@ func (e *BuildFinishedEventV0_2_0) SetSubjectArtifactId(artifactId string) {
 func NewBuildFinishedEventV0_2_0(specVersion string) (*BuildFinishedEventV0_2_0, error) {
 	e := &BuildFinishedEventV0_2_0{
 		Context: ContextV04{
-			Context{
-				Type:    BuildFinishedEventTypeV0_2_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: BuildFinishedEventTypeV0_2_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: BuildFinishedSubjectV0_2_0{
 			SubjectBase: SubjectBase{

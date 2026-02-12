@@ -208,12 +208,14 @@ func (e *ServiceDeployedEventV0_2_0) SetSubjectEnvironment(environment *Referenc
 func NewServiceDeployedEventV0_2_0(specVersion string) (*ServiceDeployedEventV0_2_0, error) {
 	e := &ServiceDeployedEventV0_2_0{
 		Context: ContextV04{
-			Context{
-				Type:    ServiceDeployedEventTypeV0_2_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: ServiceDeployedEventTypeV0_2_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: ServiceDeployedSubjectV0_2_0{
 			SubjectBase: SubjectBase{

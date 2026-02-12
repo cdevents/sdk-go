@@ -226,12 +226,14 @@ func (e *TestSuiteRunFinishedEventV0_2_0) SetSubjectTestSuite(testSuite *TestSui
 func NewTestSuiteRunFinishedEventV0_2_0(specVersion string) (*TestSuiteRunFinishedEventV0_2_0, error) {
 	e := &TestSuiteRunFinishedEventV0_2_0{
 		Context: ContextV04{
-			Context{
-				Type:    TestSuiteRunFinishedEventTypeV0_2_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: TestSuiteRunFinishedEventTypeV0_2_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: TestSuiteRunFinishedSubjectV0_2_0{
 			SubjectBase: SubjectBase{

@@ -208,12 +208,14 @@ func (e *ServiceUpgradedEventV0_2_0) SetSubjectEnvironment(environment *Referenc
 func NewServiceUpgradedEventV0_2_0(specVersion string) (*ServiceUpgradedEventV0_2_0, error) {
 	e := &ServiceUpgradedEventV0_2_0{
 		Context: ContextV04{
-			Context{
-				Type:    ServiceUpgradedEventTypeV0_2_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: ServiceUpgradedEventTypeV0_2_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: ServiceUpgradedSubjectV0_2_0{
 			SubjectBase: SubjectBase{
