@@ -1,0 +1,47 @@
+Fix v0.5.0 schema bug: change 'version' to 'specversion' in required fields
+
+The v0.5.0 release has a bug in three schemas where they incorrectly
+require 'version' instead of 'specversion' in the context.
+
+This patch fixes:
+- pipelinerunfinished.json
+- testcaserunfinished.json
+- testsuiterunfinished.json
+
+This fix is based on upstream commit ef5bb9c which will be included
+in v0.5.1. Once v0.5.1 is released, this patch can be removed.
+
+--- a/pkg/api/spec-v0.5/schemas/pipelinerunfinished.json
++++ b/pkg/api/spec-v0.5/schemas/pipelinerunfinished.json
+@@ -41,7 +41,7 @@
+       },
+       "additionalProperties": false,
+       "type": "object",
+-      "required": ["version", "id", "source", "type", "timestamp"]
++      "required": ["specversion", "id", "source", "type", "timestamp"]
+     },
+     "subject": {
+       "properties": {
+--- a/pkg/api/spec-v0.5/schemas/testcaserunfinished.json
++++ b/pkg/api/spec-v0.5/schemas/testcaserunfinished.json
+@@ -41,7 +41,7 @@
+       },
+       "additionalProperties": false,
+       "type": "object",
+-      "required": ["version", "id", "source", "type", "timestamp"]
++      "required": ["specversion", "id", "source", "type", "timestamp"]
+     },
+     "subject": {
+       "properties": {
+--- a/pkg/api/spec-v0.5/schemas/testsuiterunfinished.json
++++ b/pkg/api/spec-v0.5/schemas/testsuiterunfinished.json
+@@ -41,7 +41,7 @@
+       },
+       "additionalProperties": false,
+       "type": "object",
+-      "required": ["version", "id", "source", "type", "timestamp"]
++      "required": ["specversion", "id", "source", "type", "timestamp"]
+     },
+     "subject": {
+       "properties": {
+
