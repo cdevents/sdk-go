@@ -64,6 +64,7 @@ lint: ## Lint the code
 
 .PHONY: generate # Regenerate code
 generate:
+	./hack/patch.sh
 	./hack/generate.sh
 
 .PHONY: all
