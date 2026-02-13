@@ -91,7 +91,7 @@ type SharedContext struct {
 	// purpose of the source is to provide global uniqueness for source + id.
 	// The source MAY identify a single producer or a group of producer that
 	// belong to the same application.
-	Source string `json:"source" jsonschema:"required,minLength=1" validate:"uri-reference"`
+	Source string `json:"source" jsonschema:"required,minLength=1" validate:"uri-reference" cdevents:"context_source"`
 
 	// Spec: https://cdevents.dev/docs/spec/#type
 	// Description: defines the type of event, as combination of a subject and
@@ -402,14 +402,14 @@ type Reference struct {
 
 	// Spec: https://cdevents.dev/docs/spec/#format-of-subjects
 	// Description: Uniquely identifies the subject within the source
-	Id string `json:"id" jsonschema:"required,minLength=1"`
+	Id string `json:"id" jsonschema:"required,minLength=1" cdevents:"subject_id"`
 
 	// Spec: https://cdevents.dev/docs/spec/#format-of-subjects
 	// Description: defines the context in which an event happened. The main
 	// purpose of the source is to provide global uniqueness for source + id.
 	// The source MAY identify a single producer or a group of producer that
 	// belong to the same application.
-	Source string `json:"source,omitempty" validate:"uri-reference"`
+	Source string `json:"source,omitempty" validate:"uri-reference" cdevents:"subject_source"`
 }
 
 type SubjectBase struct {

@@ -47,7 +47,7 @@ var (
 {{- if not .IsCustom }}
 type {{.Subject}}{{.Predicate}}SubjectContentV{{.VersionName}}  struct{
 {{ range $i, $field := .Contents }}
-	{{ .Name }} {{ .Type }} `json:"{{ .NameLower }}{{ if not .Required }},omitempty{{ end }}"{{ if eq .Name "ArtifactId" }} validate:"purl"{{ end }}`
+	{{ .Name }} {{ .Type }} `json:"{{ .NameLower }}{{ if not .Required }},omitempty{{ end }}"{{ if eq .Name "ArtifactId" }} validate:"purl"{{ end }} cdevents:"{{ .NameLower }}"`
 {{ end }}
 }
 {{- end }}
@@ -309,7 +309,7 @@ func New{{.Subject}}{{.Predicate}}EventV{{.VersionName}}(specVersion string) (*{
 // {{$.Subject}}{{$.Predicate}}SubjectContent{{ .Name }}V{{$.VersionName}} holds the content of a {{ .Name }} field in the content
 type {{$.Subject}}{{$.Predicate}}SubjectContent{{ .Name }}V{{$.VersionName}} struct{
 {{ range $j, $field := .Fields }}
-	{{ .Name }} {{ .Type }} `json:"{{ .NameLower }}{{ if not .Required }},omitempty{{ end }}"`
+	{{ .Name }} {{ .Type }} `json:"{{ .NameLower }}{{ if not .Required }},omitempty{{ end }}" cdevents:"{{ .NameLower }}"`
 {{ end }}
 }
 {{ end }}
