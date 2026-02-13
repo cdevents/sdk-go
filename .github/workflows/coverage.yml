@@ -27,8 +27,8 @@ jobs:
       fail-fast: false
       matrix:
         go-version:
-          - '1.23'
           - '1.24'
+          - '1.25'
 
     env:
       GOPATH: /home/runner/go
