@@ -1,2 +1,21 @@
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+        informational: false
+    patch:
+      default:
+        target: auto
+        threshold: 1%
+        informational: false
+
 ignore:
-  - docs/examples/**
+  # Examples are documentation, not production code
+  - "docs/examples/**"
+
+comment:
+  layout: "reach,diff,flags,tree"
+  behavior: default
+  require_changes: false

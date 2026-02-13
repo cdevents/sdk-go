@@ -7,3 +7,8 @@ build/
 
 # coverage
 **/cover.out
+**/coverage.out
+
+# AI
+.claude
+.assistant

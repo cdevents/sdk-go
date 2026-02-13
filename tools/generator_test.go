@@ -347,3 +347,165 @@ func TestValidateStringEnumAnyOf(t *testing.T) {
 		})
 	}
 }
+
+func TestOutputFile(t *testing.T) {
+	tests := []struct {
+		name string
+		data Data
+		want string
+	}{{
+		name: "standard event",
+		data: Data{
+			Prefix:         "",
+			SubjectLower:   "build",
+			PredicateLower: "started",
+			VersionName:    "0_1_0",
+		},
+		want: "zz_buildstarted_0_1_0.go",
+	}, {
+		name: "with prefix",
+		data: Data{
+			Prefix:         "ztest_",
+			SubjectLower:   "foo",
+			PredicateLower: "bar",
+			VersionName:    "1_2_3",
+		},
+		want: "zz_ztest_foobar_1_2_3.go",
+	}}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := tc.data.OutputFile()
+			if d := cmp.Diff(tc.want, got); d != "" {
+				t.Errorf("OutputFile() diff(-want,+got):\n%s", d)
+			}
+		})
+	}
+}
+
+func TestCdeventTypeFromString(t *testing.T) {
+	tests := []struct {
+		name      string
+		input     string
+		want      cdeventType
+		wantError bool
+	}{{
+		name:  "valid type",
+		input: "dev.cdevents.build.started.0.1.0",
+		want: cdeventType{
+			Subject:   "build",
+			Predicate: "started",
+			Version:   "0.1.0",
+		},
+		wantError: false,
+	}, {
+		name:      "invalid format - missing parts",
+		input:     "dev.cdevents.build",
+		want:      cdeventType{},
+		wantError: true,
+	}, {
+		name:      "invalid format - wrong prefix",
+		input:     "com.example.build.started.0.1.0",
+		want:      cdeventType{},
+		wantError: true,
+	}, {
+		name:      "empty string",
+		input:     "",
+		want:      cdeventType{},
+		wantError: true,
+	}}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got, err := cdeventTypeFromString(tc.input)
+			if tc.wantError && err == nil {
+				t.Error("expected error but got none")
+			}
+			if !tc.wantError && err != nil {
+				t.Errorf("unexpected error: %v", err)
+			}
+			if d := cmp.Diff(tc.want, got); d != "" {
+				t.Errorf("cdeventTypeFromString() diff(-want,+got):\n%s", d)
+			}
+		})
+	}
+}
+
+func TestPathLoader_Load(t *testing.T) {
+	pl := PathLoader{}
+
+	// First, add a test schema to the database
+	testURL := "https://test.example.com/schema"
+	testSchemaBytes := []byte(`{"$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "` + testURL + `"}`)
+	schemas.Data[testURL] = testSchemaBytes
+
+	tests := []struct {
+		name      string
+		url       string
+		wantError bool
+	}{{
+		name:      "schema exists in database",
+		url:       testURL,
+		wantError: false,
+	}, {
+		name:      "schema not found",
+		url:       "https://example.com/nonexistent",
+		wantError: true,
+	}, {
+		name:      "invalid JSON in schema",
+		url:       "https://invalid.example.com/schema",
+		wantError: true,
+	}}
+
+	// Add invalid JSON for the third test
+	schemas.Data["https://invalid.example.com/schema"] = []byte("{invalid json}")
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := pl.Load(tc.url)
+			if tc.wantError && err == nil {
+				t.Error("expected error but got none")
+			}
+			if !tc.wantError && err != nil {
+				t.Errorf("unexpected error: %v", err)
+			}
+		})
+	}
+
+	// Clean up
+	delete(schemas.Data, testURL)
+	delete(schemas.Data, "https://invalid.example.com/schema")
+}
+
+func TestGoTypeName(t *testing.T) {
+	tests := []struct {
+		name       string
+		schemaName string
+		mappings   map[string]string
+		want       string
+	}{{
+		name:       "with mapping",
+		schemaName: "foobar",
+		mappings:   map[string]string{"foobar": "FooBar"},
+		want:       "FooBar",
+	}, {
+		name:       "without mapping - title case",
+		schemaName: "hello",
+		mappings:   map[string]string{},
+		want:       "Hello",
+	}, {
+		name:       "without mapping - already capitalized",
+		schemaName: "World",
+		mappings:   map[string]string{},
+		want:       "World",
+	}}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := GoTypeName(tc.schemaName, tc.mappings)
+			if d := cmp.Diff(tc.want, got); d != "" {
+				t.Errorf("GoTypeName() diff(-want,+got):\n%s", d)
+			}
+		})
+	}
+}

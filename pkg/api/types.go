@@ -70,14 +70,15 @@ func (t Context) GetType() CDEventType {
 	return t.Type
 }
 
-type Context struct {
-	// Spec: https://cdevents.dev/docs/spec/#version
-	// Description: The version of the CDEvents specification which the event
-	// uses. This enables the interpretation of the context. Compliant event
-	// producers MUST use a value of draft when referring to this version of the
-	// specification.
-	Version string `json:"version" jsonschema:"required"`
+func (t ContextV05) GetVersion() string {
+	return t.SpecVersion
+}
 
+func (t ContextV05) GetType() CDEventType {
+	return t.Type
+}
+
+type SharedContext struct {
 	// Spec: https://cdevents.dev/docs/spec/#id
 	// Description: Identifier for an event. Subsequent delivery attempts of the
 	// same event MAY share the same id. This attribute matches the syntax and
@@ -107,6 +108,56 @@ type Context struct {
 	// re-transmission of the event, the timestamp SHOULD NOT be updated, i.e.
 	// it should be the same for the same source + id combination.
 	Timestamp time.Time `json:"timestamp" jsonschema:"required"`
+}
+
+type Context struct {
+	SharedContext
+	// Spec: https://cdevents.dev/docs/spec/#version
+	// Description: The version of the CDEvents specification which the event
+	// uses. This enables the interpretation of the context. Compliant event
+	// producers MUST use a value of draft when referring to this version of the
+	// specification.
+	Version string `json:"version" jsonschema:"required"`
+}
+
+type ContextV05 struct {
+	SharedContext
+	// Spec: https://cdevents.dev/docs/spec/#version
+	// Description: The version of the CDEvents specification which the event
+	// uses. This enables the interpretation of the context. Compliant event
+	// producers MUST use a value of draft when referring to this version of the
+	// specification.
+	SpecVersion string `json:"specversion" jsonschema:"required"`
+	ContextLinks
+	ContextCustom
+}
+
+// ContextForUnmarshalling is used to unmarshal events from JSON when the spec version
+// is not known beforehand. It supports both v0.4 (version) and v0.5+ (specversion) formats.
+type ContextForUnmarshalling struct {
+	SharedContext
+	// v0.4 and earlier use "version"
+	Version string `json:"version,omitempty"`
+	// v0.5+ uses "specversion"
+	SpecVersion string `json:"specversion,omitempty"`
+}
+
+// GetVersion returns the spec version from whichever field is populated
+func (c ContextForUnmarshalling) GetVersion() string {
+	if c.SpecVersion != "" {
+		return c.SpecVersion
+	}
+	return c.Version
+}
+
+// GetType returns the event type
+func (c ContextForUnmarshalling) GetType() CDEventType {
+	return c.Type
+}
+
+// UsesSpecVersion returns true if the context uses the specversion field (v0.5+)
+func (c ContextForUnmarshalling) UsesSpecVersion() bool {
+	return c.SpecVersion != ""
 }
 
 type Tags map[string]interface{}
@@ -366,6 +417,10 @@ type SubjectBase struct {
 
 	// The type of subject. Constraints what is a valid valid SubjectContent
 	Type SubjectType `json:"type" jsonschema:"required,minLength=1"`
+}
+
+type SubjectBaseV05 struct {
+	Reference
 }
 
 type SubjectType string

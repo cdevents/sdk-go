@@ -232,12 +232,14 @@ func (e *TestCaseRunFinishedEventV0_2_0) SetSubjectTestSuiteRun(testSuiteRun *Re
 func NewTestCaseRunFinishedEventV0_2_0(specVersion string) (*TestCaseRunFinishedEventV0_2_0, error) {
 	e := &TestCaseRunFinishedEventV0_2_0{
 		Context: ContextV04{
-			Context{
-				Type:    TestCaseRunFinishedEventTypeV0_2_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: TestCaseRunFinishedEventTypeV0_2_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: TestCaseRunFinishedSubjectV0_2_0{
 			SubjectBase: SubjectBase{

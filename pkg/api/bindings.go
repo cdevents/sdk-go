@@ -185,9 +185,11 @@ func Validate(event CDEventReader) error {
 // This works by unmarshalling the context first, extracting the event type and using
 // that to unmarshal the rest of the event into the correct object.
 // `ContextType` defines the type of Context that can be used to unmarshal the event.
+// This function supports both v0.4 (version) and v0.5+ (specversion) context formats.
 func NewFromJsonBytesContext[CDEventType CDEvent](event []byte, cdeventsMap map[string]CDEventType) (CDEventType, error) {
+	// Use ContextForUnmarshalling to support both v0.4 (version) and v0.5+ (specversion) formats
 	eventAux := &struct {
-		Context Context `json:"context"`
+		Context ContextForUnmarshalling `json:"context"`
 	}{}
 	var nilReturn, receiver CDEventType
 	var ok bool

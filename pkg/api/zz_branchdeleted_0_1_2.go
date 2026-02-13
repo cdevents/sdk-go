@@ -159,7 +159,9 @@ func (e *BranchDeletedEventV0_1_2) SetSubjectRepository(repository *Reference) {
 func NewBranchDeletedEventV0_1_2(specVersion string) (*BranchDeletedEventV0_1_2, error) {
 	e := &BranchDeletedEventV0_1_2{
 		Context: Context{
-			Type:    BranchDeletedEventTypeV0_1_2,
+			SharedContext: SharedContext{
+				Type: BranchDeletedEventTypeV0_1_2,
+			},
 			Version: specVersion,
 		},
 		Subject: BranchDeletedSubjectV0_1_2{

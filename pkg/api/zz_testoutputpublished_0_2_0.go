@@ -220,12 +220,14 @@ func (e *TestOutputPublishedEventV0_2_0) SetSubjectUri(uri string) {
 func NewTestOutputPublishedEventV0_2_0(specVersion string) (*TestOutputPublishedEventV0_2_0, error) {
 	e := &TestOutputPublishedEventV0_2_0{
 		Context: ContextV04{
-			Context{
-				Type:    TestOutputPublishedEventTypeV0_2_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: TestOutputPublishedEventTypeV0_2_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: TestOutputPublishedSubjectV0_2_0{
 			SubjectBase: SubjectBase{

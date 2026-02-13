@@ -220,12 +220,14 @@ func (e *TestCaseRunStartedEventV0_2_0) SetSubjectTrigger(trigger *TestCaseRunSt
 func NewTestCaseRunStartedEventV0_2_0(specVersion string) (*TestCaseRunStartedEventV0_2_0, error) {
 	e := &TestCaseRunStartedEventV0_2_0{
 		Context: ContextV04{
-			Context{
-				Type:    TestCaseRunStartedEventTypeV0_2_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: TestCaseRunStartedEventTypeV0_2_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: TestCaseRunStartedSubjectV0_2_0{
 			SubjectBase: SubjectBase{

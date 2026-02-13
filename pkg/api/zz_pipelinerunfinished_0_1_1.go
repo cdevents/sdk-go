@@ -177,7 +177,9 @@ func (e *PipelineRunFinishedEventV0_1_1) SetSubjectUrl(url string) {
 func NewPipelineRunFinishedEventV0_1_1(specVersion string) (*PipelineRunFinishedEventV0_1_1, error) {
 	e := &PipelineRunFinishedEventV0_1_1{
 		Context: Context{
-			Type:    PipelineRunFinishedEventTypeV0_1_1,
+			SharedContext: SharedContext{
+				Type: PipelineRunFinishedEventTypeV0_1_1,
+			},
 			Version: specVersion,
 		},
 		Subject: PipelineRunFinishedSubjectV0_1_1{

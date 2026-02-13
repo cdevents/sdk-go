@@ -256,12 +256,14 @@ func (e *TicketUpdatedEventV0_1_0) SetSubjectUri(uri string) {
 func NewTicketUpdatedEventV0_1_0(specVersion string) (*TicketUpdatedEventV0_1_0, error) {
 	e := &TicketUpdatedEventV0_1_0{
 		Context: ContextV04{
-			Context{
-				Type:    TicketUpdatedEventTypeV0_1_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: TicketUpdatedEventTypeV0_1_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: TicketUpdatedSubjectV0_1_0{
 			SubjectBase: SubjectBase{

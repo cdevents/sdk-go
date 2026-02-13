@@ -103,31 +103,35 @@ var (
 
 	eventInvalidType = &testapi.FooSubjectBarPredicateEvent{
 		Context: api.ContextV04{
-			api.Context{
-				Type: api.CDEventType{
-					Subject:   "invalid",
-					Predicate: "invalid",
-					Version:   "#not@semver", // Invalid version format
+			Context: api.Context{
+				SharedContext: api.SharedContext{
+					Type: api.CDEventType{
+						Subject:   "invalid",
+						Predicate: "invalid",
+						Version:   "#not@semver", // Invalid version format
+					},
 				},
 				Version: "9.9.9",
 			},
-			api.ContextLinks{},
-			api.ContextCustom{},
+			ContextLinks:  api.ContextLinks{},
+			ContextCustom: api.ContextCustom{},
 		},
 	}
 
 	eventUnknownType = &testapi.FooSubjectBarPredicateEvent{
 		Context: api.ContextV04{
-			api.Context{
-				Type: api.CDEventType{
-					Subject:   "invalid", // Unknown subject
-					Predicate: "invalid", // Unknown predicate
-					Version:   "1.2.3",
+			Context: api.Context{
+				SharedContext: api.SharedContext{
+					Type: api.CDEventType{
+						Subject:   "invalid", // Unknown subject
+						Predicate: "invalid", // Unknown predicate
+						Version:   "1.2.3",
+					},
 				},
 				Version: "9.9.9",
 			},
-			api.ContextLinks{},
-			api.ContextCustom{},
+			ContextLinks:  api.ContextLinks{},
+			ContextCustom: api.ContextCustom{},
 		},
 	}
 )
@@ -319,7 +323,7 @@ func TestAsCloudEventInvalid(t *testing.T) {
 	}, {
 		name:  "event with invalid type",
 		event: eventInvalidType,
-		error: "cannot validate CDEvent Key: 'FooSubjectBarPredicateEventV2_2_3.Context.Context.Type.",
+		error: "cannot validate CDEvent Key: 'FooSubjectBarPredicateEventV2_2_3.Context.Context.SharedContext.Type.",
 	}, {
 		name:  "event with unknown type",
 		event: eventUnknownType,
@@ -441,7 +445,9 @@ func TestInvalidEvent(t *testing.T) {
 	eventInvalidType := &testapi.FooSubjectBarPredicateEvent{
 		Context: api.ContextV04{
 			Context: api.Context{
-				Type:    api.CDEventType{Subject: "not-a-valid-type"},
+				SharedContext: api.SharedContext{
+					Type: api.CDEventType{Subject: "not-a-valid-type"},
+				},
 				Version: testapi.SpecVersion,
 			},
 		},

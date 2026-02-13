@@ -159,7 +159,9 @@ func (e *BuildFinishedEventV0_1_1) SetSubjectArtifactId(artifactId string) {
 func NewBuildFinishedEventV0_1_1(specVersion string) (*BuildFinishedEventV0_1_1, error) {
 	e := &BuildFinishedEventV0_1_1{
 		Context: Context{
-			Type:    BuildFinishedEventTypeV0_1_1,
+			SharedContext: SharedContext{
+				Type: BuildFinishedEventTypeV0_1_1,
+			},
 			Version: specVersion,
 		},
 		Subject: BuildFinishedSubjectV0_1_1{

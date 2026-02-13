@@ -159,7 +159,9 @@ func (e *EnvironmentDeletedEventV0_1_1) SetSubjectName(name string) {
 func NewEnvironmentDeletedEventV0_1_1(specVersion string) (*EnvironmentDeletedEventV0_1_1, error) {
 	e := &EnvironmentDeletedEventV0_1_1{
 		Context: Context{
-			Type:    EnvironmentDeletedEventTypeV0_1_1,
+			SharedContext: SharedContext{
+				Type: EnvironmentDeletedEventTypeV0_1_1,
+			},
 			Version: specVersion,
 		},
 		Subject: EnvironmentDeletedSubjectV0_1_1{

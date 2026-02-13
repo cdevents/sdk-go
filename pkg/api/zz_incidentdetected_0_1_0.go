@@ -177,7 +177,9 @@ func (e *IncidentDetectedEventV0_1_0) SetSubjectService(service *Reference) {
 func NewIncidentDetectedEventV0_1_0(specVersion string) (*IncidentDetectedEventV0_1_0, error) {
 	e := &IncidentDetectedEventV0_1_0{
 		Context: Context{
-			Type:    IncidentDetectedEventTypeV0_1_0,
+			SharedContext: SharedContext{
+				Type: IncidentDetectedEventTypeV0_1_0,
+			},
 			Version: specVersion,
 		},
 		Subject: IncidentDetectedSubjectV0_1_0{

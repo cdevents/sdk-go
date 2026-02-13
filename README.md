@@ -13,6 +13,12 @@ go get github.com/cdevents/sdk-go
 ```
 
 And import the module in your code corresponding to the desired version of the specification.
+For CDEvents v0.5.x (latest), use:
+
+```golang
+import cdeventsv05 "github.com/cdevents/sdk-go/pkg/api/v05"
+```
+
 For CDEvents v0.4.x, use:
 
 ```golang
@@ -27,7 +33,7 @@ To create a CDEvent, for instance a [*pipelineRun queued*](https://cdevents.dev/
 func main() {
 
     // Create the base event
-    event, err := cdeventsv04.NewPipelineRunQueuedEvent()
+    event, err := cdeventsv05.NewPipelineRunQueuedEvent()
     if err != nil {
       log.Fatalf("could not create a cdevent, %v", err)
     }
@@ -82,8 +88,9 @@ See the [CloudEvents](https://github.com/cloudevents/sdk-go#send-your-first-clou
 More examples are available in the [docs](./docs) folder.
 Online API Reference:
 - [SDK Root](https://pkg.go.dev/github.com/cdevents/sdk-go/pkg/api)
-- [v03 Specific](https://pkg.go.dev/github.com/cdevents/sdk-go/pkg/api/v03)
+- [v05 Specific](https://pkg.go.dev/github.com/cdevents/sdk-go/pkg/api/v05)
 - [v04 Specific](https://pkg.go.dev/github.com/cdevents/sdk-go/pkg/api/v04)
+- [v03 Specific](https://pkg.go.dev/github.com/cdevents/sdk-go/pkg/api/v03)
 
 ## Contributing
 

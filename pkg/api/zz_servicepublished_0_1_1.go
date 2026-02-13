@@ -159,7 +159,9 @@ func (e *ServicePublishedEventV0_1_1) SetSubjectEnvironment(environment *Referen
 func NewServicePublishedEventV0_1_1(specVersion string) (*ServicePublishedEventV0_1_1, error) {
 	e := &ServicePublishedEventV0_1_1{
 		Context: Context{
-			Type:    ServicePublishedEventTypeV0_1_1,
+			SharedContext: SharedContext{
+				Type: ServicePublishedEventTypeV0_1_1,
+			},
 			Version: specVersion,
 		},
 		Subject: ServicePublishedSubjectV0_1_1{

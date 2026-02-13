@@ -165,7 +165,9 @@ func (e *EnvironmentCreatedEventV0_1_1) SetSubjectUrl(url string) {
 func NewEnvironmentCreatedEventV0_1_1(specVersion string) (*EnvironmentCreatedEventV0_1_1, error) {
 	e := &EnvironmentCreatedEventV0_1_1{
 		Context: Context{
-			Type:    EnvironmentCreatedEventTypeV0_1_1,
+			SharedContext: SharedContext{
+				Type: EnvironmentCreatedEventTypeV0_1_1,
+			},
 			Version: specVersion,
 		},
 		Subject: EnvironmentCreatedSubjectV0_1_1{

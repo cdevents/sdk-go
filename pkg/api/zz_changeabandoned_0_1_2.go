@@ -159,7 +159,9 @@ func (e *ChangeAbandonedEventV0_1_2) SetSubjectRepository(repository *Reference)
 func NewChangeAbandonedEventV0_1_2(specVersion string) (*ChangeAbandonedEventV0_1_2, error) {
 	e := &ChangeAbandonedEventV0_1_2{
 		Context: Context{
-			Type:    ChangeAbandonedEventTypeV0_1_2,
+			SharedContext: SharedContext{
+				Type: ChangeAbandonedEventTypeV0_1_2,
+			},
 			Version: specVersion,
 		},
 		Subject: ChangeAbandonedSubjectV0_1_2{

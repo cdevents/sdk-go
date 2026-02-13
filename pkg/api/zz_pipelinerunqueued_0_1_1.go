@@ -165,7 +165,9 @@ func (e *PipelineRunQueuedEventV0_1_1) SetSubjectUrl(url string) {
 func NewPipelineRunQueuedEventV0_1_1(specVersion string) (*PipelineRunQueuedEventV0_1_1, error) {
 	e := &PipelineRunQueuedEventV0_1_1{
 		Context: Context{
-			Type:    PipelineRunQueuedEventTypeV0_1_1,
+			SharedContext: SharedContext{
+				Type: PipelineRunQueuedEventTypeV0_1_1,
+			},
 			Version: specVersion,
 		},
 		Subject: PipelineRunQueuedSubjectV0_1_1{

@@ -159,7 +159,9 @@ func (e *ArtifactPackagedEventV0_1_1) SetSubjectChange(change *Reference) {
 func NewArtifactPackagedEventV0_1_1(specVersion string) (*ArtifactPackagedEventV0_1_1, error) {
 	e := &ArtifactPackagedEventV0_1_1{
 		Context: Context{
-			Type:    ArtifactPackagedEventTypeV0_1_1,
+			SharedContext: SharedContext{
+				Type: ArtifactPackagedEventTypeV0_1_1,
+			},
 			Version: specVersion,
 		},
 		Subject: ArtifactPackagedSubjectV0_1_1{

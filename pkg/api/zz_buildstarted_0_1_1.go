@@ -152,7 +152,9 @@ func (e BuildStartedEventV0_1_1) GetSubjectContent() interface{} {
 func NewBuildStartedEventV0_1_1(specVersion string) (*BuildStartedEventV0_1_1, error) {
 	e := &BuildStartedEventV0_1_1{
 		Context: Context{
-			Type:    BuildStartedEventTypeV0_1_1,
+			SharedContext: SharedContext{
+				Type: BuildStartedEventTypeV0_1_1,
+			},
 			Version: specVersion,
 		},
 		Subject: BuildStartedSubjectV0_1_1{

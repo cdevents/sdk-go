@@ -200,12 +200,14 @@ func (e *CustomTypeEventV0_4_1) SetSubjectContent(subjectContent interface{}) {
 func NewCustomTypeEventV0_4_1(specVersion string) (*CustomTypeEventV0_4_1, error) {
 	e := &CustomTypeEventV0_4_1{
 		Context: ContextV04{
-			Context{
-				Type:    CustomTypeEventTypeV0_4_1,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: CustomTypeEventTypeV0_4_1,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: CustomTypeSubjectV0_4_1{
 			SubjectBase: SubjectBase{

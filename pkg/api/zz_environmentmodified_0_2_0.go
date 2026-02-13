@@ -208,12 +208,14 @@ func (e *EnvironmentModifiedEventV0_2_0) SetSubjectUrl(url string) {
 func NewEnvironmentModifiedEventV0_2_0(specVersion string) (*EnvironmentModifiedEventV0_2_0, error) {
 	e := &EnvironmentModifiedEventV0_2_0{
 		Context: ContextV04{
-			Context{
-				Type:    EnvironmentModifiedEventTypeV0_2_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: EnvironmentModifiedEventTypeV0_2_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: EnvironmentModifiedSubjectV0_2_0{
 			SubjectBase: SubjectBase{

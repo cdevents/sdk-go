@@ -220,12 +220,14 @@ func (e *TestCaseRunSkippedEventV0_1_0) SetSubjectTestSuiteRun(testSuiteRun *Ref
 func NewTestCaseRunSkippedEventV0_1_0(specVersion string) (*TestCaseRunSkippedEventV0_1_0, error) {
 	e := &TestCaseRunSkippedEventV0_1_0{
 		Context: ContextV04{
-			Context{
-				Type:    TestCaseRunSkippedEventTypeV0_1_0,
+			Context: Context{
+				SharedContext: SharedContext{
+					Type: TestCaseRunSkippedEventTypeV0_1_0,
+				},
 				Version: specVersion,
 			},
-			ContextLinks{},
-			ContextCustom{},
+			ContextLinks:  ContextLinks{},
+			ContextCustom: ContextCustom{},
 		},
 		Subject: TestCaseRunSkippedSubjectV0_1_0{
 			SubjectBase: SubjectBase{
