@@ -41,7 +41,7 @@ jobs:
         persist-credentials: false
 
     - name: Setup Go
-      uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+      uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
       with:
         go-version: ${{ matrix.go-version }}
         check-latest: true
@@ -50,6 +50,6 @@ jobs:
       run: make test
 
     - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+      uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
