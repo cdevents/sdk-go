@@ -1,0 +1,20 @@
+{
+  "context": {
+    "version": "99.1.0",
+    "id": "382170b9-ae29-55g2-c49g-0e81g96b5930",
+    "source": "/event/source/456",
+    "type": "dev.cdevents.foosubject.barpredicate.2.2.3",
+    "timestamp": "2023-03-20T15:00:00.000000Z"
+  },
+  "subject": {
+    "id": "mySubject456",
+    "source": "/event/source/456",
+    "type": "fooSubject",
+    "content": {
+      "plainField": "otherValue",
+      "referenceField": {
+        "id": "myChange456"
+      }
+    }
+  }
+}

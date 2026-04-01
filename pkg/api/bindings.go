@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"reflect"
 	"regexp"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
@@ -218,6 +219,10 @@ func NewFromJsonBytesContext[CDEventType CDEvent](event []byte, cdeventsMap map[
 			return nilReturn, fmt.Errorf("sdk event version %s not compatible with %s", receiver.GetType().Version, eventType.Version)
 		}
 	}
+	// Create a fresh instance of the concrete type to avoid mutating the
+	// singleton stored in cdeventsMap. Without this, omitempty fields from a
+	// previous call would bleed into subsequent calls for the same event type.
+	receiver = reflect.New(reflect.TypeOf(receiver).Elem()).Interface().(CDEventType)
 	err = json.Unmarshal(event, receiver)
 	if err != nil {
 		return nilReturn, err
