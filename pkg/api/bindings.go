@@ -199,7 +199,10 @@ func NewFromJsonBytesContext[CDEventType CDEvent](event []byte, cdeventsMap map[
 	}
 	eventType := eventAux.Context.GetType()
 	if eventType.Custom != "" {
-		receiver = cdeventsMap[CustomEventMapKey] // Custom type receiver does not have a predefined type
+		receiver, ok = cdeventsMap[CustomEventMapKey]
+		if !ok {
+			return nilReturn, fmt.Errorf("custom events not supported by this map")
+		}
 	} else {
 		receiver, ok = cdeventsMap[eventType.UnversionedString()]
 		if !ok {
