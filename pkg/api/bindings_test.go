@@ -667,6 +667,23 @@ func testEventWithVersion(eventVersion string, specVersion string) *testapi.FooS
 	return event
 }
 
+func TestNewFromJsonBytesCustomEventUnsupported(t *testing.T) {
+	eventBytes, err := os.ReadFile(testsFolder + string(os.PathSeparator) + "custom_type_event.json")
+	if err != nil {
+		t.Fatalf("failed to read custom event fixture: %v", err)
+	}
+	// Use a map without CustomEventMapKey to trigger the error path
+	emptyMap := map[string]api.CDEventV04{}
+	_, err = api.NewFromJsonBytesContext[api.CDEventV04](eventBytes, emptyMap)
+	if err == nil {
+		t.Fatal("expected an error for missing CustomEventMapKey, got none")
+	}
+	wantError := "custom events not supported by this map"
+	if d := cmp.Diff(wantError, err.Error()); d != "" {
+		t.Errorf("error diff (-want,+got):\n%s", d)
+	}
+}
+
 func TestNewFromJsonBytes(t *testing.T) {
 	minorVersion := testEventWithVersion("2.999.1", testapi.SpecVersion)
 	patchVersion := testEventWithVersion("2.2.999", testapi.SpecVersion)
