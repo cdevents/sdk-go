@@ -582,6 +582,44 @@ func TestNewFromJsonString(t *testing.T) {
 	}
 }
 
+func TestNewFromJsonBytesNoSingletonMutation(t *testing.T) {
+	tests := []struct {
+		name         string
+		firstFile    string
+		secondFile   string
+		wantArtifact string
+	}{{
+		name:         "omitempty field from first event does not bleed into second",
+		firstFile:    "singleton_bleed_with_field",
+		secondFile:   "singleton_bleed_without_field",
+		wantArtifact: "",
+	}}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			firstBytes, err := os.ReadFile(testsFolder + string(os.PathSeparator) + tc.firstFile + ".json")
+			if err != nil {
+				t.Fatalf("failed to read first event fixture %s: %v", tc.firstFile, err)
+			}
+			secondBytes, err := os.ReadFile(testsFolder + string(os.PathSeparator) + tc.secondFile + ".json")
+			if err != nil {
+				t.Fatalf("failed to read second event fixture %s: %v", tc.secondFile, err)
+			}
+			_, err = testapi.NewFromJsonBytes(firstBytes)
+			if err != nil {
+				t.Fatalf("failed to parse first event %s: %v", tc.firstFile, err)
+			}
+			second, err := testapi.NewFromJsonBytes(secondBytes)
+			if err != nil {
+				t.Fatalf("failed to parse second event %s: %v", tc.secondFile, err)
+			}
+			content := second.GetSubjectContent().(api.FooSubjectBarPredicateSubjectContentV2_2_3)
+			if d := cmp.Diff(tc.wantArtifact, content.ArtifactId); d != "" {
+				t.Errorf("args: diff(-want,+got):\n%s", d)
+			}
+		})
+	}
+}
+
 func TestParseType(t *testing.T) {
 	tests := []struct {
 		name      string
