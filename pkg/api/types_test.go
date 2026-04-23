@@ -16,6 +16,8 @@ limitations under the License.
 SPDX-License-Identifier: Apache-2.0
 */
 
+//go:build testonly
+
 package api_test
 
 import (
