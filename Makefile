@@ -64,7 +64,7 @@ lint: ## Lint the code
 
 .PHONY: generate # Regenerate code
 generate:
-	./hack/generate.sh
+	go generate ./...
 
 .PHONY: all
 all: fmt test lint generate
