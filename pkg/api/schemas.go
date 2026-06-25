@@ -11661,9 +11661,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/artifact-deleted-event": `{
+		"https://cdevents.dev/0.5.1/schema/artifact-deleted-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/artifact-deleted-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/artifact-deleted-event",
   "properties": {
     "context": {
       "properties": {
@@ -11766,9 +11766,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/artifact-downloaded-event": `{
+		"https://cdevents.dev/0.5.1/schema/artifact-downloaded-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/artifact-downloaded-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/artifact-downloaded-event",
   "properties": {
     "context": {
       "properties": {
@@ -11871,9 +11871,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/artifact-packaged-event": `{
+		"https://cdevents.dev/0.5.1/schema/artifact-packaged-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/artifact-packaged-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/artifact-packaged-event",
   "properties": {
     "context": {
       "properties": {
@@ -12007,9 +12007,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/artifact-published-event": `{
+		"https://cdevents.dev/0.5.1/schema/artifact-published-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/artifact-published-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/artifact-published-event",
   "properties": {
     "context": {
       "properties": {
@@ -12126,9 +12126,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/artifact-signed-event": `{
+		"https://cdevents.dev/0.5.1/schema/artifact-signed-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/artifact-signed-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/artifact-signed-event",
   "properties": {
     "context": {
       "properties": {
@@ -12234,9 +12234,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/branch-created-event": `{
+		"https://cdevents.dev/0.5.1/schema/branch-created-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/branch-created-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/branch-created-event",
   "properties": {
     "context": {
       "properties": {
@@ -12353,9 +12353,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/branch-deleted-event": `{
+		"https://cdevents.dev/0.5.1/schema/branch-deleted-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/branch-deleted-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/branch-deleted-event",
   "properties": {
     "context": {
       "properties": {
@@ -12472,9 +12472,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/build-finished-event": `{
+		"https://cdevents.dev/0.5.1/schema/build-finished-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/build-finished-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/build-finished-event",
   "properties": {
     "context": {
       "properties": {
@@ -12576,9 +12576,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/build-queued-event": `{
+		"https://cdevents.dev/0.5.1/schema/build-queued-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/build-queued-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/build-queued-event",
   "properties": {
     "context": {
       "properties": {
@@ -12676,9 +12676,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/build-started-event": `{
+		"https://cdevents.dev/0.5.1/schema/build-started-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/build-started-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/build-started-event",
   "properties": {
     "context": {
       "properties": {
@@ -12776,9 +12776,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/change-abandoned-event": `{
+		"https://cdevents.dev/0.5.1/schema/change-abandoned-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/change-abandoned-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/change-abandoned-event",
   "properties": {
     "context": {
       "properties": {
@@ -12895,9 +12895,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/change-created-event": `{
+		"https://cdevents.dev/0.5.1/schema/change-created-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/change-created-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/change-created-event",
   "properties": {
     "context": {
       "properties": {
@@ -13018,9 +13018,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/change-merged-event": `{
+		"https://cdevents.dev/0.5.1/schema/change-merged-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/change-merged-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/change-merged-event",
   "properties": {
     "context": {
       "properties": {
@@ -13137,9 +13137,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/change-reviewed-event": `{
+		"https://cdevents.dev/0.5.1/schema/change-reviewed-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/change-reviewed-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/change-reviewed-event",
   "properties": {
     "context": {
       "properties": {
@@ -13256,9 +13256,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/change-updated-event": `{
+		"https://cdevents.dev/0.5.1/schema/change-updated-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/change-updated-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/change-updated-event",
   "properties": {
     "context": {
       "properties": {
@@ -13375,9 +13375,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/custom": `{
+		"https://cdevents.dev/0.5.1/schema/custom": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/custom",
+  "$id": "https://cdevents.dev/0.5.1/schema/custom",
   "properties": {
     "context": {
       "properties": {
@@ -13471,9 +13471,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/environment-created-event": `{
+		"https://cdevents.dev/0.5.1/schema/environment-created-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/environment-created-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/environment-created-event",
   "properties": {
     "context": {
       "properties": {
@@ -13579,9 +13579,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/environment-deleted-event": `{
+		"https://cdevents.dev/0.5.1/schema/environment-deleted-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/environment-deleted-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/environment-deleted-event",
   "properties": {
     "context": {
       "properties": {
@@ -13683,9 +13683,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/environment-modified-event": `{
+		"https://cdevents.dev/0.5.1/schema/environment-modified-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/environment-modified-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/environment-modified-event",
   "properties": {
     "context": {
       "properties": {
@@ -13791,9 +13791,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/incident-detected-event": `{
+		"https://cdevents.dev/0.5.1/schema/incident-detected-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/incident-detected-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/incident-detected-event",
   "properties": {
     "context": {
       "properties": {
@@ -13938,9 +13938,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/incident-reported-event": `{
+		"https://cdevents.dev/0.5.1/schema/incident-reported-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/incident-reported-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/incident-reported-event",
   "properties": {
     "context": {
       "properties": {
@@ -14091,9 +14091,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/incident-resolved-event": `{
+		"https://cdevents.dev/0.5.1/schema/incident-resolved-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/incident-resolved-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/incident-resolved-event",
   "properties": {
     "context": {
       "properties": {
@@ -14238,9 +14238,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/links/embeddedlinkend": `{
+		"https://cdevents.dev/0.5.1/schema/links/embeddedlinkend": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/links/embeddedlinkend",
+  "$id": "https://cdevents.dev/0.5.1/schema/links/embeddedlinkend",
   "properties": {
     "linkType": {
       "type": "string",
@@ -14274,9 +14274,9 @@ var (
 }
 
 `,
-		"https://cdevents.dev/0.5.0/schema/links/embeddedlinkpath": `{
+		"https://cdevents.dev/0.5.1/schema/links/embeddedlinkpath": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/links/embeddedlinkpath",
+  "$id": "https://cdevents.dev/0.5.1/schema/links/embeddedlinkpath",
   "properties": {
     "linkType": {
       "type": "string",
@@ -14310,9 +14310,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/links/embeddedlinkrelation": `{
+		"https://cdevents.dev/0.5.1/schema/links/embeddedlinkrelation": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/links/embeddedlinkrelation",
+  "$id": "https://cdevents.dev/0.5.1/schema/links/embeddedlinkrelation",
   "properties": {
     "linkType": {
       "type": "string",
@@ -14349,9 +14349,9 @@ var (
 }
 
 `,
-		"https://cdevents.dev/0.5.0/schema/links/embeddedlinksarray": `{
+		"https://cdevents.dev/0.5.1/schema/links/embeddedlinksarray": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/links/embeddedlinksarray",
+  "$id": "https://cdevents.dev/0.5.1/schema/links/embeddedlinksarray",
   "type": "array",
   "items": {
     "anyOf": [
@@ -14371,9 +14371,9 @@ var (
   }
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/links/linkend": `{
+		"https://cdevents.dev/0.5.1/schema/links/linkend": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/links/linkend",
+  "$id": "https://cdevents.dev/0.5.1/schema/links/linkend",
   "properties": {
     "chainId": {
       "description": "This represents the full lifecycles of a series of events in CDEvents",
@@ -14434,9 +14434,9 @@ var (
 }
 
 `,
-		"https://cdevents.dev/0.5.0/schema/links/linkpath": `{
+		"https://cdevents.dev/0.5.1/schema/links/linkpath": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/links/linkpath",
+  "$id": "https://cdevents.dev/0.5.1/schema/links/linkpath",
   "properties": {
     "chainId": {
       "type": "string",
@@ -14492,9 +14492,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/links/linkrelation": `{
+		"https://cdevents.dev/0.5.1/schema/links/linkrelation": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/links/linkrelation",
+  "$id": "https://cdevents.dev/0.5.1/schema/links/linkrelation",
   "properties": {
     "chainId": {
       "description": "This represents the full lifecycles of a series of events in CDEvents",
@@ -14557,9 +14557,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/links/linkstart": `{
+		"https://cdevents.dev/0.5.1/schema/links/linkstart": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/links/linkstart",
+  "$id": "https://cdevents.dev/0.5.1/schema/links/linkstart",
   "properties": {
     "chainId": {
       "description": "This represents the full lifecycles of a series of events in CDEvents",
@@ -14605,9 +14605,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/pipelinerun-finished-event": `{
+		"https://cdevents.dev/0.5.1/schema/pipelinerun-finished-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/pipelinerun-finished-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/pipelinerun-finished-event",
   "properties": {
     "context": {
       "properties": {
@@ -14706,9 +14706,9 @@ var (
   "required": ["context", "subject"]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/pipelinerun-queued-event": `{
+		"https://cdevents.dev/0.5.1/schema/pipelinerun-queued-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/pipelinerun-queued-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/pipelinerun-queued-event",
   "properties": {
     "context": {
       "properties": {
@@ -14814,9 +14814,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/pipelinerun-started-event": `{
+		"https://cdevents.dev/0.5.1/schema/pipelinerun-started-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/pipelinerun-started-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/pipelinerun-started-event",
   "properties": {
     "context": {
       "properties": {
@@ -14925,9 +14925,9 @@ var (
     "subject"
   ]
 }`,
-		"https://cdevents.dev/0.5.0/schema/repository-created-event": `{
+		"https://cdevents.dev/0.5.1/schema/repository-created-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/repository-created-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/repository-created-event",
   "properties": {
     "context": {
       "properties": {
@@ -15044,9 +15044,9 @@ var (
     "subject"
   ]
 }`,
-		"https://cdevents.dev/0.5.0/schema/repository-deleted-event": `{
+		"https://cdevents.dev/0.5.1/schema/repository-deleted-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/repository-deleted-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/repository-deleted-event",
   "properties": {
     "context": {
       "properties": {
@@ -15159,9 +15159,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/repository-modified-event": `{
+		"https://cdevents.dev/0.5.1/schema/repository-modified-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/repository-modified-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/repository-modified-event",
   "properties": {
     "context": {
       "properties": {
@@ -15274,9 +15274,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/service-deployed-event": `{
+		"https://cdevents.dev/0.5.1/schema/service-deployed-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/service-deployed-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/service-deployed-event",
   "properties": {
     "context": {
       "properties": {
@@ -15401,9 +15401,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/service-published-event": `{
+		"https://cdevents.dev/0.5.1/schema/service-published-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/service-published-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/service-published-event",
   "properties": {
     "context": {
       "properties": {
@@ -15520,9 +15520,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/service-removed-event": `{
+		"https://cdevents.dev/0.5.1/schema/service-removed-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/service-removed-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/service-removed-event",
   "properties": {
     "context": {
       "properties": {
@@ -15639,9 +15639,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/service-rolledback-event": `{
+		"https://cdevents.dev/0.5.1/schema/service-rolledback-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/service-rolledback-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/service-rolledback-event",
   "properties": {
     "context": {
       "properties": {
@@ -15766,9 +15766,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/service-upgraded-event": `{
+		"https://cdevents.dev/0.5.1/schema/service-upgraded-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/service-upgraded-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/service-upgraded-event",
   "properties": {
     "context": {
       "properties": {
@@ -15893,9 +15893,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/taskrun-finished-event": `{
+		"https://cdevents.dev/0.5.1/schema/taskrun-finished-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/taskrun-finished-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/taskrun-finished-event",
   "properties": {
     "context": {
       "properties": {
@@ -16025,9 +16025,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/taskrun-started-event": `{
+		"https://cdevents.dev/0.5.1/schema/taskrun-started-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/taskrun-started-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/taskrun-started-event",
   "properties": {
     "context": {
       "properties": {
@@ -16151,9 +16151,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/testcaserun-finished-event": `{
+		"https://cdevents.dev/0.5.1/schema/testcaserun-finished-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/testcaserun-finished-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/testcaserun-finished-event",
   "properties": {
     "context": {
       "properties": {
@@ -16311,9 +16311,9 @@ var (
   "required": ["context", "subject"]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/testcaserun-queued-event": `{
+		"https://cdevents.dev/0.5.1/schema/testcaserun-queued-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/testcaserun-queued-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/testcaserun-queued-event",
   "properties": {
     "context": {
       "properties": {
@@ -16501,9 +16501,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/testcaserun-skipped-event": `{
+		"https://cdevents.dev/0.5.1/schema/testcaserun-skipped-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/testcaserun-skipped-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/testcaserun-skipped-event",
   "properties": {
     "context": {
       "properties": {
@@ -16673,9 +16673,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/testcaserun-started-event": `{
+		"https://cdevents.dev/0.5.1/schema/testcaserun-started-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/testcaserun-started-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/testcaserun-started-event",
   "properties": {
     "context": {
       "properties": {
@@ -16863,9 +16863,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/testoutput-published-event": `{
+		"https://cdevents.dev/0.5.1/schema/testoutput-published-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/test-output-published-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/test-output-published-event",
   "properties": {
     "context": {
       "properties": {
@@ -16999,9 +16999,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/testsuiterun-finished-event": `{
+		"https://cdevents.dev/0.5.1/schema/testsuiterun-finished-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/testsuiterun-finished-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/testsuiterun-finished-event",
   "properties": {
     "context": {
       "properties": {
@@ -17132,9 +17132,9 @@ var (
   "required": ["context", "subject"]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/testsuiterun-queued-event": `{
+		"https://cdevents.dev/0.5.1/schema/testsuiterun-queued-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/testsuiterun-queued-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/testsuiterun-queued-event",
   "properties": {
     "context": {
       "properties": {
@@ -17293,9 +17293,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/testsuiterun-started-event": `{
+		"https://cdevents.dev/0.5.1/schema/testsuiterun-started-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/testsuiterun-started-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/testsuiterun-started-event",
   "properties": {
     "context": {
       "properties": {
@@ -17454,9 +17454,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/ticket-closed-event": `{
+		"https://cdevents.dev/0.5.1/schema/ticket-closed-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/ticket-closed-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/ticket-closed-event",
   "properties": {
     "context": {
       "properties": {
@@ -17648,9 +17648,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/ticket-created-event": `{
+		"https://cdevents.dev/0.5.1/schema/ticket-created-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/ticket-created-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/ticket-created-event",
   "properties": {
     "context": {
       "properties": {
@@ -17816,9 +17816,9 @@ var (
   ]
 }
 `,
-		"https://cdevents.dev/0.5.0/schema/ticket-updated-event": `{
+		"https://cdevents.dev/0.5.1/schema/ticket-updated-event": `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0/schema/ticket-updated-event",
+  "$id": "https://cdevents.dev/0.5.1/schema/ticket-updated-event",
   "properties": {
     "context": {
       "properties": {

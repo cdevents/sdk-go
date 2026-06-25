@@ -25,7 +25,7 @@ package v05
 
 import "github.com/cdevents/sdk-go/pkg/api"
 
-var SpecVersion = "0.5.0"
+var SpecVersion = "0.5.1"
 
 type ArtifactDeletedEvent = api.ArtifactDeletedEventV0_2_0
 type ArtifactDeletedSubject = api.ArtifactDeletedSubjectV0_2_0
@@ -471,14 +471,14 @@ func NewTicketUpdatedEvent() (*TicketUpdatedEvent, error) {
 
 var TicketUpdatedEventType = api.TicketUpdatedEventTypeV0_2_0
 
-type CustomTypeEvent = api.CustomTypeEventV0_5_0
-type CustomTypeSubject = api.CustomTypeSubjectV0_5_0
+type CustomTypeEvent = api.CustomTypeEventV0_5_1
+type CustomTypeSubject = api.CustomTypeSubjectV0_5_1
 
 func NewCustomTypeEvent() (*CustomTypeEvent, error) {
-	return api.NewCustomTypeEventV0_5_0(SpecVersion)
+	return api.NewCustomTypeEventV0_5_1(SpecVersion)
 }
 
-var CustomTypeEventType = api.CustomTypeEventTypeV0_5_0
+var CustomTypeEventType = api.CustomTypeEventTypeV0_5_1
 
 // NewFromJsonBytes builds a new CDEventReader from a JSON string as []bytes
 // This works by unmarshalling the context first, extracting the event type and using

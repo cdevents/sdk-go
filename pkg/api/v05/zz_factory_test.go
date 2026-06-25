@@ -37,7 +37,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.ArtifactDeletedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -54,7 +54,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.ArtifactDownloadedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -71,7 +71,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.ArtifactPackagedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -88,7 +88,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.ArtifactPublishedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -105,7 +105,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.ArtifactSignedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -122,7 +122,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.BranchCreatedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -139,7 +139,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.BranchDeletedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -156,7 +156,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.BuildFinishedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -173,7 +173,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.BuildQueuedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -190,7 +190,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.BuildStartedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -207,7 +207,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.ChangeAbandonedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -224,7 +224,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.ChangeCreatedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -241,7 +241,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.ChangeMergedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -258,7 +258,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.ChangeReviewedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -275,7 +275,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.ChangeUpdatedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -292,7 +292,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.EnvironmentCreatedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -309,7 +309,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.EnvironmentDeletedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -326,7 +326,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.EnvironmentModifiedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -343,7 +343,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.IncidentDetectedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -360,7 +360,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.IncidentReportedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -377,7 +377,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.IncidentResolvedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -394,7 +394,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.PipelineRunFinishedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -411,7 +411,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.PipelineRunQueuedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -428,7 +428,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.PipelineRunStartedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -445,7 +445,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.RepositoryCreatedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -462,7 +462,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.RepositoryDeletedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -479,7 +479,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.RepositoryModifiedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -496,7 +496,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.ServiceDeployedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -513,7 +513,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.ServicePublishedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -530,7 +530,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.ServiceRemovedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -547,7 +547,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.ServiceRolledbackSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -564,7 +564,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.ServiceUpgradedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -581,7 +581,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.TaskRunFinishedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -598,7 +598,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.TaskRunStartedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -615,7 +615,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.TestCaseRunFinishedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -632,7 +632,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.TestCaseRunQueuedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -649,7 +649,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.TestCaseRunSkippedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -666,7 +666,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.TestCaseRunStartedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -683,7 +683,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.TestOutputPublishedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -700,7 +700,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.TestSuiteRunFinishedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -717,7 +717,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.TestSuiteRunQueuedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -734,7 +734,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.TestSuiteRunStartedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -751,7 +751,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.TicketClosedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -768,7 +768,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.TicketCreatedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -785,7 +785,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.TicketUpdatedSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
@@ -802,7 +802,7 @@ func init() {
 					Timestamp: timeNow(),
 					Id:        testUUID(),
 				},
-				SpecVersion: "0.5.0",
+				SpecVersion: "0.5.1",
 			},
 			Subject: apiv05.CustomTypeSubject{
 				SubjectBaseV05: api.SubjectBaseV05{},
