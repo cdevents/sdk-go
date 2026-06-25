@@ -183,7 +183,7 @@ func NewCDEvent(eventType, specVersion string) (api.CDEvent, error) {
 		return NewTicketCreatedEvent()
 	case api.TicketUpdatedEventTypeV0_2_0.String():
 		return NewTicketUpdatedEvent()
-	case api.CustomTypeEventTypeV0_5_0.String():
+	case api.CustomTypeEventTypeV0_5_1.String():
 		return NewCustomTypeEvent()
 	default:
 		return nil, fmt.Errorf("event %v not supported", eventType)

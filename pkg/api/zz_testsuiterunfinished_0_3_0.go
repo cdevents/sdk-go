@@ -179,7 +179,7 @@ func (e *TestSuiteRunFinishedEventV0_3_0) SetCustomData(contentType string, data
 
 func (e TestSuiteRunFinishedEventV0_3_0) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return CompiledSchemas.GetBySpecSubjectPredicate("0.5.0", eType.Subject, eType.Predicate, eType.Custom)
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.5.1", eType.Subject, eType.Predicate, eType.Custom)
 }
 
 // CDEventsWriterV04 implementation

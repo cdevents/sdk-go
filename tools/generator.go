@@ -49,7 +49,7 @@ var (
 	GEN_CODE_FOLDER    string
 	SPEC_FOLDER_PREFIX = "spec-"
 	TEST_FOLDER_PREFIX = "tests-"
-	SPEC_VERSIONS      = []string{"0.3.0", "0.4.1", "0.5.0"}
+	SPEC_VERSIONS      = []string{"0.3.0", "0.4.1", "0.5.1"}
 	TEST_VERSIONS      = []string{"99.0.0", "99.1.0"}
 	SCHEMA_FOLDER      = "schemas"
 	LINKS_FOLDER       = filepath.Join(SCHEMA_FOLDER, "links")

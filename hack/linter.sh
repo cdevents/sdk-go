@@ -12,7 +12,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if ! [[ -x "$(command -v golangci-lint)" ]]; then
 	echo "Installing GolangCI-Lint"
 	pushd "${DIR}"
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.52.0
+	go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.12.2
 	popd
 fi
 

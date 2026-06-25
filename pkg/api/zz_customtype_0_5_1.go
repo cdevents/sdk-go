@@ -28,92 +28,92 @@ import (
 )
 
 var (
-	// CustomType event type v0.5.0
-	CustomTypeEventTypeV0_5_0 CDEventType = CDEventType{}
+	// CustomType event type v0.5.1
+	CustomTypeEventTypeV0_5_1 CDEventType = CDEventType{}
 )
 
-type CustomTypeSubjectV0_5_0 struct {
+type CustomTypeSubjectV0_5_1 struct {
 	SubjectBaseV05
 	Content interface{} `json:"content"`
 }
 
-func (sc CustomTypeSubjectV0_5_0) GetSubjectType() SubjectType {
+func (sc CustomTypeSubjectV0_5_1) GetSubjectType() SubjectType {
 	return ""
 }
 
-type CustomTypeEventV0_5_0 struct {
+type CustomTypeEventV0_5_1 struct {
 	Context ContextV05              `json:"context"`
-	Subject CustomTypeSubjectV0_5_0 `json:"subject"`
+	Subject CustomTypeSubjectV0_5_1 `json:"subject"`
 	CDEventCustomData
 }
 
 // CDEventsReader implementation
 
-func (e CustomTypeEventV0_5_0) GetType() CDEventType {
-	return CustomTypeEventTypeV0_5_0
+func (e CustomTypeEventV0_5_1) GetType() CDEventType {
+	return CustomTypeEventTypeV0_5_1
 }
 
-func (e CustomTypeEventV0_5_0) GetVersion() string {
+func (e CustomTypeEventV0_5_1) GetVersion() string {
 	return e.Context.GetVersion()
 }
 
-func (e CustomTypeEventV0_5_0) GetId() string {
+func (e CustomTypeEventV0_5_1) GetId() string {
 	return e.Context.Id
 }
 
-func (e CustomTypeEventV0_5_0) GetSource() string {
+func (e CustomTypeEventV0_5_1) GetSource() string {
 	return e.Context.Source
 }
 
-func (e CustomTypeEventV0_5_0) GetTimestamp() time.Time {
+func (e CustomTypeEventV0_5_1) GetTimestamp() time.Time {
 	return e.Context.Timestamp
 }
 
-func (e CustomTypeEventV0_5_0) GetSubjectId() string {
+func (e CustomTypeEventV0_5_1) GetSubjectId() string {
 	return e.Subject.Id
 }
 
-func (e CustomTypeEventV0_5_0) GetSubjectSource() string {
+func (e CustomTypeEventV0_5_1) GetSubjectSource() string {
 	return e.Subject.Source
 }
 
-func (e CustomTypeEventV0_5_0) GetSubject() Subject {
+func (e CustomTypeEventV0_5_1) GetSubject() Subject {
 	return e.Subject
 }
 
-func (e CustomTypeEventV0_5_0) GetCustomData() (interface{}, error) {
+func (e CustomTypeEventV0_5_1) GetCustomData() (interface{}, error) {
 	return GetCustomData(e.CustomDataContentType, e.CustomData)
 }
 
-func (e CustomTypeEventV0_5_0) GetCustomDataAs(receiver interface{}) error {
+func (e CustomTypeEventV0_5_1) GetCustomDataAs(receiver interface{}) error {
 	return GetCustomDataAs(e, receiver)
 }
 
-func (e CustomTypeEventV0_5_0) GetCustomDataRaw() ([]byte, error) {
+func (e CustomTypeEventV0_5_1) GetCustomDataRaw() ([]byte, error) {
 	return GetCustomDataRaw(e.CustomDataContentType, e.CustomData)
 }
 
-func (e CustomTypeEventV0_5_0) GetCustomDataContentType() string {
+func (e CustomTypeEventV0_5_1) GetCustomDataContentType() string {
 	return e.CustomDataContentType
 }
 
 // CDEventsReaderV04 implementation
 
-func (e CustomTypeEventV0_5_0) GetChainId() string {
+func (e CustomTypeEventV0_5_1) GetChainId() string {
 	return e.Context.ChainId
 }
 
-func (e CustomTypeEventV0_5_0) GetLinks() EmbeddedLinksArray {
+func (e CustomTypeEventV0_5_1) GetLinks() EmbeddedLinksArray {
 	return e.Context.Links
 }
 
-func (e CustomTypeEventV0_5_0) GetSchemaUri() string {
+func (e CustomTypeEventV0_5_1) GetSchemaUri() string {
 	return e.Context.SchemaUri
 }
 
 // GetCustomSchema looks up the SchemaUri, if any is defined. If none is defined, it returns nil.
 // If it's defined and cannot be found, it returns an error.
-func (e CustomTypeEventV0_5_0) GetCustomSchema() (*jsonschema.Schema, error) {
+func (e CustomTypeEventV0_5_1) GetCustomSchema() (*jsonschema.Schema, error) {
 	schemaUri := e.GetSchemaUri()
 	if schemaUri == "" {
 		return nil, nil
@@ -127,11 +127,11 @@ func (e CustomTypeEventV0_5_0) GetCustomSchema() (*jsonschema.Schema, error) {
 
 // CDEventsWriter implementation
 
-func (e *CustomTypeEventV0_5_0) SetId(id string) {
+func (e *CustomTypeEventV0_5_1) SetId(id string) {
 	e.Context.Id = id
 }
 
-func (e *CustomTypeEventV0_5_0) SetSource(source string) {
+func (e *CustomTypeEventV0_5_1) SetSource(source string) {
 	e.Context.Source = source
 	// Default the subject source to the event source
 	if e.Subject.Source == "" {
@@ -139,19 +139,19 @@ func (e *CustomTypeEventV0_5_0) SetSource(source string) {
 	}
 }
 
-func (e *CustomTypeEventV0_5_0) SetTimestamp(timestamp time.Time) {
+func (e *CustomTypeEventV0_5_1) SetTimestamp(timestamp time.Time) {
 	e.Context.Timestamp = timestamp
 }
 
-func (e *CustomTypeEventV0_5_0) SetSubjectId(subjectId string) {
+func (e *CustomTypeEventV0_5_1) SetSubjectId(subjectId string) {
 	e.Subject.Id = subjectId
 }
 
-func (e *CustomTypeEventV0_5_0) SetSubjectSource(subjectSource string) {
+func (e *CustomTypeEventV0_5_1) SetSubjectSource(subjectSource string) {
 	e.Subject.Source = subjectSource
 }
 
-func (e *CustomTypeEventV0_5_0) SetCustomData(contentType string, data interface{}) error {
+func (e *CustomTypeEventV0_5_1) SetCustomData(contentType string, data interface{}) error {
 	err := CheckCustomData(contentType, data)
 	if err != nil {
 		return err
@@ -161,52 +161,52 @@ func (e *CustomTypeEventV0_5_0) SetCustomData(contentType string, data interface
 	return nil
 }
 
-func (e CustomTypeEventV0_5_0) GetSchema() (string, *jsonschema.Schema, error) {
+func (e CustomTypeEventV0_5_1) GetSchema() (string, *jsonschema.Schema, error) {
 	eType := e.GetType()
-	return CompiledSchemas.GetBySpecSubjectPredicate("0.5.0", eType.Subject, eType.Predicate, eType.Custom)
+	return CompiledSchemas.GetBySpecSubjectPredicate("0.5.1", eType.Subject, eType.Predicate, eType.Custom)
 }
 
 // CDEventsWriterV04 implementation
 
-func (e *CustomTypeEventV0_5_0) SetChainId(chainId string) {
+func (e *CustomTypeEventV0_5_1) SetChainId(chainId string) {
 	e.Context.ChainId = chainId
 }
 
-func (e *CustomTypeEventV0_5_0) SetLinks(links EmbeddedLinksArray) {
+func (e *CustomTypeEventV0_5_1) SetLinks(links EmbeddedLinksArray) {
 	e.Context.Links = links
 }
 
-func (e *CustomTypeEventV0_5_0) SetSchemaUri(schema string) {
+func (e *CustomTypeEventV0_5_1) SetSchemaUri(schema string) {
 	e.Context.SchemaUri = schema
 }
 
-func (e CustomTypeEventV0_5_0) GetSubjectContent() interface{} {
+func (e CustomTypeEventV0_5_1) GetSubjectContent() interface{} {
 	return e.Subject.Content
 }
 
 // CustomCDEventWriter implementation
 
-func (e *CustomTypeEventV0_5_0) SetEventType(eventType CDEventType) {
+func (e *CustomTypeEventV0_5_1) SetEventType(eventType CDEventType) {
 	e.Context.Type = eventType
 }
 
 // CustomCDEvent types can have different subject fields
-func (e *CustomTypeEventV0_5_0) SetSubjectContent(subjectContent interface{}) {
+func (e *CustomTypeEventV0_5_1) SetSubjectContent(subjectContent interface{}) {
 	e.Subject.Content = subjectContent
 }
 
-// New creates a new CustomTypeEventV0_5_0
-func NewCustomTypeEventV0_5_0(specVersion string) (*CustomTypeEventV0_5_0, error) {
-	e := &CustomTypeEventV0_5_0{
+// New creates a new CustomTypeEventV0_5_1
+func NewCustomTypeEventV0_5_1(specVersion string) (*CustomTypeEventV0_5_1, error) {
+	e := &CustomTypeEventV0_5_1{
 		Context: ContextV05{
 			SharedContext: SharedContext{
-				Type: CustomTypeEventTypeV0_5_0,
+				Type: CustomTypeEventTypeV0_5_1,
 			},
 			SpecVersion:   specVersion,
 			ContextLinks:  ContextLinks{},
 			ContextCustom: ContextCustom{},
 		},
-		Subject: CustomTypeSubjectV0_5_0{
+		Subject: CustomTypeSubjectV0_5_1{
 			SubjectBaseV05: SubjectBaseV05{},
 		},
 	}

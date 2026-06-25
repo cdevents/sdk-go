@@ -1,6 +1,6 @@
 module github.com/cdevents/sdk-go
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/cloudevents/sdk-go/v2 v2.15.2
@@ -16,7 +16,10 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	golang.org/x/crypto v0.45.0 // indirect
-	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/sync v0.21.0 // indirect
+	golang.org/x/sys v0.46.0 // indirect
+	golang.org/x/telemetry v0.0.0-20260610154732-fb80ec83bdd9 // indirect
+	golang.org/x/tools v0.46.0 // indirect
 )
 
 require (
@@ -27,6 +30,6 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.17.0 // indirect
-	golang.org/x/mod v0.29.0
+	golang.org/x/mod v0.37.0
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
