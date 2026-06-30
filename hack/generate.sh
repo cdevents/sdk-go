@@ -37,7 +37,7 @@ function apply_patches() {
 
 function generate() {
     # Generate code
-    go run tools/generator.go --resources "${REPO_PATH}"
+    go generate ./...
 }
 
 function revert_patches() {
