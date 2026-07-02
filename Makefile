@@ -49,8 +49,8 @@ fmt: importfmt ## Format the code and check for uncommitted changes
 			echo "Fixed formatting for: $(FORMATTED)"; \
 		fi
 	@if ! git diff --exit-code --quiet; then \
-		echo "ERROR: formatting produced uncommitted changes; run 'make fmt' locally and commit the result"; \
-		git diff; \
+		echo "ERROR: working tree has uncommitted changes after formatting; run 'make fmt' locally and commit the result"; \
+		git --no-pager diff; \
 		exit 1; \
 	fi
 
