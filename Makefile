@@ -40,14 +40,19 @@ test: ## Run tests with the "unit" build tag
 	CGO_ENABLED=$(CGO_ENABLED) $(GOTEST) $(COVERFLAGS) --tags=testonly -failfast -short ./...
 
 .PHONY: fmt
-fmt: importfmt ## Format the code
+fmt: importfmt ## Format the code and check for uncommitted changes
 	$(eval FORMATTED = $(shell $(GO) fmt ./...))
 	@if [ "$(FORMATTED)" == "" ]; \
-      	then \
-      	    echo "All Go files properly formatted"; \
-      	else \
-      		echo "Fixed formatting for: $(FORMATTED)"; \
-      	fi
+		then \
+			echo "All Go files properly formatted"; \
+		else \
+			echo "Fixed formatting for: $(FORMATTED)"; \
+		fi
+	@if ! git diff --exit-code --quiet; then \
+		echo "ERROR: formatting produced uncommitted changes; run 'make fmt' locally and commit the result"; \
+		git diff; \
+		exit 1; \
+	fi
 
 .PHONY: importfmt
 importfmt: get-fmt-deps
