@@ -1,3 +1,5 @@
+//go:build testonly
+
 /*
 Copyright 2022 The CDEvents Authors
 
