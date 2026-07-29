@@ -1,0 +1,99 @@
+# Plumber configuration for the sdk-go repository.
+# Based on Plumber's built-in defaults (github provider only); every control
+# is listed explicitly so none is silently disabled. The only customizations
+# are the trustedGithubActions list and the branch protection policy below.
+version: "2.0"
+github:
+  controls:
+    containerImageMustNotUseForbiddenTags:
+      enabled: true
+      tags:
+      - latest
+      - dev
+      - development
+      - staging
+      - main
+      - master
+      containerImagesMustBePinnedByDigest: true
+    branchMustBeProtected:
+      enabled: true
+      namePatterns:
+      - main
+      - master
+      - release/*
+      - production
+      - dev
+      defaultMustBeProtected: true
+      allowForcePush: false
+      # This project does not use a CODEOWNERS-based review process, so
+      # code owner approval is not part of its branch protection policy.
+      codeOwnerApprovalRequired: false
+    externalRefsMustNotCollide:
+      enabled: true
+    pipelineMustNotEnableDebugTrace:
+      enabled: true
+      forbiddenVariables:
+      - ACTIONS_STEP_DEBUG
+      - ACTIONS_RUNNER_DEBUG
+    securityJobsMustNotBeWeakened:
+      enabled: true
+      securityJobPatterns:
+      - '*codeql*'
+      - '*dependency-review*'
+      - '*trufflehog*'
+      - '*gitleaks*'
+      - '*osv-scanner*'
+      - '*-sast'
+      - '*-sast-*'
+      - '*-scan'
+      - '*scan*'
+      - '*-security'
+      - '*-security-*'
+      - '*-audit'
+      - '*-audit-*'
+      allowFailureMustBeFalse:
+        enabled: true
+      rulesMustNotBeRedefined:
+        enabled: true
+      whenMustNotBeManual:
+        enabled: true
+    pipelineMustNotExecuteUnverifiedScripts:
+      enabled: true
+    pipelineMustNotUseDockerInDocker:
+      enabled: true
+      detectInsecureDaemon: true
+    actionsMustBePinnedByCommitSha:
+      enabled: true
+      trustedOwners:
+      - actions
+      - github
+    workflowMustNotInjectUserInputInScripts:
+      enabled: true
+    workflowMustNotWriteUntrustedContentToGitHubEnv:
+      enabled: true
+    workflowMustNotUseDangerousTriggers:
+      enabled: true
+    pullRequestTargetMustNotCheckoutHead:
+      enabled: true
+    workflowsMustDeclarePermissions:
+      enabled: true
+    reusableWorkflowsMustNotInheritSecrets:
+      enabled: true
+    workflowMustNotExportEntireSecretsContext:
+      enabled: true
+    workflowMustNotGrantPermissionsWriteAll:
+      enabled: true
+    actionsMustNotBeArchived:
+      enabled: true
+    actionRefsMustExistUpstream:
+      enabled: true
+    actionsMustNotCarryKnownCVEs:
+      enabled: true
+    actionsMustNotExecuteMutableRemoteCode:
+      enabled: true
+    releaseWorkflowsMustNotRestoreUntrustedCache:
+      enabled: false
+    workflowMustIncludeRequiredActions:
+      enabled: false
+    githubActionMustComeFromAuthorizedSources:
+      enabled: false
