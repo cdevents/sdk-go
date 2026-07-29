@@ -1,0 +1,40 @@
+name: plumber
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    name: Scan CI/CD workflows
+    runs-on: ubuntu-latest
+    permissions:
+      # To upload the SARIF report to the Security tab
+      security-events: write
+      contents: read
+      # To publish the Plumber Score via OIDC (score-push, see below)
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - name: Run Plumber
+        uses: getplumber/plumber@87ca135cc4566ba8e9065ea95b5d897232cdb208 # v0.4.16
+        with:
+          # Fail the check only when the Plumber Score drops below C.
+          min-score: "C"
+          # Publish this repository's Plumber Score to the hosted score
+          # service so the README badge stays up to date. This makes the
+          # repository name and its score public. The badge displays the
+          # score of the default branch.
+          score-push: true

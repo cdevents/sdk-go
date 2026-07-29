@@ -1,5 +1,7 @@
 # Golang CDEvents SDK
 
+[![Plumber Score](https://score.getplumber.io/github.com/cdevents/sdk-go.svg)](https://score.getplumber.io/github.com/cdevents/sdk-go)
+
 Golang SDK to emit [CDEvents](https://cdevents.dev).
 
 The SDK can be used to create CDEvents and send them as CloudEvents, as well as parse a received CloudEvent into a CDEvent.
