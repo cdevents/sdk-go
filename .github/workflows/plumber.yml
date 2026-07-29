@@ -21,7 +21,8 @@ jobs:
       # To upload the SARIF report to the Security tab
       security-events: write
       contents: read
-      # id-token: write  # required only when score-push is enabled (see PR description)
+      # To publish the Plumber Score via OIDC (score-push, see below)
+      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -32,7 +33,8 @@ jobs:
         with:
           # Fail the check only when the Plumber Score drops below C.
           min-score: "C"
-          # score-push publishes a public A-E score badge to the hosted
-          # score service. Kept disabled here; see the PR description for
-          # the trade-offs before turning it on.
-          score-push: false
+          # Publish this repository's Plumber Score to the hosted score
+          # service so the README badge stays up to date. This makes the
+          # repository name and its score public. The badge displays the
+          # score of the default branch.
+          score-push: true
