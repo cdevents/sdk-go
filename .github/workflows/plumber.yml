@@ -25,11 +25,11 @@ jobs:
       id-token: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Run Plumber
-        uses: getplumber/plumber@87ca135cc4566ba8e9065ea95b5d897232cdb208 # v0.4.16
+        uses: getplumber/plumber@d37150cee04d6627497cb4c6a553ef9a2d6c7548 # v0.5.2
         with:
           # Fail the check only when the Plumber Score drops below C.
           min-score: "C"
