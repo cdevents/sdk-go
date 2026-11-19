@@ -17,7 +17,7 @@ You must install these tools:
 1. [`git`](https://help.github.com/articles/set-up-git/): For source control
 
 1. [`go`](https://golang.org/doc/install): The language this SDK is built in.
-    Check the [.go-version](.go-version) file for the minimum required version.
+    Use the Go version in [.go-version](.go-version) for development. The SDK minimum is declared in [go.mod](go.mod).
 
 1. [`make`](https://www.gnu.org/software/make/): not strictly required but handy to run
    tests with a single command.
