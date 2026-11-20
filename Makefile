@@ -13,7 +13,6 @@ REPO := sdk-go
 ORG_REPO := $(ORG)/$(REPO)
 RELEASE_ORG_REPO := $(ORG_REPO)
 ROOT_PACKAGE := github.com/$(ORG_REPO)
-GO_VERSION := 1.25
 GO_DEPENDENCIES := $(call rwildcard,pkg/,*.go) $(call rwildcard,cmd/,*.go)
 
 BRANCH     := $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null  || echo 'unknown')
@@ -60,7 +59,7 @@ importfmt: get-fmt-deps
 	goimports -w $(GO_DEPENDENCIES)
 
 get-fmt-deps: ## Install test dependencies
-	$(GO) install golang.org/x/tools/cmd/goimports@v0.42.0
+	$(GO) install golang.org/x/tools/cmd/goimports@v0.53.0
 
 .PHONY: lint
 lint: ## Lint the code
